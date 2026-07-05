@@ -26,7 +26,15 @@ const VOCATION = 'druids';
 // Public api.tibiadata.com keeps highscores in "restriction mode"; the dev
 // instance serves them — and is what the reference project queries too.
 const API = 'https://dev.tibiadata.com/v4';
-const SKILL_CATEGORIES = ['magiclevel', 'charmpoints', 'bosspoints', 'achievements', 'loyaltypoints', 'fishing', 'drome'];
+const SKILL_CATEGORIES = [
+  { category: 'magiclevel', valueField: 'magicLevel', rankField: 'magicLevelRank' },
+  { category: 'charmpoints', valueField: 'charmPoints', rankField: 'charmPointsRank' },
+  { category: 'bosspoints', valueField: 'bossPoints', rankField: 'bossPointsRank' },
+  { category: 'achievements', valueField: 'achievements', rankField: 'achievementsRank' },
+  { category: 'loyaltypoints', valueField: 'loyalty', rankField: 'loyaltyRank' },
+  { category: 'fishing', valueField: 'fishing', rankField: 'fishingRank' },
+  { category: 'drome', valueField: 'dromeScore', rankField: 'dromeScoreRank' },
+];
 
 const HISTORY_PATH = new URL('../data/character-history.json', import.meta.url);
 const PROFILE_PATH = new URL('../data/character.json', import.meta.url);
@@ -96,7 +104,7 @@ if (snapshotUnchanged && !Object.hasOwn(history, today)) {
 
 // ---- skill categories (best-effort; unranked or erroring → null) ----
 const skills = {};
-for (const category of SKILL_CATEGORIES) {
+for (const { category } of SKILL_CATEGORIES) {
   try {
     const hit = await findInHighscores(category);
     skills[category] = hit ? { rank: hit.rank, value: hit.value } : null;
@@ -120,14 +128,12 @@ const todayEntry = {
   rank: xp.rank,
   level: xp.level,
   experience: xp.value,
-  magicLevel: skills.magiclevel?.value ?? null,
-  charmPoints: skills.charmpoints?.value ?? null,
-  bossPoints: skills.bosspoints?.value ?? null,
-  achievements: skills.achievements?.value ?? null,
-  loyalty: skills.loyaltypoints?.value ?? null,
-  fishing: skills.fishing?.value ?? null,
-  dromeScore: skills.drome?.value ?? null,
+  source: 'TibiaData highscores',
 };
+for (const { category, valueField, rankField } of SKILL_CATEGORIES) {
+  todayEntry[valueField] = skills[category]?.value ?? null;
+  todayEntry[rankField] = skills[category]?.rank ?? null;
+}
 
 let changed = false;
 if (JSON.stringify(history[today] || null) !== JSON.stringify(todayEntry)) {
@@ -158,7 +164,7 @@ const nextProfile = {
   accountCreated: profileData.character.account_information?.created || null,
   loyaltyTitle: profileData.character.account_information?.loyalty_title || null,
   houses: (c.houses || []).map((h) => ({ name: h.name, town: h.town, paidUntil: h.paid })),
-  skillRanks: Object.fromEntries(SKILL_CATEGORIES.map((cat) => [cat, skills[cat]?.rank ?? null])),
+  skillRanks: Object.fromEntries(SKILL_CATEGORIES.map(({ category }) => [category, skills[category]?.rank ?? null])),
   deaths: knownDeaths,
 };
 

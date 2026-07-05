@@ -4,7 +4,7 @@ import { boot } from './_boot.js';
 import { nf, kk, hm } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
-import { bars, flow, attachFlowHover } from '../viz/svg.js';
+import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 
 const { stage, hunts, table } = await boot('analytics.html');
@@ -34,35 +34,49 @@ const TREND_SKILLS = [
   { key: 'dromeScore', label: 'Drome score' },
 ];
 
-function previousSkillValue(key) {
-  for (let i = history.length - 2; i >= 0; i--) {
-    if (history[i][key] != null) return history[i][key];
-  }
-  return null;
+function signed(value) {
+  if (value == null || !Number.isFinite(value)) return '<span class="dim">-</span>';
+  if (value === 0) return '<span class="dim">0</span>';
+  return `<span class="${value > 0 ? 'ok' : 'bad'}">${value > 0 ? '+' : ''}${nf(value)}</span>`;
 }
-
-const skillCards = latest ? SKILLS
-  .filter((s) => latest[s.key] != null)
-  .map((s) => {
-    const value = latest[s.key];
-    const prev = previousSkillValue(s.key);
-    const delta = prev != null ? value - prev : null;
-    const rank = profile?.skillRanks?.[s.rank] ?? null;
-    return `
-      <div class="fact">
-        <b class="num">${nf(value)}</b>
-        <span class="fine dim meta-line">${s.label}</span>
-        <span class="fine dim meta-line">${rank != null ? `Rank #${nf(rank)}` : 'Tracked value'}${delta ? ` · ${delta > 0 ? '+' : ''}${nf(delta)} since last record` : ''}</span>
-      </div>`;
-  }) : [];
 
 const skillTrends = TREND_SKILLS.map((s) => {
   const series = history
     .filter((row) => row[s.key] != null)
     .map((row) => ({ key: row.date.slice(5), n: row[s.key] }));
   const values = new Set(series.map((row) => row.n));
-  return { ...s, series, moving: series.length >= 2 && values.size >= 2 };
-}).filter((s) => s.moving);
+  const latestPoint = series.at(-1);
+  const previousPoint = series.length > 1 ? series.at(-2) : null;
+  const firstPoint = series[0];
+  return {
+    ...s,
+    series,
+    moving: series.length >= 2 && values.size >= 2,
+    value: latestPoint?.n ?? null,
+    lastDelta: latestPoint && previousPoint ? latestPoint.n - previousPoint.n : null,
+    trackedDelta: latestPoint && firstPoint ? latestPoint.n - firstPoint.n : null,
+  };
+}).filter((s) => s.value != null);
+
+function skillTrendCard(s) {
+  return `
+    <article class="panel skill-card">
+      <div class="skill-card-head">
+        <div>
+          <h3>${s.label}</h3>
+          <p class="fine dim">${nf(s.series.length)} tracked row${s.series.length === 1 ? '' : 's'} · independent scale</p>
+        </div>
+        <b class="num">${nf(s.value)}</b>
+      </div>
+      <div class="mini-metrics">
+        <span><b class="num">${signed(s.lastDelta)}</b><small>Last change</small></span>
+        <span><b class="num">${signed(s.trackedDelta)}</b><small>Tracked delta</small></span>
+      </div>
+      <div class="sparkline">
+        ${s.moving ? sparkline(s.series, { fmt: nf }) : '<span class="fine dim">No trend drawn until this metric has at least two distinct values.</span>'}
+      </div>
+    </article>`;
+}
 
 const topXp = table.filter((r) => r.xpRawRate != null)
   .sort((a, b) => b.xpRawRate - a.xpRawRate).slice(0, 10)
@@ -114,11 +128,10 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="big num">${meanProfit != null ? kk(meanProfit) : '—'}</div><div class="eyebrow">Avg profit/h</div></div>
   </div>
   ${board('Daily XP gain', dailyXp, flow(dailyXp))}
-  ${skillCards.length ? `<section class="section">
-    <div class="section-bar"><h2>Tracked skills</h2><span class="fine dim">separate units; no shared-axis comparison</span></div>
-    <div class="facts">${skillCards.join('')}</div>
+  ${skillTrends.length ? `<section class="section">
+    <div class="section-bar"><h2>Tracked skills</h2><span class="fine dim">each metric gets its own scale and readiness state</span></div>
+    <div class="skill-grid">${skillTrends.map(skillTrendCard).join('')}</div>
   </section>` : ''}
-  ${skillTrends.map((s) => board(`${s.label} trend`, s.series, flow(s.series, { baseline: 'min' }))).join('')}
   ${board('Best XP targets', topXp, bars(topXp))}
   ${board('Best profit targets', topProfit, bars(topProfit))}
   ${board('Busiest grounds', busiest, bars(busiest, { fmt: nf }))}

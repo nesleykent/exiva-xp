@@ -135,6 +135,19 @@ if (character) {
   if (character.skillRanks?.drome != null) {
     assert(Number.isFinite(latestEntry.dromeScore), 'latest character-history entry is missing TibiaData Drome score despite a Drome rank in character.json');
   }
+  for (const [valueField, rankField] of [
+    ['magicLevel', 'magicLevelRank'],
+    ['charmPoints', 'charmPointsRank'],
+    ['bossPoints', 'bossPointsRank'],
+    ['achievements', 'achievementsRank'],
+    ['loyalty', 'loyaltyRank'],
+    ['fishing', 'fishingRank'],
+    ['dromeScore', 'dromeScoreRank'],
+  ]) {
+    if (latestEntry[valueField] != null && latestEntry[rankField] != null) {
+      assert(Number.isFinite(latestEntry[rankField]), `latest character-history entry has a bad ${rankField}`);
+    }
+  }
 }
 
 let online = null;

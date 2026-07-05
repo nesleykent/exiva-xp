@@ -360,15 +360,23 @@
   "source": "guildstats.eu backfill"
  },
  "2026-07-05": {
-  "rank": 349,
-  "level": 467,
-  "experience": 1679082574,
+  "rank": 343,
+  "level": 471,
+  "experience": 1720531964,
+  "source": "TibiaData highscores",
   "magicLevel": 110,
+  "magicLevelRank": 231,
   "charmPoints": 6705,
-  "bossPoints": 1240,
+  "charmPointsRank": 171,
+  "bossPoints": 1255,
+  "bossPointsRank": 290,
   "achievements": 709,
+  "achievementsRank": 79,
   "loyalty": 2469,
+  "loyaltyRank": 143,
   "fishing": 72,
-  "dromeScore": 319
+  "fishingRank": 3,
+  "dromeScore": 319,
+  "dromeScoreRank": 265
  }
 }
