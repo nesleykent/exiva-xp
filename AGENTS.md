@@ -1,4 +1,4 @@
-# GUIDELINES.md — the Exiva XP architectural contract
+# AGENTS.md — the Exiva XP architectural contract
 
 This file is binding. Any agent (Codex, Claude, or other) continuing this project reads this file FIRST and follows it exactly. When an instruction here conflicts with what seems convenient, this file wins. Only the project owner (nesleykent) or the controlling architect may amend it — and every amendment is committed with a reason.
 
