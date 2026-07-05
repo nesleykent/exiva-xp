@@ -1,0 +1,43 @@
+{
+ "updatedAt": "2026-07-05T06:39:32.184Z",
+ "name": "Night'Flyn",
+ "title": "Aeternal",
+ "sex": "female",
+ "vocation": "Elder Druid",
+ "level": 467,
+ "world": "Gentebra",
+ "residence": "Thais",
+ "achievementPoints": 709,
+ "lastLogin": "2026-07-05T03:39:15Z",
+ "accountStatus": "Premium Account",
+ "accountCreated": "2003-08-01T22:04:00Z",
+ "loyaltyTitle": "Warrior of Tibia",
+ "houses": [
+  {
+   "name": "Fibula Village 3",
+   "town": "Thais",
+   "paidUntil": "2026-07-18"
+  }
+ ],
+ "skillRanks": {
+  "magiclevel": 230,
+  "charmpoints": 170,
+  "bosspoints": 289,
+  "achievements": 79,
+  "loyaltypoints": 143,
+  "fishing": 3,
+  "drome": 264
+ },
+ "deaths": [
+  {
+   "time": "2013-07-19T20:03:00Z",
+   "level": 136,
+   "reason": "Died at level 136 by a dragon lord (guildstats.eu backfill)"
+  },
+  {
+   "time": "2024-11-23T21:56:00Z",
+   "level": 292,
+   "reason": "Died at level 292 by humongous fungus (guildstats.eu backfill)"
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+name: Merge shared hunts
+
+on:
+  issues:
+    types: [labeled]
+  schedule:
+    - cron: '43 4 * * *'   # nightly sweep
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: merge-hunts
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    if: github.event_name != 'issues' || github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Merge and rebuild the ledger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node pipeline/merge-hunts.mjs
+
+      - name: Commit datasets
+        run: |
+          git config user.name "nesleykent"
+          git config user.email '20923096+nesleykent@users.noreply.github.com'
+          git add data/shared-hunts.json data/ledger.json
+          if git diff --cached --quiet; then
+            echo "No dataset changes."
+          else
+            git commit -m "data: merge shared hunts"
+            git push
+          fi

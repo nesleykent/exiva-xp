@@ -1,0 +1,184 @@
+/**
+ * Hunt planner — filterable tile grid, one card per ground.
+ * Filtering happens over individual ledger rows (a ground can have several:
+ * one per vocation/level bracket); sorting happens after grouping into cards,
+ * against each card's own best/aggregate value — sorting the raw rows first
+ * and grouping afterward would show numbers that don't match the sort (e.g.
+ * "sort by Loot/h" picking a card's displayed Raw XP/h from an unrelated row).
+ */
+
+import { boot } from './_boot.js';
+import { esc, fold } from '../lib/text.js';
+import { kk, nf } from '../lib/fmt.js';
+import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu } from '../shell.js';
+import { ELEMENTS } from '../engine/codex.js';
+import { population } from '../engine/locator.js';
+import { readBattle } from '../engine/strategy.js';
+import { VOCATIONS } from '../engine/rules.js';
+import { loadAccess, loadCharacter } from '../data/sources.js';
+
+const { stage, codex, grounds, hunts, table } = await boot('grounds.html');
+const [access, profile] = await Promise.all([
+  loadAccess().catch(() => ({ grounds: {} })),
+  loadCharacter().catch(() => null),
+]);
+const characterLevel = profile?.level ?? null;
+const areaBySlug = new Map(Object.entries(access.grounds || {})
+  .map(([slug, entry]) => [slug, fold(entry.area || '')]));
+
+const state = {
+  q: '', level: characterLevel, vocation: '', mode: '', playstyle: '', sort: 'ground', dir: 'asc',
+};
+
+/** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
+const SORTS = {
+  ground: ['Ground (A–Z)', (c) => c.name, 'asc'],
+  xpRawRate: ['Raw XP/h', (c) => c.bestXp ?? -1, 'desc'],
+  lootRate: ['Loot/h', (c) => c.bestLoot ?? -1, 'desc'],
+  profitRate: ['Profit/h', (c) => c.bestProfit ?? -1, 'desc'],
+  level: ['Level', (c) => c.minLevel ?? -1, 'asc'],
+  n: ['Logged hunts', (c) => c.n, 'desc'],
+};
+
+let intelCache = null;
+function intel() {
+  if (!intelCache) {
+    intelCache = new Map();
+    for (const g of grounds.directory) {
+      const pop = population(g, codex, hunts);
+      if (!pop) continue;
+      const battle = readBattle(pop.set);
+      intelCache.set(g.slug, {
+        attackEl: battle?.attack.el || null,
+        names: new Set(pop.set.map((s) => s.creature.key)),
+        weak: new Set(ELEMENTS.filter((el) => pop.set.some((s) => s.creature.taken[el] > 100))),
+      });
+    }
+  }
+  return intelCache;
+}
+
+function filteredRows() {
+  const q = fold(state.q);
+  const ix = q ? intel() : null;
+
+  return table.filter((r) => {
+    if (state.level != null && (r.level == null || r.level > state.level)) return false;
+    if (state.vocation && r.vocation !== state.vocation) return false;
+    if (state.mode === 'solo' && r.party) return false;
+    if (state.mode === 'party' && !r.party) return false;
+    if (state.playstyle && !fold(r.gear || '').includes(fold(state.playstyle))) return false;
+    if (q) {
+      const nameHit = fold(r.ground).includes(q);
+      const areaHit = areaBySlug.get(r.groundSlug)?.includes(q);
+      const i = ix.get(r.groundSlug);
+      const creatureHit = i && [...i.names].some((n) => n.includes(q));
+      if (!nameHit && !creatureHit && !areaHit) return false;
+    }
+    return true;
+  });
+}
+
+/** Group rows into one card per ground, tracking each metric's own best value. */
+function groundCards(rows) {
+  const per = new Map();
+  for (const r of rows) {
+    if (!per.has(r.groundSlug)) {
+      per.set(r.groundSlug, {
+        slug: r.groundSlug, name: r.ground, minLevel: r.level,
+        vocations: new Set(), party: false, n: 0,
+        bestXp: null, bestLoot: null, bestProfit: null, badgeRow: r,
+      });
+    }
+    const g = per.get(r.groundSlug);
+    if (r.xpRawRate != null && (g.bestXp == null || r.xpRawRate > g.bestXp)) { g.bestXp = r.xpRawRate; g.badgeRow = r; }
+    if (r.lootRate != null && (g.bestLoot == null || r.lootRate > g.bestLoot)) g.bestLoot = r.lootRate;
+    if (r.profitRate != null && (g.bestProfit == null || r.profitRate > g.bestProfit)) g.bestProfit = r.profitRate;
+    if (r.level != null && (g.minLevel == null || r.level < g.minLevel)) g.minLevel = r.level;
+    if (r.vocation) g.vocations.add(r.vocation);
+    if (r.party) g.party = true;
+    g.n += r.n;
+  }
+  return [...per.values()];
+}
+
+stage.innerHTML = `
+  <header style="padding: 8px 0 4px">
+    <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
+    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around Night'Flyn's tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
+  </header>
+  <form class="filter-bar" id="f">
+    <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
+    <button type="button" class="filter-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more"><span>Filters</span><span class="chevron">⌄</span></button>
+    <div class="filter-more" id="f-more">
+      <label class="lbl lbl-narrow"><span class="eyebrow">Level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
+      <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value="">All</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Hunt type</span><select id="f-mode"><option value="">All</option><option value="solo">Solo</option><option value="party">Team hunt</option></select></label>
+      <label class="lbl"><span class="eyebrow">Playstyle</span><input type="search" id="f-playstyle" placeholder="e.g. forked, arrows"></label>
+      <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('f-sort', SORTS, state.sort)}</label>
+    </div>
+  </form>
+  <div id="out"></div>`;
+
+function render() {
+  const rows = filteredRows();
+  const cards = groundCards(rows);
+  const ix = intel();
+
+  const val = SORTS[state.sort]?.[1] || SORTS.ground[1];
+  const dir = state.dir === 'asc' ? 1 : -1;
+  cards.sort((a, b) => {
+    const va = val(a); const vb = val(b);
+    return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * dir;
+  });
+
+  $('#out').innerHTML = `
+    <p class="fine dim count-line">${nf(cards.length)} grounds · ${nf(rows.length)} matching rows</p>
+    <div class="tiles">
+      ${cards.map((g) => {
+        const attackEl = ix?.get(g.slug)?.attackEl;
+        const area = access.grounds?.[g.slug]?.area;
+        return `
+        <a class="panel tile" href="ground.html?g=${esc(g.slug)}">
+          <div class="tile-top">
+            ${ring(g.name, { quiet: !g.n })}
+            <div>
+              <div class="name">${esc(g.name)}</div>
+              <div class="fine dim">${area ? `${esc(area)} · ` : ''}from level ${nf(g.minLevel)}${g.party ? ' · team hunt' : ''}</div>
+            </div>
+          </div>
+          <div class="tile-stats">
+            <span class="stat"><b class="num">${kk(g.bestXp)}</b><span class="fine dim">raw XP/h</span></span>
+            <span class="stat"><b class="num">${kk(g.bestLoot)}</b><span class="fine dim">loot/h</span></span>
+            <span class="stat"><b class="num">${nf(g.n)}</b><span class="fine dim">logged</span></span>
+          </div>
+          <div class="tile-tags">
+            ${basisPill(g.badgeRow.basis)}
+            ${attackEl ? pillEl(attackEl) : ''}
+            ${[...g.vocations].sort().slice(0, 3).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
+          </div>
+        </a>`;
+      }).join('') || '<p class="dim">Nothing matches those filters.</p>'}
+    </div>`;
+}
+
+const bind = (id, prop, map = (v) => v) => {
+  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); render(); });
+};
+bind('#f-q', 'q');
+bind('#f-level', 'level', (v) => (v ? +v : null));
+bind('#f-voc', 'vocation');
+bind('#f-mode', 'mode');
+bind('#f-playstyle', 'playstyle');
+bindSortMenu('f-sort', (key) => {
+  state.sort = key;
+  state.dir = SORTS[key]?.[2] || 'desc';
+  render();
+});
+$('#f-toggle').addEventListener('click', () => {
+  const open = $('#f-more').classList.toggle('open');
+  $('#f-toggle').setAttribute('aria-expanded', String(open));
+});
+
+render();
+export {};

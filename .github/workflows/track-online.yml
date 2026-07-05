@@ -1,0 +1,48 @@
+# 15-minute online sampler for Night'Flyn. It uses TibiaData's world
+# endpoint, which exposes the current online_players list for a world.
+name: Track online samples
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: track-online
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch online sample
+        id: sample
+        run: node pipeline/track-online.mjs
+
+      - name: Commit sampled data
+        run: |
+          git config user.name "nesleykent"
+          git config user.email '20923096+nesleykent@users.noreply.github.com'
+          stamp=$(date -u +'%Y-%m-%d %H:%M UTC')
+          git add data/character-online.json
+          git commit -m "data: online sample for ${stamp}" || exit 0
+          git push
+
+      # A Pages build every 15 minutes is waste — the sampler decides when
+      # the new state is worth showing promptly (online, session close,
+      # level-up, new UTC day); plain offline heartbeats just commit.
+      - name: Redeploy site
+        if: steps.sample.outputs.deploy == 'true'
+        run: gh workflow run publish.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

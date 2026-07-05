@@ -1,0 +1,47 @@
+{
+ "character": "Night'Flyn",
+ "world": "Gentebra",
+ "cadenceMinutes": 15,
+ "source": "TibiaData https://api.tibiadata.com/v4/world/Gentebra online_players",
+ "updatedAt": "2026-07-05T22:25:10.890Z",
+ "samples": [
+  {
+   "slot": "2026-07-05T18:15:00.000Z",
+   "sampledAt": "2026-07-05T18:27:25.804Z",
+   "online": false,
+   "level": null,
+   "vocation": null,
+   "worldPlayersOnline": 429,
+   "worldStatus": "online"
+  },
+  {
+   "slot": "2026-07-05T20:45:00.000Z",
+   "sampledAt": "2026-07-05T20:53:51.906Z",
+   "online": true,
+   "level": 470,
+   "vocation": "Elder Druid",
+   "worldPlayersOnline": 348,
+   "worldStatus": "online"
+  },
+  {
+   "slot": "2026-07-05T21:45:00.000Z",
+   "sampledAt": "2026-07-05T21:54:56.638Z",
+   "online": false,
+   "level": null,
+   "vocation": null,
+   "worldPlayersOnline": 333,
+   "worldStatus": "online"
+  },
+  {
+   "slot": "2026-07-05T22:15:00.000Z",
+   "sampledAt": "2026-07-05T22:25:10.890Z",
+   "online": false,
+   "level": null,
+   "vocation": null,
+   "worldPlayersOnline": 405,
+   "worldStatus": "online"
+  }
+ ],
+ "days": [],
+ "levelUps": []
+}

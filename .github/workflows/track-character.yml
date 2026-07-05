@@ -1,0 +1,48 @@
+# Daily Night'Flyn tracker — same mechanism and schedule as
+# github.com/mathiasbynens/tibia-xp-history: the Tibia highscores roll once
+# a day, so a daily crawl at 03:00 UTC records {rank, level, experience}
+# plus the skill categories, committed back to the repo with the owner's
+# GitHub noreply identity so the contributor list stays owner-only.
+# The data commit then dispatches publish.yml so the site redeploys with
+# fresh numbers (a GITHUB_TOKEN push does not fire push-triggered
+# workflows on its own).
+name: Track character
+
+on:
+  schedule:
+    # Reference project: "During CEST, run daily at 03:00 UTC".
+    - cron: '00 03 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: track-character
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch today's highscore + profile data
+        run: node pipeline/track-character.mjs
+
+      - name: Commit the day's data
+        run: |
+          git config user.name "nesleykent"
+          git config user.email '20923096+nesleykent@users.noreply.github.com'
+          date=$(date +'%Y-%m-%d')
+          git add data/character-history.json data/character.json data/character-snapshot.json
+          git commit -m "data: character snapshot for ${date}" || exit 0
+          git push
+          gh workflow run publish.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

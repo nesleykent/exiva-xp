@@ -1,0 +1,360 @@
+/*
+ * Exiva XP — base layer: brand fonts, semantic tokens and the product app
+ * shell (sidebar → icon rail → bottom tab bar). Token values come from the
+ * Instagram Design System (nesleykent/instagram-design-system): light-first,
+ * near-monochrome surfaces, one loud gradient, a single fixed action blue.
+ */
+
+/* ---------- brand typefaces ---------- */
+
+@font-face {
+  font-family: "Optimistic";
+  src: url("../fonts/optimistic-vf.ttf") format("truetype");
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instagram Sans Headline";
+  src: url("../fonts/instagram-sans-headline.otf") format("opentype");
+  font-weight: 400 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instagram Sans";
+  src: url("../fonts/instagram-sans-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instagram Sans";
+  src: url("../fonts/instagram-sans-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---------- tokens ---------- */
+
+:root {
+  /* brand gradient — the only saturated element */
+  --grad-yellow: #FFD600;
+  --grad-orange: #FF7A00;
+  --grad-rose: #FF0169;
+  --grad-magenta: #D300C5;
+  --grad-purple: #7638FA;
+  --grad-hero: linear-gradient(72.44deg, var(--grad-rose) 4.69%, var(--grad-magenta) 48.96%, var(--grad-purple) 92.19%);
+  --grad-spectrum: linear-gradient(125deg, var(--grad-yellow) 15%, var(--grad-orange) 30%, var(--grad-rose), var(--grad-magenta) 70%, var(--grad-purple) 85%);
+  --grad-story: conic-gradient(from 220deg, var(--grad-yellow), var(--grad-orange), var(--grad-rose), var(--grad-magenta), var(--grad-purple), var(--grad-yellow));
+
+  /* semantic surfaces — light default */
+  --surface: 255, 255, 255;
+  --surface-2: 243, 245, 247;
+  --surface-raised: 255, 255, 255;
+  --ink: 0, 0, 0;
+  --ink-2: 115, 115, 115;
+  --icon: 38, 38, 38;
+  --wash: 239, 239, 239;
+  --line: 219, 219, 219;
+  --line-strong: 168, 168, 168;
+  --overlay: 0, 0, 0;
+  --overlay-a: .05;
+
+  /* fixed semantics — never theme-swap, matching the source's --web-always-* */
+  --blue: 0, 149, 246;
+  --blue-press: 24, 119, 242;
+  --red: 237, 73, 86;
+  --green: 88, 195, 34;
+  --white-fixed: 255, 255, 255;
+
+  /* element accents (data colour only) */
+  --c-physical: 142, 142, 142;
+  --c-earth: 88, 195, 34;
+  --c-fire: 255, 122, 0;
+  --c-energy: 118, 56, 250;
+  --c-ice: 0, 149, 246;
+  --c-holy: 255, 214, 0;
+  --c-death: 211, 0, 197;
+
+  /* type */
+  --f-ui: "Optimistic", Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --f-wordmark: "Instagram Sans Headline", "Instagram Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-display: "Instagram Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* spacing / shape / elevation */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px;
+  --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
+  --r-sm: 4px; --r-input: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+  --r-pill: 1000px; --r-circle: 50%;
+  --shadow-card: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1);
+  --shadow-float: 0 4px 12px rgba(0,0,0,.15);
+
+  /* motion */
+  --e-standard: cubic-bezier(.4, 0, .2, 1);
+  --e-settle: cubic-bezier(.16, 1, .3, 1);
+  --t-hover: 150ms;
+
+  /* shell geometry */
+  --rail: 245px;
+  --rail-slim: 76px;
+  --feed: 660px;
+  --canvas: 1180px;
+
+  color-scheme: light;
+}
+
+[data-appearance="dark"] {
+  --surface: 12, 16, 20;
+  --surface-2: 37, 41, 46;
+  --surface-raised: 33, 35, 40;
+  --ink: 245, 245, 245;
+  --ink-2: 168, 168, 168;
+  --icon: 245, 245, 245;
+  --wash: 38, 38, 38;
+  --line: 38, 38, 38;
+  --line-strong: 85, 85, 85;
+  --overlay: 255, 255, 255;
+  --overlay-a: .1;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* ---------- resets ---------- */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: rgb(var(--surface));
+  color: rgb(var(--ink));
+  font-family: var(--f-ui);
+  font-size: 14px;
+  line-height: 18px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+h1, h2, h3, h4 { margin: 0; font-weight: 700; }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.skip-link { position: fixed; left: -9999px; z-index: 200; background: rgb(var(--surface-raised)); padding: var(--s3) var(--s4); border-radius: var(--r-md); box-shadow: var(--shadow-float); }
+.skip-link:focus { left: var(--s3); top: var(--s3); }
+:focus-visible { outline: 2px solid rgb(var(--line-strong)); outline-offset: 2px; }
+
+/* ---------- app shell ---------- */
+
+.shell { display: flex; min-height: 100vh; }
+
+.rail {
+  position: sticky; top: 0; align-self: flex-start;
+  width: var(--rail); height: 100vh; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  padding: 8px 12px 20px;
+  border-right: 1px solid rgb(var(--line));
+  background: rgb(var(--surface));
+  z-index: 50;
+}
+
+.wordmark {
+  display: flex; align-items: center; gap: 10px;
+  padding: 25px 12px 20px;
+  font-family: var(--f-wordmark);
+  font-weight: 700; font-size: 24px; letter-spacing: -.5px;
+  white-space: nowrap;
+}
+.wordmark img, .wordmark svg { width: 30px; height: 30px; flex-shrink: 0; }
+
+.rail-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+.rail-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px; border: 0; border-radius: var(--r-md);
+  background: transparent; color: rgb(var(--ink));
+  font-size: 16px; line-height: 24px; font-weight: 400;
+  cursor: pointer; white-space: nowrap;
+  transition: background var(--t-hover) var(--e-standard);
+}
+.rail-item:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+.rail-item[aria-current="page"] { font-weight: 700; }
+.rail-item svg { width: 26px; height: 26px; flex-shrink: 0; }
+
+.rail-foot { display: flex; flex-direction: column; gap: 4px; }
+
+/* icon rail on narrow desktop */
+@media (max-width: 1100px) {
+  .rail { width: var(--rail-slim); align-items: center; padding: 8px 8px 20px; }
+  .wordmark span { display: none; }
+  .wordmark { padding: 25px 0 20px; justify-content: center; }
+  .rail-item span { display: none; }
+  .rail-item { justify-content: center; width: 48px; }
+}
+
+/* bottom tab bar on mobile */
+@media (max-width: 700px) {
+  .shell { flex-direction: column; }
+  .rail {
+    position: fixed; top: auto; bottom: 0; left: 0; right: 0;
+    width: 100%; height: 52px; flex-direction: row; align-items: center;
+    justify-content: space-around; padding: 0 var(--s2);
+    border-right: 0; border-top: 1px solid rgb(var(--line));
+  }
+  .wordmark, .rail-foot .theme-label { display: none; }
+  .rail-nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 0; }
+  .rail-item { padding: 8px 6px; width: auto; }
+  /* GitHub + appearance are utilities, not destinations — a floating
+     corner cluster keeps the bottom tab bar to the real nav targets. */
+  .rail-foot {
+    position: fixed; top: var(--s2); right: var(--s2); z-index: 60;
+    flex-direction: row; gap: 2px; padding: 2px;
+    background: rgba(var(--surface), .92);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgb(var(--line)); border-radius: var(--r-pill);
+  }
+  .rail-foot .rail-item { padding: 8px; }
+  /* the tab bar carries only the five daily-loop destinations; the rest
+     stay in the desktop sidebar and on the home workspace grid */
+  .rail-nav .rail-desktop-only { display: none; }
+  main.stage { padding-bottom: 72px !important; }
+}
+
+main.stage {
+  flex: 1; min-width: 0;
+  padding: var(--s8) var(--s6) var(--s16);
+}
+.stage-inner { max-width: var(--canvas); margin: 0 auto; }
+.stage-inner.narrow { max-width: var(--feed); }
+
+/* ---------- primitives ----------
+ * Button — three-tier action control (primary/secondary/tertiary), plus an
+ * app-specific "destructive" tier using the system's own error colour.
+ * Radius is 6px at every size — sizes vary padding/font only, never shape.
+ */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 32px; padding: 7px var(--s4);
+  border: 0; border-radius: var(--r-input);
+  font-size: 14px; font-weight: 600; letter-spacing: -0.01em; cursor: pointer;
+  transition: background var(--t-hover) var(--e-standard);
+}
+.btn-primary { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
+.btn-primary:hover { background: rgb(var(--blue-press)); }
+.btn-secondary { background: rgb(var(--wash)); color: rgb(var(--ink)); }
+.btn-secondary:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
+.btn-tertiary { background: transparent; color: rgb(var(--ink)); border: 1px solid rgb(var(--line)); }
+.btn-tertiary:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+.btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }
+.btn[disabled] { opacity: .3; cursor: default; }
+.btn-sm { min-height: 28px; padding: 5px var(--s3); font-size: 12px; }
+.btn-lg { min-height: 44px; padding: 11px var(--s6); font-size: 15px; }
+
+/* utility card — 6px radius matches the source's Card "utility" variant.
+   The source keeps --shadow-card on at rest; here it's hover-only (.tile:hover)
+   since hundreds of small cards render at once — an always-on shadow at this
+   density reads as noisy, which conflicts with the source's own "used
+   sparingly" guidance more than a resting-shadow mismatch would. */
+.panel {
+  background: rgb(var(--surface-raised));
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--r-input);
+}
+.panel-pad { padding: var(--s5); }
+
+.hairline { border: 0; border-top: 1px solid rgb(var(--line)); margin: var(--s5) 0; }
+
+.eyebrow {
+  font-size: 11px; line-height: 13px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: rgb(var(--ink-2));
+}
+
+.dim { color: rgb(var(--ink-2)); }
+.fine { font-size: 12px; line-height: 16px; }
+.num { font-variant-numeric: tabular-nums; }
+
+input[type="text"], input[type="search"], input[type="number"], select, textarea {
+  font-family: var(--f-ui); font-size: 14px;
+  color: rgb(var(--ink));
+  background: rgb(var(--surface-2));
+  border: 1px solid transparent; border-radius: var(--r-input);
+  padding: 8px 12px; min-height: 36px;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: rgb(var(--line-strong)); }
+textarea { width: 100%; font-family: var(--f-mono); font-size: 12px; line-height: 1.5; resize: vertical; }
+
+label.lbl { display: grid; gap: 4px; }
+label.lbl > .eyebrow { font-weight: 600; }
+/* every filter field shares one width so a row of controls lines up evenly;
+   lbl-wide/lbl-narrow are the only sanctioned exceptions (free text search,
+   short numeric inputs) — never set width via inline style on a .lbl field. */
+label.lbl > input, label.lbl > select { min-width: 160px; width: 100%; box-sizing: border-box; }
+label.lbl.lbl-wide > input, label.lbl.lbl-wide > select { min-width: 220px; }
+label.lbl.lbl-narrow > input, label.lbl.lbl-narrow > select { min-width: 96px; width: 96px; }
+label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; }
+
+/* Sort control — Apple HIG's menu pattern for a small mutually-exclusive
+   option set: a button that opens an anchored list with a checkmark on the
+   current choice, dismissed on pick or outside click. Replaces a native
+   <select>, which read as an OS-chrome control next to the rest of this
+   custom-styled system. */
+.sort-menu { position: relative; }
+.sort-menu-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; font-family: var(--f-ui); font-size: 14px; text-align: left; cursor: pointer;
+  color: rgb(var(--ink)); background: rgb(var(--surface-2));
+  border: 1px solid transparent; border-radius: var(--r-input);
+  padding: 8px 12px; min-height: 36px;
+}
+.sort-menu-btn:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
+.sort-menu-btn:focus-visible, .sort-menu-btn[aria-expanded="true"] { outline: none; border-color: rgb(var(--line-strong)); }
+.sort-menu-btn .value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sort-menu-btn .chevron { width: 16px; height: 16px; flex-shrink: 0; color: rgb(var(--ink-2)); transition: transform var(--t-hover) var(--e-standard); }
+.sort-menu-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.sort-menu-list {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20;
+  padding: 6px; margin: 0;
+  background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--line));
+  border-radius: var(--r-lg); box-shadow: var(--shadow-float);
+}
+.sort-menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 10px; border: 0; border-radius: var(--r-input);
+  background: transparent; color: rgb(var(--ink)); font-family: var(--f-ui); font-size: 14px; text-align: left; cursor: pointer;
+}
+.sort-menu-item:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+.sort-menu-item .check { width: 16px; height: 16px; flex-shrink: 0; color: rgb(var(--blue)); visibility: hidden; }
+.sort-menu-item[aria-checked="true"] .check { visibility: visible; }
+
+/* gradient text — whole-word treatment only */
+.grad-text {
+  background: var(--grad-spectrum);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* story-ring avatar (grounds/creatures) */
+.ring {
+  display: inline-grid; place-items: center;
+  width: 64px; height: 64px; border-radius: var(--r-circle);
+  background: var(--grad-story);
+  flex-shrink: 0;
+}
+.ring > .ring-core {
+  display: grid; place-items: center;
+  width: 56px; height: 56px; border-radius: var(--r-circle);
+  background: rgb(var(--surface));
+  font-weight: 700; font-size: 18px;
+}
+.ring.ring-quiet { background: rgb(var(--line)); }
+
+.toast {
+  position: fixed; left: 50%; bottom: var(--s6); transform: translateX(-50%);
+  background: rgb(var(--ink)); color: rgb(var(--surface));
+  padding: 10px var(--s5); border-radius: var(--r-md);
+  font-size: 14px; z-index: 120; box-shadow: var(--shadow-float);
+  animation: toast-rise .35s var(--e-settle);
+}
+@keyframes toast-rise { from { opacity: 0; transform: translate(-50%, 10px); } }

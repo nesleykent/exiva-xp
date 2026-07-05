@@ -1,0 +1,72 @@
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax-check every module
+        run: |
+          find assets/js pipeline -name '*.js' -o -name '*.mjs' | while read -r f; do
+            node --check "$f"
+          done
+
+      - name: Engine smoke tests
+        run: node pipeline/smoke.mjs
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # GitHub Pages serves assets with cache-control: max-age=600, so after
+      # every deploy phones keep rendering the previous CSS/JS for up to ten
+      # minutes — long enough to make each fix look broken. Stamping the
+      # commit SHA into the asset URLs gives every deploy fresh cache keys.
+      # The module graph must be stamped too, not just the HTML's entry
+      # files: a fresh entry importing a stale cached './shell.js' produced
+      # markup for classes the fresh CSS no longer had (unstyled chips on
+      # phones mid-window). Query-stamping the import specifiers keeps every
+      # deploy's JS graph version-consistent.
+      - name: Stamp asset URLs with the commit SHA
+        run: |
+          V=${GITHUB_SHA::12}
+          sed -i "s|\(href=\"assets/css/[^\"]*\.css\)\"|\1?v=${V}\"|g; s|\(src=\"assets/js/[^\"]*\.js\)\"|\1?v=${V}\"|g" ./*.html
+          find assets/js -name '*.js' -exec sed -i "s|from '\(\.[^']*\.js\)'|from '\1?v=${V}'|g" {} +
+          # The data JSONs update every deploy (daily tracker, merged hunts) and
+          # sit behind the same 600s cache — stamp their fetch URLs too, so a
+          # fresh page never renders yesterday's data. All data fetches go
+          # through the FILES map in sources.js.
+          sed -i "s|'\(data/[^']*\.json\)'|'\1?v=${V}'|g" assets/js/data/sources.js
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

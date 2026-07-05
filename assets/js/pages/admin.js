@@ -1,0 +1,143 @@
+/** Logbook tools — local hunt review, duplicate sweep, import/export. */
+
+import { boot } from './_boot.js';
+import { esc, fingerprint } from '../lib/text.js';
+import { kk, nf, day } from '../lib/fmt.js';
+import { $, say, dataTable, note } from '../shell.js';
+import { judge } from '../engine/rules.js';
+import { logbook, writeLogbook } from '../data/sources.js';
+
+const { stage } = await boot('admin.html', { ledger: false });
+
+const FIELDS = ['id', 'loggedAt', 'ground', 'vocation', 'level', 'party', 'world',
+  'minutes', 'xpRaw', 'xpRawRate', 'xpRate', 'loot', 'supplies', 'balance'];
+
+stage.innerHTML = `
+  <header style="padding: 8px 0 4px">
+    <h1 style="font-size:26px; letter-spacing:-.4px">Logbook tools</h1>
+    <p class="dim" style="max-width:64ch">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
+  </header>
+  <section class="section" style="margin-top:var(--s5)">
+    <div class="section-bar"><h2>Local logbook</h2><span class="fine dim" id="k-count"></span></div>
+    <div id="k-book"></div>
+  </section>
+  <section class="section">
+    <div class="section-bar"><h2>Duplicate sweep</h2></div>
+    <p class="fine dim" style="margin-top:-8px">Identical analyser text (whitespace-insensitive). Sweeping keeps the earliest copy.</p>
+    <div id="k-dupes"></div>
+  </section>
+  <section class="section">
+    <div class="section-bar"><h2>Move data</h2></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <button class="btn btn-secondary" id="k-json">Export JSON</button>
+      <button class="btn btn-secondary" id="k-csv">Export CSV</button>
+      <button class="btn btn-secondary" id="k-xls">Export Excel</button>
+      <label class="btn btn-tertiary" style="cursor:pointer">Import JSON<input type="file" id="k-import" accept=".json" hidden></label>
+    </div>
+    <div id="k-io"></div>
+  </section>`;
+
+function refresh() {
+  const book = logbook();
+  $('#k-count').textContent = `${book.length} hunt${book.length === 1 ? '' : 's'} in this browser`;
+
+  dataTable($('#k-book'), {
+    cols: [
+      { id: 'loggedAt', label: 'Date', cell: (h) => day(h.loggedAt) },
+      { id: 'ground', label: 'Ground', cell: (h) => esc(h.ground || '—') },
+      { id: 'vocation', label: 'Vocation', cell: (h) => esc(h.vocation || (h.party ? 'Party' : '—')) },
+      { id: 'level', label: 'Level', num: true, cell: (h) => nf(h.level) },
+      { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (h) => kk(h.xpRawRate) },
+      { id: 'check', label: 'Rules', cell: (h) => {
+        const v = judge(h, []);
+        if (!v.ok) return `<span class="badge badge-error" title="${esc(v.faults.join(' '))}">Faulted</span>`;
+        if (v.flags.length) return `<span class="badge badge-warning" title="${esc(v.flags.join(' '))}">Flagged</span>`;
+        return '<span class="badge badge-success">Clean</span>';
+      } },
+      { id: 'x', label: '', cell: (h) => `<button class="btn btn-destructive" style="min-height:26px;padding:2px 10px;font-size:12px" data-drop="${esc(h.id)}">Delete</button>` },
+    ],
+    rows: book,
+  });
+
+  $('#k-book').onclick = (e) => {
+    const id = e.target.dataset?.drop;
+    if (!id) return;
+    writeLogbook(logbook().filter((h) => h.id !== id));
+    say('Hunt deleted.');
+    refresh();
+  };
+
+  const packs = new Map();
+  for (const h of book) {
+    const fp = fingerprint(h.raw || '');
+    if (!packs.has(fp)) packs.set(fp, []);
+    packs.get(fp).push(h);
+  }
+  const dupes = [...packs.values()].filter((p) => p.length > 1);
+  const host = $('#k-dupes');
+  if (!dupes.length) {
+    host.innerHTML = '<p class="fine dim">No duplicates.</p>';
+  } else {
+    host.innerHTML = dupes.map((p, i) => `
+      <div class="panel panel-pad" style="display:flex; align-items:center; gap:12px; margin-bottom:8px">
+        <span><b>${esc(p[0].ground || 'Unknown ground')}</b> — ${p.length} identical logs (${p.map((h) => day(h.loggedAt)).join(', ')})</span>
+        <button class="btn btn-secondary" style="margin-left:auto" data-sweep="${i}">Sweep</button>
+      </div>`).join('');
+    host.onclick = (e) => {
+      const i = e.target.dataset?.sweep;
+      if (i == null) return;
+      const pack = dupes[+i].sort((a, b) => String(a.loggedAt).localeCompare(String(b.loggedAt)));
+      const drop = new Set(pack.slice(1).map((h) => h.id));
+      writeLogbook(logbook().filter((h) => !drop.has(h.id)));
+      say(`Swept ${pack.length - 1} duplicate${pack.length > 2 ? 's' : ''}.`);
+      refresh();
+    };
+  }
+}
+
+function download(filename, mime, content) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type: mime }));
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$('#k-json').addEventListener('click', () =>
+  download('exiva-logbook.json', 'application/json', JSON.stringify(logbook(), null, 2)));
+
+$('#k-csv').addEventListener('click', () => {
+  const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const lines = [FIELDS.join(','), ...logbook().map((h) => FIELDS.map((f) => cell(h[f])).join(','))];
+  download('exiva-logbook.csv', 'text/csv', lines.join('\n'));
+});
+
+$('#k-xls').addEventListener('click', () => {
+  const cell = (v) => (typeof v === 'number'
+    ? `<Cell><Data ss:Type="Number">${v}</Data></Cell>`
+    : `<Cell><Data ss:Type="String">${esc(String(v ?? ''))}</Data></Cell>`);
+  const rows = [FIELDS, ...logbook().map((h) => FIELDS.map((f) => h[f]))]
+    .map((r) => `<Row>${r.map(cell).join('')}</Row>`).join('');
+  download('exiva-logbook.xls', 'application/vnd.ms-excel',
+    `<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Hunts"><Table>${rows}</Table></Worksheet></Workbook>`);
+});
+
+$('#k-import').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const incoming = JSON.parse(await file.text());
+    if (!Array.isArray(incoming)) throw new Error('expected a JSON array of hunts');
+    const book = logbook();
+    const known = new Set(book.map((h) => h.id));
+    const fresh = incoming.filter((h) => h?.id && !known.has(h.id));
+    writeLogbook([...book, ...fresh]);
+    $('#k-io').innerHTML = note('green', `Imported ${fresh.length} new hunts (${incoming.length - fresh.length} already present).`);
+    refresh();
+  } catch (err) {
+    $('#k-io').innerHTML = note('red', `Import failed: ${err.message}`);
+  }
+});
+
+refresh();
+export {};

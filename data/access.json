@@ -1,0 +1,2337 @@
+{
+ "source": "tibia.fandom.com (best-effort extraction, unverified — always check the linked wiki page in-game)",
+ "builtAt": "2026-07-04T14:22:52.612Z",
+ "grounds": {
+  "larva-ankrahmun": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Larva Caves",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Larva_Caves"
+  },
+  "tarantulas-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "swamp-trolls-port-hope-venore": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Near the city of Port Hope there is a cave with many Swamp Trolls suited for players at level 8 to 20.",
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Swamp Trolls",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Swamp_Trolls"
+  },
+  "elves-yalahar": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "zombies-treasure-island": {
+   "level": null,
+   "quest": "Treasure Island Quest",
+   "premium": null,
+   "note": "Each time you want to access the caverns you have to do the Treasure Island Quest.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Treasure Island",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Treasure_Island"
+  },
+  "mutated-humans-yalahar-single-target": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "coryms-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "mother-of-scarabs-lair-3": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair"
+  },
+  "pirates-yalahar": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "mutated-humans-yalahar-exori": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "laguna-islands": {
+   "level": null,
+   "quest": "Eleonore Quest",
+   "premium": null,
+   "note": null,
+   "area": "Liberty Bay",
+   "wikiTitle": "Laguna Islands",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands"
+  },
+  "lion-s-rock": {
+   "level": null,
+   "quest": "Lion's Rock Quest",
+   "premium": null,
+   "note": "The Lion's Rock Quest is located here.",
+   "area": "Darashia",
+   "wikiTitle": "Lion's Rock",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Lion's_Rock"
+  },
+  "old-fortress-1-bonebeasts": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "vengoth-haunted-treelings": {
+   "level": null,
+   "quest": "Blood Brothers Quest",
+   "premium": null,
+   "note": "To travel to Vengoth you need to have at least started the mission 4 (The Dark Lands) of the Blood Brothers Quest.",
+   "area": "Yalahar",
+   "wikiTitle": "Vengoth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth"
+  },
+  "nibelor-crystal-spiders": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "In order to access this island you can do so by asking for a \"passage\" to Iskan though you might need to do something for him first.",
+   "area": "Svargrond",
+   "wikiTitle": "Nibelor",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Nibelor"
+  },
+  "darashia-dragon-lair": {
+   "level": 40,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Darashia",
+   "wikiTitle": "Darashia Dragon Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Darashia_Dragon_Lair"
+  },
+  "yalahar-dragons": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "blood-crabs-laguna-islands": {
+   "level": null,
+   "quest": "Eleonore Quest",
+   "premium": null,
+   "note": null,
+   "area": "Liberty Bay",
+   "wikiTitle": "Laguna Islands",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands"
+  },
+  "mother-of-scarabs-lair-4-5": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair"
+  },
+  "mutated-rats-alchemist-quarter": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Alchemist Quarter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter"
+  },
+  "yalahar-bog-raiders-central": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "yalahar-alchemist-outskirts": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "middle-spike": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kazordoon",
+   "wikiTitle": "Middle Spike",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Middle_Spike"
+  },
+  "wyrms-lb-1": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "carlin-cults": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Femor Hills",
+   "wikiTitle": "Carlin",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Carlin"
+  },
+  "edron-heroes-2-3": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "fenrock-dragon-lords": {
+   "level": null,
+   "quest": "The Hidden City of Beregar Quest",
+   "premium": null,
+   "note": "You need to have started The Hidden City of Beregar Quest to be able to access Fenrock, as well as to gain access to Beregar and use the Ore Wagon shortcut.",
+   "area": "Yalahar",
+   "wikiTitle": "Fenrock Dragon Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Fenrock_Dragon_Lair"
+  },
+  "edron-vampire-crypt": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Edron Vampire Crypt is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Edron Vampire Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt"
+  },
+  "nightmare-scions-krailos": {
+   "level": null,
+   "quest": "Krailos Quest",
+   "premium": null,
+   "note": "The Krailos Quest takes place here.",
+   "area": "Rathleton",
+   "wikiTitle": "Krailos",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Krailos"
+  },
+  "krailos-bug-cave": {
+   "level": null,
+   "quest": "Krailos Quest",
+   "premium": null,
+   "note": "The Krailos Quest takes place here.",
+   "area": "Rathleton",
+   "wikiTitle": "Krailos",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Krailos"
+  },
+  "exotic-cave": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "To gain access, you must gain 1500 points of reputation from Eustacio by completing the Pirat Raids (A Pirate's Tail quest).",
+   "area": "Issavi",
+   "wikiTitle": "Exotic Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Exotic_Cave"
+  },
+  "oramond-west": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "grimvale-4": {
+   "level": null,
+   "quest": "Grimvale Quest",
+   "premium": null,
+   "note": "The Grimvale Quest takes place here.",
+   "area": "Edron",
+   "wikiTitle": "Grimvale",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grimvale"
+  },
+  "mini-rosha": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Lower Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul"
+  },
+  "edron-orc-cults": {
+   "level": null,
+   "quest": "Against the Spider Cult Quest",
+   "premium": null,
+   "note": "In this cave, you will find the following quests: *Against the Spider Cult Quest *Barbarian Axe Quest *Berserker Treasure Quest *Dark Armor Quest *Poison Daggers Quest *Shaman Treasure Quest *Cults of Tibia Quest File:Edron Orc Cave 1.",
+   "area": "Edron",
+   "wikiTitle": "Edron Orc Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave"
+  },
+  "yalahar-sunken-quarter": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "hydras-oramond": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "okolnir": {
+   "level": 120,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Svargrond",
+   "wikiTitle": "Okolnir",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Okolnir"
+  },
+  "replica-dungeon": {
+   "level": null,
+   "quest": "Forgotten Knowledge Quest",
+   "premium": null,
+   "note": "The area is part of the Forgotten Knowledge Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Replica Dungeon",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Replica_Dungeon"
+  },
+  "desecrated-glade": {
+   "level": null,
+   "quest": "Forgotten Knowledge Quest",
+   "premium": null,
+   "note": "The area is part of the Forgotten Knowledge Quest.",
+   "area": "Kazordoon",
+   "wikiTitle": "Desecrated Glade",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Desecrated_Glade"
+  },
+  "lower-spike": {
+   "level": 150,
+   "quest": "Killing in the Name of... Quest",
+   "premium": null,
+   "note": null,
+   "area": null,
+   "wikiTitle": "The Spike",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Spike"
+  },
+  "barkless-ab-cults": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Femor Hills",
+   "wikiTitle": "Ab'Dendriel",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ab'Dendriel"
+  },
+  "edron-south-werecreatures": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "oramond-minos": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "otherworld-kazo": {
+   "level": null,
+   "quest": "Heart of Destruction Quest",
+   "premium": null,
+   "note": "The main Otherworld is where the Heart of Destruction Quest takes place.",
+   "area": "Svargrond",
+   "wikiTitle": "Otherworld",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld"
+  },
+  "iksupan": {
+   "level": null,
+   "quest": "Adventures of Galthen Quest",
+   "premium": null,
+   "note": "Access to Iksupan is obtained through the Adventures of Galthen Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Iksupan",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan"
+  },
+  "elder-wyrms-drefia": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Darashia",
+   "wikiTitle": "Drefia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Drefia"
+  },
+  "yalahar-grim-reapers": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "seacrest-serpents": {
+   "level": null,
+   "quest": "Twenty Miles Beneath the Sea Quest",
+   "premium": null,
+   "note": "There is a main quest, Twenty Miles Beneath the Sea Quest, which unlocks the Seacrest Grounds in parts.",
+   "area": "Rathleton",
+   "wikiTitle": "Seacrest Grounds",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Seacrest_Grounds"
+  },
+  "otherworld-edron": {
+   "level": null,
+   "quest": "Heart of Destruction Quest",
+   "premium": null,
+   "note": "The main Otherworld is where the Heart of Destruction Quest takes place.",
+   "area": "Svargrond",
+   "wikiTitle": "Otherworld",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld"
+  },
+  "hive-stage3": {
+   "level": null,
+   "quest": "War Against The Hive Quest",
+   "premium": null,
+   "note": "The War Against The Hive Quest takes place here.",
+   "area": "Gray Beach",
+   "wikiTitle": "The Hive",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive"
+  },
+  "glooth-tower": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Rathleton",
+   "wikiTitle": "Glooth Factory",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Glooth_Factory"
+  },
+  "medusa-tower": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Medusa Tower is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Medusa Tower",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Medusa_Tower"
+  },
+  "warzone-4": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "asura-palace": {
+   "level": 250,
+   "quest": "Asura Palace Quest",
+   "premium": null,
+   "note": "Another instructional text comes in the form of a Large Book and is found near the Destroyers: The Asura Palace Quest, The Lost Brother Quest and part of The Secret Library Quest take place here.",
+   "area": "Port Hope",
+   "wikiTitle": "Asura Palace",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Palace"
+  },
+  "carnivora-s-rock": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Carnivora's Rocks",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Carnivora's_Rocks"
+  },
+  "candia-nibblemaws": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Feyrist",
+   "wikiTitle": "Candia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Candia"
+  },
+  "drefia-grim-reapers": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Darashia",
+   "wikiTitle": "Drefia Grim Reaper Dungeons",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Drefia_Grim_Reaper_Dungeons"
+  },
+  "oramond-fury-dungeon": {
+   "level": null,
+   "quest": "Dark Trails Quest",
+   "premium": null,
+   "note": "The Oramond Fury Dungeon is a fearsome place north of Rathleton to which access is gained during the Dark Trails Quest.",
+   "area": "Rathleton",
+   "wikiTitle": "Oramond Fury Dungeon",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Fury_Dungeon"
+  },
+  "deeper-banuta-bottom-floor": {
+   "level": null,
+   "quest": "The Ape City Quest",
+   "premium": null,
+   "note": "Access to Deeper Banuta is gained through The Ape City Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Deeper Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deeper_Banuta"
+  },
+  "asura-mirror-1": {
+   "level": 250,
+   "quest": "Asura Palace Quest",
+   "premium": null,
+   "note": "To access the vault you must have completed the Asura Palace Quest and The Lost Brother Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Asura Vaults",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults"
+  },
+  "warzone-5": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "oramond-wildlife-raid": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "winter-court-behind-tp-portal": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to this location is granted during The Dream Courts Quest.",
+   "area": "Svargrond",
+   "wikiTitle": "Court of Winter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter"
+  },
+  "buried-cathedral-1": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Part of The Dream Courts Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Buried Cathedral",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral"
+  },
+  "haunted-house": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Part of The Dream Courts Quest takes place here.",
+   "area": "Port Hope",
+   "wikiTitle": "Haunted Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Temple"
+  },
+  "lower-rosha": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "rosha-west": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "roshamuul-mines": {
+   "level": null,
+   "quest": "Roshamuul Quest",
+   "premium": null,
+   "note": "Some of the Roshamuul Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Roshamuul Mines",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul_Mines"
+  },
+  "winter-court": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to this location is granted during The Dream Courts Quest.",
+   "area": "Svargrond",
+   "wikiTitle": "Court of Winter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter"
+  },
+  "warzone-6": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "marapur-turtles-and-foam-stalkers": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Marapur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Marapur"
+  },
+  "summer-court-for-first-timers-half-boxes": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to the Summer Court is obtained via The Dream Courts Quest.",
+   "area": "Feyrist",
+   "wikiTitle": "Court of Summer",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer"
+  },
+  "roshamuul-shockheads": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Lower Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul"
+  },
+  "issavi-crypts-sphinx-wardens": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "summer-court-full-boxing": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to the Summer Court is obtained via The Dream Courts Quest.",
+   "area": "Feyrist",
+   "wikiTitle": "Court of Summer",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer"
+  },
+  "cobra-bastion-for-beginners": {
+   "level": 250,
+   "quest": "Grave Danger Quest",
+   "premium": null,
+   "note": "Part of the Grave Danger Quest takes part here.",
+   "area": "Ankrahmun",
+   "wikiTitle": "Cobra Bastion",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion"
+  },
+  "oskayaat-werecrocodiles": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Chor",
+   "wikiTitle": "Oskayaat",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat"
+  },
+  "warzone-2": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "nightmare-isles": {
+   "level": null,
+   "quest": "Nightmare Teddy Quest",
+   "premium": null,
+   "note": "Home of the Nightmare Teddy Quest.",
+   "area": "Darama",
+   "wikiTitle": "Nightmare Isles",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Nightmare_Isles"
+  },
+  "oskayaat-weretigers": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Chor",
+   "wikiTitle": "Oskayaat",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat"
+  },
+  "oramond-catacombs": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "warzone-8": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "warzone-1": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "otherworld": {
+   "level": null,
+   "quest": "Heart of Destruction Quest",
+   "premium": null,
+   "note": "The main Otherworld is where the Heart of Destruction Quest takes place.",
+   "area": "Svargrond",
+   "wikiTitle": "Otherworld",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld"
+  },
+  "warzone-7": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "cobra-bastion-1": {
+   "level": 250,
+   "quest": "Grave Danger Quest",
+   "premium": null,
+   "note": "Part of the Grave Danger Quest takes part here.",
+   "area": "Ankrahmun",
+   "wikiTitle": "Cobra Bastion",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion"
+  },
+  "flimsy-venore-1": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Amazon Camp (Venore)",
+   "wikiTitle": "Venore",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Venore"
+  },
+  "issavi-surface-east": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "warzone-3": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "issavi-sewers": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Issavi",
+   "wikiTitle": "Issavi Sewers",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi_Sewers"
+  },
+  "azzilon-castle": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Azzilon Castle",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Azzilon_Castle"
+  },
+  "cobra-bastion": {
+   "level": 250,
+   "quest": "Grave Danger Quest",
+   "premium": null,
+   "note": "Part of the Grave Danger Quest takes part here.",
+   "area": "Ankrahmun",
+   "wikiTitle": "Cobra Bastion",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion"
+  },
+  "oramond-mountain-hideout-1-2": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "norcferatu-fortress": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Norcferatu Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Fortress"
+  },
+  "norcferatu-dungeons-west": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Norcferatu Dungeons",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons"
+  },
+  "norcferatu-dungeons-east": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Norcferatu Dungeons",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons"
+  },
+  "bloodfire-gorge": {
+   "level": null,
+   "quest": "The Order of the Stag Quest",
+   "premium": null,
+   "note": "Accessed after 20 Night Harpy Beaks have been skinned in The Order of the Stag Quest.",
+   "area": "Roshamuul",
+   "wikiTitle": "Bloodfire Gorge",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bloodfire_Gorge"
+  },
+  "edron-tomb": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Mahatheb the Vizier (Book) can be found in a Sarcophagus (Quest) in the room they are buried in.",
+   "area": "Edron",
+   "wikiTitle": "Forgotten Tomb",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forgotten_Tomb"
+  },
+  "mutated-humans-yalahar": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "coryms-port-hope-stealth-ring": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "mammoths-badgers-svargrond": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Formorgar Glacier",
+   "wikiTitle": "Svargrond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Svargrond"
+  },
+  "chor": {
+   "level": 50,
+   "quest": "Explorer Society Quest",
+   "premium": null,
+   "note": "In order to successfully fulfill a mission from the Explorer Society Quest, you must go to the deepest parts of this village to find the Lizard Urn.",
+   "area": "Port Hope",
+   "wikiTitle": "Chor",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Chor"
+  },
+  "zombies-cemetery-yalahar": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "banuta-apes": {
+   "level": 27,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Banuta"
+  },
+  "edron-old-fortress-1-bonebeasts": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "krailos-surface": {
+   "level": null,
+   "quest": "Krailos Quest",
+   "premium": null,
+   "note": "The Krailos Quest takes place here.",
+   "area": "Rathleton",
+   "wikiTitle": "Krailos",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Krailos"
+  },
+  "edron-vampire-crypt-3": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Edron Vampire Crypt is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Edron Vampire Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt"
+  },
+  "laguna-islands-profit": {
+   "level": null,
+   "quest": "Eleonore Quest",
+   "premium": null,
+   "note": null,
+   "area": "Liberty Bay",
+   "wikiTitle": "Laguna Islands",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands"
+  },
+  "wyrms-liberty-bay-1": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "forbidden-temple-ankrahmun-cults": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Forbidden Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forbidden_Temple"
+  },
+  "peninsula-tomb": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Peninsula Tomb",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Peninsula_Tomb"
+  },
+  "ramoa-bonebeast-island": {
+   "level": null,
+   "quest": "The Shattered Isles Quest",
+   "premium": null,
+   "note": "Ramoa is accessed through The Shattered Isles Quest, through the Goroma volcano, and leads to Talahu through an underground passage.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Ramoa",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ramoa"
+  },
+  "cults-yalahar": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "werebadgers-grimvale-1": {
+   "level": null,
+   "quest": "Grimvale Quest",
+   "premium": null,
+   "note": "The Grimvale Quest takes place here.",
+   "area": "Edron",
+   "wikiTitle": "Grimvale",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grimvale"
+  },
+  "liberty-bay-bonelord-cave-full-lap": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "It's a good place to farm Bonelord Eyes which are usually very valuable since they are required for a quest.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Vandura Bonelord Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Bonelord_Cave"
+  },
+  "demonwar-crypt-both-spawns": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Demonwar Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt"
+  },
+  "dragon-lords-fenrock": {
+   "level": null,
+   "quest": "The Hidden City of Beregar Quest",
+   "premium": null,
+   "note": "You need to have started The Hidden City of Beregar Quest to be able to access Fenrock, as well as to gain access to Beregar and use the Ore Wagon shortcut.",
+   "area": "Yalahar",
+   "wikiTitle": "Fenrock Dragon Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Fenrock_Dragon_Lair"
+  },
+  "edron-south-were": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "feyrist-surface": {
+   "level": null,
+   "quest": "Threatened Dreams Quest",
+   "premium": null,
+   "note": "Access to Feyrist is gained through the Threatened Dreams Quest.",
+   "area": "Roshamuul",
+   "wikiTitle": "Feyrist",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist"
+  },
+  "old-masonry-death-portal": {
+   "level": null,
+   "quest": "Forgotten Knowledge Quest",
+   "premium": null,
+   "note": "The area is part of the Forgotten Knowledge Quest.",
+   "area": "Ab'Dendriel",
+   "wikiTitle": "Old Masonry",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Masonry"
+  },
+  "ice-witch-temple": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Svargrond",
+   "wikiTitle": "Ice Witch Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ice_Witch_Temple"
+  },
+  "misguided": {
+   "level": null,
+   "quest": "Cults of Tibia Quest",
+   "premium": null,
+   "note": "This is one of the Cults hideout of the Cults of Tibia Quest.",
+   "area": "Thais",
+   "wikiTitle": "Misguided Camp",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Misguided_Camp"
+  },
+  "okolnir-frost-dragons": {
+   "level": 120,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Svargrond",
+   "wikiTitle": "Okolnir",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Okolnir"
+  },
+  "souleater-mountain": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Farmine",
+   "wikiTitle": "Souleater Mountains",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Souleater_Mountains"
+  },
+  "edron-vampire-crypt-4": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Edron Vampire Crypt is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Edron Vampire Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt"
+  },
+  "talahu-medusas-serpents": {
+   "level": 120,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Liberty Bay",
+   "wikiTitle": "Talahu",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Talahu"
+  },
+  "edron-heroes-3": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "edron-heroes-2": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "werecreatures-edron": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "otherworld-kazordoon-dwarf-bridge": {
+   "level": null,
+   "quest": "Opticording Sphere Quest",
+   "premium": null,
+   "note": "A mission of the Opticording Sphere Quest takes place here.",
+   "area": "Thais",
+   "wikiTitle": "Otherworld (Dwarf Bridge)",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld_(Dwarf_Bridge)"
+  },
+  "carnivora-s-rocks": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Carnivora's Rocks",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Carnivora's_Rocks"
+  },
+  "deeper-banuta-8": {
+   "level": null,
+   "quest": "The Ape City Quest",
+   "premium": null,
+   "note": "Access to Deeper Banuta is gained through The Ape City Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Deeper Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deeper_Banuta"
+  },
+  "hive-stage-3": {
+   "level": null,
+   "quest": "War Against The Hive Quest",
+   "premium": null,
+   "note": "The War Against The Hive Quest takes place here.",
+   "area": "Gray Beach",
+   "wikiTitle": "The Hive",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive"
+  },
+  "deeper-banuta-6": {
+   "level": null,
+   "quest": "The Ape City Quest",
+   "premium": null,
+   "note": "Access to Deeper Banuta is gained through The Ape City Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Deeper Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deeper_Banuta"
+  },
+  "seacrest-serpents-birthing-grounds": {
+   "level": null,
+   "quest": "Twenty Miles Beneath the Sea Quest",
+   "premium": null,
+   "note": "There is a main quest, Twenty Miles Beneath the Sea Quest, which unlocks the Seacrest Grounds in parts.",
+   "area": "Rathleton",
+   "wikiTitle": "Seacrest Grounds",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Seacrest_Grounds"
+  },
+  "lower-roshamuul": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "asura-mirror": {
+   "level": 250,
+   "quest": "Asura Palace Quest",
+   "premium": null,
+   "note": "To access the vault you must have completed the Asura Palace Quest and The Lost Brother Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Asura Vaults",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults"
+  },
+  "iksupan-occupied-sanctuary": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access to Iksupan Occupied Sanctuary is obtained through the Galthen and the City of Gold Part II.",
+   "area": "Port Hope",
+   "wikiTitle": "Iksupan Occupied Sanctuary",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Occupied_Sanctuary"
+  },
+  "iksupan-last-stand": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access to Iksupan Last Stand is obtained through the Galthen and the City of Gold Part II.",
+   "area": "Port Hope",
+   "wikiTitle": "Iksupan Last Stand",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Last_Stand"
+  },
+  "buried-cathedral-8": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Part of The Dream Courts Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Buried Cathedral",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral"
+  },
+  "oramond-abandoned-sewers": {
+   "level": null,
+   "quest": "Dark Trails Quest",
+   "premium": null,
+   "note": "Access to this place is gained through the Dark Trails Quest.",
+   "area": "Rathleton",
+   "wikiTitle": "Abandoned Sewers",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Abandoned_Sewers"
+  },
+  "rosha-shockheads": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Lower Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul"
+  },
+  "roshamuul-mines-terrorsleeps": {
+   "level": null,
+   "quest": "Roshamuul Quest",
+   "premium": null,
+   "note": "Some of the Roshamuul Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Roshamuul Mines",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul_Mines"
+  },
+  "summer-court": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to the Summer Court is obtained via The Dream Courts Quest.",
+   "area": "Feyrist",
+   "wikiTitle": "Court of Summer",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer"
+  },
+  "rosha-bones": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "upper-roshamuul-north": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "marapur-naga": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Marapur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Marapur"
+  },
+  "upper-roshamuul-south": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "venore-flimsies": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Amazon Camp (Venore)",
+   "wikiTitle": "Venore",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Venore"
+  },
+  "issavi-ogres": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "issavi-puzzle": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "deep-desert": {
+   "level": null,
+   "quest": "The Secret Library Quest",
+   "premium": null,
+   "note": "To be able to access all areas of the building check The Secret Library Quest which partially takes place here.",
+   "area": "Darashia",
+   "wikiTitle": "Deep Desert",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deep_Desert"
+  },
+  "issavi-sphinx-crypt-wardens": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "issavi-surface": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "warzone-9": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Talk to Gnomission for access to the warzones.",
+   "area": "Kazordoon",
+   "wikiTitle": "Warzone 1",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1"
+  },
+  "bulltaur-lair": {
+   "level": null,
+   "quest": "20 Years a Cook Quest",
+   "premium": null,
+   "note": "Access is gained through the 20 Years a Cook Quest.",
+   "area": "Venore",
+   "wikiTitle": "Bulltaur Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair"
+  },
+  "azzilon-catacombs": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Azzilon Catacombs",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Azzilon_Catacombs"
+  },
+  "forsaken-crypt": {
+   "level": null,
+   "quest": "The Roost of the Graveborn Quest",
+   "premium": null,
+   "note": "Part of The Roost of the Graveborn Quest.",
+   "area": "Ab'Dendriel",
+   "wikiTitle": "Forsaken Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forsaken_Crypt"
+  },
+  "larva-ankh": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Larva Caves",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Larva_Caves"
+  },
+  "edron-forgotten-tomb": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Mahatheb the Vizier (Book) can be found in a Sarcophagus (Quest) in the room they are buried in.",
+   "area": "Edron",
+   "wikiTitle": "Forgotten Tomb",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forgotten_Tomb"
+  },
+  "podzilla-quaras": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Oramond",
+   "wikiTitle": "Podzilla",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Podzilla"
+  },
+  "chor-runes": {
+   "level": 50,
+   "quest": "Explorer Society Quest",
+   "premium": null,
+   "note": "In order to successfully fulfill a mission from the Explorer Society Quest, you must go to the deepest parts of this village to find the Lizard Urn.",
+   "area": "Port Hope",
+   "wikiTitle": "Chor",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Chor"
+  },
+  "banuta-apes-runes": {
+   "level": 27,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Banuta"
+  },
+  "upper-spike-runes": {
+   "level": 150,
+   "quest": "Killing in the Name of... Quest",
+   "premium": null,
+   "note": null,
+   "area": null,
+   "wikiTitle": "The Spike",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Spike"
+  },
+  "minotaurs-darashia-stealth-ring": {
+   "level": null,
+   "quest": null,
+   "premium": true,
+   "note": "Only characters with a Premium Account can go to Darashia, using the boat from Venore, or some other Premium cities of Ankrahmun, Port Hope, Liberty Bay and Yalahar.",
+   "area": "Dark Pyramid",
+   "wikiTitle": "Darashia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Darashia"
+  },
+  "coryms-ph-runes": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "carniphilas-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "meriana-gargoyle-cave-runes": {
+   "level": null,
+   "quest": "Killing in the Name of... Quest",
+   "premium": null,
+   "note": "Quest, besides Stone Golems, Tarantulas and Thornback Tortoises which can be hunted for this quest as well.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Meriana Gargoyle Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Meriana_Gargoyle_Cave"
+  },
+  "yalahar-cults": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "lb-quara-scouts": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "wyrms-lb": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "mutated-rats-yalahar-alchemist": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "killer-caiman-cave-zao": {
+   "level": 60,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Farmine",
+   "wikiTitle": "Killer Caiman Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Killer_Caiman_Cave"
+  },
+  "quaras-lb": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "edron-bonebeasts": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "mutated-rats-yalahar-arena": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "water-elementals-south-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "water-elementals-west-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "edron-vampire-crypts": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Edron Vampire Crypt is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Edron Vampire Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt"
+  },
+  "iksupan-entrance": {
+   "level": null,
+   "quest": "Adventures of Galthen Quest",
+   "premium": null,
+   "note": "Access to Iksupan is obtained through the Adventures of Galthen Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Iksupan",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan"
+  },
+  "mother-of-scarabs-lair": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair"
+  },
+  "sunken-quarter": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Sunken Quarter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Sunken_Quarter"
+  },
+  "edron-old-fortress-heroes": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "barkless-elves-ab": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Femor Hills",
+   "wikiTitle": "Ab'Dendriel",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ab'Dendriel"
+  },
+  "oskayaat-weretigers-2": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Chor",
+   "wikiTitle": "Oskayaat",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat"
+  },
+  "marapur-nagas": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Marapur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Marapur"
+  },
+  "lower-rosh": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "marapur-turtles": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Marapur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Marapur"
+  },
+  "buried-cathedral": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Part of The Dream Courts Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Buried Cathedral",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral"
+  },
+  "iksupan-last-stand-entrance": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access to Iksupan Last Stand is obtained through the Galthen and the City of Gold Part II.",
+   "area": "Port Hope",
+   "wikiTitle": "Iksupan Last Stand",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Last_Stand"
+  },
+  "marapur-nagas-soulkamas": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Roshamuul",
+   "wikiTitle": "Marapur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Marapur"
+  },
+  "upper-roshamuul": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "cobra-bastion-1-basement": {
+   "level": 250,
+   "quest": "Grave Danger Quest",
+   "premium": null,
+   "note": "Part of the Grave Danger Quest takes part here.",
+   "area": "Ankrahmun",
+   "wikiTitle": "Cobra Bastion",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion"
+  },
+  "sphinx-crypt-warden-issavi": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "issavi-goannas-central-steppe": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "roshamuul-west": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "oramond-hideout-1": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "buried-cathedral-sanguine": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Part of The Dream Courts Quest takes place here.",
+   "area": "Roshamuul",
+   "wikiTitle": "Buried Cathedral",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral"
+  },
+  "winter-court-sanguine": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to this location is granted during The Dream Courts Quest.",
+   "area": "Svargrond",
+   "wikiTitle": "Court of Winter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter"
+  },
+  "flimsy-lost-souls-venore": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Amazon Camp (Venore)",
+   "wikiTitle": "Venore",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Venore"
+  },
+  "summer-court-sanguine": {
+   "level": null,
+   "quest": "The Dream Courts Quest",
+   "premium": null,
+   "note": "Access to the Summer Court is obtained via The Dream Courts Quest.",
+   "area": "Feyrist",
+   "wikiTitle": "Court of Summer",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer"
+  },
+  "otherworld-sanguine": {
+   "level": null,
+   "quest": "Heart of Destruction Quest",
+   "premium": null,
+   "note": "The main Otherworld is where the Heart of Destruction Quest takes place.",
+   "area": "Svargrond",
+   "wikiTitle": "Otherworld",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld"
+  },
+  "raubritters-bloodfire-gorge": {
+   "level": null,
+   "quest": "The Order of the Stag Quest",
+   "premium": null,
+   "note": "Accessed after 20 Night Harpy Beaks have been skinned in The Order of the Stag Quest.",
+   "area": "Roshamuul",
+   "wikiTitle": "Bloodfire Gorge",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bloodfire_Gorge"
+  },
+  "deep-desert-darashia-skeletons": {
+   "level": null,
+   "quest": "The Secret Library Quest",
+   "premium": null,
+   "note": "To be able to access all areas of the building check The Secret Library Quest which partially takes place here.",
+   "area": "Darashia",
+   "wikiTitle": "Deep Desert",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deep_Desert"
+  },
+  "energy-library": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access Requirements: * Completed The Secret Library Quest up to at least here.",
+   "area": "Carlin",
+   "wikiTitle": "Secret Library",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library"
+  },
+  "fire-library": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access Requirements: * Completed The Secret Library Quest up to at least here.",
+   "area": "Carlin",
+   "wikiTitle": "Secret Library",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library"
+  },
+  "ice-library": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access Requirements: * Completed The Secret Library Quest up to at least here.",
+   "area": "Carlin",
+   "wikiTitle": "Secret Library",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library"
+  },
+  "terramites-darashia": {
+   "level": null,
+   "quest": null,
+   "premium": true,
+   "note": "Only characters with a Premium Account can go to Darashia, using the boat from Venore, or some other Premium cities of Ankrahmun, Port Hope, Liberty Bay and Yalahar.",
+   "area": "Dark Pyramid",
+   "wikiTitle": "Darashia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Darashia"
+  },
+  "cormaya-dwarf-mines": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Cormaya Dwarf Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cormaya_Dwarf_Cave"
+  },
+  "cyclops-mistrock": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Mistrock",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mistrock"
+  },
+  "edron-earth-elementals": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Edron Earth Elemental Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Earth_Elemental_Cave"
+  },
+  "upper-spike": {
+   "level": 150,
+   "quest": "Killing in the Name of... Quest",
+   "premium": null,
+   "note": null,
+   "area": null,
+   "wikiTitle": "The Spike",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Spike"
+  },
+  "mutated-humans-yala": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Yalahar is also the only way to access to the west side of Zao, a place called Vengoth.",
+   "area": "Mistrock",
+   "wikiTitle": "Yalahar",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Yalahar"
+  },
+  "gargoyle-cave-meriana": {
+   "level": null,
+   "quest": "Killing in the Name of... Quest",
+   "premium": null,
+   "note": "Quest, besides Stone Golems, Tarantulas and Thornback Tortoises which can be hunted for this quest as well.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Meriana Gargoyle Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Meriana_Gargoyle_Cave"
+  },
+  "dryad-gardens": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "There is a Warning Sign at the entrance of the cave: : The Dryad Gardens is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Dryad Gardens",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dryad_Gardens"
+  },
+  "apes-banuta": {
+   "level": 27,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Banuta"
+  },
+  "ice-witch-temple-zushuka": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Svargrond",
+   "wikiTitle": "Ice Witch Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ice_Witch_Temple"
+  },
+  "liberty-bay-wyrms": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "water-elementals-port-hope": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "krailos-ogres-surface": {
+   "level": null,
+   "quest": "Krailos Quest",
+   "premium": null,
+   "note": "The Krailos Quest takes place here.",
+   "area": "Rathleton",
+   "wikiTitle": "Krailos",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Krailos"
+  },
+  "muggy-plains": {
+   "level": null,
+   "quest": "The New Frontier Quest",
+   "premium": null,
+   "note": "This teleporter is only available to players who have completed the first eight missions of The New Frontier Quest.",
+   "area": "Farmine",
+   "wikiTitle": "Muggy Plains",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Muggy_Plains"
+  },
+  "issavi-sphinxes-surface-sd": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "calassa": {
+   "level": null,
+   "quest": "The Explorer Society Quest",
+   "premium": null,
+   "note": "In order to get the ability to travel with Captain Max you need to do The Explorer Society Quest.",
+   "area": "Liberty Bay",
+   "wikiTitle": "Calassa",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Calassa"
+  },
+  "edron-were-south": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "behemoths-cyclopolis": {
+   "level": null,
+   "quest": "Behemoth Quest",
+   "premium": null,
+   "note": "There is a ramp up to the Behemoth Quest on floor 8.",
+   "area": "Edron",
+   "wikiTitle": "Cyclopolis",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Cyclopolis"
+  },
+  "edron-old-fortress-heroes-2-3": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron Dragon Lair",
+   "wikiTitle": "Edron",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron"
+  },
+  "oramond-minotaur-plains": {
+   "level": null,
+   "quest": "Rathleton Quest",
+   "premium": null,
+   "note": "Depending on the votes cast within the Rathleton Quest, you may find a Slime Slide which is a shortcut back to Rathleton .",
+   "area": "Rathleton",
+   "wikiTitle": "Oramond Minotaur Camp",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Minotaur_Camp"
+  },
+  "crumbling-caverns": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Edron",
+   "wikiTitle": "Crumbling Caverns",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Crumbling_Caverns"
+  },
+  "oramond-fury": {
+   "level": null,
+   "quest": "Dark Trails Quest",
+   "premium": null,
+   "note": "The Oramond Fury Dungeon is a fearsome place north of Rathleton to which access is gained during the Dark Trails Quest.",
+   "area": "Rathleton",
+   "wikiTitle": "Oramond Fury Dungeon",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Fury_Dungeon"
+  },
+  "roshamuul-terrosleep-mines": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "upper-rosh": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Next, the wall needs to be breached to access Upper Roshamuul.",
+   "area": null,
+   "wikiTitle": "Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul"
+  },
+  "issavi-sphinxes-crypt-wardens": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "issavi-ogre-mountain": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "dark-faun-cave-feyrist": {
+   "level": null,
+   "quest": "Threatened Dreams Quest",
+   "premium": null,
+   "note": "Access to Feyrist is gained through the Threatened Dreams Quest.",
+   "area": "Roshamuul",
+   "wikiTitle": "Feyrist",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist"
+  },
+  "flimsy-venore": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Amazon Camp (Venore)",
+   "wikiTitle": "Venore",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Venore"
+  },
+  "issavi-goannas": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "coryms-port-hope-aoe": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "issavi-surafce-sd": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Kilmaresh",
+   "wikiTitle": "Issavi",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Issavi"
+  },
+  "haunted-treelings-vengoth": {
+   "level": null,
+   "quest": "Blood Brothers Quest",
+   "premium": null,
+   "note": "To travel to Vengoth you need to have at least started the mission 4 (The Dark Lands) of the Blood Brothers Quest.",
+   "area": "Yalahar",
+   "wikiTitle": "Vengoth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth"
+  },
+  "edron-old-fortress-3-hero": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "edron-old-fortress-2-hero": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "darashia-dragon-lords": {
+   "level": null,
+   "quest": null,
+   "premium": true,
+   "note": "Only characters with a Premium Account can go to Darashia, using the boat from Venore, or some other Premium cities of Ankrahmun, Port Hope, Liberty Bay and Yalahar.",
+   "area": "Dark Pyramid",
+   "wikiTitle": "Darashia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Darashia"
+  },
+  "behemoths-forbidden-lands": {
+   "level": null,
+   "quest": "The Ape City Quest",
+   "premium": null,
+   "note": "You can find there a Giant Ape's Hair used in The Ape City Quest There is a near the stairs.",
+   "area": "Port Hope",
+   "wikiTitle": "Forbidden Lands",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forbidden_Lands"
+  },
+  "oramond-west-no-quara-raid": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "oramond-west-quara-raid": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Cormaya",
+   "wikiTitle": "Oramond",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond"
+  },
+  "dessert-dungeon": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Candia",
+   "wikiTitle": "Dessert Dungeons",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dessert_Dungeons"
+  },
+  "oramond-minotaur-south-plains": {
+   "level": null,
+   "quest": "Rathleton Quest",
+   "premium": null,
+   "note": "Depending on the votes cast within the Rathleton Quest, you may find a Slime Slide which is a shortcut back to Rathleton .",
+   "area": "Rathleton",
+   "wikiTitle": "Oramond Minotaur Camp",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Minotaur_Camp"
+  },
+  "rotworms-liberty-bay": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Calassa",
+   "wikiTitle": "Liberty Bay",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Liberty_Bay"
+  },
+  "tarantulas-ph": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "coryms-ph": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Port Hope",
+   "wikiTitle": "Port Hope Surroundings",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Surroundings"
+  },
+  "old-fortress-heroes": {
+   "level": null,
+   "quest": "Cartography 101 Quest",
+   "premium": null,
+   "note": "The Old Fortress is also one of the spots you have to cartograph during the Cartography 101 Quest.",
+   "area": "Edron",
+   "wikiTitle": "Old Fortress",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress"
+  },
+  "inner-hive": {
+   "level": null,
+   "quest": "War Against The Hive Quest",
+   "premium": null,
+   "note": "The War Against The Hive Quest takes place here.",
+   "area": "Gray Beach",
+   "wikiTitle": "The Hive",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive"
+  },
+  "deeper-banuta": {
+   "level": null,
+   "quest": "The Ape City Quest",
+   "premium": null,
+   "note": "Access to Deeper Banuta is gained through The Ape City Quest.",
+   "area": "Port Hope",
+   "wikiTitle": "Deeper Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Deeper_Banuta"
+  },
+  "norcferatu-dungeons": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Yalahar",
+   "wikiTitle": "Norcferatu Dungeons",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons"
+  },
+  "secret-library": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": "Access Requirements: * Completed The Secret Library Quest up to at least here.",
+   "area": "Carlin",
+   "wikiTitle": "Secret Library",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library"
+  },
+  "gnomprona": {
+   "level": null,
+   "quest": "Primal Ordeal Quest",
+   "premium": null,
+   "note": null,
+   "area": null,
+   "wikiTitle": "Gnomprona",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Gnomprona"
+  },
+  "unhallowed-crypt": {
+   "level": null,
+   "quest": "The Roost of the Graveborn Quest",
+   "premium": null,
+   "note": "Part of The Roost of the Graveborn Quest.",
+   "area": "Ab'Dendriel",
+   "wikiTitle": "Unhallowed Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Unhallowed_Crypt"
+  },
+  "ripper-spectre-venore": {
+   "level": null,
+   "quest": null,
+   "premium": null,
+   "note": null,
+   "area": "Amazon Camp (Venore)",
+   "wikiTitle": "Venore",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Venore"
+  }
+ }
+}
