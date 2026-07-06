@@ -2,9 +2,10 @@
  * Daily character tracker for Night'Flyn — the same mechanism as
  * tibia-xp-history's get-xp-data.mjs (github.com/mathiasbynens/tibia-xp-history):
  * the TibiaData v4 highscores expose each ranked character's exact
- * experience once per day, so a daily crawl of the world+vocation pages
- * until the character appears yields {rank, level, experience}. A snapshot
- * of page 1 guards against recording the same upstream day twice.
+ * experience, so a crawl of the world+vocation pages until the character
+ * appears yields {rank, level, experience}. The history key follows Tibia's
+ * daily boundary: 10:00 Europe/Berlin server save time (CET or CEST). A
+ * snapshot of page 1 guards against recording the same upstream day twice.
  *
  * Extended beyond the reference: skill highscore categories (magic level,
  * charm points, boss points, achievements, loyalty, fishing, Drome) are
@@ -41,6 +42,18 @@ const PROFILE_PATH = new URL('../data/character.json', import.meta.url);
 const SNAPSHOT_PATH = new URL('../data/character-snapshot.json', import.meta.url);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const berlinParts = (date) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Berlin',
+  hourCycle: 'h23',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+}).formatToParts(date).filter((p) => p.type !== 'literal').map((p) => [p.type, Number(p.value)]));
+const serverSaveDate = (date = new Date()) => {
+  const p = berlinParts(date);
+  return new Date(Date.UTC(p.year, p.month - 1, p.day - (p.hour < 10 ? 1 : 0))).toISOString().slice(0, 10);
+};
 const readJson = (path, fallback) => {
   try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return fallback; }
 };
@@ -60,7 +73,7 @@ async function fetchJson(url, attempt = 1) {
   return res.json();
 }
 
-const today = new Date().toISOString().slice(0, 10);
+const today = serverSaveDate();
 const history = readJson(HISTORY_PATH, {});
 const previousProfile = readJson(PROFILE_PATH, {});
 

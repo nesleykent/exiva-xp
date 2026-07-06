@@ -1,8 +1,9 @@
 # Daily Night'Flyn tracker — same mechanism and schedule as
 # github.com/mathiasbynens/tibia-xp-history: the Tibia highscores roll once
-# a day, so a daily crawl at 03:00 UTC records {rank, level, experience}
-# plus the skill categories, committed back to the repo with the owner's
-# GitHub noreply identity so the contributor list stays owner-only.
+# a day, and the script keys history rows by Tibia's 10:00 Europe/Berlin
+# server-save boundary. A daily crawl at 03:00 UTC records {rank, level,
+# experience} plus the skill categories, committed back to the repo with the
+# owner's GitHub noreply identity so the contributor list stays owner-only.
 # The data commit then dispatches publish.yml so the site redeploys with
 # fresh numbers (a GITHUB_TOKEN push does not fire push-triggered
 # workflows on its own).
@@ -39,7 +40,7 @@ jobs:
         run: |
           git config user.name "nesleykent"
           git config user.email '20923096+nesleykent@users.noreply.github.com'
-          date=$(date +'%Y-%m-%d')
+          date=$(node --input-type=module -e "const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit'}).formatToParts(new Date()).filter((part)=>part.type!=='literal').map((part)=>[part.type,Number(part.value)])); console.log(new Date(Date.UTC(p.year,p.month-1,p.day-(p.hour<10?1:0))).toISOString().slice(0,10));")
           git add data/character-history.json data/character.json data/character-snapshot.json
           git commit -m "data: character snapshot for ${date}" || exit 0
           git push

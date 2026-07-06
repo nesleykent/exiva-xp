@@ -2,7 +2,7 @@
 
 **A private-first Tibia character hub, built around [Night'Flyn](https://www.tibia.com/community/?subtopic=characters&name=night%27flyn)** (Elder Druid, Gentebra). Exiva XP centralises everything one character needs to understand, plan and improve: Hunting Analyser sessions, XP and skill history, profit, deaths, hunting places, creature intelligence, elemental strategy, charms, stamina planning and long-term progression. Every tool answers a practical character question: *where should I hunt, which element is best, how much profit do I make, how does my XP evolve, which respawns fit my level, which creatures do I kill most, which charms matter, and how is my performance changing?* The curated hunting database remains underneath as the planning engine, but the character and personal logbook are the centre. Public/shared features are optional later layers.
 
-Four scoped references shape the product: the current [Exiva XP site](https://nesleykent.github.io/exiva-xp/index.html), [TibiaTools](https://tibiatools.io) (combat/damage/charm calculator logic), [Respawn Finder](https://github.com/danyelvarejao/respawn-finder) (respawn search patterns that improve the hunting database), and [Tibia XP History](https://github.com/mathiasbynens/tibia-xp-history) (daily character progression tracking via TibiaData — its formulas, workflow and 03:00 UTC update schedule are ported here directly). GuildStats is used only as an initial Night'Flyn backfill source until the daily tracker has enough history of its own.
+Four scoped references shape the product: the current [Exiva XP site](https://nesleykent.github.io/exiva-xp/index.html), [TibiaTools](https://tibiatools.io) (combat/damage/charm calculator logic), [Respawn Finder](https://github.com/danyelvarejao/respawn-finder) (respawn search patterns that improve the hunting database), and [Tibia XP History](https://github.com/mathiasbynens/tibia-xp-history) (daily character progression tracking via TibiaData — its formulas and crawler workflow are ported here, with history rows keyed to Tibia's 10:00 Europe/Berlin server-save day). GuildStats is used only as an initial Night'Flyn backfill source until the daily tracker has enough history of its own.
 
 Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dependencies. Ships to GitHub Pages as-is. The interface follows the [Instagram Design System](https://github.com/nesleykent/instagram-design-system): a product-app shell (sidebar → icon rail → tab bar), light and dark appearances, quiet monochrome surfaces and one loud gradient.
 
@@ -59,7 +59,7 @@ data/
   shared-hunts.json        generated — optional shared/approved hunts
   ledger.json              generated — prebuilt shared ledger cache
   character.json           generated daily — Night'Flyn profile, skill ranks, death log
-  character-history.json   generated daily — {date: {rank, level, experience, skills…}}; older rows may be marked as imported backfill
+  character-history.json   generated daily — {server-save date: {rank, level, experience, skills…}}; older rows may be marked as imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
   character-online.json    generated every 15 minutes — sampled world-list online status from TibiaData
 pipeline/
@@ -74,7 +74,7 @@ pipeline/
 .github/workflows/
   check-hunt.yml           on issue opened/edited
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
-  track-character.yml      daily 03:00 UTC — record the day, commit, redeploy
+  track-character.yml      daily 03:00 UTC — record the current Tibia server-save day, commit, redeploy
   track-online.yml         every 15 minutes — record one online/offline sample, commit, redeploy
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```

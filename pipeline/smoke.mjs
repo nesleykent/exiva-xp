@@ -151,6 +151,8 @@ if (character) {
   const charHistory = data('character-history.json');
   const entries = Object.entries(charHistory);
   assert(entries.length >= 1, 'character-history.json is empty despite character.json existing');
+  assert(!Object.hasOwn(charHistory, '2026-07-06') || charHistory['2026-07-06'].source !== 'TibiaData highscores',
+    'pre-server-save TibiaData reading was recorded under UTC date 2026-07-06 instead of Tibia server-save day 2026-07-05');
   for (const [date, e] of entries) {
     assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `bad history date key: ${date}`);
     assert(Number.isFinite(e.level) && Number.isFinite(e.experience) && (e.rank == null || Number.isFinite(e.rank)),
