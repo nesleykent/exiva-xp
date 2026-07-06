@@ -222,3 +222,38 @@ export function effectiveDamage({
     turn: hit + charmExpected,
   };
 }
+
+/**
+ * Shared Experience level range, per TibiaWiki (Sharing Experience): the
+ * lowest-level member of a shared-XP group must be at least 2/3 of the
+ * highest-level member's level. For a fixed reference level this bound is
+ * symmetric — it applies the same way whether the reference level ends up
+ * being the higher or lower member of the pair.
+ */
+export function sharedExpRange(level) {
+  const n = Number(level) || 0;
+  return {
+    min: Math.ceil((n * 2) / 3),
+    max: Math.floor(n * 1.5),
+  };
+}
+
+/**
+ * Exercise weapon (wand/rod) training cost, per TibiaWiki (Exercise
+ * Weapons): each charge burns 600 mana and is consumed once every 2
+ * seconds of use against a training dummy. Skill points gained per hit
+ * are randomized and have no documented closed-form rate, so this
+ * reports only mana spent and dummy time elapsed — never a skill-point
+ * or "time to next skill level" projection.
+ */
+export const EXERCISE_MANA_PER_CHARGE = 600;
+export const EXERCISE_SECONDS_PER_CHARGE = 2;
+
+export function exerciseWeaponCost(charges) {
+  const n = Math.max(0, Math.floor(Number(charges) || 0));
+  return {
+    charges: n,
+    mana: n * EXERCISE_MANA_PER_CHARGE,
+    seconds: n * EXERCISE_SECONDS_PER_CHARGE,
+  };
+}

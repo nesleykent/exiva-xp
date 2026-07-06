@@ -7,9 +7,11 @@ import { $, pillEl, ring } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
+  exerciseWeaponCost,
   formatStamina,
   parseStamina,
   profitSnapshot,
+  sharedExpRange,
   staminaProjection,
 } from '../engine/planning.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
@@ -78,6 +80,30 @@ stage.innerHTML = `
         <span class="fine dim">from saved analyser sessions</span>
       </div>
       <div class="tool-result" id="profit-out"></div>
+    </section>
+
+    <section class="panel panel-pad tool-card" id="sharedxp-tool">
+      <div class="tool-head">
+        <h2>Shared Experience range</h2>
+        <span class="fine dim">party level spread</span>
+      </div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Partner level</span><input id="sharedxp-level" type="number" min="1" placeholder="e.g. 300"></label>
+      </div>
+      <div class="tool-result" id="sharedxp-out"></div>
+      <p class="fine dim">The lowest-level party member must be at least 2/3 of the highest-level member's level to share experience.</p>
+    </section>
+
+    <section class="panel panel-pad tool-card" id="exercise-tool">
+      <div class="tool-head">
+        <h2>Exercise weapon cost</h2>
+        <span class="fine dim">wand/rod training on a dummy</span>
+      </div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Charges</span><input id="exercise-charges" type="number" min="0" value="500"></label>
+      </div>
+      <div class="tool-result" id="exercise-out"></div>
+      <p class="fine dim">Mana and dummy time only — skill points gained per hit are randomized with no published closed-form rate, so this never estimates skill progress or time to next skill level.</p>
     </section>
   </div>`;
 
@@ -185,6 +211,27 @@ function renderProfit() {
     </div>`;
 }
 
+function renderSharedExp() {
+  const range = sharedExpRange(characterLevel);
+  const partner = $('#sharedxp-level').value;
+  const partnerLevel = partner === '' ? null : numberInput('#sharedxp-level');
+  const inRange = partnerLevel != null && partnerLevel >= range.min && partnerLevel <= range.max;
+  $('#sharedxp-out').innerHTML = `
+    <div class="tool-kpis">
+      <span><b>${nf(range.min)}–${nf(range.max)}</b><small>Night'Flyn (lvl ${nf(characterLevel)}) can share with</small></span>
+      ${partnerLevel != null ? `<span><b>${inRange ? 'In range' : 'Out of range'}</b><small>level ${nf(partnerLevel)}</small></span>` : ''}
+    </div>`;
+}
+
+function renderExercise() {
+  const result = exerciseWeaponCost(numberInput('#exercise-charges'));
+  $('#exercise-out').innerHTML = `
+    <div class="tool-kpis">
+      <span><b>${nf(result.mana)}</b><small>mana burned</small></span>
+      <span><b>${hm(result.seconds / 60)}</b><small>dummy time</small></span>
+    </div>`;
+}
+
 [
   '#stamina-current', '#stamina-session', '#stamina-target',
 ].forEach((id) => $(id).addEventListener('input', renderStamina));
@@ -193,9 +240,13 @@ function renderProfit() {
   '#damage-mitigation', '#damage-crit-chance', '#damage-crit-damage',
   '#damage-fatal-chance', '#damage-fatal-damage', '#damage-charm', '#damage-charm-chance',
 ].forEach((id) => $(id).addEventListener('input', renderDamage));
+$('#sharedxp-level').addEventListener('input', renderSharedExp);
+$('#exercise-charges').addEventListener('input', renderExercise);
 
 renderStamina();
 renderDamage();
 renderProfit();
+renderSharedExp();
+renderExercise();
 
 export {};
