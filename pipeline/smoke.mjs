@@ -126,8 +126,8 @@ if (character) {
   assert(entries.length >= 1, 'character-history.json is empty despite character.json existing');
   for (const [date, e] of entries) {
     assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `bad history date key: ${date}`);
-    assert(Number.isFinite(e.level) && Number.isFinite(e.experience) && Number.isFinite(e.rank),
-      `history[${date}] missing rank/level/experience`);
+    assert(Number.isFinite(e.level) && Number.isFinite(e.experience) && (e.rank == null || Number.isFinite(e.rank)),
+      `history[${date}] missing level/experience or has a bad rank`);
     assert(experienceUntilNextLevel(e.level, e.experience) > 0,
       `history[${date}]: recorded XP exceeds the next level's requirement — level/XP mismatch`);
   }
