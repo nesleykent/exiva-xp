@@ -20,7 +20,7 @@ const workspaces = [
     href: 'character.html',
     icon: ring(profile?.name || "Night'Flyn", { quiet: true }),
     title: 'Character dashboard',
-    text: 'Night\'Flyn profile, XP history, skills, deaths and personal progression context.',
+    text: 'Night\'Flyn profile, XP history, highscores, deaths and personal progression context.',
   },
   {
     href: 'grounds.html',
@@ -44,7 +44,7 @@ const workspaces = [
     href: 'analytics.html',
     icon: ICONS.chart,
     title: 'Progress',
-    text: 'XP, skills, sessions, kill volume, loot and performance boards.',
+    text: 'XP, highscores, sessions, kill volume, loot and performance boards.',
   },
   {
     href: 'creatures.html',

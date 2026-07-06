@@ -25,10 +25,10 @@ These are rebuilt by pipeline scripts and committed:
 
 These are generated observations for Night'Flyn and must stay honest:
 
-- `character-history.json` - daily XP/rank/skill rows keyed by Tibia's
+- `character-history.json` - daily XP/rank/highscore rows keyed by Tibia's
   10:00 Europe/Berlin server-save day. Unknown values stay `null`; never carry
-  forward a previous skill or rank as if it were measured today.
-- `character.json` - latest profile, skill ranks and known deaths.
+  forward a previous highscore value or rank as if it were measured today.
+- `character.json` - latest profile, highscore ranks and known deaths.
 - `character-snapshot.json` - highscore staleness guard for the tracker.
 - `character-online.json` - 15-minute sampled world-list observations. Offline
   means "not listed in that sample", not continuous telemetry.

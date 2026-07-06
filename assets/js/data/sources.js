@@ -143,7 +143,7 @@ export async function loadCharacter(prefix = '') {
   catch { return null; }
 }
 
-/** Daily {date: {rank, level, experience, skills…}} history, oldest first. */
+/** Daily {date: {rank, level, experience, highscores...}} history, oldest first. */
 export async function loadCharacterHistory(prefix = '') {
   try {
     const raw = await json(prefix + FILES.characterHistory);

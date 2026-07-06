@@ -7,9 +7,8 @@
  * daily boundary: 10:00 Europe/Berlin server save time (CET or CEST). A
  * snapshot of page 1 guards against recording the same upstream day twice.
  *
- * Extended beyond the reference: skill highscore categories (magic level,
- * charm points, boss points, achievements, loyalty, fishing, Drome) are
- * tracked the same way, and the character profile (achievement points,
+ * Extended beyond the reference: every TibiaData highscore category for the
+ * character is tracked the same way, and the character profile (achievement points,
  * last login, account details) comes from the character endpoint. Known
  * deaths are preserved from earlier imports and extended if TibiaData
  * exposes new ones.
@@ -20,6 +19,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { HIGHSCORE_CATEGORIES, TRACKED_HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 
 const NAME = "Night'Flyn";
 const WORLD = 'Gentebra';
@@ -27,16 +27,6 @@ const VOCATION = 'druids';
 // Public api.tibiadata.com keeps highscores in "restriction mode"; the dev
 // instance serves them — and is what the reference project queries too.
 const API = 'https://dev.tibiadata.com/v4';
-const SKILL_CATEGORIES = [
-  { category: 'magiclevel', valueField: 'magicLevel', rankField: 'magicLevelRank' },
-  { category: 'charmpoints', valueField: 'charmPoints', rankField: 'charmPointsRank' },
-  { category: 'bosspoints', valueField: 'bossPoints', rankField: 'bossPointsRank' },
-  { category: 'achievements', valueField: 'achievements', rankField: 'achievementsRank' },
-  { category: 'loyaltypoints', valueField: 'loyalty', rankField: 'loyaltyRank' },
-  { category: 'fishing', valueField: 'fishing', rankField: 'fishingRank' },
-  { category: 'drome', valueField: 'dromeScore', rankField: 'dromeScoreRank' },
-];
-
 const HISTORY_PATH = new URL('../data/character-history.json', import.meta.url);
 const PROFILE_PATH = new URL('../data/character.json', import.meta.url);
 const SNAPSHOT_PATH = new URL('../data/character-snapshot.json', import.meta.url);
@@ -115,17 +105,17 @@ if (snapshotUnchanged && !Object.hasOwn(history, today)) {
   throw new Error('Highscores identical to the stored snapshot — upstream has not rolled a new day yet. Try again later.');
 }
 
-// ---- skill categories (best-effort; unranked or erroring → null) ----
-const skills = {};
-for (const { category } of SKILL_CATEGORIES) {
+// ---- secondary highscore categories (best-effort; unranked or erroring → null) ----
+const highscores = {};
+for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
   try {
     const hit = await findInHighscores(category);
-    skills[category] = hit ? { rank: hit.rank, value: hit.value } : null;
+    highscores[category] = hit ? { rank: hit.rank, value: hit.value } : null;
     console.log(`${category}: ${hit ? `rank ${hit.rank}, value ${hit.value}` : 'not in top 1000'}`);
   } catch (err) {
     // null means "not measured today" — never carry an old value forward as
     // if it were today's reading; the history must stay honest.
-    skills[category] = null;
+    highscores[category] = null;
     console.error(`${category}: ${err.message}`);
   }
   await sleep(400);
@@ -143,9 +133,9 @@ const todayEntry = {
   experience: xp.value,
   source: 'TibiaData highscores',
 };
-for (const { category, valueField, rankField } of SKILL_CATEGORIES) {
-  todayEntry[valueField] = skills[category]?.value ?? null;
-  todayEntry[rankField] = skills[category]?.rank ?? null;
+for (const { category, valueField, rankField } of TRACKED_HIGHSCORE_CATEGORIES) {
+  todayEntry[valueField] = highscores[category]?.value ?? null;
+  todayEntry[rankField] = highscores[category]?.rank ?? null;
 }
 
 let changed = false;
@@ -177,7 +167,11 @@ const nextProfile = {
   accountCreated: profileData.character.account_information?.created || null,
   loyaltyTitle: profileData.character.account_information?.loyalty_title || null,
   houses: (c.houses || []).map((h) => ({ name: h.name, town: h.town, paidUntil: h.paid })),
-  skillRanks: Object.fromEntries(SKILL_CATEGORIES.map(({ category }) => [category, skills[category]?.rank ?? null])),
+  highscoreRanks: Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
+    category,
+    category === 'experience' ? xp.rank : highscores[category]?.rank ?? null,
+  ])),
+  skillRanks: Object.fromEntries(TRACKED_HIGHSCORE_CATEGORIES.map(({ category }) => [category, highscores[category]?.rank ?? null])),
   deaths: knownDeaths,
 };
 

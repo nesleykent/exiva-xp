@@ -14,10 +14,22 @@ import { readBattle } from '../assets/js/engine/strategy.js';
 import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
 import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
 import { charmAdvice, effectiveDamage, exerciseWeaponCost, formatStamina, parseStamina, profitSnapshot, sharedExpRange, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
+import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 
 const data = (f) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'));
 const assert = (cond, msg) => { if (!cond) throw new Error(msg); };
+const tibiaServerSaveDate = (date = new Date()) => {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Berlin',
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+  }).formatToParts(date).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day - (parts.hour < 10 ? 1 : 0))).toISOString().slice(0, 10);
+};
 
 let extra = null;
 try { extra = data('codex-extra.json'); } catch { /* enrichment is optional */ }
@@ -157,8 +169,7 @@ if (character) {
   const charHistory = data('character-history.json');
   const entries = Object.entries(charHistory);
   assert(entries.length >= 1, 'character-history.json is empty despite character.json existing');
-  assert(!Object.hasOwn(charHistory, '2026-07-06') || charHistory['2026-07-06'].source !== 'TibiaData highscores',
-    'pre-server-save TibiaData reading was recorded under UTC date 2026-07-06 instead of Tibia server-save day 2026-07-05');
+  assert(entries.at(-1)[0] <= tibiaServerSaveDate(), 'latest character-history row is after the current Tibia server-save day');
   for (const [date, e] of entries) {
     assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `bad history date key: ${date}`);
     assert(Number.isFinite(e.level) && Number.isFinite(e.experience) && (e.rank == null || Number.isFinite(e.rank)),
@@ -167,18 +178,12 @@ if (character) {
       `history[${date}]: recorded XP exceeds the next level's requirement — level/XP mismatch`);
   }
   const latestEntry = entries.at(-1)?.[1] || {};
-  if (character.skillRanks?.drome != null) {
+  if (character.highscoreRanks?.dromescore != null || character.skillRanks?.drome != null) {
     assert(Number.isFinite(latestEntry.dromeScore), 'latest character-history entry is missing TibiaData Drome score despite a Drome rank in character.json');
   }
-  for (const [valueField, rankField] of [
-    ['magicLevel', 'magicLevelRank'],
-    ['charmPoints', 'charmPointsRank'],
-    ['bossPoints', 'bossPointsRank'],
-    ['achievements', 'achievementsRank'],
-    ['loyalty', 'loyaltyRank'],
-    ['fishing', 'fishingRank'],
-    ['dromeScore', 'dromeScoreRank'],
-  ]) {
+  for (const { valueField, rankField } of HIGHSCORE_CATEGORIES) {
+    assert(Object.hasOwn(latestEntry, valueField), `latest character-history entry is missing ${valueField}`);
+    assert(Object.hasOwn(latestEntry, rankField), `latest character-history entry is missing ${rankField}`);
     if (latestEntry[valueField] != null && latestEntry[rankField] != null) {
       assert(Number.isFinite(latestEntry[rankField]), `latest character-history entry has a bad ${rankField}`);
     }

@@ -1,4 +1,4 @@
-/** Progression analytics — XP history, skills and personal hunt performance. */
+/** Progression analytics — XP history, highscores and personal hunt performance. */
 
 import { boot } from './_boot.js';
 import { nf, kk, hm } from '../lib/fmt.js';
@@ -6,6 +6,7 @@ import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
 import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
+import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const { stage, hunts, table } = await boot('analytics.html');
 const [history, profile] = await Promise.all([
@@ -31,29 +32,16 @@ const weekdayXp = weekdayBuckets
   .filter((row) => row.gains.length)
   .map((row) => ({ key: `${row.name} (${nf(row.gains.length)}d)`, n: average(row.gains) }));
 
-const SKILLS = [
-  { key: 'magicLevel', rank: 'magiclevel', label: 'Magic level' },
-  { key: 'charmPoints', rank: 'charmpoints', label: 'Charm points' },
-  { key: 'bossPoints', rank: 'bosspoints', label: 'Boss points' },
-  { key: 'achievements', rank: 'achievements', label: 'Achievement points' },
-  { key: 'loyalty', rank: 'loyaltypoints', label: 'Loyalty points' },
-  { key: 'fishing', rank: 'fishing', label: 'Fishing' },
-];
-const TREND_SKILLS = [
-  ...SKILLS,
-  { key: 'dromeScore', label: 'Drome score' },
-];
-
 function signed(value) {
   if (value == null || !Number.isFinite(value)) return '<span class="dim">-</span>';
   if (value === 0) return '<span class="dim">0</span>';
   return `<span class="${value > 0 ? 'ok' : 'bad'}">${value > 0 ? '+' : ''}${nf(value)}</span>`;
 }
 
-const skillTrends = TREND_SKILLS.map((s) => {
+const highscoreTrends = HIGHSCORE_CATEGORIES.map((s) => {
   const series = history
-    .filter((row) => row[s.key] != null)
-    .map((row) => ({ key: row.date.slice(5), n: row[s.key] }));
+    .filter((row) => row[s.valueField] != null)
+    .map((row) => ({ key: row.date.slice(5), n: row[s.valueField] }));
   const values = new Set(series.map((row) => row.n));
   const latestPoint = series.at(-1);
   const previousPoint = series.length > 1 ? series.at(-2) : null;
@@ -68,7 +56,7 @@ const skillTrends = TREND_SKILLS.map((s) => {
   };
 }).filter((s) => s.value != null);
 
-function skillTrendCard(s) {
+function highscoreTrendCard(s) {
   return `
     <article class="panel skill-card">
       <div class="skill-card-head">
@@ -128,7 +116,7 @@ const board = (title, data, svg) => (data.length ? `
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Progression analytics</h1>
-    <p class="dim">XP and skills come from Night'Flyn's daily tracker; hunt boards use ${nf(hunts.length)} saved analyser log${hunts.length === 1 ? '' : 's'} plus ${nf(table.length)} planner rows.</p>
+    <p class="dim">XP and highscores come from Night'Flyn's daily tracker; hunt boards use ${nf(hunts.length)} saved analyser log${hunts.length === 1 ? '' : 's'} plus ${nf(table.length)} planner rows.</p>
   </header>
   <div class="pulse-row">
     <div class="panel pulse"><div class="big num">${nf(history.length)}</div><div class="eyebrow">Tracked days</div></div>
@@ -139,9 +127,9 @@ stage.innerHTML = `
   </div>
   ${board('Daily XP gain', dailyXp, flow(dailyXp))}
   ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
-  ${skillTrends.length ? `<section class="section">
-    <div class="section-bar"><h2>Tracked skills</h2><span class="fine dim">each metric gets its own scale and readiness state</span></div>
-    <div class="skill-grid">${skillTrends.map(skillTrendCard).join('')}</div>
+  ${highscoreTrends.length ? `<section class="section">
+    <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>
+    <div class="skill-grid">${highscoreTrends.map(highscoreTrendCard).join('')}</div>
   </section>` : ''}
   ${board('Best XP targets', topXp, bars(topXp))}
   ${board('Best profit targets', topProfit, bars(topProfit))}
@@ -150,7 +138,7 @@ stage.innerHTML = `
   ${board('Most killed creatures', topKills, bars(topKills, { fmt: nf }))}
   ${board('Most looted items', topDrops, bars(topDrops, { fmt: nf }))}
   ${board('Hunts by vocation', byVocation, bars(byVocation, { fmt: nf }))}
-  ${hunts.length ? '' : '<div class="note note-amber" style="margin-top:24px">Personal hunt boards light up after the first analyser is saved. XP and skill tracking already run from the character history.</div>'}`;
+  ${hunts.length ? '' : '<div class="note note-amber" style="margin-top:24px">Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.</div>'}`;
 document.querySelectorAll('.viz').forEach((panel) => { if (panel.querySelector('.vdot')) attachFlowHover(panel); });
 
 export {};

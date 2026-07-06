@@ -1,6 +1,6 @@
 /**
  * Character - Night'Flyn's dashboard: generated profile, progression,
- * sampled online status, skills, deaths, and shortcuts into the planning tools.
+ * sampled online status, highscores, deaths, and shortcuts into the planning tools.
  */
 
 import { boot } from './_boot.js';
@@ -20,6 +20,7 @@ import { $, ring } from '../shell.js';
 import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, loadCharacterOnline, logbook } from '../data/sources.js';
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
+import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const { stage, codex, grounds, table } = await boot('character.html');
 const [profile, history, onlineLog] = await Promise.all([
@@ -64,23 +65,13 @@ const levelUps = [...levelUpsChronological].reverse();
 const recentGains = gains.slice(-7).map((g) => g.n);
 const avgDailyXp = recentGains.length ? Math.round(recentGains.reduce((a, b) => a + b, 0) / recentGains.length) : null;
 
-const SKILLS = [
-  { key: 'magicLevel', rankKey: 'magiclevel', rankHistoryKey: 'magicLevelRank', label: 'Magic level', kind: 'skill level' },
-  { key: 'charmPoints', rankKey: 'charmpoints', rankHistoryKey: 'charmPointsRank', label: 'Charm points', kind: 'earned points' },
-  { key: 'bossPoints', rankKey: 'bosspoints', rankHistoryKey: 'bossPointsRank', label: 'Boss points', kind: 'earned points' },
-  { key: 'achievements', rankKey: 'achievements', rankHistoryKey: 'achievementsRank', label: 'Achievement points', kind: 'points' },
-  { key: 'loyalty', rankKey: 'loyaltypoints', rankHistoryKey: 'loyaltyRank', label: 'Loyalty points', kind: 'points' },
-  { key: 'fishing', rankKey: 'fishing', rankHistoryKey: 'fishingRank', label: 'Fishing', kind: 'skill level' },
-  { key: 'dromeScore', rankKey: 'drome', rankHistoryKey: 'dromeScoreRank', label: 'Drome score', kind: 'season score' },
-];
-
-/** Earliest recorded value of a skill field; the delta window is the whole history. */
+/** Earliest recorded value of a highscore field; the delta window is the whole history. */
 function firstKnown(field) {
   for (const e of history) if (e[field] != null) return { value: e[field], date: e.date };
   return null;
 }
 
-function skillSeries(field) {
+function highscoreSeries(field) {
   return history
     .filter((row) => row[field] != null)
     .map((row) => ({ id: row.date, key: row.date.slice(5), n: row[field] }));
@@ -103,20 +94,20 @@ const historyByDate = new Map(historyRows.map((row) => [row.date, row]));
 // samples away; deriving from raw alone would forget anything >14 days old
 const onlineLevelUps = onlineLog?.levelUps?.length ? onlineLog.levelUps : observedOnlineLevelUps(onlineSamples);
 
-const skillRows = latest ? SKILLS
-  .filter(({ key }) => latest[key] != null)
-  .map((skill) => {
-    const { key, rankKey, rankHistoryKey, label, kind } = skill;
-    const first = firstKnown(key);
-    const value = latest[key];
-    const series = skillSeries(key);
+const highscoreRows = latest ? HIGHSCORE_CATEGORIES
+  .filter(({ valueField }) => latest[valueField] != null)
+  .map((category) => {
+    const { category: rankKey, valueField, rankField, label, kind } = category;
+    const first = firstKnown(valueField);
+    const value = latest[valueField];
+    const series = highscoreSeries(valueField);
     const values = series.map((row) => row.n);
     const previousValue = values.length > 1 ? values.at(-2) : null;
-    const latestRank = latest[rankHistoryKey] ?? profile?.skillRanks?.[rankKey] ?? null;
+    const latestRank = latest[rankField] ?? profile?.highscoreRanks?.[rankKey] ?? profile?.skillRanks?.[rankKey] ?? null;
     return {
-      key,
+      key: valueField,
       rankKey,
-      rankHistoryKey,
+      rankHistoryKey: rankField,
       label,
       kind,
       value,
@@ -595,7 +586,7 @@ function xpDetailHtml(row = historyRows.at(-1)) {
     </div>`;
 }
 
-function skillCardHtml(row) {
+function highscoreCardHtml(row) {
   const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
   return `
     <article class="panel skill-card">
@@ -640,8 +631,8 @@ const xpTable = tableHtml([
   { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
 ], [...historyRows].reverse(), 'No XP rows yet.');
 
-const skillsTable = tableHtml([
-  { label: 'Skill', cell: (row) => esc(row.label) },
+const highscoresTable = tableHtml([
+  { label: 'Highscore', cell: (row) => esc(row.label) },
   { label: 'Unit', cell: (row) => esc(row.kind) },
   { label: 'Value', className: 'num', cell: (row) => nf(row.value) },
   { label: 'Rank', className: 'num', cell: (row) => row.rank != null ? `#${nf(row.rank)}` : '<span class="dim">-</span>' },
@@ -651,7 +642,7 @@ const skillsTable = tableHtml([
   { label: 'Delta', className: 'num', cell: (row) => signed(row.delta) },
   { label: 'XP over window', className: 'num', cell: (row) => signed(xpOverWindow(row)) },
   { label: 'Window', cell: (row) => esc([row.firstDate, row.sourceDate].filter(Boolean).join(' -> ')) },
-], skillRows, 'No skill rows yet.');
+], highscoreRows, 'No highscore rows yet.');
 
 const groundsTable = tableHtml([
   { label: 'Ground', cell: (row) => `<a href="ground.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
@@ -691,7 +682,7 @@ stage.innerHTML = `
     <a href="#profile">Profile</a>
     <a href="#experience">XP</a>
     <a href="#online">Online</a>
-    <a href="#skills">Skills</a>
+    <a href="#highscores">Highscores</a>
     <a href="#hunts">Hunts</a>
   </nav>
 
@@ -763,13 +754,13 @@ stage.innerHTML = `
   </section>
 
   ${latest ? `
-  <section class="section" id="skills">
-    <div class="section-bar"><h2>Skills &amp; standings</h2><span class="fine dim">as of ${esc(latest.date)} · each skill keeps its own unit</span></div>
+  <section class="section" id="highscores">
+    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">as of ${esc(latest.date)} · each category keeps its own unit</span></div>
     <div class="skill-grid">
-      ${skillRows.map(skillCardHtml).join('')}
+      ${highscoreRows.map(highscoreCardHtml).join('')}
     </div>
-    <div class="section-subhead"><h3>Skill rows</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
-    ${skillsTable}
+    <div class="section-subhead"><h3>Highscore rows</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
+    ${highscoresTable}
   </section>` : ''}
 
   ${levelUps.length ? `

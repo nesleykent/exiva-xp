@@ -1,6 +1,6 @@
 # Exiva XP
 
-**A private-first Tibia character hub, built around [Night'Flyn](https://www.tibia.com/community/?subtopic=characters&name=night%27flyn)** (Elder Druid, Gentebra). Exiva XP centralises everything one character needs to understand, plan and improve: Hunting Analyser sessions, XP and skill history, profit, deaths, hunting places, creature intelligence, elemental strategy, charms, stamina planning and long-term progression. Every tool answers a practical character question: *where should I hunt, which element is best, how much profit do I make, how does my XP evolve, which respawns fit my level, which creatures do I kill most, which charms matter, and how is my performance changing?* The curated hunting database remains underneath as the planning engine, but the character and personal logbook are the centre. Public/shared features are optional later layers.
+**A private-first Tibia character hub, built around [Night'Flyn](https://www.tibia.com/community/?subtopic=characters&name=night%27flyn)** (Elder Druid, Gentebra). Exiva XP centralises everything one character needs to understand, plan and improve: Hunting Analyser sessions, XP and highscore history, profit, deaths, hunting places, creature intelligence, elemental strategy, charms, stamina planning and long-term progression. Every tool answers a practical character question: *where should I hunt, which element is best, how much profit do I make, how does my XP evolve, which respawns fit my level, which creatures do I kill most, which charms matter, and how is my performance changing?* The curated hunting database remains underneath as the planning engine, but the character and personal logbook are the centre. Public/shared features are optional later layers.
 
 Four scoped references shape the product: the current [Exiva XP site](https://nesleykent.github.io/exiva-xp/index.html), [TibiaTools](https://tibiatools.io) (combat/damage/charm calculator logic), [Respawn Finder](https://github.com/danyelvarejao/respawn-finder) (respawn search patterns that improve the hunting database), and [Tibia XP History](https://github.com/mathiasbynens/tibia-xp-history) (daily character progression tracking via TibiaData — its formulas and crawler workflow are ported here, with history rows keyed to Tibia's 10:00 Europe/Berlin server-save day). GuildStats is used only as an initial Night'Flyn backfill source until the daily tracker has enough history of its own.
 
@@ -19,7 +19,7 @@ Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dep
 | Page | What it does |
 | --- | --- |
 | `index.html` | App home/start screen with links to the working surfaces |
-| `character.html` | Night'Flyn's character dashboard: compact operational header, TibiaData profile and highscore row side by side, page-level timezone selector, XP-to-next-level plus milestone context, interactive XP charts (total XP, daily gain, level; 7d/30d/all) with selected-row inspector, full XP/source table, timezone-aware 15-minute online-sample tables, a level-prediction calculator over the tracked pace, level-up logs, per-skill cards with independent scales/ranks/deltas (magic level, charm points, boss points, achievements, loyalty, fishing, Drome), death table, level-fit hunting decisions and personal hunt-log context |
+| `character.html` | Night'Flyn's character dashboard: compact operational header, TibiaData profile and highscore row side by side, page-level timezone selector, XP-to-next-level plus milestone context, interactive XP charts (total XP, daily gain, level; 7d/30d/all) with selected-row inspector, full XP/source table, timezone-aware 15-minute online-sample tables, a level-prediction calculator over the tracked pace, level-up logs, per-highscore cards with independent scales/ranks/deltas across all TibiaData highscore categories, death table, level-fit hunting decisions and personal hunt-log context |
 | `grounds.html` | Hunt planner. It opens around Night'Flyn's tracked level, then shows one tile per ground with best-effort **area** (nearest city/region), best attack element and logged evidence. Filter bar: Search (matches ground *or* creature names), Level, Vocation, Hunt type (solo/team), Playstyle (free text against the loadout column, e.g. "fork" for druids, "arrows" for paladins), and Sort. Sorting happens after grouping into cards, against each card's own aggregate value, so the numbers shown always match what you sorted by. Each ground's curated rows keep tibiapal's vocation-specific **loadout** column verbatim (knight/monk weapon element, paladin ammo/barrage, sorcerer mastery, druid spell/fork playstyle) |
 | `tools.html` | Character tools: stamina calculator, TibiaTools-style element damage sandbox, and profit tracker from saved analyser sessions |
 | `ground.html?g=…` | Ground dossier: best-effort **area and access requirements** (city/region, level/quest/premium, sourced from TibiaWiki, always linked and labelled unverified), recommendations, personal/shared stats, population, battle plan, creature matchups |
@@ -27,12 +27,12 @@ Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dep
 | `creature.html?c=…` | Creature dossier: official artwork, lore and behaviour (TibiaData), stats, summon/convince costs, resistance meters, damage ranking, battle plan, loot, habitats (linked to grounds), Charm data, and the kill count from your saved analyser logs (an honest floor, not the Bestiary counter) |
 | `charms.html` | Personal charm intelligence: "Charms for your hunts" ranks elemental charms by expected proc damage over the saved kill log, the tracked charm-point budget marks affordable stages (earned-points caveat), and the full catalogue (Cyclopedia-sourced): elemental damage charms grouped by element, other Major charms, and Minor charms — cost per upgrade stage, effect text, and a link to the source page. Creature/ground pages link straight into it by charm |
 | `submit.html` | The four-step analyser flow: paste, locate, read combat strategy, save to the private logbook |
-| `analytics.html` | Pure-SVG progression and performance boards: daily XP gain, tracked skills, top XP/profit targets, busiest grounds, hunts over time, most-killed creatures, most-looted items, vocation split |
+| `analytics.html` | Pure-SVG progression and performance boards: daily XP gain, tracked highscores, top XP/profit targets, busiest grounds, hunts over time, most-killed creatures, most-looted items, vocation split |
 | `admin.html` | Logbook tools: local hunt review, rule checks, duplicate sweep, JSON/CSV/Excel export, JSON import |
 
 ## Character Hub Scope
 
-Exiva XP is one Night'Flyn interface, not a generic public directory. Current implemented surfaces cover: Hunting Analyser parsing, personal hunt logbook, XP and skill history, 15-minute online sampling from TibiaData's world list, level-fit hunt planning, creature codex, elemental recommendations, charm references, profit tracking, stamina calculation, a first TibiaTools-style damage sandbox and progression analytics. The remaining product work is explicit and should not be treated as done: deeper TibiaTools combat parity, richer planner search informed by the Respawn Finder reference, Wheel/equipment inference and historical data import.
+Exiva XP is one Night'Flyn interface, not a generic public directory. Current implemented surfaces cover: Hunting Analyser parsing, personal hunt logbook, XP and highscore history, 15-minute online sampling from TibiaData's world list, level-fit hunt planning, creature codex, elemental recommendations, charm references, profit tracking, stamina calculation, a first TibiaTools-style damage sandbox and progression analytics. The remaining product work is explicit and should not be treated as done: deeper TibiaTools combat parity, richer planner search informed by the Respawn Finder reference, Wheel/equipment inference and historical data import.
 
 ## Layout
 
@@ -60,8 +60,8 @@ data/
   access.json              generated — best-effort ground access notes (unverified)
   shared-hunts.json        generated — optional shared/approved hunts
   ledger.json              generated — prebuilt shared ledger cache
-  character.json           generated daily — Night'Flyn profile, skill ranks, death log
-  character-history.json   generated daily — {server-save date: {rank, level, experience, skills…}}; older rows may be marked as imported backfill
+  character.json           generated daily — Night'Flyn profile, highscore ranks, death log
+  character-history.json   generated daily — {server-save date: {rank, level, experience, highscores...}}; older rows may be marked as imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
   character-online.json    generated every 15 minutes — sampled world-list online status from TibiaData
 pipeline/
@@ -70,7 +70,7 @@ pipeline/
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
-  track-character.mjs      daily Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended with skills + Drome)
+  track-character.mjs      daily Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   track-online.mjs         15-minute Gentebra world-list sampler for Night'Flyn online status
   smoke.mjs                engine smoke tests, run locally or by publish.yml
 .github/actions/
