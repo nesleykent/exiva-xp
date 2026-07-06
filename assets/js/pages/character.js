@@ -10,6 +10,7 @@ import {
   DEFAULT_TIMEZONE,
   SUPPORTED_TIMEZONES,
   TIMEZONE_STORAGE_KEY,
+  datePartsInTimezone,
   dateKeyInTimezone,
   formatDateInTimezone,
   formatDateTimeInTimezone,
@@ -53,10 +54,10 @@ const gains = historyRows.filter((row) => row.gain != null).map((row) => ({ key:
 const bestDay = historyRows.reduce((best, row) => (row.gain > (best?.gain ?? 0) ? row : best), null);
 
 // Level-up log, derived from the daily rows: every day the tracked level rose.
-const levelUps = historyRows
+const levelUpsChronological = historyRows
   .filter((row) => row.levelDelta > 0)
-  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta, source: row.source || 'TibiaData tracker' }))
-  .reverse();
+  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta, source: row.source || 'TibiaData tracker' }));
+const levelUps = [...levelUpsChronological].reverse();
 
 // Default prediction pace: mean of the last 7 recorded daily gains (zeros
 // count because rest days are part of the real pace).
@@ -97,6 +98,7 @@ const onlineSamples = onlineLog?.samples || [];
 const cadence = onlineLog?.cadenceMinutes || 15;
 const onlineSeen = onlineSamples.filter((sample) => sample.online);
 const latestSample = onlineSamples.at(-1) || null;
+const historyByDate = new Map(historyRows.map((row) => [row.date, row]));
 // the sampler persists every observed level-up before compacting old raw
 // samples away; deriving from raw alone would forget anything >14 days old
 const onlineLevelUps = onlineLog?.levelUps?.length ? onlineLog.levelUps : observedOnlineLevelUps(onlineSamples);
@@ -229,6 +231,112 @@ function dailyOnlineRows(samples, minutesPerSample, tz) {
   return [...map.values()].sort((a, b) => b.date.localeCompare(a.date));
 }
 
+function xpGainStreaks(rows) {
+  let current = 0;
+  let best = 0;
+  for (const row of rows) {
+    if (row.gain != null && row.gain > 0) {
+      current += 1;
+      best = Math.max(best, current);
+    } else {
+      current = 0;
+    }
+  }
+  return { current, best };
+}
+
+function levelCadence() {
+  if (levelUpsChronological.length < 3) return null;
+  const gaps = [];
+  for (let i = 1; i < levelUpsChronological.length; i++) {
+    const previous = new Date(`${levelUpsChronological[i - 1].date}T00:00:00Z`);
+    const next = new Date(`${levelUpsChronological[i].date}T00:00:00Z`);
+    const days = Math.round((next - previous) / 86_400_000);
+    if (Number.isFinite(days) && days >= 0) gaps.push(days);
+  }
+  if (gaps.length < 2) return null;
+  return {
+    recent: avg(gaps.slice(-5)),
+    all: avg(gaps),
+  };
+}
+
+function xpOverWindow(row) {
+  const first = row.firstDate ? historyByDate.get(row.firstDate) : null;
+  const last = row.sourceDate ? historyByDate.get(row.sourceDate) : null;
+  return first && last ? last.experience - first.experience : null;
+}
+
+function xpPerSampledOnlineHourRows(onlineDaily) {
+  const rows = onlineDaily
+    .map((row) => {
+      const historyRow = historyByDate.get(row.date);
+      if (!historyRow || historyRow.gain == null) return null;
+      return {
+        date: row.date,
+        gain: historyRow.gain,
+        minutes: row.minutes,
+        xpPerHour: row.minutes > 0 ? historyRow.gain / (row.minutes / 60) : null,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  return { count: rows.length, rows: rows.filter((row) => row.xpPerHour != null && Number.isFinite(row.xpPerHour)) };
+}
+
+function onlineHourRows(samples, tz) {
+  const map = new Map();
+  for (const sample of samples) {
+    const parts = datePartsInTimezone(sample.slot, tz);
+    if (!parts?.hour) continue;
+    const hour = parts.hour;
+    if (!map.has(hour)) map.set(hour, { hour, samples: 0, onlineSamples: 0 });
+    const row = map.get(hour);
+    row.samples += 1;
+    if (sample.online) row.onlineSamples += 1;
+  }
+  return [...map.values()]
+    .sort((a, b) => a.hour.localeCompare(b.hour))
+    .map((row) => ({
+      ...row,
+      key: `${row.hour}:00 (${nf(row.onlineSamples)}/${nf(row.samples)})`,
+      n: row.samples ? (row.onlineSamples / row.samples) * 100 : 0,
+    }));
+}
+
+function sampledSessionBlocks(samples, minutesPerSample) {
+  const blocks = [];
+  let current = null;
+  let previousSlot = null;
+  const expectedGap = minutesPerSample * 60_000 + 60_000;
+  for (const sample of samples) {
+    const slotTime = new Date(sample.slot).getTime();
+    const adjacent = previousSlot != null && Number.isFinite(slotTime) && slotTime - previousSlot <= expectedGap;
+    if (sample.online && current && adjacent) {
+      current.end = sample.slot;
+      current.samples += 1;
+    } else {
+      if (current) blocks.push(current);
+      current = sample.online ? { start: sample.slot, end: sample.slot, samples: 1 } : null;
+    }
+    previousSlot = Number.isFinite(slotTime) ? slotTime : null;
+  }
+  if (current) blocks.push(current);
+  const spans = blocks.map((block) => {
+    const start = new Date(block.start).getTime();
+    const end = new Date(block.end).getTime();
+    return Number.isFinite(start) && Number.isFinite(end) ? Math.max(0, (end - start) / 60_000) : 0;
+  });
+  return { blocks, averageSpan: avg(spans) };
+}
+
+function worldPopulationContext(samples) {
+  const online = samples.filter((sample) => sample.online && Number.isFinite(sample.worldPlayersOnline)).map((sample) => sample.worldPlayersOnline);
+  const offline = samples.filter((sample) => !sample.online && Number.isFinite(sample.worldPlayersOnline)).map((sample) => sample.worldPlayersOnline);
+  if (online.length < 20 || offline.length < 20) return { onlineCount: online.length, offlineCount: offline.length, ready: false };
+  return { onlineCount: online.length, offlineCount: offline.length, ready: true, onlineAvg: avg(online), offlineAvg: avg(offline) };
+}
+
 function observedOnlineLevelUps(samples) {
   const rows = [];
   let previousLevel = null;
@@ -261,6 +369,16 @@ function xpRowsForChart(metric, range) {
       baseline: 'min',
       fmt: nf,
       data: rows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.level })),
+    };
+  }
+  if (metric === 'rank') {
+    const rankRows = rows.filter((row) => row.rank != null);
+    return {
+      title: 'World XP rank',
+      note: `${rankRows.length} rank rows; raw rank number, lower = better`,
+      baseline: 'min',
+      fmt: (value) => `#${nf(value)}`,
+      data: rankRows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.rank })),
     };
   }
   return {
@@ -352,6 +470,10 @@ function onlineBodyHtml() {
   const todayKey = dateKeyInTimezone(new Date(), timezone);
   const todayOnline = onlineDaily.find((row) => row.date === todayKey);
   const timezoneLabel = getTimezoneDisplayLabel(timezone);
+  const xpOnline = xpPerSampledOnlineHourRows(onlineDaily);
+  const hourlyRows = onlineHourRows(onlineSamples, timezone);
+  const sessions = sampledSessionBlocks(onlineSamples, cadence);
+  const population = worldPopulationContext(onlineSamples);
   return `
     <div class="tool-fields timezone-controls">
       ${timezoneSelectHtml('timezone-select-online')}
@@ -362,11 +484,29 @@ function onlineBodyHtml() {
       <div class="panel pulse"><div class="big num">${todayOnline ? hm(todayOnline.minutes) : '0m'}</div><div class="eyebrow">Sampled online today</div></div>
       <div class="panel pulse"><div class="big num">${nf(onlineSeen.length)}</div><div class="eyebrow">Online samples</div></div>
       <div class="panel pulse"><div class="big num">${nf(onlineLevelUps.length)}</div><div class="eyebrow">Observed level-ups</div></div>
+      <div class="panel pulse"><div class="big num">${nf(sessions.blocks.length)}</div><div class="eyebrow">Sampled session blocks</div></div>
+      <div class="panel pulse"><div class="big num">${sessions.averageSpan != null ? hm(sessions.averageSpan) : '-'}</div><div class="eyebrow">Avg sampled block span</div></div>
     </div>
+    <p class="fine dim" style="margin:8px 0 0">Sampled session blocks use sampled status, not continuous telemetry. Two real sessions separated by less than one ${nf(cadence)}-minute sample interval would merge into one block, and one long session spanning a missed sample would split into two.</p>
     ${onlineDaily.length ? `<div class="panel panel-pad viz" style="margin-top:12px">
       <p class="eyebrow" style="margin:0 0 8px">Sampled online minutes by ${esc(timezoneLabel)} day</p>
       ${bars([...onlineDaily].reverse().slice(-14).map((row) => ({ key: row.date.slice(5), n: row.minutes })), { fmt: hm })}
     </div>` : ''}
+    <div class="section-subhead"><h3>XP per sampled-online hour</h3><span class="fine dim">derived from tracked daily XP and sampled online minutes</span></div>
+    ${xpOnline.count >= 3 ? tableHtml([
+      { label: 'Date', cell: (row) => esc(row.date) },
+      { label: 'XP gain', className: 'num', cell: (row) => `+${nf(row.gain)}` },
+      { label: 'Sampled online', className: 'num', cell: (row) => hm(row.minutes) },
+      { label: 'XP / sampled hour', className: 'num', cell: (row) => kk(row.xpPerHour) },
+    ], xpOnline.rows, 'No sampled-online XP rows yet.') : '<div class="panel panel-pad dim">Not enough overlapping tracked-XP and sampled-online days yet.</div>'}
+    <p class="fine dim" style="margin:8px 0 0">This is derived from sampled status, not continuous telemetry; each online row means Night'Flyn appeared in Gentebra's public world list during that 15-minute slot.</p>
+    <div class="section-subhead"><h3>Activity by hour</h3><span class="fine dim">online samples / total samples by ${esc(timezoneLabel)} hour</span></div>
+    ${onlineSamples.length >= 40 ? `<div class="panel panel-pad viz">${bars(hourlyRows, { fmt: (value) => `${Math.round(value)}%` })}</div>` : '<div class="panel panel-pad dim">Not enough sampled history yet.</div>'}
+    ${population.ready ? `<div class="section-subhead"><h3>World population context</h3><span class="fine dim">sampled world-list population when online vs offline</span></div>
+    <div class="mini-metrics">
+      <span><b class="num">${nf(Math.round(population.onlineAvg))}</b><small>Avg world online when listed</small></span>
+      <span><b class="num">${nf(Math.round(population.offlineAvg))}</b><small>Avg world online when not listed</small></span>
+    </div>` : '<div class="panel panel-pad dim" style="margin-top:12px">World population context needs at least 20 online and 20 offline samples.</div>'}
     <div class="section-subhead"><h3>Daily sampled summary</h3><span class="fine dim">online samples / total samples</span></div>
     ${onlineDailyTableHtml(onlineDaily)}
     <div class="section-subhead"><h3>Observed level changes</h3><span class="fine dim">only when the sampler catches the character online</span></div>
@@ -485,6 +625,8 @@ const bestProfitHunt = myHunts
   .filter((hunt) => hunt.balance != null && hunt.minutes > 0)
   .map((hunt) => ({ ...hunt, profitRate: (hunt.balance / hunt.minutes) * 60 }))
   .sort((a, b) => b.profitRate - a.profitRate)[0] || null;
+const streaks = xpGainStreaks(historyRows);
+const cadenceTrend = levelCadence();
 
 const xpTable = tableHtml([
   { label: 'Date', cell: (row) => esc(row.date) },
@@ -507,6 +649,7 @@ const skillsTable = tableHtml([
   { label: 'First tracked', className: 'num', cell: (row) => row.firstValue != null ? nf(row.firstValue) : '<span class="dim">-</span>' },
   { label: 'Last change', className: 'num', cell: (row) => signed(row.lastDelta) },
   { label: 'Delta', className: 'num', cell: (row) => signed(row.delta) },
+  { label: 'XP over window', className: 'num', cell: (row) => signed(xpOverWindow(row)) },
   { label: 'Window', cell: (row) => esc([row.firstDate, row.sourceDate].filter(Boolean).join(' -> ')) },
 ], skillRows, 'No skill rows yet.');
 
@@ -557,6 +700,8 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="big num">${avg7 != null ? kk(avg7) : '-'}</div><div class="eyebrow">7-day pace</div></div>
     <div class="panel pulse"><div class="big num">${avg30 != null ? kk(avg30) : '-'}</div><div class="eyebrow">30-day pace</div></div>
     <div class="panel pulse"><div class="big num">${trackedLevel != null && experience != null ? kk(experienceUntilNextLevel(trackedLevel, experience)) : '-'}</div><div class="eyebrow">Tracked XP to next</div></div>
+    <div class="panel pulse"><div class="big num">${nf(streaks.current)}</div><div class="eyebrow">Current XP-gain streak</div></div>
+    <div class="panel pulse"><div class="big num">${nf(streaks.best)}</div><div class="eyebrow">Best XP-gain streak</div></div>
     <a class="panel pulse decision-link" href="${topGround ? `ground.html?g=${esc(topGround.groundSlug)}` : 'grounds.html'}"><div class="big">${topGround ? esc(topGround.ground) : 'Planner'}</div><div class="eyebrow">${topGround ? `${kk(topGround.xpRawRate)} raw XP/h target` : 'Open level-fit hunts'}</div></a>
     <div class="panel pulse"><div class="big">${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</div><div class="eyebrow">${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt log yet'}</div></div>
   </section>
@@ -580,6 +725,7 @@ stage.innerHTML = `
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
           </div>
           <div class="chart-button-group" aria-label="XP chart range">
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
@@ -629,6 +775,7 @@ stage.innerHTML = `
   ${levelUps.length ? `
   <section class="section" id="levels">
     <div class="section-bar"><h2>Level-up log</h2><span class="fine dim">daily highscore rows where tracked level rose</span></div>
+    ${cadenceTrend ? `<p class="fine dim" style="margin:0 0 10px">Recent pace: <b class="num">${cadenceTrend.recent.toFixed(1)}</b> days/level (all-time: <b class="num">${cadenceTrend.all.toFixed(1)}</b> days/level).</p>` : ''}
     ${tableHtml([
       { label: 'Date', cell: (row) => esc(row.date) },
       { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },

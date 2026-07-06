@@ -20,6 +20,16 @@ const dailyXp = [];
 for (let i = 1; i < history.length; i++) {
   dailyXp.push({ key: history[i].date.slice(5), n: Math.max(0, history[i].experience - history[i - 1].experience) });
 }
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
+for (let i = 1; i < history.length; i++) {
+  const gain = Math.max(0, history[i].experience - history[i - 1].experience);
+  const day = new Date(`${history[i].date}T00:00:00Z`).getUTCDay();
+  weekdayBuckets[day].gains.push(gain);
+}
+const weekdayXp = weekdayBuckets
+  .filter((row) => row.gains.length)
+  .map((row) => ({ key: `${row.name} (${nf(row.gains.length)}d)`, n: average(row.gains) }));
 
 const SKILLS = [
   { key: 'magicLevel', rank: 'magiclevel', label: 'Magic level' },
@@ -128,6 +138,7 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="big num">${meanProfit != null ? kk(meanProfit) : '—'}</div><div class="eyebrow">Avg profit/h</div></div>
   </div>
   ${board('Daily XP gain', dailyXp, flow(dailyXp))}
+  ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
   ${skillTrends.length ? `<section class="section">
     <div class="section-bar"><h2>Tracked skills</h2><span class="fine dim">each metric gets its own scale and readiness state</span></div>
     <div class="skill-grid">${skillTrends.map(skillTrendCard).join('')}</div>
