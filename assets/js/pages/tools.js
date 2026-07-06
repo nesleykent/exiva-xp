@@ -310,51 +310,32 @@ function priceInputRow(itemId, name, prices) {
     </label>`;
 }
 
+const TIER_BADGE = { basic: 'badge-success', intricate: 'badge-info', powerful: 'badge-error' };
+
+/** Compact tier tile: item list, one total (cheapest method), one alt line, copy. */
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
+  const alt = calc.options.find((o) => o !== cheapest && o.total != null);
   return `
   <div class="panel panel-pad tool-mini-card">
-    <div class="tile-top">
-      <b>${esc(t.name)}</b><br>${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
+    <div class="tile-top" style="display:flex;justify-content:space-between;align-items:baseline">
+      <span class="badge ${TIER_BADGE[tierId]}">${esc(t.name)}</span>
+      ${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
     </div>
-    <div>
-      <p class="eyebrow">Required resources</p>
-      <div class="mini-list">
-        ${t.items.map((it) => {
-    const marketOption = calc.options.find((o) => o.method === 'market');
-    const line = marketOption.items.find((l) => l.itemId === it.itemId)
-          || { quantity: it.quantity, unitPrice: null, subtotal: null };
-    return `<span style="display:flex;justify-content:space-between;gap:8px"><span>${esc(it.name)}</span><span class="fine dim">${nf(it.quantity)} × ${line.unitPrice == null ? '—' : gp(line.unitPrice)} = ${line.subtotal == null ? '—' : gp(line.subtotal)}</span></span>`;
-  }).join('')}
-      </div>
+    <div class="mini-list">
+      ${cheapest?.tokenQuantity ? `<span>${nf(cheapest.tokenQuantity)}x Gold Token</span>` : t.items.map((it) => `<span>${nf(it.quantity)}x ${esc(it.name)}</span>`).join('')}
     </div>
-    <div>
-      <p class="eyebrow">Acquisition methods</p>
-      <div class="mini-list">
-        ${calc.options.map((o) => `
-          <span style="display:flex;justify-content:space-between;gap:8px">
-            <span>${esc(o.label)}${cheapest === o ? ' <b>· cheapest</b>' : ''}</span>
-            <span class="fine ${o.total == null ? 'dim' : ''}">${o.total == null ? 'Missing prices' : gp(o.total)}</span>
-          </span>`).join('')}
-      </div>
+    <div class="tool-kpis" style="grid-template-columns:1fr">
+      <span>
+        <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
+        <small>Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''}</small>
+      </span>
     </div>
-    ${calc.canCalculate ? `
-    <div>
-      <p class="eyebrow">Breakdown — ${esc(cheapest.label)}</p>
-      <div class="mini-list">
-        ${cheapest.tokenQuantity ? `<span>${nf(cheapest.tokenQuantity)} × Gold Token @ ${gp(cheapest.tokenLine.unitPrice)} = ${gp(cheapest.tokenLine.subtotal)}</span>` : ''}
-        ${cheapest.items.map((it) => `<span>${nf(it.quantity)} × ${esc(it.name)} @ ${gp(it.unitPrice)} = ${gp(it.subtotal)}</span>`).join('')}
-        <span><b>Total: ${gp(cheapest.total)}</b></span>
-      </div>
-      ${calc.savings.length ? `
-      <p class="eyebrow">Savings vs alternatives</p>
-      <div class="mini-list">
-        ${calc.savings.map((s) => `<span>vs ${esc(s.against)}: ${gp(s.amount)} saved</span>`).join('')}
-      </div>` : ''}
-      <button type="button" class="btn btn-secondary btn-sm" data-copy-tier="${tierId}">Copy shopping list</button>
-    </div>` : `
-    <p class="dim fine">Cannot calculate total because required prices are missing: ${esc(calc.missingPrices.join(', '))}.</p>`}
+    ${alt ? `<p class="fine dim">or ${esc(alt.label)}: ${gp(alt.total)}</p>` : ''}
+    ${calc.canCalculate
+      ? `<button type="button" class="btn btn-secondary btn-sm" data-copy-tier="${tierId}">Copy shopping list</button>`
+      : `<p class="fine dim">Add prices below to calculate.</p>`}
   </div>`;
 }
 
@@ -386,19 +367,22 @@ function openImbuementModal(id) {
       <div class="tool-head">
         <div>
           <h2 style="margin:0">${esc(imb.name)}</h2>
-          <span class="fine dim">${esc(imb.effect)} · World: ${esc(world)}</span>
+          <span class="fine dim">${esc(imb.effect)}</span>
         </div>
         <button type="button" class="btn btn-tertiary btn-sm" id="imb-modal-close">Close</button>
       </div>
-      ${!imb.verified ? '<span class="pill pill-warning" style="width:fit-content">Unverified quantities — sourced from third-party guides, not yet confirmed against the imbuing shrine or TibiaWiki directly.</span>' : ''}
+      ${!imb.verified ? '<span class="pill pill-warning" style="width:fit-content">Unverified quantities — confirm at the imbuing shrine.</span>' : ''}
+      <div class="tool-result-grid" id="imb-tier-cards"></div>
       <div>
-        <p class="eyebrow">Manual prices (${esc(world)})</p>
+        <div class="tool-head">
+          <p class="eyebrow" style="margin:0">Resource prices</p>
+          <span class="fine dim">World: ${esc(world)}</span>
+        </div>
         <div class="tool-fields" id="imb-price-inputs">
           ${imb.supportsGoldTokenExchange ? priceInputRow(GOLD_TOKEN_ITEM, 'Gold Token', prices) : ''}
           ${itemIds.map((iid) => priceInputRow(iid, items.find((it) => it.itemId === iid).name, prices)).join('')}
         </div>
       </div>
-      <div class="tool-result-grid" id="imb-tier-cards"></div>
     </div>`;
   renderModalTiers(imb, world);
   modal.querySelectorAll('[data-price-item]').forEach((input) => {

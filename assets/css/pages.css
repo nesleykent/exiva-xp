@@ -404,7 +404,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   border-radius: var(--r-lg);
   padding: 0;
   background: transparent;
-  max-width: 90vw;
+  width: min(760px, 92vw);
   max-height: 88vh;
   overflow: auto;
   color: rgb(var(--ink));
