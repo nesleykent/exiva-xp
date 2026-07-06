@@ -6,13 +6,13 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { readAnalyser } from '../assets/js/engine/analyser.js';
+import { isAnalyser, readAnalyser } from '../assets/js/engine/analyser.js';
 import { judge } from '../assets/js/engine/rules.js';
-import { Codex, ELEMENT_CHARM } from '../assets/js/engine/codex.js';
-import { locateHunt } from '../assets/js/engine/locator.js';
+import { armorSpots, Codex, ELEMENT_CHARM } from '../assets/js/engine/codex.js';
+import { locateHunt, nameCreatures, population } from '../assets/js/engine/locator.js';
 import { readBattle } from '../assets/js/engine/strategy.js';
-import { buildLedger } from '../assets/js/engine/ledger.js';
-import { experienceForLevel, levelForExperience, experienceUntilNextLevel } from '../assets/js/engine/progression.js';
+import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
+import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
 import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapshot, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 
@@ -37,11 +37,19 @@ const s = readAnalyser([
   '  120x dragon',
   '  30x dragon lord',
 ].join('\n'));
+assert(isAnalyser(s), 'isAnalyser rejected a valid analyser paste');
+assert(!isAnalyser(readAnalyser('hello world')), 'isAnalyser accepted plain text');
 assert(s.xpRawRate === 1_200_000, `rate derivation failed: ${s.xpRawRate}`);
 assert(s.kills.length === 2, 'kill list failed');
 
 const loc = locateHunt(s.kills, codex, grounds.directory);
 assert(loc.candidates.length > 0, 'locator returned nothing');
+
+const seaSerpents = nameCreatures('Sea Serpents', codex).map((c) => c.name);
+assert(seaSerpents.includes('Sea Serpent'), 'nameCreatures missed the creature named by Sea Serpents');
+const codexPopulation = population({ name: 'Sea Serpents' }, codex);
+assert(codexPopulation?.evidence === 'codex' && codexPopulation.set.some((row) => row.creature.name === 'Sea Serpent'),
+  'population missed the codex population for Sea Serpents');
 
 const battle = readBattle(loc.known.map((k) => ({ creature: k.creature, n: k.n })));
 assert(battle && battle.tips.length > 0, 'strategy returned nothing');
@@ -58,6 +66,13 @@ assert(!judge({ ...hunt, id: 't2' }, [hunt]).ok, 'duplicate slipped through');
 
 const table = buildLedger(grounds.entries, [hunt]);
 assert(table.some((r) => r.basis === 'logged'), 'ledger missing logged row');
+const dossier = groundDossier(hunt.ground.toLowerCase().replace(/ /g, '-'), [hunt]);
+assert(dossier.n === 1 && dossier.kills[0].name === 'dragon' && dossier.kills[0].n === 120,
+  'groundDossier did not aggregate the hunt kills');
+assert(dossier.profitRate.avg === 150_000, `groundDossier profit rate failed: ${dossier.profitRate.avg}`);
+const loggedPopulation = population({ name: hunt.ground }, codex, [hunt]);
+assert(loggedPopulation?.evidence === 'logged' && loggedPopulation.set.some((row) => row.creature.name === 'Dragon' && row.n === 120),
+  'population did not prefer logged kill evidence');
 
 assert(formatStamina(parseStamina('39:30')) === '39:30', 'stamina parsing/formatting failed');
 const stamina = staminaProjection(parseStamina('39:00'), parseStamina('2:00'), parseStamina('42:00'));
@@ -80,6 +95,9 @@ const charmElement = Object.fromEntries(Object.entries(ELEMENT_CHARM).map(([el, 
 const adviceCharms = charms.map((c) => ({ name: c.name, element: charmElement[c.name] || null, stages: c.stages, effect: c.effect }));
 const dragon = codex.identify('dragon')?.creature;
 assert(dragon, 'dragon did not resolve in the codex');
+const dragonArmor = armorSpots(dragon);
+assert(dragonArmor.length > 0 && dragonArmor.every((row) => row.taken < 100), 'armorSpots missed dragon resistances');
+assert(dragonArmor.every((row, i) => i === 0 || dragonArmor[i - 1].taken <= row.taken), 'armorSpots is not ordered hardest resistance first');
 const advice = charmAdvice([{ kills: [{ name: 'dragon', n: 100 }] }], codex, adviceCharms);
 assert(advice.length > 0, 'charm advice returned nothing for dragon kills');
 assert(advice.every((row, i) => i === 0 || advice[i - 1].total >= row.total), 'charm advice is not sorted descending');
@@ -116,6 +134,15 @@ if (access) {
 
 assert(experienceForLevel(2) === 100, 'XP formula broken: level 2 must cost 100 xp');
 assert(Math.abs(levelForExperience(experienceForLevel(465)) - 465) < 1e-6, 'level↔XP inversion drifted');
+assert(progressWithinLevel(465, experienceForLevel(465)) === 0, 'progressWithinLevel must start at 0 for exact level XP');
+assert(Math.abs(progressWithinLevel(465, (experienceForLevel(465) + experienceForLevel(466)) / 2) - 50) < 1e-9,
+  'progressWithinLevel drifted at the midpoint between levels');
+assert(nextMilestoneLevel(465) === 500 && nextMilestoneLevel(500) === 550, 'nextMilestoneLevel should advance to the next 50-level marker');
+const baseAt465 = baseValue(465);
+const nextBaseAt465 = nextBaseBreakpointLevel(465);
+assert(Number.isFinite(baseAt465) && nextBaseAt465 > 465, 'base value breakpoint calculation failed');
+assert(baseValue(nextBaseAt465 - 1) === baseAt465 && baseValue(nextBaseAt465) > baseAt465,
+  'nextBaseBreakpointLevel did not point at the next base-value increase');
 
 let character = null;
 try { character = data('character.json'); } catch { /* tracker has not run yet */ }

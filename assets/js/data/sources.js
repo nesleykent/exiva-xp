@@ -1,5 +1,5 @@
 /**
- * Data sources: dataset loaders + the submission backend abstraction.
+ * Data sources: dataset loaders + the hunt backend abstraction.
  * One backend interface, eight implementations, selected by `BACKEND` below.
  * Whatever the backend, a copy of every hunt is kept in this browser as the
  * player's personal logbook.
@@ -189,7 +189,7 @@ function remember(hunt) {
 function issueText(hunt) {
   return [
     '<!-- exiva-xp hunt payload — leave the JSON block untouched -->',
-    'Optional shared hunt submission from Exiva XP. A maintainer reviews and labels it.',
+    'Optional shared hunt from Exiva XP. A maintainer reviews and labels it.',
     '',
     '```json',
     JSON.stringify(hunt, null, 2),
@@ -215,20 +215,20 @@ function restHeaders(extra = {}) {
 const BACKENDS = {
   'github-issues': {
     label: 'GitHub Issues',
-    blurb: 'Optional public sync: hunts become prefilled GitHub Issues; Actions validate, merge and republish the shared datasets.',
+    blurb: 'Optional public sync: hunts become prefilled GitHub Issues; Actions validate, merge and refresh the shared datasets.',
     read: () => loadSharedHunts(),
     async send(hunt) {
       remember(hunt);
-      return { ok: true, followUp: githubNewUrl('issue', hunt), message: 'Saved locally. Publish the prefilled GitHub Issue only if you want to share it.' };
+      return { ok: true, followUp: githubNewUrl('issue', hunt), message: 'Saved locally. Open the prefilled GitHub Issue only if you want to share it.' };
     },
   },
   'github-discussions': {
     label: 'GitHub Discussions',
-    blurb: 'Optional public sync, like GitHub Issues, but submissions open a prefilled Discussion instead.',
+    blurb: 'Optional public sync, like GitHub Issues, but saving here opens a prefilled Discussion instead.',
     read: () => loadSharedHunts(),
     async send(hunt) {
       remember(hunt);
-      return { ok: true, followUp: githubNewUrl('discussion', hunt), message: 'Saved locally. Publish the prefilled Discussion only if you want to share it.' };
+      return { ok: true, followUp: githubNewUrl('discussion', hunt), message: 'Saved locally. Open the prefilled Discussion only if you want to share it.' };
     },
   },
   browser: {
@@ -242,7 +242,7 @@ const BACKENDS = {
   },
   static: {
     label: 'Static JSON',
-    blurb: 'Read-only mirror: datasets served as JSON, submitting disabled.',
+    blurb: 'Read-only mirror: datasets served as JSON, saving disabled.',
     read: () => loadSharedHunts(),
     async send(hunt) {
       remember(hunt);

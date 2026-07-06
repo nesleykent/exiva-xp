@@ -37,7 +37,7 @@ Exiva XP is one Night'Flyn interface, not a generic public directory. Current im
 ## Layout
 
 ```
-*.html                     ten thin pages sharing one shell
+*.html                     eleven thin pages sharing one shell
 assets/
   css/base.css             fonts, tokens (light + dark), app shell
   css/pages.css            page components
@@ -79,7 +79,7 @@ pipeline/
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```
 
-The engine directory is DOM-free and runs identically in the browser and in Node 20 inside Actions — the pipeline can never disagree with the preview the hunter saw.
+The engine directory is DOM-free and runs identically in the browser and in Node 22 inside Actions — the pipeline can never disagree with the preview the hunter saw.
 
 ## Data model
 
@@ -154,7 +154,7 @@ The source package has no Sort/Picker/Menu component at all, so Sort (`assets/js
 
 ## Roadmap
 
-The task list, decision log and the full architectural contract live in [GUIDELINES.md](GUIDELINES.md) — read it before contributing. Current priorities: deeper character-dashboard analytics, planner search depth informed by the Respawn Finder reference, extending the character history backfill, and Wheel/equipment context for the damage calculator where real formulas and player state are available.
+The task list, decision log and the full architectural contract live in [AGENTS.md](AGENTS.md) — read it before contributing. Current priorities: deeper character-dashboard analytics, planner search depth informed by the Respawn Finder reference, extending the character history backfill, and Wheel/equipment context for the damage calculator where real formulas and player state are available.
 
 ---
 
