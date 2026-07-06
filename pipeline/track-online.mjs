@@ -141,6 +141,7 @@ const deploy = sample.online || previousLatest?.online === true || !previousLate
 if (process.env.GITHUB_OUTPUT) {
   const { appendFileSync } = await import('node:fs');
   appendFileSync(process.env.GITHUB_OUTPUT, `deploy=${deploy}\n`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `commit-message=data: online sample for ${sample.slot.slice(0, 16).replace('T', ' ')} UTC\n`);
 }
 
 console.log(`${sample.online ? 'online' : 'offline'} sample for ${NAME} at ${sample.slot}${sample.level ? `, level ${sample.level}` : ''}; ${world.players_online} players online in ${WORLD}. ${log.samples.length} raw sample(s), ${log.days.length} compacted day(s), ${log.levelUps.length} observed level-up(s), deploy=${deploy}.`);

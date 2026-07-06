@@ -1,0 +1,68 @@
+name: Commit generated data
+description: Commit generated data files with the repository owner's identity and optionally dispatch Pages.
+
+inputs:
+  paths:
+    description: Newline-separated paths to stage.
+    required: true
+  message:
+    description: Commit message to use when staged files changed.
+    required: true
+  publish:
+    description: Whether to dispatch publish.yml after a successful commit.
+    required: false
+    default: 'false'
+  token:
+    description: GitHub token for pushing and optional workflow dispatch.
+    required: false
+    default: ''
+  branch:
+    description: Branch to pull/rebase and push.
+    required: false
+    default: main
+
+outputs:
+  committed:
+    description: Whether a commit was created.
+    value: ${{ steps.commit.outputs.committed }}
+
+runs:
+  using: composite
+  steps:
+    - id: commit
+      shell: bash
+      env:
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_MESSAGE: ${{ inputs.message }}
+        INPUT_PUBLISH: ${{ inputs.publish }}
+        INPUT_BRANCH: ${{ inputs.branch }}
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+
+        git config user.name "nesleykent"
+        git config user.email '20923096+nesleykent@users.noreply.github.com'
+        git pull --rebase --autostash origin "$INPUT_BRANCH"
+
+        while IFS= read -r path; do
+          if [ -n "$path" ]; then
+            git add "$path"
+          fi
+        done <<< "$INPUT_PATHS"
+
+        if git diff --cached --quiet; then
+          echo "No generated data changes."
+          echo "committed=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        git commit -m "$INPUT_MESSAGE"
+        git push || {
+          git pull --rebase origin "$INPUT_BRANCH"
+          git push
+        }
+        echo "committed=true" >> "$GITHUB_OUTPUT"
+
+        if [ "$INPUT_PUBLISH" = "true" ]; then
+          gh workflow run publish.yml
+        fi

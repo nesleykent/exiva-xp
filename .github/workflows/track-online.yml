@@ -29,20 +29,13 @@ jobs:
         id: sample
         run: node pipeline/track-online.mjs
 
+      # The sampler emits deploy=true only when the new state is worth showing
+      # promptly; plain offline heartbeats commit without deploying.
       - name: Commit sampled data
-        run: |
-          git config user.name "nesleykent"
-          git config user.email '20923096+nesleykent@users.noreply.github.com'
-          stamp=$(date -u +'%Y-%m-%d %H:%M UTC')
-          git add data/character-online.json
-          git commit -m "data: online sample for ${stamp}" || exit 0
-          git push
-
-      # A Pages build every 15 minutes is waste — the sampler decides when
-      # the new state is worth showing promptly (online, session close,
-      # level-up, new UTC day); plain offline heartbeats just commit.
-      - name: Redeploy site
-        if: steps.sample.outputs.deploy == 'true'
-        run: gh workflow run publish.yml
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ./.github/actions/commit-generated-data
+        with:
+          paths: |
+            data/character-online.json
+          message: ${{ steps.sample.outputs.commit-message }}
+          publish: ${{ steps.sample.outputs.deploy }}
+          token: ${{ secrets.GITHUB_TOKEN }}

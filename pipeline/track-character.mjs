@@ -196,6 +196,11 @@ if (pendingSnapshot && !snapshotUnchanged) {
   changed = true;
 }
 
+if (process.env.GITHUB_OUTPUT) {
+  const { appendFileSync } = await import('node:fs');
+  appendFileSync(process.env.GITHUB_OUTPUT, `commit-message=data: character snapshot for ${today}\n`);
+}
+
 console.log(changed
   ? `Recorded ${today}: level ${xp.level}, ${Object.keys(history).length} day(s) of history, ${knownDeaths.length} known death(s).`
   : `No data changes for ${today}: TibiaData still reports level ${xp.level}, ${xp.value} xp.`);

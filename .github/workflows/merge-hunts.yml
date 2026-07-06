@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 concurrency:
   group: merge-hunts
@@ -34,13 +35,11 @@ jobs:
         run: node pipeline/merge-hunts.mjs
 
       - name: Commit datasets
-        run: |
-          git config user.name "nesleykent"
-          git config user.email '20923096+nesleykent@users.noreply.github.com'
-          git add data/shared-hunts.json data/ledger.json
-          if git diff --cached --quiet; then
-            echo "No dataset changes."
-          else
-            git commit -m "data: merge shared hunts"
-            git push
-          fi
+        uses: ./.github/actions/commit-generated-data
+        with:
+          paths: |
+            data/shared-hunts.json
+            data/ledger.json
+          message: 'data: merge shared hunts'
+          publish: 'true'
+          token: ${{ secrets.GITHUB_TOKEN }}

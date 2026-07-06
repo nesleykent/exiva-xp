@@ -51,6 +51,8 @@ assets/
     shell.js               chrome + shared DOM fragments
     pages/                 one controller per page
 data/
+  README.md                source-of-truth contract for curated inputs,
+                           generated caches and character observations
   bestiary.json            creature reference (read-only)
   codex-extra.json         TibiaData enrichment: artwork, lore, behaviour, loot, summon data
   charms.json              the Charm catalogue (read-only, sourced from TibiaWiki)
@@ -71,6 +73,9 @@ pipeline/
   track-character.mjs      daily Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended with skills + Drome)
   track-online.mjs         15-minute Gentebra world-list sampler for Night'Flyn online status
   smoke.mjs                engine smoke tests, run locally or by publish.yml
+.github/actions/
+  commit-generated-data    shared owner-authored generated-data commit +
+                           optional Pages dispatch action
 .github/workflows/
   check-hunt.yml           on issue opened/edited
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
