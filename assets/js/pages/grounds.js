@@ -25,9 +25,13 @@ const [access, profile] = await Promise.all([
 const characterLevel = profile?.level ?? null;
 const areaBySlug = new Map(Object.entries(access.grounds || {})
   .map(([slug, entry]) => [slug, fold(entry.area || '')]));
+const areaOptions = [...new Set(Object.values(access.grounds || {})
+  .map((entry) => entry.area)
+  .filter(Boolean))]
+  .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: '', mode: '', playstyle: '', sort: 'ground', dir: 'asc',
+  q: '', level: characterLevel, vocation: '', mode: '', playstyle: '', area: '', element: '', family: '', sort: 'ground', dir: 'asc',
 };
 
 /** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
@@ -51,6 +55,9 @@ function intel() {
       intelCache.set(g.slug, {
         attackEl: battle?.attack.el || null,
         names: new Set(pop.set.map((s) => s.creature.key)),
+        families: new Set(pop.set.map((s) => s.creature.family).filter(Boolean)),
+        tiers: new Set(pop.set.map((s) => s.creature.tier).filter(Boolean)),
+        rarities: new Set(pop.set.map((s) => s.creature.rarity).filter(Boolean)),
         weak: new Set(ELEMENTS.filter((el) => pop.set.some((s) => s.creature.taken[el] > 100))),
       });
     }
@@ -58,9 +65,17 @@ function intel() {
   return intelCache;
 }
 
+const familyOptions = () => [...new Set([...intel().values()].flatMap((i) => [...i.families]))]
+  .sort((a, b) => a.localeCompare(b));
+
+const questText = (groundSlug) => {
+  const entry = access.grounds?.[groundSlug];
+  return fold(`${entry?.quest || ''} ${entry?.note || ''}`);
+};
+
 function filteredRows() {
-  const q = fold(state.q);
-  const ix = q ? intel() : null;
+  const tokens = fold(state.q).split(/\s+/).filter(Boolean);
+  const ix = (tokens.length || state.element || state.family) ? intel() : null;
 
   return table.filter((r) => {
     if (state.level != null && (r.level == null || r.level > state.level)) return false;
@@ -68,12 +83,17 @@ function filteredRows() {
     if (state.mode === 'solo' && r.party) return false;
     if (state.mode === 'party' && !r.party) return false;
     if (state.playstyle && !fold(r.gear || '').includes(fold(state.playstyle))) return false;
-    if (q) {
-      const nameHit = fold(r.ground).includes(q);
-      const areaHit = areaBySlug.get(r.groundSlug)?.includes(q);
+    if (state.area && areaBySlug.get(r.groundSlug) !== fold(state.area)) return false;
+    if (state.element && ix.get(r.groundSlug)?.attackEl !== state.element) return false;
+    if (state.family && !ix.get(r.groundSlug)?.families.has(state.family)) return false;
+    if (tokens.length) {
       const i = ix.get(r.groundSlug);
-      const creatureHit = i && [...i.names].some((n) => n.includes(q));
-      if (!nameHit && !creatureHit && !areaHit) return false;
+      const searchSets = [
+        ...(i ? [...i.names, ...i.families, ...i.tiers, ...i.rarities].map(fold) : []),
+      ];
+      const textSources = [fold(r.ground), areaBySlug.get(r.groundSlug) || '', questText(r.groundSlug)];
+      const hit = (token) => textSources.some((s) => s.includes(token)) || searchSets.some((s) => s.includes(token));
+      if (!tokens.every(hit)) return false;
     }
     return true;
   });
@@ -114,6 +134,9 @@ stage.innerHTML = `
       <label class="lbl lbl-narrow"><span class="eyebrow">Level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
       <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value="">All</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Hunt type</span><select id="f-mode"><option value="">All</option><option value="solo">Solo</option><option value="party">Team hunt</option></select></label>
+      <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Creature type</span><select id="f-family"><option value="">All</option>${familyOptions().map((family) => `<option>${esc(family)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Playstyle</span><input type="search" id="f-playstyle" placeholder="e.g. forked, arrows"></label>
       <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('f-sort', SORTS, state.sort)}</label>
     </div>
@@ -169,6 +192,9 @@ bind('#f-q', 'q');
 bind('#f-level', 'level', (v) => (v ? +v : null));
 bind('#f-voc', 'vocation');
 bind('#f-mode', 'mode');
+bind('#f-area', 'area');
+bind('#f-element', 'element');
+bind('#f-family', 'family');
 bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;
