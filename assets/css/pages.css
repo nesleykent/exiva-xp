@@ -397,6 +397,32 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   margin: 0 0 var(--s2);
 }
 
+/* ---------- imbuement calculator modal ---------- */
+
+#imb-modal {
+  border: 0;
+  border-radius: var(--r-lg);
+  padding: 0;
+  background: transparent;
+  max-width: 90vw;
+  max-height: 88vh;
+  overflow: auto;
+  color: rgb(var(--ink));
+}
+#imb-modal::backdrop {
+  background: rgba(0, 0, 0, .5);
+}
+#imb-modal .panel {
+  box-shadow: var(--shadow-float);
+}
+#imb-toggle-filters .pill {
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+#imb-toggle-filters .pill[aria-pressed="true"] {
+  border-color: rgb(var(--blue));
+}
+
 /* ---------- character dashboard ---------- */
 
 .dashboard-head {

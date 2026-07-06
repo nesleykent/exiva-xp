@@ -15,6 +15,7 @@ import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
 import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
 import { charmAdvice, effectiveDamage, exerciseWeaponCost, formatStamina, parseStamina, profitSnapshot, sharedExpRange, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
+import { calculateImbuement, calculateTier, getAcquisitionOptions, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 
 const data = (f) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'));
@@ -238,4 +239,58 @@ if (online) {
   }
 }
 
-console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of Night'Flyn` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''}`);
+// -------------------------------------------------------------- imbuements
+
+assert(IMBUEMENTS.length >= 20, `imbuement catalogue too small: ${IMBUEMENTS.length}`);
+assert(IMBUEMENTS.filter((i) => i.supportsGoldTokenExchange).map((i) => i.id).sort().join(',') === 'strike,vampirism,void',
+  'only Vampirism, Void and Strike may support Gold Token exchange');
+
+const vampirism = imbuementById('vampirism');
+const gentebraPrices = {
+  'gold-token': 46029,
+  'vampire-teeth': 792,
+  'bloody-pincers': 13022,
+  'piece-of-dead-brain': 30596,
+};
+const powerful = calculateTier(vampirism, 'powerful', gentebraPrices);
+const totals = Object.fromEntries(powerful.options.map((o) => [o.label, o.total]));
+assert(totals['Market only'] === 368110, `market-only total wrong: ${totals['Market only']}`);
+assert(totals['6 Gold Tokens'] === 276174, `token-only total wrong: ${totals['6 Gold Tokens']}`);
+assert(totals['Hybrid from Intricate'] === 337096, `hybrid-from-intricate total wrong: ${totals['Hybrid from Intricate']}`);
+assert(totals['Hybrid from Basic'] === 440368, `hybrid-from-basic total wrong: ${totals['Hybrid from Basic']}`);
+assert(powerful.cheapest.label === '6 Gold Tokens', `expected Gold Tokens to be cheapest, got ${powerful.cheapest?.label}`);
+assert(powerful.savings.find((s) => s.against === 'Market only').amount === 368110 - 276174, 'savings vs market-only wrong');
+
+const basicOptions = getAcquisitionOptions(vampirism, 'basic', gentebraPrices);
+assert(basicOptions.length === 2, `Basic Vampirism should have exactly market + token options, got ${basicOptions.length}`);
+assert(selectCheapestOption(basicOptions).label === 'Market only', 'Basic Vampirism cheapest should be market at these prices (25×792 beats 2×46,029)');
+
+const intricateOptions = getAcquisitionOptions(vampirism, 'intricate', gentebraPrices);
+assert(intricateOptions.length === 3, `Intricate Vampirism should have market + token + one hybrid, got ${intricateOptions.length}`);
+const intricateHybrid = intricateOptions.find((o) => o.method === 'hybrid');
+assert(intricateHybrid.items.length === 1 && intricateHybrid.items[0].name === 'Bloody Pincers',
+  'Intricate hybrid must only carry the Bloody Pincers remainder, not the Basic package again');
+
+const swiftness = imbuementById('swiftness');
+assert(!swiftness.supportsGoldTokenExchange, 'Swiftness must not support Gold Token exchange');
+const swiftnessOptions = getAcquisitionOptions(swiftness, 'powerful', {});
+assert(swiftnessOptions.length === 1 && swiftnessOptions[0].method === 'market',
+  'imbuements without Gold Token support must expose Market only as the single option');
+
+const missingPriceTier = calculateTier(vampirism, 'basic', {});
+assert(!missingPriceTier.canCalculate, 'a tier with zero prices set must not be calculable');
+assert(missingPriceTier.missingPrices.includes('Vampire Teeth') && missingPriceTier.missingPrices.includes('Gold Token'),
+  'missing-price list must name every unpriced item across all options');
+assert(missingPriceTier.cheapest == null, 'an incomplete tier must never recommend an option');
+
+const zeroPriceTier = calculateTier(vampirism, 'basic', { 'vampire-teeth': 0 });
+assert(!zeroPriceTier.canCalculate, 'an unconfirmed zero price must be treated as missing, not free');
+const confirmedZeroTier = calculateTier(vampirism, 'basic', { 'vampire-teeth': { price: 0, confirmedZero: true }, 'gold-token': 100 });
+assert(confirmedZeroTier.canCalculate, 'an explicitly confirmed zero price must be usable');
+
+for (const imb of IMBUEMENTS) {
+  const calc = calculateImbuement(imb, {});
+  for (const tierId of ['basic', 'intricate', 'powerful']) assert(!calc[tierId].canCalculate, `${imb.id} ${tierId} should be incomplete with no prices set`);
+}
+
+console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of Night'Flyn` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''} / ${IMBUEMENTS.length} imbuements`);

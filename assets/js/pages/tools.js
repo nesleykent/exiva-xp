@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
 import { gp, hm, kk, nf, pct } from '../lib/fmt.js';
-import { $, pillEl, ring } from '../shell.js';
+import { $, bindSortMenu, pillEl, ring, say, sortMenu } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
@@ -14,6 +14,15 @@ import {
   sharedExpRange,
   staminaProjection,
 } from '../engine/planning.js';
+import {
+  calculateImbuement,
+  formatShoppingList,
+  GOLD_TOKEN_ITEM,
+  imbuementById,
+  IMBUEMENTS,
+  sortImbuements,
+} from '../engine/imbuements.js';
+import { loadWorldPrices, saveItemPrice } from '../data/imbuement-prices.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 
 const { stage, codex, hunts } = await boot('tools.html', { ledger: false });
@@ -105,7 +114,53 @@ stage.innerHTML = `
       <div class="tool-result" id="exercise-out"></div>
       <p class="fine dim">Mana and dummy time only — skill points gained per hit are randomized with no published closed-form rate, so this never estimates skill progress or time to next skill level.</p>
     </section>
-  </div>`;
+
+    <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
+      <div class="tool-head">
+        <h2>Imbuement price calculator</h2>
+        <span class="fine dim">cheapest way to gather each tier's resources</span>
+      </div>
+      <div class="filter-bar" id="imb-filter-bar">
+        <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
+          ${profile?.world
+    ? `<input id="imb-world" type="text" value="${esc(profile.world)}" disabled>`
+    : `<input id="imb-world" type="text" value="Gentebra" placeholder="World">`}
+        </label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>
+          <select id="imb-tier"><option value="basic">Basic</option><option value="intricate">Intricate</option><option value="powerful" selected>Powerful</option></select>
+        </label>
+        <div class="filter-more" id="imb-filter-more">
+          <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('imb-sort', { default: ['Default'], alphabetical: ['Alphabetical'] }, 'default')}</label>
+          <label class="lbl"><span class="eyebrow">Effect type</span>
+            <select id="imb-category">
+              <option value="all">All types</option>
+              <option value="leech">Leech &amp; Critical</option>
+              <option value="utility">Utility</option>
+              <option value="protection">Protection</option>
+              <option value="skill">Skill</option>
+              <option value="damage">Elemental damage</option>
+            </select>
+          </label>
+          <label class="lbl"><span class="eyebrow">Cheapest by</span>
+            <select id="imb-cheapest-method">
+              <option value="all">Any method</option>
+              <option value="market">Market</option>
+              <option value="tokens">Gold Tokens</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </label>
+        </div>
+        <button type="button" class="filter-toggle" id="imb-filter-toggle" aria-expanded="false" aria-controls="imb-filter-more"><span>Filters</span><span class="chevron">⌄</span></button>
+      </div>
+      <div class="tile-tags" id="imb-toggle-filters">
+        <button type="button" class="pill" id="imb-toggle-tokens" aria-pressed="false">Gold Token supported</button>
+        <button type="button" class="pill" id="imb-toggle-missing" aria-pressed="false">Missing prices</button>
+      </div>
+      <div class="tool-result-grid" id="imb-grid"></div>
+    </section>
+  </div>
+
+  <dialog id="imb-modal"></dialog>`;
 
 $('#damage-element').value = elementOrder(defaultCreature)[0]?.el || 'physical';
 
@@ -232,6 +287,201 @@ function renderExercise() {
     </div>`;
 }
 
+// ---------------------------------------------------------------- imbuements
+
+const imbState = { tier: 'powerful', sort: 'default', category: 'all', cheapestMethod: 'all', tokenOnly: false, missingOnly: false };
+
+function imbWorld() {
+  return $('#imb-world').value.trim() || 'Gentebra';
+}
+
+function imbPrices() {
+  return loadWorldPrices(imbWorld());
+}
+
+function filteredImbuements() {
+  let list = sortImbuements(IMBUEMENTS, imbState.sort);
+  if (imbState.category !== 'all') list = list.filter((i) => i.category === imbState.category);
+  if (imbState.tokenOnly) list = list.filter((i) => i.supportsGoldTokenExchange);
+  if (imbState.missingOnly || imbState.cheapestMethod !== 'all') {
+    const prices = imbPrices();
+    list = list.filter((i) => {
+      const calc = calculateImbuement(i, prices)[imbState.tier];
+      if (imbState.missingOnly && calc.canCalculate) return false;
+      if (imbState.cheapestMethod !== 'all' && calc.cheapest?.method !== imbState.cheapestMethod) return false;
+      return true;
+    });
+  }
+  return list;
+}
+
+function imbCardHtml(imb, prices) {
+  const calc = calculateImbuement(imb, prices)[imbState.tier];
+  const tierLabel = imb.tiers[imbState.tier].name;
+  return `
+    <button type="button" class="tool-mini-card" data-imb="${esc(imb.id)}" style="text-align:left;width:100%">
+      <div class="tile-top">
+        <b>${esc(imb.name)}</b><br><span class="fine dim">${esc(imb.effect)}</span>
+      </div>
+      <div class="tool-kpis">
+        <span><b>${calc.canCalculate ? gp(calc.cheapest.total) : '—'}</b><small>${esc(tierLabel)} · cheapest</small></span>
+      </div>
+      <div class="tile-tags">
+        ${imb.supportsGoldTokenExchange ? '<span class="pill pill-info">Gold Token</span>' : ''}
+        ${!imb.verified ? '<span class="pill pill-warning">Unverified</span>' : ''}
+        ${!calc.canCalculate
+    ? '<span class="badge badge-error">Missing prices</span>'
+    : `<span class="badge badge-success">${esc(calc.cheapest.label)}</span>`}
+      </div>
+    </button>`;
+}
+
+function renderImbuementGrid() {
+  const prices = imbPrices();
+  const list = filteredImbuements();
+  $('#imb-grid').innerHTML = list.length
+    ? list.map((imb) => imbCardHtml(imb, prices)).join('')
+    : '<p class="dim">No imbuements match these filters.</p>';
+  $('#imb-grid').querySelectorAll('[data-imb]').forEach((btn) => {
+    btn.addEventListener('click', () => openImbuementModal(btn.dataset.imb));
+  });
+}
+
+function priceInputRow(itemId, name, prices) {
+  const entry = prices[itemId];
+  const value = entry ? entry.price : '';
+  return `
+    <label class="lbl lbl-narrow">
+      <span class="eyebrow">${esc(name)}</span>
+      <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="gp">
+    </label>`;
+}
+
+function tierCardHtml(imb, tierId, calc) {
+  const t = calc.tier;
+  const cheapest = calc.cheapest;
+  return `
+  <div class="panel panel-pad tool-mini-card">
+    <div class="tile-top">
+      <b>${esc(t.name)}</b><br>${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
+    </div>
+    <div>
+      <p class="eyebrow">Required resources</p>
+      <div class="mini-list">
+        ${t.items.map((it) => {
+    const marketOption = calc.options.find((o) => o.method === 'market');
+    const line = marketOption.items.find((l) => l.itemId === it.itemId)
+          || { quantity: it.quantity, unitPrice: null, subtotal: null };
+    return `<span style="display:flex;justify-content:space-between;gap:8px"><span>${esc(it.name)}</span><span class="fine dim">${nf(it.quantity)} × ${line.unitPrice == null ? '—' : gp(line.unitPrice)} = ${line.subtotal == null ? '—' : gp(line.subtotal)}</span></span>`;
+  }).join('')}
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">Acquisition methods</p>
+      <div class="mini-list">
+        ${calc.options.map((o) => `
+          <span style="display:flex;justify-content:space-between;gap:8px">
+            <span>${esc(o.label)}${cheapest === o ? ' <b>· cheapest</b>' : ''}</span>
+            <span class="fine ${o.total == null ? 'dim' : ''}">${o.total == null ? 'Missing prices' : gp(o.total)}</span>
+          </span>`).join('')}
+      </div>
+    </div>
+    ${calc.canCalculate ? `
+    <div>
+      <p class="eyebrow">Breakdown — ${esc(cheapest.label)}</p>
+      <div class="mini-list">
+        ${cheapest.tokenQuantity ? `<span>${nf(cheapest.tokenQuantity)} × Gold Token @ ${gp(cheapest.tokenLine.unitPrice)} = ${gp(cheapest.tokenLine.subtotal)}</span>` : ''}
+        ${cheapest.items.map((it) => `<span>${nf(it.quantity)} × ${esc(it.name)} @ ${gp(it.unitPrice)} = ${gp(it.subtotal)}</span>`).join('')}
+        <span><b>Total: ${gp(cheapest.total)}</b></span>
+      </div>
+      ${calc.savings.length ? `
+      <p class="eyebrow">Savings vs alternatives</p>
+      <div class="mini-list">
+        ${calc.savings.map((s) => `<span>vs ${esc(s.against)}: ${gp(s.amount)} saved</span>`).join('')}
+      </div>` : ''}
+      <button type="button" class="btn btn-secondary btn-sm" data-copy-tier="${tierId}">Copy shopping list</button>
+    </div>` : `
+    <p class="dim fine">Cannot calculate total because required prices are missing: ${esc(calc.missingPrices.join(', '))}.</p>`}
+  </div>`;
+}
+
+function renderModalTiers(imb, world) {
+  const calc = calculateImbuement(imb, loadWorldPrices(world));
+  $('#imb-tier-cards').innerHTML = ['basic', 'intricate', 'powerful']
+    .map((tierId) => tierCardHtml(imb, tierId, calc[tierId])).join('');
+  $('#imb-tier-cards').querySelectorAll('[data-copy-tier]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const c = calc[btn.dataset.copyTier];
+      if (!c.canCalculate) return;
+      const text = formatShoppingList(imb.name, c.tier.name, world, c.cheapest);
+      try { await navigator.clipboard.writeText(text); say('Shopping list copied'); }
+      catch { say('Could not copy — clipboard unavailable'); }
+    });
+  });
+}
+
+function openImbuementModal(id) {
+  const imb = imbuementById(id);
+  if (!imb) return;
+  const world = imbWorld();
+  const prices = loadWorldPrices(world);
+  const itemIds = [...new Set(imb.tiers.powerful.items.map((it) => it.itemId))];
+  const items = imb.tiers.powerful.items;
+  const modal = $('#imb-modal');
+  modal.innerHTML = `
+    <div class="panel panel-pad" style="max-width:760px;display:grid;gap:var(--s4)">
+      <div class="tool-head">
+        <div>
+          <h2 style="margin:0">${esc(imb.name)}</h2>
+          <span class="fine dim">${esc(imb.effect)} · World: ${esc(world)}</span>
+        </div>
+        <button type="button" class="btn btn-tertiary btn-sm" id="imb-modal-close">Close</button>
+      </div>
+      ${!imb.verified ? '<span class="pill pill-warning" style="width:fit-content">Unverified quantities — sourced from third-party guides, not yet confirmed against the imbuing shrine or TibiaWiki directly.</span>' : ''}
+      <div>
+        <p class="eyebrow">Manual prices (${esc(world)})</p>
+        <div class="tool-fields" id="imb-price-inputs">
+          ${imb.supportsGoldTokenExchange ? priceInputRow(GOLD_TOKEN_ITEM, 'Gold Token', prices) : ''}
+          ${itemIds.map((iid) => priceInputRow(iid, items.find((it) => it.itemId === iid).name, prices)).join('')}
+        </div>
+      </div>
+      <div class="tool-result-grid" id="imb-tier-cards"></div>
+    </div>`;
+  renderModalTiers(imb, world);
+  modal.querySelectorAll('[data-price-item]').forEach((input) => {
+    input.addEventListener('input', () => {
+      const value = input.value === '' ? null : Number(input.value);
+      saveItemPrice(world, input.dataset.priceItem, value);
+      renderModalTiers(imb, world);
+      renderImbuementGrid();
+    });
+  });
+  $('#imb-modal-close').addEventListener('click', () => modal.close());
+  modal.showModal();
+}
+
+$('#imb-world').addEventListener('input', () => renderImbuementGrid());
+$('#imb-tier').addEventListener('change', () => { imbState.tier = $('#imb-tier').value; renderImbuementGrid(); });
+$('#imb-category').addEventListener('change', () => { imbState.category = $('#imb-category').value; renderImbuementGrid(); });
+$('#imb-cheapest-method').addEventListener('change', () => { imbState.cheapestMethod = $('#imb-cheapest-method').value; renderImbuementGrid(); });
+bindSortMenu('imb-sort', (value) => { imbState.sort = value; renderImbuementGrid(); });
+$('#imb-toggle-tokens').addEventListener('click', () => {
+  imbState.tokenOnly = !imbState.tokenOnly;
+  $('#imb-toggle-tokens').setAttribute('aria-pressed', String(imbState.tokenOnly));
+  $('#imb-toggle-tokens').classList.toggle('pill-info', imbState.tokenOnly);
+  renderImbuementGrid();
+});
+$('#imb-toggle-missing').addEventListener('click', () => {
+  imbState.missingOnly = !imbState.missingOnly;
+  $('#imb-toggle-missing').setAttribute('aria-pressed', String(imbState.missingOnly));
+  $('#imb-toggle-missing').classList.toggle('pill-info', imbState.missingOnly);
+  renderImbuementGrid();
+});
+$('#imb-filter-toggle').addEventListener('click', () => {
+  const open = $('#imb-filter-more').classList.toggle('open');
+  $('#imb-filter-toggle').setAttribute('aria-expanded', String(open));
+});
+
 [
   '#stamina-current', '#stamina-session', '#stamina-target',
 ].forEach((id) => $(id).addEventListener('input', renderStamina));
@@ -248,5 +498,6 @@ renderDamage();
 renderProfit();
 renderSharedExp();
 renderExercise();
+renderImbuementGrid();
 
 export {};
