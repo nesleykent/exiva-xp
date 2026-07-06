@@ -390,5 +390,25 @@
   "fishingRank": 3,
   "dromeScore": 319,
   "dromeScoreRank": 265
+ },
+ "2026-07-06": {
+  "rank": 340,
+  "level": 471,
+  "experience": 1726179553,
+  "source": "TibiaData highscores",
+  "magicLevel": 110,
+  "magicLevelRank": 231,
+  "charmPoints": 6705,
+  "charmPointsRank": 171,
+  "bossPoints": 1255,
+  "bossPointsRank": 290,
+  "achievements": 709,
+  "achievementsRank": 79,
+  "loyalty": 2470,
+  "loyaltyRank": 143,
+  "fishing": 72,
+  "fishingRank": 3,
+  "dromeScore": 319,
+  "dromeScoreRank": 265
  }
 }
