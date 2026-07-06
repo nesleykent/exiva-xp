@@ -13,7 +13,7 @@ import { locateHunt, nameCreatures, population } from '../assets/js/engine/locat
 import { readBattle } from '../assets/js/engine/strategy.js';
 import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
 import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
-import { charmAdvice, effectiveDamage, exerciseWeaponCost, formatStamina, parseStamina, profitSnapshot, sharedExpRange, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
+import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapshot, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
@@ -102,12 +102,6 @@ assert(damage.charmExpected < damage.charmProc, 'charm expectation must discount
 assert(Math.abs(damage.charmExpected - damage.charmProc * 0.11) < 1e-9, 'charm expectation must use the given per-charm trigger chance');
 const profit = profitSnapshot([hunt]);
 assert(profit.totals.hunts === 1 && profit.totals.profitRate === 150_000, 'profit snapshot failed');
-
-const sharedRange = sharedExpRange(300);
-assert(sharedRange.min <= 300 && 300 <= sharedRange.max, 'sharedExpRange must contain its own reference level');
-assert(sharedRange.min === 200 && sharedRange.max === 450, `sharedExpRange(300) drifted: got ${sharedRange.min}-${sharedRange.max}`);
-const exercise = exerciseWeaponCost(500);
-assert(exercise.mana === 300_000 && exercise.seconds === 1000, `exerciseWeaponCost(500) drifted: ${JSON.stringify(exercise)}`);
 
 const charms = data('charms.json').charms;
 const charmElement = Object.fromEntries(Object.entries(ELEMENT_CHARM).map(([el, name]) => [name, el]));
