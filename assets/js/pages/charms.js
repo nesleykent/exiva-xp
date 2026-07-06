@@ -59,7 +59,7 @@ function card(c) {
   const total = c.stages.reduce((sum, s) => sum + (Number(s.cost) || 0), 0);
   const stages = c.stages.map((s, i) => `
     <div class="fact"${trackedCharmPoints && Number(s.cost) <= trackedCharmPoints.points ? ' title="within tracked earned points"' : ''}>
-      <b class="num">${nf(s.cost)}${trackedCharmPoints && Number(s.cost) <= trackedCharmPoints.points ? ' ✓' : ''}</b><span class="fine dim">Stage ${i + 1} · ${s.value}%</span>
+      <b class="num">${nf(s.cost)}</b><span class="fine dim">Stage ${i + 1} · ${s.value}%</span>
     </div>`).join('');
   return `
   <div class="panel panel-pad" id="${esc(c.slug)}">
