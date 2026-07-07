@@ -139,7 +139,7 @@ export async function loadAccess(prefix = '') {
   catch { return {}; }
 }
 
-/** Night'Flyn's tracked profile (data/character.json — see pipeline/track-character.mjs). */
+/** The tracked character's profile (config.ini) (data/character.json — see pipeline/track-character.mjs). */
 export async function loadCharacter(prefix = '') {
   try { return await json(prefix + FILES.character); }
   catch { return null; }

@@ -1,8 +1,8 @@
 /**
- * 15-minute online sampler for Night'Flyn.
+ * 15-minute online sampler for the character configured in config.ini.
  *
  * This records what the public world endpoint can honestly observe:
- * whether the character appears in Gentebra's online_players list at the
+ * whether the character appears in the configured world's online_players list at the
  * polling slot, and the level/vocation shown there when online. It is not
  * continuous telemetry; each online sample represents one 15-minute slot.
  *
@@ -11,9 +11,9 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { CHARACTER } from './config.mjs';
 
-const NAME = "Night'Flyn";
-const WORLD = 'Gentebra';
+const { name: NAME, world: WORLD } = CHARACTER;
 const API = 'https://api.tibiadata.com/v4';
 // ONLINE_LOG_PATH override exists for dry-run testing against a copy —
 // synthetic samples must never enter the real observation log.

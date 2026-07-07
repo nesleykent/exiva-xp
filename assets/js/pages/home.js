@@ -9,18 +9,19 @@ import { day, nf } from '../lib/fmt.js';
 import { ICONS, ring } from '../shell.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 
-const { stage, codex, grounds } = await boot('index.html', { ledger: false });
+const { stage, codex, grounds, config } = await boot('index.html', { ledger: false });
 const [profile, history] = await Promise.all([loadCharacter(), loadCharacterHistory()]);
 
 const latest = history[history.length - 1] || null;
 const hunts = logbook();
+const characterName = profile?.name || config.name;
 
 const workspaces = [
   {
     href: 'character.html',
-    icon: ring(profile?.name || "Night'Flyn", { quiet: true }),
+    icon: ring(characterName, { quiet: true }),
     title: 'Character dashboard',
-    text: 'Night\'Flyn profile, XP history, highscores, deaths and personal progression context.',
+    text: `${characterName} profile, XP history, highscores, deaths and personal progression context.`,
   },
   {
     href: 'grounds.html',
@@ -58,7 +59,7 @@ stage.innerHTML = `
   <header class="hello">
     <p class="eyebrow">Exiva XP</p>
     <h1><span class="grad-text">Tibia character intelligence</span></h1>
-    <p>A private-first workspace for Night'Flyn. Start here, then open the character dashboard, planner, analyser log, tools or progression boards.</p>
+    <p>A private-first workspace for ${esc(characterName)}. Start here, then open the character dashboard, planner, analyser log, tools or progression boards.</p>
     <div class="actions">
       <a class="btn btn-primary btn-lg" href="character.html">Open character dashboard</a>
       <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan next hunt</a>
@@ -66,7 +67,7 @@ stage.innerHTML = `
   </header>
 
   <section class="section" style="margin-top:0">
-    <div class="section-bar"><h2>Workspaces</h2><span class="fine dim">Night'Flyn workspace</span></div>
+    <div class="section-bar"><h2>Workspaces</h2><span class="fine dim">${esc(characterName)} workspace</span></div>
     <div class="tiles home-workspaces">
       ${workspaces.map((item) => `
         <a class="panel tile home-workspace" href="${esc(item.href)}">

@@ -23,13 +23,14 @@ import {
 import { loadWorldPrices, mergeMarketPrices, saveItemPrice } from '../data/imbuement-prices.js';
 import { loadCharacter, loadCharacterHistory, loadImbuementArt, loadImbuementPrices } from '../data/sources.js';
 
-const { stage, codex, hunts } = await boot('tools.html', { ledger: false });
+const { stage, codex, hunts, config } = await boot('tools.html', { ledger: false });
 const [profile, history, imbuementArt, marketPrices] = await Promise.all([
   loadCharacter().catch(() => null),
   loadCharacterHistory().catch(() => []),
   loadImbuementArt().catch(() => ({ imbuements: {}, items: {} })),
   loadImbuementPrices().catch(() => ({})),
 ]);
+const characterName = profile?.name || config.name;
 
 const latest = history.at(-1) || {};
 const characterLevel = profile?.level ?? latest.level ?? 465;
@@ -42,7 +43,7 @@ const creatures = [...codex.creatures].sort((a, b) => a.name.localeCompare(b.nam
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Character tools</h1>
-    <p class="dim" style="max-width:66ch">Practical Night'Flyn tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
+    <p class="dim" style="max-width:66ch">Practical ${esc(characterName)} tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
   </header>
 
   <div class="tool-grid" style="margin-top:20px">
@@ -98,7 +99,7 @@ stage.innerHTML = `
       </div>
       <div class="filter-bar" id="imb-filter-bar">
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
-          <input id="imb-world" type="text" value="${esc(profile?.world || 'Gentebra')}" placeholder="World">
+          <input id="imb-world" type="text" value="${esc(profile?.world || config.world)}" placeholder="World">
         </label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>
           <select id="imb-tier"><option value="basic">Basic</option><option value="intricate">Intricate</option><option value="powerful" selected>Powerful</option></select>
@@ -219,7 +220,7 @@ function renderProfit() {
 const imbState = { tier: 'powerful', sort: 'default' };
 
 function imbWorld() {
-  return $('#imb-world').value.trim() || 'Gentebra';
+  return $('#imb-world').value.trim() || config.world;
 }
 
 function imbPrices(world = imbWorld()) {

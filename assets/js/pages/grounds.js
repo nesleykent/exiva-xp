@@ -17,11 +17,12 @@ import { readBattle } from '../engine/strategy.js';
 import { VOCATIONS } from '../engine/rules.js';
 import { loadAccess, loadCharacter } from '../data/sources.js';
 
-const { stage, codex, grounds, hunts, table } = await boot('grounds.html');
+const { stage, codex, grounds, hunts, table, config } = await boot('grounds.html');
 const [access, profile] = await Promise.all([
   loadAccess().catch(() => ({ grounds: {} })),
   loadCharacter().catch(() => null),
 ]);
+const characterName = profile?.name || config.name;
 const characterLevel = profile?.level ?? null;
 // Tibia's promoted title ("Elder Druid") always contains its base vocation
 // name — match the same way character.js's isVocationCompatible does.
@@ -129,7 +130,7 @@ function groundCards(rows) {
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
-    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around Night'Flyn's tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}${characterVocation ? ` and vocation (${esc(characterVocation)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
+    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around ${esc(characterName)}'s tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}${characterVocation ? ` and vocation (${esc(characterVocation)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
   <form class="filter-bar" id="f">
     <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>

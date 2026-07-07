@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Fetch Gentebra imbuement item prices
+      - name: Fetch imbuement item prices for the configured world
         id: prices
         run: node pipeline/fetch-imbuement-prices.mjs
 

@@ -1,4 +1,4 @@
-# Night'Flyn TibiaData tracker. The script keys history rows by Tibia's
+# TibiaData tracker for the character configured in config.ini. The script keys history rows by Tibia's
 # 10:00 Europe/Berlin server-save boundary, and reruns during the same Tibia
 # day refresh the current row when TibiaData reports fresher values. Each crawl
 # records {rank, level, experience} plus the skill categories, committed back

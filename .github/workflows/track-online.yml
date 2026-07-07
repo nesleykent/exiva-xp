@@ -1,4 +1,4 @@
-# 15-minute online sampler for Night'Flyn. It uses TibiaData's world
+# 15-minute online sampler for the character configured in config.ini. It uses TibiaData's world
 # endpoint, which exposes the current online_players list for a world.
 name: Track online samples
 

@@ -1,6 +1,7 @@
 /** Progression analytics — XP history, highscores and personal hunt performance. */
 
 import { boot } from './_boot.js';
+import { esc } from '../lib/text.js';
 import { nf, kk, hm } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
@@ -8,11 +9,12 @@ import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
-const { stage, hunts, table } = await boot('analytics.html');
+const { stage, hunts, table, config } = await boot('analytics.html');
 const [history, profile] = await Promise.all([
   loadCharacterHistory().catch(() => []),
   loadCharacter().catch(() => null),
 ]);
+const characterName = profile?.name || config.name;
 
 const label = (r) => [r.ground, r.vocation || 'Party', r.levelText].filter(Boolean).join(' · ');
 const latest = history.at(-1) || null;
@@ -116,7 +118,7 @@ const board = (title, data, svg) => (data.length ? `
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Progression analytics</h1>
-    <p class="dim">XP and highscores come from Night'Flyn's daily tracker; hunt boards use ${nf(hunts.length)} saved analyser log${hunts.length === 1 ? '' : 's'} plus ${nf(table.length)} planner rows.</p>
+    <p class="dim">XP and highscores come from ${esc(characterName)}'s tracker; hunt boards use ${nf(hunts.length)} saved analyser log${hunts.length === 1 ? '' : 's'} plus ${nf(table.length)} planner rows.</p>
   </header>
   <div class="pulse-row">
     <div class="panel pulse"><div class="big num">${nf(history.length)}</div><div class="eyebrow">Tracked days</div></div>

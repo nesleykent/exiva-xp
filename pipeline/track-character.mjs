@@ -1,5 +1,5 @@
 /**
- * Daily character tracker for Night'Flyn — the same mechanism as
+ * Daily character tracker for the character configured in config.ini — the same mechanism as
  * tibia-xp-history's get-xp-data.mjs (github.com/mathiasbynens/tibia-xp-history):
  * the TibiaData v4 highscores expose each ranked character's exact
  * experience, so a crawl of the world+vocation pages until the character
@@ -19,10 +19,9 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { HIGHSCORE_CATEGORIES, TRACKED_HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
+import { CHARACTER } from './config.mjs';
 
-const NAME = "Night'Flyn";
-const WORLD = 'Gentebra';
-const VOCATION = 'druids';
+const { name: NAME, world: WORLD, vocation: VOCATION } = CHARACTER;
 // Public api.tibiadata.com keeps highscores in "restriction mode"; the dev
 // instance serves them — and is what the reference project queries too.
 const API = 'https://dev.tibiadata.com/v4';

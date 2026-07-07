@@ -1,5 +1,5 @@
 /**
- * Character - Night'Flyn's dashboard: generated profile, progression,
+ * Character - the tracked character's dashboard (config.ini): generated profile, progression,
  * sampled online status, highscores, deaths, and shortcuts into the planning tools.
  */
 
@@ -22,7 +22,7 @@ import { loadCharacter, loadCharacterHistory, loadCharacterOnline, logbook } fro
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
-const { stage, codex, grounds, table } = await boot('character.html');
+const { stage, codex, grounds, table, config } = await boot('character.html');
 const [profile, history, onlineLog] = await Promise.all([
   loadCharacter(),
   loadCharacterHistory(),
@@ -563,7 +563,7 @@ function onlineBodyHtml() {
     </div>` : '<div class="panel panel-pad dim" style="margin-top:12px">World population context needs at least 20 online and 20 offline samples.</div>'}
     <details class="detail-block">
       <summary>Source rows and sampling caveats</summary>
-      <p class="fine dim">This is sampled status, not continuous telemetry. Each online row means Night'Flyn appeared in Gentebra's public world list during that ${nf(cadence)}-minute slot. Session blocks can merge if two real sessions are closer than one sample interval, or split when a long session spans a missed sample.</p>
+      <p class="fine dim">This is sampled status, not continuous telemetry. Each online row means ${esc(profile?.name || config.name)} appeared in ${esc(onlineLog?.world || config.world)}'s public world list during that ${nf(cadence)}-minute slot. Session blocks can merge if two real sessions are closer than one sample interval, or split when a long session spans a missed sample.</p>
       <div class="section-subhead"><h3>Daily sampled summary</h3><span class="fine dim">online samples / total samples</span></div>
       ${onlineDailyTableHtml(onlineDaily)}
       <div class="section-subhead"><h3>Observed level changes</h3><span class="fine dim">only when the sampler catches the character online</span></div>
@@ -765,10 +765,10 @@ const groundsTable = tableHtml([
 stage.innerHTML = `
   <header class="character-hero panel">
     <div class="dashboard-identity">
-      ${ring(profile?.name || "Night'Flyn", { quiet: true })}
+      ${ring(profile?.name || config.name, { quiet: true })}
       <div>
-        <p class="eyebrow">${esc(profile?.world || 'Tibia')} · ${esc(profile?.vocation || 'character')}</p>
-        <h1>${esc(profile?.name || "Night'Flyn")}</h1>
+        <p class="eyebrow">${esc(profile?.world || config.world)} · ${esc(profile?.vocation || 'character')}</p>
+        <h1>${esc(profile?.name || config.name)}</h1>
         <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, sampled activity, deaths and private hunt evidence.</p>
         <div class="dashboard-meta">
           ${profileLevel != null ? `<span class="pill">Profile lvl ${nf(profileLevel)}</span>` : ''}

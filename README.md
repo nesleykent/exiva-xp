@@ -38,12 +38,13 @@ Exiva XP is one Night'Flyn interface, not a generic public directory. Current im
 
 ```
 *.html                     eleven thin pages sharing one shell
+config.ini                 the tracked character: name, world, vocation — edit this, not code
 assets/
   css/base.css             fonts, tokens (light + dark), app shell
   css/pages.css            page components
   fonts/                   Optimistic VF + Instagram Sans (from the design system)
   js/
-    lib/                   fmt.js · text.js · stats.js        (primitives)
+    lib/                   fmt.js · text.js · stats.js · config.js (browser config.ini reader)
     engine/                analyser.js · codex.js · strategy.js
                            locator.js · ledger.js · rules.js  (game logic, Node-safe)
     data/sources.js        dataset loaders + 8 submission backends
@@ -66,6 +67,7 @@ data/
   character-online.json    generated every 15 minutes — sampled world-list online status from TibiaData
   imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
+  config.mjs               reads config.ini — the tracked character for every script below
   check-hunt.mjs           Action: judge an issue payload
   merge-hunts.mjs          Optional Action: merge approved shared issues, rebuild the shared ledger
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
@@ -144,10 +146,11 @@ The ground↔creature matcher (`assets/js/engine/locator.js`) had a real bug: it
 ## Deploying your own
 
 1. Push this folder to a new repository's `main` branch.
-2. Set `SITE.owner` / `SITE.repo` in `assets/js/data/sources.js`.
-3. **Settings → Pages** → Source: **GitHub Actions**.
-4. Optional, only if you want shared/public hunt submissions: create the labels `hunt`, `approved`, `clean`, `faulted`.
-5. Push — `publish.yml` verifies the engine and deploys.
+2. Edit `config.ini` — `name`, `world` and `vocation` (lowercase TibiaData slug: knights/paladins/sorcerers/druids/monks) for the character to track. Both the pipeline scripts (`pipeline/config.mjs`) and the browser UI (`assets/js/lib/config.js`) read this file; no code edits needed.
+3. Set `SITE.owner` / `SITE.repo` in `assets/js/data/sources.js`.
+4. **Settings → Pages** → Source: **GitHub Actions**.
+5. Optional, only if you want shared/public hunt submissions: create the labels `hunt`, `approved`, `clean`, `faulted`.
+6. Push — `publish.yml` verifies the engine and deploys.
 
 Run locally with any static server (`python3 -m http.server`) — ES modules don't load from `file://`.
 

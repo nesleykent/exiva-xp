@@ -3,19 +3,21 @@
 import { mountShell, $ } from '../shell.js';
 import { backend, loadCodex, loadGrounds } from '../data/sources.js';
 import { buildLedger } from '../engine/ledger.js';
+import { loadConfig } from '../lib/config.js';
 
 export async function boot(page, { ledger = true } = {}) {
   mountShell(page);
   const stage = $('#stage');
   try {
-    const [codex, grounds, hunts] = await Promise.all([
-      loadCodex(), loadGrounds(), backend().read(),
+    const [codex, grounds, hunts, config] = await Promise.all([
+      loadCodex(), loadGrounds(), backend().read(), loadConfig(),
     ]);
     return {
       stage,
       codex,
       grounds,
       hunts,
+      config,
       table: ledger ? buildLedger(grounds.entries, hunts) : [],
     };
   } catch (err) {

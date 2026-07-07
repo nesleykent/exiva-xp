@@ -18,6 +18,7 @@ import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
+import { CHARACTER } from './config.mjs';
 
 const data = (f) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'));
 const assert = (cond, msg) => { if (!cond) throw new Error(msg); };
@@ -161,7 +162,7 @@ assert(baseValue(nextBaseAt465 - 1) === baseAt465 && baseValue(nextBaseAt465) > 
 let character = null;
 try { character = data('character.json'); } catch { /* tracker has not run yet */ }
 if (character) {
-  assert(character.name === "Night'Flyn", `character.json tracks ${character.name}, expected Night'Flyn`);
+  assert(character.name === CHARACTER.name, `character.json tracks ${character.name}, expected ${CHARACTER.name} (config.ini)`);
   const charHistory = data('character-history.json');
   const entries = Object.entries(charHistory);
   assert(entries.length >= 1, 'character-history.json is empty despite character.json existing');
@@ -189,8 +190,8 @@ if (character) {
 let online = null;
 try { online = data('character-online.json'); } catch { /* online sampler has not run yet */ }
 if (online) {
-  assert(online.character === "Night'Flyn", `character-online.json tracks ${online.character}, expected Night'Flyn`);
-  assert(online.world === 'Gentebra', `character-online.json world is ${online.world}, expected Gentebra`);
+  assert(online.character === CHARACTER.name, `character-online.json tracks ${online.character}, expected ${CHARACTER.name} (config.ini)`);
+  assert(online.world === CHARACTER.world, `character-online.json world is ${online.world}, expected ${CHARACTER.world} (config.ini)`);
   assert(online.cadenceMinutes === 15, `online cadence must stay at 15 minutes, got ${online.cadenceMinutes}`);
   assert(/TibiaData/.test(online.source || ''), 'online sampler must declare TibiaData as its source');
   assert(Array.isArray(online.samples), 'character-online.json samples must be an array');
@@ -313,4 +314,4 @@ for (const itemId of priceableItems) {
   assert(Number.isFinite(IMBUEMENT_MARKET_IDS[itemId]), `${itemId} has no TibiaMarket item_id pinned in pipeline/imbuement-market-ids.mjs`);
 }
 
-console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of Night'Flyn` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''} / ${IMBUEMENTS.length} imbuements`);
+console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''} / ${IMBUEMENTS.length} imbuements`);

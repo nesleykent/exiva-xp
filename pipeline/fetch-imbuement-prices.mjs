@@ -17,8 +17,9 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { IMBUEMENTS, GOLD_TOKEN_ITEM } from '../assets/js/engine/imbuements.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
+import { CHARACTER } from './config.mjs';
 
-const WORLD = 'Gentebra';
+const { world: WORLD } = CHARACTER;
 const API = 'https://api.tibiamarket.top/item_history';
 // Same bundled fallback token the sister project ships publicly (its own
 // anonymous read token for tibiamarket.top) — override with
