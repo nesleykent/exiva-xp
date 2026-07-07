@@ -281,23 +281,16 @@ function itemIcon(itemId, size = '') {
 
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
-  const tierLabel = imb.tiers[imbState.tier].name;
   return `
-    <button type="button" class="tool-mini-card" data-imb="${esc(imb.id)}" style="text-align:left;width:100%">
-      <div class="tile-top" style="display:flex;gap:10px;align-items:center">
-        ${imbIcon(imb)}
-        <div><b>${esc(imb.name)}</b><br><span class="fine dim">${esc(imb.effect)}</span></div>
+    <button type="button" class="tool-mini-card imb-card" data-imb="${esc(imb.id)}">
+      <div class="imb-card-head">
+        <div class="imb-card-id">
+          ${imbIcon(imb)}
+          <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
+        </div>
+        <span class="imb-card-price ${calc.canCalculate ? '' : 'dim'}">${calc.canCalculate ? gp(calc.cheapest.total) : '—'}</span>
       </div>
-      <div class="tool-kpis">
-        <span><b>${calc.canCalculate ? gp(calc.cheapest.total) : '—'}</b><small>${esc(tierLabel)} · cheapest</small></span>
-      </div>
-      <div class="tile-tags">
-        ${imb.supportsGoldTokenExchange ? '<span class="pill pill-info">Gold Token</span>' : ''}
-        ${!imb.verified ? '<span class="pill pill-warning">Unverified</span>' : ''}
-        ${!calc.canCalculate
-    ? '<span class="badge badge-error">Missing prices</span>'
-    : `<span class="badge badge-success">${esc(calc.cheapest.label)}</span>`}
-      </div>
+      ${imb.supportsGoldTokenExchange ? '<span class="pill pill-info imb-card-badge">Gold Token</span>' : ''}
     </button>`;
 }
 
@@ -316,9 +309,9 @@ function priceInputRow(itemId, name, prices) {
   const entry = prices[itemId];
   const value = entry ? entry.price : '';
   return `
-    <label class="lbl lbl-narrow">
-      <span class="eyebrow" style="display:flex;align-items:center;gap:4px">${itemIcon(itemId, 'imb-icon-sm')}${esc(name)}</span>
-      <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="gp">
+    <label class="imb-price-input" title="${esc(name)}">
+      ${itemIcon(itemId, 'imb-icon-sm')}
+      <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="${esc(name)}" aria-label="${esc(name)} price">
     </label>`;
 }
 
@@ -329,10 +322,10 @@ function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
   const alt = calc.options.find((o) => o !== cheapest && o.total != null);
-  const itemRow = (icon, label) => `<span style="display:flex;align-items:center;gap:6px">${icon}${label}</span>`;
+  const itemRow = (icon, label) => `<span class="imb-item-row">${icon}${label}</span>`;
   return `
-  <div class="panel panel-pad tool-mini-card">
-    <div class="tile-top" style="display:flex;justify-content:space-between;align-items:baseline">
+  <div class="panel panel-pad tool-mini-card imb-tier-card">
+    <div class="imb-tier-head">
       <span class="badge ${TIER_BADGE[tierId]}">${esc(t.name)}</span>
       ${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
     </div>
@@ -341,16 +334,14 @@ function tierCardHtml(imb, tierId, calc) {
     ? itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`)
     : t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`)).join('')}
     </div>
-    <div class="tool-kpis" style="grid-template-columns:1fr">
-      <span>
-        <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
-        <small>Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''}</small>
-      </span>
+    <div class="imb-tier-total">
+      <span>Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''}</span>
+      <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
     </div>
-    ${alt ? `<p class="fine dim">or ${esc(alt.label)}: ${gp(alt.total)}</p>` : ''}
+    ${alt ? `<p class="fine dim" style="margin:0">or ${esc(alt.label)}: ${gp(alt.total)}</p>` : ''}
     ${calc.canCalculate
       ? `<button type="button" class="btn btn-secondary btn-sm" data-copy-tier="${tierId}">Copy shopping list</button>`
-      : `<p class="fine dim">Add prices below to calculate.</p>`}
+      : `<p class="fine dim" style="margin:0">Add prices below to calculate.</p>`}
   </div>`;
 }
 

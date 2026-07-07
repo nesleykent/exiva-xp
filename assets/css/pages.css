@@ -427,6 +427,76 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 #imb-toggle-filters .pill[aria-pressed="true"] {
   border-color: rgb(var(--blue));
 }
+.imb-card {
+  display: grid;
+  gap: var(--s2);
+  text-align: left;
+  width: 100%;
+}
+.imb-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+}
+.imb-card-id {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-width: 0;
+}
+.imb-card-id > div {
+  display: grid;
+  min-width: 0;
+}
+.imb-card-id b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.imb-card-price {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.imb-card-badge {
+  width: fit-content;
+}
+.imb-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.imb-tier-card {
+  gap: var(--s3);
+}
+.imb-tier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.imb-tier-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: var(--s2);
+  border-top: 1px solid rgb(var(--line));
+}
+.imb-tier-total b {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.imb-price-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.imb-price-input input {
+  width: 100px;
+  min-width: 0;
+}
 
 /* ---------- character dashboard ---------- */
 
