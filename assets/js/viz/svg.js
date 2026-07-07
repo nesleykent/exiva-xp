@@ -126,4 +126,7 @@ export function attachFlowHover(container) {
   container.addEventListener('pointermove', pick);
   container.addEventListener('pointerdown', pick);
   container.addEventListener('pointerleave', reset);
+  // a resize (phone rotation, devtools) invalidates the tip's inline px
+  // position — it would otherwise render stranded outside the container
+  window.addEventListener('resize', reset);
 }
