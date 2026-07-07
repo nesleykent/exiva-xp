@@ -40,6 +40,7 @@ const FILES = {
   character: 'data/character.json',
   characterHistory: 'data/character-history.json',
   characterOnline: 'data/character-online.json',
+  imbuementArt: 'data/imbuement-art.json',
 };
 
 // ---------------------------------------------------------------- loaders
@@ -141,6 +142,12 @@ export async function loadAccess(prefix = '') {
 export async function loadCharacter(prefix = '') {
   try { return await json(prefix + FILES.character); }
   catch { return null; }
+}
+
+/** { imbuements: { id: url }, items: { itemId: url } } TibiaWiki icon lookup. */
+export async function loadImbuementArt(prefix = '') {
+  try { return await json(prefix + FILES.imbuementArt); }
+  catch { return { imbuements: {}, items: {} }; }
 }
 
 /** Daily {date: {rank, level, experience, highscores...}} history, oldest first. */

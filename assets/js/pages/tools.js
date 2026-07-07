@@ -21,12 +21,13 @@ import {
   sortImbuements,
 } from '../engine/imbuements.js';
 import { loadWorldPrices, saveItemPrice } from '../data/imbuement-prices.js';
-import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
+import { loadCharacter, loadCharacterHistory, loadImbuementArt } from '../data/sources.js';
 
 const { stage, codex, hunts } = await boot('tools.html', { ledger: false });
-const [profile, history] = await Promise.all([
+const [profile, history, imbuementArt] = await Promise.all([
   loadCharacter().catch(() => null),
   loadCharacterHistory().catch(() => []),
+  loadImbuementArt().catch(() => ({ imbuements: {}, items: {} })),
 ]);
 
 const latest = history.at(-1) || {};
@@ -268,13 +269,24 @@ function filteredImbuements() {
   return list;
 }
 
+function imbIcon(imb) {
+  const src = imbuementArt.imbuements?.[imb.id];
+  return src ? `<img class="imb-icon" src="${esc(src)}" alt="" loading="lazy">` : '';
+}
+
+function itemIcon(itemId, size = '') {
+  const src = imbuementArt.items?.[itemId];
+  return src ? `<img class="imb-icon${size ? ` ${size}` : ''}" src="${esc(src)}" alt="" loading="lazy">` : '';
+}
+
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
   const tierLabel = imb.tiers[imbState.tier].name;
   return `
     <button type="button" class="tool-mini-card" data-imb="${esc(imb.id)}" style="text-align:left;width:100%">
-      <div class="tile-top">
-        <b>${esc(imb.name)}</b><br><span class="fine dim">${esc(imb.effect)}</span>
+      <div class="tile-top" style="display:flex;gap:10px;align-items:center">
+        ${imbIcon(imb)}
+        <div><b>${esc(imb.name)}</b><br><span class="fine dim">${esc(imb.effect)}</span></div>
       </div>
       <div class="tool-kpis">
         <span><b>${calc.canCalculate ? gp(calc.cheapest.total) : '—'}</b><small>${esc(tierLabel)} · cheapest</small></span>
@@ -305,7 +317,7 @@ function priceInputRow(itemId, name, prices) {
   const value = entry ? entry.price : '';
   return `
     <label class="lbl lbl-narrow">
-      <span class="eyebrow">${esc(name)}</span>
+      <span class="eyebrow" style="display:flex;align-items:center;gap:4px">${itemIcon(itemId, 'imb-icon-sm')}${esc(name)}</span>
       <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="gp">
     </label>`;
 }
@@ -317,6 +329,7 @@ function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
   const alt = calc.options.find((o) => o !== cheapest && o.total != null);
+  const itemRow = (icon, label) => `<span style="display:flex;align-items:center;gap:6px">${icon}${label}</span>`;
   return `
   <div class="panel panel-pad tool-mini-card">
     <div class="tile-top" style="display:flex;justify-content:space-between;align-items:baseline">
@@ -324,7 +337,9 @@ function tierCardHtml(imb, tierId, calc) {
       ${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
     </div>
     <div class="mini-list">
-      ${cheapest?.tokenQuantity ? `<span>${nf(cheapest.tokenQuantity)}x Gold Token</span>` : t.items.map((it) => `<span>${nf(it.quantity)}x ${esc(it.name)}</span>`).join('')}
+      ${cheapest?.tokenQuantity
+    ? itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`)
+    : t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`)).join('')}
     </div>
     <div class="tool-kpis" style="grid-template-columns:1fr">
       <span>

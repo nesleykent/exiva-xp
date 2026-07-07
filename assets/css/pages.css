@@ -187,6 +187,11 @@
   image-rendering: pixelated; flex-shrink: 0;
 }
 .critter-lg { width: 84px; height: 84px; }
+.imb-icon {
+  width: 32px; height: 32px; object-fit: contain;
+  image-rendering: pixelated; flex-shrink: 0;
+}
+.imb-icon-sm { width: 20px; height: 20px; }
 .art-disc {
   display: grid; place-items: center; flex-shrink: 0;
   background: rgb(var(--surface-2)); border-radius: var(--r-lg);

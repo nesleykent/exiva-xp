@@ -3,14 +3,16 @@
  * DOM-free and Node-safe — the UI never computes a price itself, it only
  * renders what this module returns.
  *
- * Data provenance: Vampirism, Void, Strike and Featherweight quantities are
- * cross-confirmed (Featherweight against the owner's own in-game screenshot;
- * the other three against multiple independent guides) and marked
- * `verified: true`. Every other imbuement's item list comes from a single
- * third-party guide (TibiaVault, 2026) with no in-game confirmation yet —
- * they carry `verified: false` and the UI must show that plainly. Never
- * silently upgrade an entry to verified without a second source or the
- * owner's own confirmation.
+ * Data provenance: every item, quantity and per-tier bonus is read directly
+ * from each tier's own TibiaWiki page ("Basic/Intricate/Powerful <Name>"),
+ * via its `{{Infobox Imbuement}}` `astralsources`/`effect` fields fetched
+ * 2026-07-06 — the wiki's own primary data, not a third-party guide. All
+ * entries are `verified: true`. An earlier pass sourced ~18 of these from a
+ * single web guide (TibiaVault) and got several wrong (e.g. Dragon Hide's
+ * items were entirely different, Vibrancy's third item wasn't "Swamp
+ * Plant" but "Quill") — corrected here against the wiki's own template
+ * data. If TibiaWiki itself is ever wrong, fix it here with a fresh fetch,
+ * never by guessing.
  */
 
 export const GOLD_TOKEN_ITEM = 'gold-token';
@@ -65,16 +67,17 @@ export const IMBUEMENTS = [
     [item('grimeleech-wings', 'Some Grimeleech Wings', 5)],
     { basic: '+3% Mana Leech', intricate: '+5% Mana Leech', powerful: '+8% Mana Leech' }),
 
-  imbuement('strike', 'Strike', 'Critical Damage', 'critical', true, true,
+  imbuement('strike', 'Strike', 'Critical Hit Damage', 'critical', true, true,
     [item('protective-charm', 'Protective Charm', 20)],
     [item('sabretooth', 'Sabretooth', 25)],
     [item('vexclaw-talon', 'Vexclaw Talon', 5)],
-    { basic: '+15% Critical Damage', intricate: '+25% Critical Damage', powerful: '+50% Critical Damage' }),
+    { basic: '+5% damage (5% chance)', intricate: '+15% damage (5% chance)', powerful: '+40% damage (5% chance)' }),
 
-  imbuement('swiftness', 'Swiftness', 'Speed Boost', 'utility', false, false,
+  imbuement('swiftness', 'Swiftness', 'Speed Boost', 'utility', false, true,
     [item('damselfly-wing', 'Damselfly Wing', 15)],
     [item('compass', 'Compass', 25)],
-    [item('waspoid-wing', 'Waspoid Wing', 5)]),
+    [item('waspoid-wing', 'Waspoid Wing', 20)],
+    { basic: '+10 speed', intricate: '+15 speed', powerful: '+30 speed' }),
 
   imbuement('featherweight', 'Featherweight', 'Capacity Increase', 'utility', false, true,
     [item('fairy-wings', 'Fairy Wings', 20)],
@@ -82,95 +85,113 @@ export const IMBUEMENTS = [
     [item('goosebump-leather', 'Goosebump Leather', 5)],
     { basic: '+3% total capacity', intricate: '+8% total capacity', powerful: '+15% total capacity' }),
 
-  imbuement('vibrancy', 'Vibrancy', 'Paralysis Removal', 'utility', false, false,
+  imbuement('vibrancy', 'Vibrancy', 'Paralysis Deflection', 'utility', false, true,
     [item('wereboar-hooves', 'Wereboar Hooves', 20)],
     [item('crystallized-anger', 'Crystallized Anger', 15)],
-    [item('swamp-plant', 'Swamp Plant', 5)]),
+    [item('quill', 'Quill', 5)],
+    { basic: '15% deflect chance', intricate: '25% deflect chance', powerful: '50% deflect chance' }),
 
-  imbuement('lich-shroud', 'Lich Shroud', 'Death Protection', 'protection', false, false,
+  imbuement('lich-shroud', 'Lich Shroud', 'Death Protection', 'protection', false, true,
     [item('flask-of-embalming-fluid', 'Flask of Embalming Fluid', 25)],
     [item('gloom-wolf-fur', 'Gloom Wolf Fur', 20)],
-    [item('mystical-hourglass', 'Mystical Hourglass', 5)]),
+    [item('mystical-hourglass', 'Mystical Hourglass', 5)],
+    { basic: '+2% Death Protection', intricate: '+5% Death Protection', powerful: '+10% Death Protection' }),
 
-  imbuement('snake-skin', 'Snake Skin', 'Earth Protection', 'protection', false, false,
+  imbuement('snake-skin', 'Snake Skin', 'Earth Protection', 'protection', false, true,
     [item('piece-of-swampling-wood', 'Piece of Swampling Wood', 25)],
     [item('snake-skin-item', 'Snake Skin', 20)],
-    [item('brimstone-shell', 'Brimstone Shell', 5)]),
+    [item('brimstone-fangs', 'Brimstone Fangs', 10)],
+    { basic: '+3% Earth Protection', intricate: '+8% Earth Protection', powerful: '+15% Earth Protection' }),
 
-  imbuement('dragon-hide', 'Dragon Hide', 'Fire Protection', 'protection', false, false,
-    [item('green-dragon-scale', 'Green Dragon Scale', 10)],
-    [item('wyvern-talisman', 'Wyvern Talisman', 5)],
-    [item('warmasters-wristguards', "Warmaster's Wristguards", 5)]),
+  imbuement('dragon-hide', 'Dragon Hide', 'Fire Protection', 'protection', false, true,
+    [item('green-dragon-leather', 'Green Dragon Leather', 20)],
+    [item('blazing-bone', 'Blazing Bone', 10)],
+    [item('draken-sulphur', 'Draken Sulphur', 5)],
+    { basic: '+3% Fire Protection', intricate: '+8% Fire Protection', powerful: '+15% Fire Protection' }),
 
-  imbuement('quara-scale', 'Quara Scale', 'Ice Protection', 'protection', false, false,
-    [item('quara-bone', 'Quara Bone', 25)],
-    [item('quara-eye', 'Quara Eye', 5)],
-    [item('frozen-heart', 'Frozen Heart', 5)]),
+  imbuement('quara-scale', 'Quara Scale', 'Ice Protection', 'protection', false, true,
+    [item('winter-wolf-fur', 'Winter Wolf Fur', 25)],
+    [item('thick-fur', 'Thick Fur', 15)],
+    [item('deepling-warts', 'Deepling Warts', 10)],
+    { basic: '+3% Ice Protection', intricate: '+8% Ice Protection', powerful: '+15% Ice Protection' }),
 
-  imbuement('cloud-fabric', 'Cloud Fabric', 'Energy Protection', 'protection', false, false,
+  imbuement('cloud-fabric', 'Cloud Fabric', 'Energy Protection', 'protection', false, true,
     [item('wyvern-talisman', 'Wyvern Talisman', 20)],
-    [item('peacock-feather-fan', 'Peacock Feather Fan', 10)],
-    [item('energy-vein', 'Energy Vein', 5)]),
+    [item('crawler-head-plating', 'Crawler Head Plating', 15)],
+    [item('wyrm-scale', 'Wyrm Scale', 10)],
+    { basic: '+3% Energy Protection', intricate: '+8% Energy Protection', powerful: '+15% Energy Protection' }),
 
-  imbuement('demon-presence', 'Demon Presence', 'Holy Protection', 'protection', false, false,
-    [item('flask-of-demonic-blood', 'Flask of Demonic Blood', 25)],
-    [item('cultish-robe', 'Cultish Robe', 15)],
-    [item('concentrated-demonic-blood', 'Concentrated Demonic Blood', 5)]),
+  imbuement('demon-presence', 'Demon Presence', 'Holy Protection', 'protection', false, true,
+    [item('cultish-robe', 'Cultish Robe', 25)],
+    [item('cultish-mask', 'Cultish Mask', 25)],
+    [item('hellspawn-tail', 'Hellspawn Tail', 20)],
+    { basic: '+3% Holy Protection', intricate: '+8% Holy Protection', powerful: '+15% Holy Protection' }),
 
-  imbuement('precision', 'Precision', 'Distance Fighting', 'skill', false, false,
+  imbuement('precision', 'Precision', 'Distance Fighting', 'skill', false, true,
     [item('elven-scouting-glass', 'Elven Scouting Glass', 25)],
-    [item('compass', 'Compass', 20)],
-    [item('soul-orb', 'Soul Orb', 5)]),
+    [item('elven-hoof', 'Elven Hoof', 20)],
+    [item('metal-spike', 'Metal Spike', 10)],
+    { basic: '+1 Distance Fighting', intricate: '+2 Distance Fighting', powerful: '+4 Distance Fighting' }),
 
-  imbuement('epiphany', 'Epiphany', 'Magic Level', 'skill', false, false,
-    [item('strand-of-medusa-hair', 'Strand of Medusa Hair', 25)],
-    [item('gloom-wolf-fur', 'Gloom Wolf Fur', 15)],
-    [item('concentrated-demonic-blood', 'Concentrated Demonic Blood', 5)]),
+  imbuement('epiphany', 'Epiphany', 'Magic Level', 'skill', false, true,
+    [item('elvish-talisman', 'Elvish Talisman', 25)],
+    [item('broken-shamanic-staff', 'Broken Shamanic Staff', 15)],
+    [item('strand-of-medusa-hair', 'Strand of Medusa Hair', 15)],
+    { basic: '+1 Magic Level', intricate: '+2 Magic Level', powerful: '+4 Magic Level' }),
 
-  imbuement('scorch', 'Scorch', 'Fire Damage', 'damage', false, false,
+  imbuement('scorch', 'Scorch', 'Fire Damage', 'damage', false, true,
     [item('fiery-heart', 'Fiery Heart', 25)],
     [item('green-dragon-scale', 'Green Dragon Scale', 5)],
-    [item('piece-of-hellfire-armor', 'Piece of Hellfire Armor', 5)]),
+    [item('demon-horn', 'Demon Horn', 5)],
+    { basic: '+10% Fire Damage', intricate: '+25% Fire Damage', powerful: '+50% Fire Damage' }),
 
-  imbuement('venom', 'Venom', 'Earth Damage', 'damage', false, false,
+  imbuement('venom', 'Venom', 'Earth Damage', 'damage', false, true,
     [item('swamp-grass', 'Swamp Grass', 25)],
-    [item('gruesome-fan', 'Gruesome Fan', 5)],
-    [item('slime-heart', 'Slime Heart', 5)]),
+    [item('poisonous-slime', 'Poisonous Slime', 20)],
+    [item('slime-heart', 'Slime Heart', 2)],
+    { basic: '+10% Earth Damage', intricate: '+25% Earth Damage', powerful: '+50% Earth Damage' }),
 
-  imbuement('frost', 'Frost', 'Ice Damage', 'damage', false, false,
+  imbuement('frost', 'Frost', 'Ice Damage', 'damage', false, true,
     [item('frosty-heart', 'Frosty Heart', 25)],
-    [item('seacrest-hair', 'Seacrest Hair', 5)],
-    [item('polar-bear-paw', 'Polar Bear Paw', 5)]),
+    [item('seacrest-hair', 'Seacrest Hair', 10)],
+    [item('polar-bear-paw', 'Polar Bear Paw', 5)],
+    { basic: '+10% Ice Damage', intricate: '+25% Ice Damage', powerful: '+50% Ice Damage' }),
 
-  imbuement('electrify', 'Electrify', 'Energy Damage', 'damage', false, false,
+  imbuement('electrify', 'Electrify', 'Energy Damage', 'damage', false, true,
     [item('rorc-feather', 'Rorc Feather', 25)],
     [item('peacock-feather-fan', 'Peacock Feather Fan', 5)],
-    [item('energy-vein', 'Energy Vein', 5)]),
+    [item('energy-vein', 'Energy Vein', 1)],
+    { basic: '+10% Energy Damage', intricate: '+25% Energy Damage', powerful: '+50% Energy Damage' }),
 
-  imbuement('reap', 'Reap', 'Death Damage', 'damage', false, false,
+  imbuement('reap', 'Reap', 'Death Damage', 'damage', false, true,
     [item('pile-of-grave-earth', 'Pile of Grave Earth', 25)],
-    [item('unholy-bone', 'Unholy Bone', 25)],
-    [item('piece-of-dead-brain', 'Piece of Dead Brain', 5)]),
+    [item('demonic-skeletal-hand', 'Demonic Skeletal Hand', 20)],
+    [item('petrified-scream', 'Petrified Scream', 5)],
+    { basic: '+10% Death Damage', intricate: '+25% Death Damage', powerful: '+50% Death Damage' }),
 
-  imbuement('chop', 'Chop', 'Axe Fighting', 'skill', false, false,
-    [item('piece-of-scarab-shell', 'Piece of Scarab Shell', 25)],
-    [item('brimstone-fangs', 'Brimstone Fangs', 25)],
-    [item('piece-of-royal-steel', 'Piece of Royal Steel', 5)]),
+  imbuement('chop', 'Chop', 'Axe Fighting', 'skill', false, true,
+    [item('orc-tooth', 'Orc Tooth', 20)],
+    [item('battle-stone', 'Battle Stone', 25)],
+    [item('moohtant-horn', 'Moohtant Horn', 20)],
+    { basic: '+1 Axe Fighting', intricate: '+2 Axe Fighting', powerful: '+4 Axe Fighting' }),
 
-  imbuement('slash', 'Slash', 'Sword Fighting', 'skill', false, false,
+  imbuement('slash', 'Slash', 'Sword Fighting', 'skill', false, true,
     [item('lions-mane', "Lion's Mane", 25)],
-    [item('moohtar-shell', "Mooh'tar Shell", 25)],
-    [item('war-crystal', 'War Crystal', 5)]),
+    [item('moohtah-shell', "Mooh'tah Shell", 25)],
+    [item('war-crystal', 'War Crystal', 5)],
+    { basic: '+1 Sword Fighting', intricate: '+2 Sword Fighting', powerful: '+4 Sword Fighting' }),
 
-  imbuement('bash', 'Bash', 'Club Fighting', 'skill', false, false,
+  imbuement('bash', 'Bash', 'Club Fighting', 'skill', false, true,
     [item('cyclops-toe', 'Cyclops Toe', 20)],
     [item('ogre-nose-ring', 'Ogre Nose Ring', 15)],
-    [item('warmasters-wristguards', "Warmaster's Wristguards", 5)]),
+    [item('warmasters-wristguards', "Warmaster's Wristguards", 10)],
+    { basic: '+1 Club Fighting', intricate: '+2 Club Fighting', powerful: '+4 Club Fighting' }),
 
-  imbuement('blockade', 'Blockade', 'Shielding', 'skill', false, false,
+  imbuement('blockade', 'Blockade', 'Shielding', 'skill', false, true,
     [item('piece-of-scarab-shell', 'Piece of Scarab Shell', 20)],
     [item('brimstone-shell', 'Brimstone Shell', 25)],
-    [item('piece-of-royal-steel', 'Piece of Royal Steel', 5)]),
+    [item('frazzle-skin', 'Frazzle Skin', 25)],
+    { basic: '+1 Shielding', intricate: '+2 Shielding', powerful: '+4 Shielding' }),
 ];
 
 /** Screenshot-matched default order: leech/critical, utility, protection, skill (distance/magic), damage, skill (melee/shield). */
