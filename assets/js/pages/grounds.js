@@ -35,7 +35,7 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'ground', dir: 'asc',
+  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'level', dir: 'asc',
 };
 
 /** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
