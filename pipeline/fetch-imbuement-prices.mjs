@@ -29,7 +29,10 @@ const TOKEN = process.env.TIBIA_MARKET_TOKEN || [
   'MrRgQJyNb5rlNmdsD3oyzG3ZugVeeeF8uFNElfWUOyI',
 ].join('.');
 const PRICES_PATH = new URL('../data/imbuement-prices.json', import.meta.url);
-const RATE_LIMIT_DELAY_MS = 3000;
+// Matches fetch_item_history.py's tested default — going faster trips
+// TibiaMarket's rate limit, and each 429 then costs a silent 15s+ backoff
+// that's far more expensive than just spacing requests out up front.
+const RATE_LIMIT_DELAY_MS = 6000;
 const FRESH_WITHIN_MS = 4 * 60 * 60 * 1000; // skip a refetch under 4h old, per item
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -53,7 +56,9 @@ async function fetchHistory(itemId, attempt = 1) {
   if (!res.ok) {
     if ((res.status === 429 || res.status >= 500) && attempt <= 4) {
       const retryAfter = Number(res.headers.get('retry-after'));
-      await sleep((Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 15) * 1000 * attempt);
+      const backoffMs = (Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 15) * 1000 * attempt;
+      console.error(`item ${itemId}: ${res.status}, retrying in ${Math.round(backoffMs / 1000)}s (attempt ${attempt})`);
+      await sleep(backoffMs);
       return fetchHistory(itemId, attempt + 1);
     }
     throw new Error(`${res.status} for item ${itemId}`);
