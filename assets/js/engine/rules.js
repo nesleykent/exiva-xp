@@ -17,6 +17,26 @@ export const LIMITS = {
 
 export const VOCATIONS = ['Knight', 'Paladin', 'Monk', 'Sorcerer', 'Druid'];
 
+/**
+ * Elements each vocation's own spell arsenal can actually deal, ordered by
+ * how central they are to that vocation's identity. Confirmed against
+ * TibiaWiki: Sorcerer is fire/energy/death (Energy Wave, Rage of the Skies);
+ * Druid is ice/earth (Terra Wave, Eternal Winter, Ice Wave); Paladin's
+ * offense is physical distance fighting plus holy spells (Divine Caldera,
+ * Holy Flash); Knight is melee physical (Exori); Monk's confirmed damage
+ * type is physical (Harmony spells) — its exact elemental spread beyond
+ * that isn't nailed down, so it's kept physical-only rather than guessed.
+ * Used to keep "best element" recommendations from suggesting an element a
+ * vocation has no way to actually deal (e.g. Holy to a Druid).
+ */
+export const VOCATION_ELEMENTS = {
+  Knight: ['physical'],
+  Paladin: ['physical', 'holy'],
+  Monk: ['physical'],
+  Sorcerer: ['fire', 'energy', 'death'],
+  Druid: ['ice', 'earth'],
+};
+
 const NON_NEGATIVE = ['xpRawRate', 'xpRate', 'loot', 'supplies', 'damage', 'damageRate', 'healing', 'healingRate', 'minutes'];
 
 /**

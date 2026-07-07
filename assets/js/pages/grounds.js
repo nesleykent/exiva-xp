@@ -14,7 +14,7 @@ import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu } from '../shell.js'
 import { ELEMENTS } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
-import { VOCATIONS } from '../engine/rules.js';
+import { VOCATIONS, VOCATION_ELEMENTS } from '../engine/rules.js';
 import { loadAccess, loadCharacter } from '../data/sources.js';
 
 const { stage, codex, grounds, hunts, table, config } = await boot('grounds.html');
@@ -57,7 +57,7 @@ function intel() {
       if (!pop) continue;
       const battle = readBattle(pop.set);
       intelCache.set(g.slug, {
-        attackEl: battle?.attack.el || null,
+        attackOrder: battle?.order || null,
         names: new Set(pop.set.map((s) => s.creature.key)),
         families: new Set(pop.set.map((s) => s.creature.family).filter(Boolean)),
         tiers: new Set(pop.set.map((s) => s.creature.tier).filter(Boolean)),
@@ -89,7 +89,7 @@ function filteredRows() {
     if (state.mode === 'party' && !r.party) return false;
     if (state.playstyle && !fold(r.gear || '').includes(fold(state.playstyle))) return false;
     if (state.area && areaBySlug.get(r.groundSlug) !== fold(state.area)) return false;
-    if (state.element && ix.get(r.groundSlug)?.attackEl !== state.element) return false;
+    if (state.element && ix.get(r.groundSlug)?.attackOrder?.[0]?.el !== state.element) return false;
     if (state.family && !ix.get(r.groundSlug)?.families.has(state.family)) return false;
     if (tokens.length) {
       const i = ix.get(r.groundSlug);
@@ -125,6 +125,18 @@ function groundCards(rows) {
     g.n += r.n;
   }
   return [...per.values()];
+}
+
+/**
+ * The best attack element to show on a card, restricted to what the
+ * selected vocation can actually deal (a Druid can't cast Holy) — falls
+ * back to the population's overall weakest element with no vocation filter.
+ */
+function bestAttackElement(attackOrder, vocation) {
+  if (!attackOrder?.length) return null;
+  const allowed = VOCATION_ELEMENTS[vocation];
+  if (!allowed) return attackOrder[0].el;
+  return attackOrder.find((o) => allowed.includes(o.el))?.el || null;
 }
 
 stage.innerHTML = `
@@ -164,7 +176,7 @@ function render() {
     <p class="fine dim count-line">${nf(cards.length)} grounds · ${nf(rows.length)} matching rows</p>
     <div class="tiles">
       ${cards.map((g) => {
-        const attackEl = ix?.get(g.slug)?.attackEl;
+        const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = access.grounds?.[g.slug]?.area;
         return `
         <a class="panel tile" href="ground.html?g=${esc(g.slug)}">
