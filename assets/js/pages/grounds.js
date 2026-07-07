@@ -23,6 +23,9 @@ const [access, profile] = await Promise.all([
   loadCharacter().catch(() => null),
 ]);
 const characterLevel = profile?.level ?? null;
+// Tibia's promoted title ("Elder Druid") always contains its base vocation
+// name — match the same way character.js's isVocationCompatible does.
+const characterVocation = VOCATIONS.find((v) => (profile?.vocation || '').toLowerCase().includes(v.toLowerCase())) || '';
 const areaBySlug = new Map(Object.entries(access.grounds || {})
   .map(([slug, entry]) => [slug, fold(entry.area || '')]));
 const areaOptions = [...new Set(Object.values(access.grounds || {})
@@ -31,7 +34,7 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: '', mode: '', playstyle: '', area: '', element: '', family: '', sort: 'ground', dir: 'asc',
+  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'ground', dir: 'asc',
 };
 
 /** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
@@ -79,7 +82,8 @@ function filteredRows() {
 
   return table.filter((r) => {
     if (state.level != null && (r.level == null || r.level > state.level)) return false;
-    if (state.vocation && r.vocation !== state.vocation) return false;
+    // a row with no vocation is a party/any-vocation row — never exclude those
+    if (state.vocation && r.vocation && r.vocation !== state.vocation) return false;
     if (state.mode === 'solo' && r.party) return false;
     if (state.mode === 'party' && !r.party) return false;
     if (state.playstyle && !fold(r.gear || '').includes(fold(state.playstyle))) return false;
@@ -125,14 +129,14 @@ function groundCards(rows) {
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
-    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around Night'Flyn's tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
+    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around Night'Flyn's tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}${characterVocation ? ` and vocation (${esc(characterVocation)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
   <form class="filter-bar" id="f">
     <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
     <button type="button" class="filter-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more"><span>Filters</span><span class="chevron">⌄</span></button>
     <div class="filter-more" id="f-more">
       <label class="lbl lbl-narrow"><span class="eyebrow">Level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
-      <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value="">All</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value=""${characterVocation ? '' : ' selected'}>All</option>${[...VOCATIONS].sort().map((v) => `<option${v === characterVocation ? ' selected' : ''}>${v}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Hunt type</span><select id="f-mode"><option value="">All</option><option value="solo">Solo</option><option value="party">Team hunt</option></select></label>
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
