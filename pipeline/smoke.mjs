@@ -15,8 +15,9 @@ import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
 import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
 import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapshot, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
-import { calculateImbuement, calculateTier, getAcquisitionOptions, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
+import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
+import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
 
 const data = (f) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'));
 const assert = (cond, msg) => { if (!cond) throw new Error(msg); };
@@ -299,6 +300,17 @@ assert(confirmedZeroTier.canCalculate, 'an explicitly confirmed zero price must 
 for (const imb of IMBUEMENTS) {
   const calc = calculateImbuement(imb, {});
   for (const tierId of ['basic', 'intricate', 'powerful']) assert(!calc[tierId].canCalculate, `${imb.id} ${tierId} should be incomplete with no prices set`);
+}
+
+// every priceable item (fetch-imbuement-prices.mjs's TibiaMarket prefill target) must have a pinned numeric item_id
+const priceableItems = new Set([GOLD_TOKEN_ITEM]);
+for (const imb of IMBUEMENTS) {
+  for (const tierId of ['basic', 'intricate', 'powerful']) {
+    for (const it of imb.tiers[tierId].items) priceableItems.add(it.itemId);
+  }
+}
+for (const itemId of priceableItems) {
+  assert(Number.isFinite(IMBUEMENT_MARKET_IDS[itemId]), `${itemId} has no TibiaMarket item_id pinned in pipeline/imbuement-market-ids.mjs`);
 }
 
 console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of Night'Flyn` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''} / ${IMBUEMENTS.length} imbuements`);

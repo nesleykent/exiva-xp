@@ -64,6 +64,7 @@ data/
   character-history.json   generated daily — {server-save date: {rank, level, experience, highscores...}}; older rows may be marked as imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
   character-online.json    generated every 15 minutes — sampled world-list online status from TibiaData
+  imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
   check-hunt.mjs           Action: judge an issue payload
   merge-hunts.mjs          Optional Action: merge approved shared issues, rebuild the shared ledger
@@ -72,6 +73,8 @@ pipeline/
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
   track-character.mjs      15-minute Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   track-online.mjs         15-minute Gentebra world-list sampler for Night'Flyn online status
+  fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (skips items refreshed within 4h)
+  imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
   smoke.mjs                engine smoke tests, run locally or by publish.yml
 .github/actions/
   commit-generated-data    shared owner-authored generated-data commit +
@@ -81,6 +84,7 @@ pipeline/
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
   track-character.yml      every 15 minutes — refresh the current Tibia server-save day, commit, redeploy
   track-online.yml         every 15 minutes — record one online/offline sample, commit, redeploy only for visible state changes
+  fetch-imbuement-prices.yml  a few times daily — refresh TibiaMarket imbuement item prices for Gentebra, commit, redeploy
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```
 

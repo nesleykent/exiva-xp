@@ -1,7 +1,9 @@
 /**
- * Manual imbuement item prices, stored per world in the browser. This is
- * the manual-input phase only — see AGENTS.md decision log: TibiaMarket API
- * prefill is a future final phase, not implemented here.
+ * Manual imbuement item prices, stored per world in the browser, layered
+ * over TibiaMarket API prefill (pipeline/fetch-imbuement-prices.mjs →
+ * data/imbuement-prices.json, loaded via sources.js's loadImbuementPrices).
+ * A manual entry always wins for that item; an untouched field falls back
+ * to the market prefill when one exists for that world.
  */
 
 const STORAGE_KEY = 'exiva:imbuement-prices';
@@ -37,4 +39,9 @@ export function clearWorldPrices(world) {
   const store = readStore();
   delete store[world];
   writeStore(store);
+}
+
+/** Manual entries win; a market entry only shows where the item has no manual price. */
+export function mergeMarketPrices(manualPrices, marketPricesForWorld) {
+  return { ...(marketPricesForWorld || {}), ...manualPrices };
 }

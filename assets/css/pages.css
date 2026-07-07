@@ -562,6 +562,10 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   width: 100px;
   min-width: 0;
 }
+.imb-price-input-market input {
+  border-color: rgb(var(--blue));
+  background: rgba(var(--blue), 0.08);
+}
 .imb-card:focus-visible {
   outline: none;
   border-color: rgb(var(--line-strong));

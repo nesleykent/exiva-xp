@@ -20,14 +20,15 @@ import {
   IMBUEMENTS,
   sortImbuements,
 } from '../engine/imbuements.js';
-import { loadWorldPrices, saveItemPrice } from '../data/imbuement-prices.js';
-import { loadCharacter, loadCharacterHistory, loadImbuementArt } from '../data/sources.js';
+import { loadWorldPrices, mergeMarketPrices, saveItemPrice } from '../data/imbuement-prices.js';
+import { loadCharacter, loadCharacterHistory, loadImbuementArt, loadImbuementPrices } from '../data/sources.js';
 
 const { stage, codex, hunts } = await boot('tools.html', { ledger: false });
-const [profile, history, imbuementArt] = await Promise.all([
+const [profile, history, imbuementArt, marketPrices] = await Promise.all([
   loadCharacter().catch(() => null),
   loadCharacterHistory().catch(() => []),
   loadImbuementArt().catch(() => ({ imbuements: {}, items: {} })),
+  loadImbuementPrices().catch(() => ({})),
 ]);
 
 const latest = history.at(-1) || {};
@@ -221,8 +222,8 @@ function imbWorld() {
   return $('#imb-world').value.trim() || 'Gentebra';
 }
 
-function imbPrices() {
-  return loadWorldPrices(imbWorld());
+function imbPrices(world = imbWorld()) {
+  return mergeMarketPrices(loadWorldPrices(world), marketPrices[world]);
 }
 
 function filteredImbuements() {
@@ -273,10 +274,12 @@ function renderImbuementGrid() {
 function priceInputRow(itemId, name, prices) {
   const entry = prices[itemId];
   const value = entry ? entry.price : '';
+  const fromMarket = entry?.source === 'tibiamarket';
+  const title = fromMarket ? `${name} — TibiaMarket estimate, edit to override` : name;
   return `
-    <label class="imb-price-input" title="${esc(name)}">
+    <label class="imb-price-input${fromMarket ? ' imb-price-input-market' : ''}" title="${esc(title)}">
       ${itemIcon(itemId, 'imb-icon-sm')}
-      <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="${esc(name)}" aria-label="${esc(name)} price">
+      <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="${esc(name)}" aria-label="${esc(title)}">
     </label>`;
 }
 
@@ -328,7 +331,7 @@ function tierCardHtml(imb, tierId, calc) {
 }
 
 function renderModalTiers(imb, world) {
-  const calc = calculateImbuement(imb, loadWorldPrices(world));
+  const calc = calculateImbuement(imb, imbPrices(world));
   $('#imb-tier-cards').innerHTML = ['basic', 'intricate', 'powerful']
     .map((tierId) => tierCardHtml(imb, tierId, calc[tierId])).join('');
   $('#imb-tier-cards').querySelectorAll('[data-copy-tier]').forEach((btn) => {
@@ -352,7 +355,7 @@ function openImbuementModal(id) {
   const imb = imbuementById(id);
   if (!imb) return;
   const world = imbWorld();
-  const prices = loadWorldPrices(world);
+  const prices = imbPrices(world);
   const itemIds = [...new Set(imb.tiers.powerful.items.map((it) => it.itemId))];
   const items = imb.tiers.powerful.items;
   const modal = $('#imb-modal');
@@ -376,6 +379,7 @@ function openImbuementModal(id) {
           ${imb.supportsGoldTokenExchange ? priceInputRow(GOLD_TOKEN_ITEM, 'Gold Token', prices) : ''}
           ${itemIds.map((iid) => priceInputRow(iid, items.find((it) => it.itemId === iid).name, prices)).join('')}
         </div>
+        ${Object.values(prices).some((p) => p?.source === 'tibiamarket') ? '<p class="fine dim" style="margin-top:6px">Highlighted fields are TibiaMarket estimates — edit any of them to use your own price instead.</p>' : ''}
       </div>
     </div>`;
   renderModalTiers(imb, world);

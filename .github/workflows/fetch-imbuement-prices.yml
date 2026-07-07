@@ -1,0 +1,44 @@
+# TibiaMarket price prefill for the imbuement calculator (pipeline/fetch-
+# imbuement-prices.mjs). Prices don't need 15-minute freshness like the
+# character/online trackers, so this runs a few times a day; the script
+# itself skips any item refreshed within the last 4 hours, so overlapping
+# or delayed scheduled runs (GitHub's schedule trigger drifts by hours in
+# practice — see track-character.yml/track-online.yml) still converge
+# without wasted TibiaMarket requests.
+name: Fetch imbuement prices
+
+on:
+  schedule:
+    - cron: '11 1,5,9,13,17,21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: fetch-imbuement-prices
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch Gentebra imbuement item prices
+        id: prices
+        run: node pipeline/fetch-imbuement-prices.mjs
+
+      - name: Commit updated prices
+        uses: ./.github/actions/commit-generated-data
+        with:
+          paths: |
+            data/imbuement-prices.json
+          message: ${{ steps.prices.outputs.commit-message }}
+          publish: 'true'
+          token: ${{ secrets.GITHUB_TOKEN }}

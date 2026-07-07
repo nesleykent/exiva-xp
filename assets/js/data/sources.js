@@ -41,6 +41,7 @@ const FILES = {
   characterHistory: 'data/character-history.json',
   characterOnline: 'data/character-online.json',
   imbuementArt: 'data/imbuement-art.json',
+  imbuementPrices: 'data/imbuement-prices.json',
 };
 
 // ---------------------------------------------------------------- loaders
@@ -148,6 +149,12 @@ export async function loadCharacter(prefix = '') {
 export async function loadImbuementArt(prefix = '') {
   try { return await json(prefix + FILES.imbuementArt); }
   catch { return { imbuements: {}, items: {} }; }
+}
+
+/** { world: { itemId: { price, source, updatedAt } } } TibiaMarket prefill (see pipeline/fetch-imbuement-prices.mjs). */
+export async function loadImbuementPrices(prefix = '') {
+  try { return await json(prefix + FILES.imbuementPrices); }
+  catch { return {}; }
 }
 
 /** Daily {date: {rank, level, experience, highscores...}} history, oldest first. */
