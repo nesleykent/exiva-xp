@@ -282,8 +282,9 @@ function itemIcon(itemId, size = '') {
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
   const market = calc.options.find((o) => o.method === 'market');
+  const tokens = calc.options.find((o) => o.method === 'tokens');
   return `
-    <button type="button" class="tool-mini-card imb-card" data-imb="${esc(imb.id)}">
+    <div class="tool-mini-card imb-card" data-imb="${esc(imb.id)}" tabindex="0" role="button">
       <div class="imb-card-head">
         <div class="imb-card-id">
           ${imbIcon(imb)}
@@ -291,7 +292,23 @@ function imbCardHtml(imb, prices) {
         </div>
         <span class="imb-card-price ${market.total == null ? 'dim' : ''}">${market.total == null ? '—' : `${COIN_ICON} ${nf(market.total)}`}</span>
       </div>
-    </button>`;
+      ${imb.supportsGoldTokenExchange ? `
+      <div class="imb-compare">
+        <button type="button" class="imb-compare-trigger" data-compare-trigger="${esc(imb.id)}" aria-haspopup="true" aria-expanded="false" title="Best buying methods">
+          ${itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm')}
+        </button>
+        <div class="imb-compare-pop" hidden>
+          <p class="fine dim" style="margin:0 0 6px">Best buying methods · ${esc(calc.tier.name)}</p>
+          <div class="imb-compare-row"><span>Market</span><b>${market.total == null ? '—' : `${COIN_ICON} ${nf(market.total)}`}</b></div>
+          <div class="imb-compare-row"><span>Gold Tokens</span><b>${tokens.total == null ? '—' : `${COIN_ICON} ${nf(tokens.total)}`}</b></div>
+        </div>
+      </div>` : ''}
+    </div>`;
+}
+
+function closeAllComparePopovers() {
+  $('#imb-grid').querySelectorAll('.imb-compare-pop').forEach((el) => { el.hidden = true; });
+  $('#imb-grid').querySelectorAll('[data-compare-trigger]').forEach((el) => el.setAttribute('aria-expanded', 'false'));
 }
 
 function renderImbuementGrid() {
@@ -300,10 +317,24 @@ function renderImbuementGrid() {
   $('#imb-grid').innerHTML = list.length
     ? list.map((imb) => imbCardHtml(imb, prices)).join('')
     : '<p class="dim">No imbuements match these filters.</p>';
-  $('#imb-grid').querySelectorAll('[data-imb]').forEach((btn) => {
-    btn.addEventListener('click', () => openImbuementModal(btn.dataset.imb));
+  $('#imb-grid').querySelectorAll('[data-imb]').forEach((card) => {
+    const open = () => openImbuementModal(card.dataset.imb);
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  $('#imb-grid').querySelectorAll('[data-compare-trigger]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pop = btn.nextElementSibling;
+      const willOpen = pop.hidden;
+      closeAllComparePopovers();
+      pop.hidden = !willOpen;
+      btn.setAttribute('aria-expanded', String(willOpen));
+    });
   });
 }
+document.addEventListener('click', closeAllComparePopovers);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllComparePopovers(); });
 
 function priceInputRow(itemId, name, prices) {
   const entry = prices[itemId];

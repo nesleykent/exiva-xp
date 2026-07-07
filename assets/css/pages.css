@@ -561,6 +561,54 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   width: 100px;
   min-width: 0;
 }
+.imb-card {
+  cursor: pointer;
+}
+.imb-card:focus-visible {
+  outline: none;
+  border-color: rgb(var(--line-strong));
+}
+.imb-compare {
+  position: relative;
+  width: fit-content;
+}
+.imb-compare-trigger {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  padding: 0; border: 1px solid rgb(var(--line)); border-radius: var(--r-sm);
+  background: rgb(var(--surface-2)); cursor: pointer;
+}
+.imb-compare-trigger:hover {
+  background: rgba(var(--overlay), var(--overlay-a));
+}
+.imb-compare-pop {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 200px;
+  padding: var(--s3);
+  background: rgb(var(--surface-raised));
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-float);
+}
+.imb-compare-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s2);
+  padding: 4px 0;
+  font-size: 13px;
+}
+.imb-compare-row b {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.imb-compare-row b svg { width: 12px; height: 12px; }
 
 /* ---------- character dashboard ---------- */
 
