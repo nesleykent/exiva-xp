@@ -711,9 +711,10 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .section-nav::-webkit-scrollbar { display: none; }
 .section-nav a {
+  display: flex; align-items: center;
   flex: 0 0 auto;
-  min-height: 36px;
-  padding: 9px var(--s4);
+  min-height: 44px; /* HIG minimum tap target */
+  padding: 0 var(--s4);
   border-radius: var(--r-input);
   background: rgb(var(--surface-2));
   color: rgb(var(--ink));
@@ -857,6 +858,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   color: rgb(var(--ink));
   font-size: 13px;
   font-weight: 700;
+  /* HIG minimum 44pt tap target — the text line alone is ~18px tall */
+  display: flex; align-items: center; min-height: 44px;
+  margin: -14px 0;
 }
 .detail-block summary:hover { color: rgb(var(--blue)); }
 .detail-block:not([open]) > :not(summary) { display: none; }
@@ -986,6 +990,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 .chart-controls { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); margin-bottom: var(--s3); flex-wrap: wrap; }
 .chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
+/* the metric/range toggles are this page's primary chart controls — HIG minimum tap target */
+.chart-controls .btn { min-height: 44px; }
 .chart-button-group { display: flex; gap: 6px; flex-wrap: wrap; }
 .chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
 #online-dynamic { scroll-margin-top: 84px; }
@@ -999,6 +1005,12 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .section-subhead h3 { font-size: 15px; }
 .section > .section-bar .fine,
 .section-subhead .fine { min-width: 0; overflow-wrap: anywhere; }
+/* invisible tap-padding so header-row action links (e.g. "Open full planner")
+   hit the HIG 44pt minimum without changing their visual size or position */
+.section-bar a.fine, .section-subhead a.fine {
+  display: inline-flex; align-items: center;
+  min-height: 44px; margin: -14px 0;
+}
 
 @media (max-width: 700px) {
   .pulse { padding: var(--s3); }
