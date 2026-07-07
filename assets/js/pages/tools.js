@@ -269,9 +269,9 @@ function filteredImbuements() {
   return list;
 }
 
-function imbIcon(imb) {
+function imbIcon(imb, size = '') {
   const src = imbuementArt.imbuements?.[imb.id];
-  return src ? `<img class="imb-icon" src="${esc(src)}" alt="" loading="lazy">` : '';
+  return src ? `<img class="imb-icon${size ? ` ${size}` : ''}" src="${esc(src)}" alt="" loading="lazy">` : '';
 }
 
 function itemIcon(itemId, size = '') {
@@ -331,16 +331,21 @@ function tierCardHtml(imb, tierId, calc) {
   const itemRow = (icon, label, copyText) => `
     <span class="imb-item-row">
       <span class="imb-item-row-label">${icon}${label}</span>
-      <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+      <span class="imb-item-row-actions">
+        ${imb.supportsGoldTokenExchange ? itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm') : ''}
+        <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+      </span>
     </span>`;
   return `
-  <div class="panel panel-pad tool-mini-card imb-tier-card">
+  <div class="imb-tier-card">
     <div class="imb-tier-head">
-      ${imbIcon(imb)}
-      <span class="badge ${TIER_BADGE[tierId]}">${esc(t.name)}</span>
+      ${imbIcon(imb, 'imb-icon-lg')}
+      <div class="imb-tier-head-text">
+        <span class="badge ${TIER_BADGE[tierId]}">${esc(t.name)}</span>
+        ${t.bonus ? `<p class="imb-tier-bonus ${TIER_TEXT[tierId]}">${esc(t.bonus)}</p>` : ''}
+      </div>
     </div>
-    ${t.bonus ? `<p class="imb-tier-bonus ${TIER_TEXT[tierId]}">${esc(t.bonus)}</p>` : ''}
-    <div class="mini-list">
+    <div class="imb-tier-items">
       ${t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`)).join('')}
     </div>
     <div class="imb-tier-total">

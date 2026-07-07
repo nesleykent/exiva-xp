@@ -472,6 +472,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: center;
   justify-content: space-between;
   gap: 6px;
+  padding: 6px 0;
 }
 .imb-item-row-label {
   display: flex;
@@ -479,14 +480,32 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: 6px;
 }
 .imb-item-row-label svg { width: 15px; height: 15px; color: rgb(var(--ink-2)); }
+.imb-item-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
 .imb-tier-card {
-  gap: var(--s3);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--r-input);
+  overflow: hidden;
 }
 .imb-tier-head {
   display: flex;
   align-items: center;
-  gap: var(--s2);
+  gap: var(--s3);
+  padding: var(--s3);
+  background: rgb(var(--surface-2));
+  border-bottom: 1px solid rgb(var(--line));
 }
+.imb-tier-head-text {
+  display: grid;
+  gap: 4px;
+}
+.imb-icon-lg { width: 44px; height: 44px; flex-shrink: 0; }
 .imb-tier-bonus {
   margin: 0;
   font-size: 13px;
@@ -495,11 +514,19 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .imb-tier-text-basic { color: rgb(var(--green)); }
 .imb-tier-text-intricate { color: rgb(var(--blue)); }
 .imb-tier-text-powerful { color: rgb(var(--red)); }
+.imb-tier-items {
+  padding: var(--s2) var(--s3);
+  background: rgb(var(--surface-raised));
+}
+.imb-tier-items .imb-item-row + .imb-item-row {
+  border-top: 1px solid rgb(var(--line));
+}
 .imb-tier-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--s2);
+  padding: var(--s3);
+  background: rgb(var(--surface-2));
   border-top: 1px solid rgb(var(--line));
 }
 .imb-tier-total b {
