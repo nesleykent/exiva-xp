@@ -320,6 +320,8 @@ const TIER_BADGE = { basic: 'badge-success', intricate: 'badge-info', powerful: 
 /** Compact tier tile: item list, one total (cheapest method), one alt line, copy. */
 const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
 
+const TIER_TEXT = { basic: 'imb-tier-text-basic', intricate: 'imb-tier-text-intricate', powerful: 'imb-tier-text-powerful' };
+
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
@@ -327,9 +329,10 @@ function tierCardHtml(imb, tierId, calc) {
   return `
   <div class="panel panel-pad tool-mini-card imb-tier-card">
     <div class="imb-tier-head">
+      ${imbIcon(imb)}
       <span class="badge ${TIER_BADGE[tierId]}">${esc(t.name)}</span>
-      ${t.bonus ? `<span class="fine dim">${esc(t.bonus)}</span>` : ''}
     </div>
+    ${t.bonus ? `<p class="imb-tier-bonus ${TIER_TEXT[tierId]}">${esc(t.bonus)}</p>` : ''}
     <div class="mini-list">
       ${cheapest?.tokenQuantity
     ? itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`)

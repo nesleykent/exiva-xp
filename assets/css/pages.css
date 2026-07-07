@@ -473,9 +473,17 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .imb-tier-head {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: var(--s2);
 }
+.imb-tier-bonus {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.imb-tier-text-basic { color: rgb(var(--green)); }
+.imb-tier-text-intricate { color: rgb(var(--blue)); }
+.imb-tier-text-powerful { color: rgb(var(--red)); }
 .imb-tier-total {
   display: flex;
   justify-content: space-between;
