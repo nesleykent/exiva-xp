@@ -281,6 +281,7 @@ function itemIcon(itemId, size = '') {
 
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
+  const market = calc.options.find((o) => o.method === 'market');
   return `
     <button type="button" class="tool-mini-card imb-card" data-imb="${esc(imb.id)}">
       <div class="imb-card-head">
@@ -288,9 +289,8 @@ function imbCardHtml(imb, prices) {
           ${imbIcon(imb)}
           <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
         </div>
-        <span class="imb-card-price ${calc.canCalculate ? '' : 'dim'}">${calc.canCalculate ? gp(calc.cheapest.total) : '—'}</span>
+        <span class="imb-card-price ${market.total == null ? 'dim' : ''}">${market.total == null ? '—' : `${COIN_ICON} ${nf(market.total)}`}</span>
       </div>
-      ${imb.supportsGoldTokenExchange ? '<span class="pill pill-info imb-card-badge">Gold Token</span>' : ''}
     </button>`;
 }
 
@@ -322,10 +322,17 @@ const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 
 const TIER_TEXT = { basic: 'imb-tier-text-basic', intricate: 'imb-tier-text-intricate', powerful: 'imb-tier-text-powerful' };
 
+const INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.25" fill="currentColor" stroke-width="1.5"/></svg>';
+const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/></svg>';
+
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
-  const cheapest = calc.cheapest;
-  const itemRow = (icon, label) => `<span class="imb-item-row">${icon}${label}</span>`;
+  const market = calc.options.find((o) => o.method === 'market');
+  const itemRow = (icon, label, copyText) => `
+    <span class="imb-item-row">
+      <span class="imb-item-row-label">${icon}${label}</span>
+      <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+    </span>`;
   return `
   <div class="panel panel-pad tool-mini-card imb-tier-card">
     <div class="imb-tier-head">
@@ -334,15 +341,13 @@ function tierCardHtml(imb, tierId, calc) {
     </div>
     ${t.bonus ? `<p class="imb-tier-bonus ${TIER_TEXT[tierId]}">${esc(t.bonus)}</p>` : ''}
     <div class="mini-list">
-      ${cheapest?.tokenQuantity
-    ? itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`)
-    : t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`)).join('')}
+      ${t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`)).join('')}
     </div>
     <div class="imb-tier-total">
-      <span>Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''}</span>
+      <span class="imb-item-row-label">Total ${INFO_ICON}</span>
       <span class="imb-tier-total-right">
-        <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
-        ${calc.canCalculate ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
+        ${market.total == null ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(market.total)}</b>`}
+        ${market.total != null ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
   </div>`;
@@ -355,9 +360,16 @@ function renderModalTiers(imb, world) {
   $('#imb-tier-cards').querySelectorAll('[data-copy-tier]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const c = calc[btn.dataset.copyTier];
-      if (!c.canCalculate) return;
-      const text = formatShoppingList(imb.name, c.tier.name, world, c.cheapest);
+      const market = c.options.find((o) => o.method === 'market');
+      if (market.total == null) return;
+      const text = formatShoppingList(imb.name, c.tier.name, world, market);
       try { await navigator.clipboard.writeText(text); say('Shopping list copied'); }
+      catch { say('Could not copy — clipboard unavailable'); }
+    });
+  });
+  $('#imb-tier-cards').querySelectorAll('[data-copy-text]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(btn.dataset.copyText); say('Copied'); }
       catch { say('Could not copy — clipboard unavailable'); }
     });
   });
