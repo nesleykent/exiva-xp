@@ -185,6 +185,7 @@ function render() {
             <div>
               <div class="name">${esc(g.name)}</div>
               <div class="fine dim">${area ? `${esc(area)} · ` : ''}from level ${nf(g.minLevel)}${g.party ? ' · team hunt' : ''}</div>
+              ${g.badgeRow.gear ? `<div class="fine dim" title="${esc(g.badgeRow.gearLabel || '')}">${esc(g.badgeRow.gear)}</div>` : ''}
             </div>
           </div>
           <div class="tile-stats">
