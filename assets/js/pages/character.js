@@ -37,7 +37,7 @@ const level = profileLevel ?? trackedLevel;
 const experience = latest?.experience ?? null;
 const historyNote = latest && profileLevel != null && trackedLevel != null && profileLevel !== trackedLevel
   ? `profile level ${nf(profileLevel)}; exact highscore XP row level ${nf(trackedLevel)} as of ${latest.date}`
-  : 'tracked daily from TibiaData highscores at 03:00 UTC';
+  : 'tracked every 15 minutes from TibiaData highscores';
 
 const historyRows = history.map((row, i) => {
   const prev = history[i - 1] || null;

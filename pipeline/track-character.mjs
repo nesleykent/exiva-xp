@@ -13,8 +13,7 @@
  * deaths are preserved from earlier imports and extended if TibiaData
  * exposes new ones.
  *
- * Run by .github/workflows/track-character.yml on the reference project's
- * schedule (03:00 UTC daily), or locally:
+ * Run by .github/workflows/track-character.yml every 15 minutes, or locally:
  *   node pipeline/track-character.mjs
  */
 
@@ -113,9 +112,10 @@ for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
     highscores[category] = hit ? { rank: hit.rank, value: hit.value } : null;
     console.log(`${category}: ${hit ? `rank ${hit.rank}, value ${hit.value}` : 'not in top 1000'}`);
   } catch (err) {
-    // null means "not measured today" — never carry an old value forward as
-    // if it were today's reading; the history must stay honest.
-    highscores[category] = null;
+    // Leave the category unset — "not measured this run", distinct from a
+    // confirmed "not in top 1000". Under the 15-minute cadence a run's
+    // transient failure must not overwrite a value an earlier run today
+    // already recorded; that's handled by falling back below.
     console.error(`${category}: ${err.message}`);
   }
   await sleep(400);
@@ -133,9 +133,11 @@ const todayEntry = {
   experience: xp.value,
   source: 'TibiaData highscores',
 };
+const existingToday = history[today] || null;
 for (const { category, valueField, rankField } of TRACKED_HIGHSCORE_CATEGORIES) {
-  todayEntry[valueField] = highscores[category]?.value ?? null;
-  todayEntry[rankField] = highscores[category]?.rank ?? null;
+  const measured = Object.hasOwn(highscores, category);
+  todayEntry[valueField] = measured ? highscores[category]?.value ?? null : existingToday?.[valueField] ?? null;
+  todayEntry[rankField] = measured ? highscores[category]?.rank ?? null : existingToday?.[rankField] ?? null;
 }
 
 let changed = false;
@@ -169,9 +171,14 @@ const nextProfile = {
   houses: (c.houses || []).map((h) => ({ name: h.name, town: h.town, paidUntil: h.paid })),
   highscoreRanks: Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
     category,
-    category === 'experience' ? xp.rank : highscores[category]?.rank ?? null,
+    category === 'experience'
+      ? xp.rank
+      : Object.hasOwn(highscores, category) ? highscores[category]?.rank ?? null : previousProfile.highscoreRanks?.[category] ?? null,
   ])),
-  skillRanks: Object.fromEntries(TRACKED_HIGHSCORE_CATEGORIES.map(({ category }) => [category, highscores[category]?.rank ?? null])),
+  skillRanks: Object.fromEntries(TRACKED_HIGHSCORE_CATEGORIES.map(({ category }) => [
+    category,
+    Object.hasOwn(highscores, category) ? highscores[category]?.rank ?? null : previousProfile.skillRanks?.[category] ?? null,
+  ])),
   deaths: knownDeaths,
 };
 

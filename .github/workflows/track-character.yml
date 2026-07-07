@@ -11,7 +11,10 @@ name: Track character
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    # Avoid GitHub Actions' busiest scheduler slots (:00/:15/:30/:45) and
+    # stay off track-online.yml's slots (7,22,37,52) so the two trackers
+    # don't collide, while preserving the 15-minute cadence.
+    - cron: '3,18,33,48 * * * *'
   workflow_dispatch:
 
 permissions:
