@@ -38,7 +38,7 @@ Exiva XP is one Night'Flyn interface, not a generic public directory. Current im
 
 ```
 *.html                     eleven thin pages sharing one shell
-config.ini                 the tracked character: name, world, vocation — edit this, not code
+config.ini                 the tracked character's name — world/vocation resolve from TibiaData automatically
 assets/
   css/base.css             fonts, tokens (light + dark), app shell
   css/pages.css            page components
@@ -146,7 +146,7 @@ The ground↔creature matcher (`assets/js/engine/locator.js`) had a real bug: it
 ## Deploying your own
 
 1. Push this folder to a new repository's `main` branch.
-2. Edit `config.ini` — `name`, `world` and `vocation` (lowercase TibiaData slug: knights/paladins/sorcerers/druids/monks) for the character to track. Both the pipeline scripts (`pipeline/config.mjs`) and the browser UI (`assets/js/lib/config.js`) read this file; no code edits needed.
+2. Edit `config.ini` — just the character's `name`. World and vocation resolve automatically from TibiaData's character endpoint (cached through `data/character.json` after the first tracker run). Both the pipeline scripts (`pipeline/config.mjs`) and the browser UI (`assets/js/lib/config.js`) read this file; no code edits needed.
 3. Set `SITE.owner` / `SITE.repo` in `assets/js/data/sources.js`.
 4. **Settings → Pages** → Source: **GitHub Actions**.
 5. Optional, only if you want shared/public hunt submissions: create the labels `hunt`, `approved`, `clean`, `faulted`.
