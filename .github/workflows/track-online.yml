@@ -4,9 +4,7 @@ name: Track online samples
 
 on:
   schedule:
-    # Avoid the busiest GitHub Actions scheduler slots while preserving the
-    # 15-minute sampling cadence.
-    - cron: '7,22,37,52 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:

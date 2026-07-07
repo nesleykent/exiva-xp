@@ -70,7 +70,7 @@ pipeline/
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
-  track-character.mjs      daily Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
+  track-character.mjs      15-minute Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   track-online.mjs         15-minute Gentebra world-list sampler for Night'Flyn online status
   smoke.mjs                engine smoke tests, run locally or by publish.yml
 .github/actions/
@@ -79,7 +79,7 @@ pipeline/
 .github/workflows/
   check-hunt.yml           on issue opened/edited
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
-  track-character.yml      daily 03:00 UTC — record the current Tibia server-save day, commit, redeploy
+  track-character.yml      every 15 minutes — refresh the current Tibia server-save day, commit, redeploy
   track-online.yml         every 15 minutes — record one online/offline sample, commit, redeploy only for visible state changes
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```

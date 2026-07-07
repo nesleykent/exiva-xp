@@ -1,9 +1,9 @@
-# Daily Night'Flyn tracker — same mechanism and schedule as
-# github.com/mathiasbynens/tibia-xp-history: the Tibia highscores roll once
-# a day, and the script keys history rows by Tibia's 10:00 Europe/Berlin
-# server-save boundary. A daily crawl at 03:00 UTC records {rank, level,
-# experience} plus the skill categories, committed back to the repo with the
-# owner's GitHub noreply identity so the contributor list stays owner-only.
+# Night'Flyn TibiaData tracker. The script keys history rows by Tibia's
+# 10:00 Europe/Berlin server-save boundary, and reruns during the same Tibia
+# day refresh the current row when TibiaData reports fresher values. Each crawl
+# records {rank, level, experience} plus the skill categories, committed back
+# to the repo with the owner's GitHub noreply identity so the contributor list
+# stays owner-only.
 # The data commit then dispatches publish.yml so the site redeploys with
 # fresh numbers (a GITHUB_TOKEN push does not fire push-triggered
 # workflows on its own).
@@ -11,8 +11,7 @@ name: Track character
 
 on:
   schedule:
-    # Reference project: "During CEST, run daily at 03:00 UTC".
-    - cron: '00 03 * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:
