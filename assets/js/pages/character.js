@@ -531,22 +531,24 @@ function onlineBodyHtml() {
   const sessions = sampledSessionBlocks(onlineSamples, cadence);
   const population = worldPopulationContext(onlineSamples);
   return `
-    <div class="tool-fields timezone-controls">
-      ${timezoneSelectHtml('timezone-select-online')}
-      <span class="fine dim timezone-context">Activity days use ${esc(timezoneLabel)}</span>
+    <div class="panel panel-pad activity-overview">
+      <div class="tool-fields timezone-controls">
+        ${timezoneSelectHtml('timezone-select-online')}
+        <span class="fine dim timezone-context">Activity days use ${esc(timezoneLabel)}</span>
+      </div>
+      <div class="mini-metrics activity-metrics">
+        <span><b class="num">${latestSample ? (latestSample.online ? 'Online' : 'Offline') : '-'}</b><small>Last sample</small></span>
+        <span><b class="num">${todayOnline ? hm(todayOnline.minutes) : '0m'}</b><small>Sampled online today</small></span>
+        <span><b class="num">${nf(onlineSeen.length)}</b><small>Online samples</small></span>
+        <span><b class="num">${nf(onlineLevelUps.length)}</b><small>Observed level-ups</small></span>
+        <span><b class="num">${nf(sessions.blocks.length)}</b><small>Sampled session blocks</small></span>
+        <span><b class="num">${sessions.averageSpan != null ? hm(sessions.averageSpan) : '-'}</b><small>Avg sampled block span</small></span>
+      </div>
+      ${onlineDaily.length ? `<div class="viz activity-chart">
+        <p class="eyebrow" style="margin:0 0 8px">Sampled online minutes by ${esc(timezoneLabel)} day</p>
+        ${bars([...onlineDaily].reverse().slice(-14).map((row) => ({ key: row.date.slice(5), n: row.minutes })), { fmt: hm })}
+      </div>` : ''}
     </div>
-    <div class="pulse-row">
-      <div class="panel pulse"><div class="big num">${latestSample ? (latestSample.online ? 'Online' : 'Offline') : '-'}</div><div class="eyebrow">Last sample</div></div>
-      <div class="panel pulse"><div class="big num">${todayOnline ? hm(todayOnline.minutes) : '0m'}</div><div class="eyebrow">Sampled online today</div></div>
-      <div class="panel pulse"><div class="big num">${nf(onlineSeen.length)}</div><div class="eyebrow">Online samples</div></div>
-      <div class="panel pulse"><div class="big num">${nf(onlineLevelUps.length)}</div><div class="eyebrow">Observed level-ups</div></div>
-      <div class="panel pulse"><div class="big num">${nf(sessions.blocks.length)}</div><div class="eyebrow">Sampled session blocks</div></div>
-      <div class="panel pulse"><div class="big num">${sessions.averageSpan != null ? hm(sessions.averageSpan) : '-'}</div><div class="eyebrow">Avg sampled block span</div></div>
-    </div>
-    ${onlineDaily.length ? `<div class="panel panel-pad viz" style="margin-top:12px">
-      <p class="eyebrow" style="margin:0 0 8px">Sampled online minutes by ${esc(timezoneLabel)} day</p>
-      ${bars([...onlineDaily].reverse().slice(-14).map((row) => ({ key: row.date.slice(5), n: row.minutes })), { fmt: hm })}
-    </div>` : ''}
     <div class="section-subhead"><h3>XP per sampled-online hour</h3><span class="fine dim">tracked XP divided by observed online time</span></div>
     ${xpOnline.count >= 3 ? tableHtml([
       { label: 'Date', cell: (row) => esc(row.date) },
@@ -711,6 +713,44 @@ function highscoreCardHtml(row) {
     </article>`;
 }
 
+/** The one metric worth a full trend card — the rest read faster as a compact list. */
+function highscoreFeatureHtml(row) {
+  const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
+  const trend = sampledSeries(row.series);
+  return `
+    <article class="panel skill-feature">
+      <div class="skill-card-head">
+        <div>
+          <h3>${esc(row.label)}</h3>
+          <p class="fine dim">${esc(row.kind)} · ${nf(row.observations)} tracked row${row.observations === 1 ? '' : 's'}</p>
+        </div>
+        <b class="num">${nf(row.value)}</b>
+      </div>
+      <div class="mini-metrics">
+        <span><b class="num">${row.rank != null ? `#${nf(row.rank)}` : '-'}</b><small>Current rank</small></span>
+        <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
+        <span><b class="num">${signed(row.delta)}</b><small>Tracked delta</small></span>
+      </div>
+      <div class="sparkline sparkline-lg">
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Waiting for another distinct TibiaData row before drawing a trend.</span>'}
+      </div>
+    </article>`;
+}
+
+function highscoreRowHtml(row) {
+  return `
+    <div class="hs-row">
+      <div class="hs-row-label">
+        <b>${esc(row.label)}</b>
+        <span class="fine dim">${esc(row.kind)}</span>
+      </div>
+      <div class="hs-row-value">
+        <b class="num">${nf(row.value)}</b>
+        <span class="fine dim">${row.rank != null ? `#${nf(row.rank)}` : '-'} · ${signed(row.delta)}</span>
+      </div>
+    </div>`;
+}
+
 const lastGain = historyRows.at(-1)?.gain ?? null;
 const avg7 = gainAverage(7);
 const avg30 = gainAverage(30);
@@ -726,6 +766,8 @@ const standoutHighscores = highscoreRows
   .slice(0, 6);
 const primaryHighscoreKeys = new Set(['experience', 'magicLevel', 'charmPoints', 'achievements', 'weeklyTasks', 'fishing']);
 const primaryHighscores = highscoreRows.filter((row) => primaryHighscoreKeys.has(row.key));
+const featuredHighscore = primaryHighscores.find((row) => row.key === 'experience') || primaryHighscores[0] || null;
+const secondaryHighscores = primaryHighscores.filter((row) => row !== featuredHighscore);
 
 const xpTable = tableHtml([
   { label: 'Date', cell: (row) => esc(row.date) },
@@ -764,28 +806,28 @@ const groundsTable = tableHtml([
 
 stage.innerHTML = `
   <header class="character-hero panel">
-    <div class="dashboard-identity">
-      ${ring(profile?.name || "Night'Flyn", { quiet: true })}
-      <div>
-        <p class="eyebrow">${esc(profile?.world || 'Tibia')} · ${esc(profile?.vocation || 'character')}</p>
-        <h1>${esc(profile?.name || "Night'Flyn")}</h1>
-        <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, sampled activity, deaths and private hunt evidence.</p>
-        <div class="dashboard-meta">
-          ${profileLevel != null ? `<span class="pill">Profile lvl ${nf(profileLevel)}</span>` : ''}
-          ${trackedLevel != null ? `<span class="pill">Highscore lvl ${nf(trackedLevel)}</span>` : ''}
-          ${experience != null ? `<span class="pill">XP ${kk(experience)}</span>` : ''}
-          ${latest?.date ? `<span class="pill">Tracker ${esc(latest.date)}</span>` : ''}
-        </div>
+    <div class="hero-top">
+      ${ring(profile?.name || "Night'Flyn")}
+      <div class="hero-stats">
+        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
+        <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
+        <span><b class="num">${trackedLevel != null && experience != null ? kk(experienceUntilNextLevel(trackedLevel, experience)) : '-'}</b><small>XP to next</small></span>
       </div>
     </div>
-    <div class="character-hero-readout">
-      <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
-      <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
-      <span><b class="num">${trackedLevel != null && experience != null ? kk(experienceUntilNextLevel(trackedLevel, experience)) : '-'}</b><small>XP to next</small></span>
-      <div class="actions">
-        <a class="btn btn-primary btn-lg" href="submit.html">Save hunt</a>
-        <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan hunt</a>
+    <div class="hero-identity">
+      <p class="eyebrow">${esc(profile?.world || 'Tibia')} · ${esc(profile?.vocation || 'character')}</p>
+      <h1>${esc(profile?.name || "Night'Flyn")}</h1>
+      <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, sampled activity, deaths and private hunt evidence.</p>
+      <div class="dashboard-meta">
+        ${profileLevel != null ? `<span class="pill">Profile lvl ${nf(profileLevel)}</span>` : ''}
+        ${trackedLevel != null ? `<span class="pill">Highscore lvl ${nf(trackedLevel)}</span>` : ''}
+        ${experience != null ? `<span class="pill">XP ${kk(experience)}</span>` : ''}
+        ${latest?.date ? `<span class="pill">Tracker ${esc(latest.date)}</span>` : ''}
       </div>
+    </div>
+    <div class="hero-actions actions">
+      <a class="btn btn-primary btn-lg" href="submit.html">Save hunt</a>
+      <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan hunt</a>
     </div>
   </header>
 
@@ -876,8 +918,11 @@ stage.innerHTML = `
     <div class="narrative-strip">
       ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
     </div>
-    <div class="skill-grid">
-      ${primaryHighscores.map(highscoreCardHtml).join('')}
+    <div class="skill-feature-row">
+      ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
+      <div class="hs-list panel">
+        ${secondaryHighscores.map(highscoreRowHtml).join('')}
+      </div>
     </div>
     <details class="detail-block">
       <summary>All highscore cards and rows</summary>
