@@ -318,10 +318,11 @@ function priceInputRow(itemId, name, prices) {
 const TIER_BADGE = { basic: 'badge-success', intricate: 'badge-info', powerful: 'badge-error' };
 
 /** Compact tier tile: item list, one total (cheapest method), one alt line, copy. */
+const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
-  const alt = calc.options.find((o) => o !== cheapest && o.total != null);
   const itemRow = (icon, label) => `<span class="imb-item-row">${icon}${label}</span>`;
   return `
   <div class="panel panel-pad tool-mini-card imb-tier-card">
@@ -336,12 +337,11 @@ function tierCardHtml(imb, tierId, calc) {
     </div>
     <div class="imb-tier-total">
       <span>Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''}</span>
-      <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
+      <span class="imb-tier-total-right">
+        <b>${calc.canCalculate ? gp(cheapest.total) : '—'}</b>
+        ${calc.canCalculate ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
+      </span>
     </div>
-    ${alt ? `<p class="fine dim" style="margin:0">or ${esc(alt.label)}: ${gp(alt.total)}</p>` : ''}
-    ${calc.canCalculate
-      ? `<button type="button" class="btn btn-secondary btn-sm" data-copy-tier="${tierId}">Copy shopping list</button>`
-      : `<p class="fine dim" style="margin:0">Add prices below to calculate.</p>`}
   </div>`;
 }
 

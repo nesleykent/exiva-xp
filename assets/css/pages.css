@@ -479,7 +479,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .imb-tier-total {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   padding-top: var(--s2);
   border-top: 1px solid rgb(var(--line));
 }
@@ -487,6 +487,20 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: 16px;
   font-variant-numeric: tabular-nums;
 }
+.imb-tier-total-right {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.imb-copy-btn {
+  display: grid;
+  place-items: center;
+  width: 22px; height: 22px;
+  padding: 0; border: 0; background: transparent;
+  color: rgb(var(--ink-2)); cursor: pointer; border-radius: var(--r-sm);
+}
+.imb-copy-btn svg { width: 15px; height: 15px; }
+.imb-copy-btn:hover { background: rgba(var(--overlay), var(--overlay-a)); color: rgb(var(--ink)); }
 .imb-price-input {
   display: flex;
   align-items: center;
