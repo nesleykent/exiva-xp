@@ -281,6 +281,7 @@ function itemIcon(itemId, size = '') {
 
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
+  const cheapest = calc.cheapest;
   const market = calc.options.find((o) => o.method === 'market');
   const tokens = calc.options.find((o) => o.method === 'tokens');
   return `
@@ -290,7 +291,7 @@ function imbCardHtml(imb, prices) {
           ${imbIcon(imb)}
           <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
         </div>
-        <span class="imb-card-price ${market.total == null ? 'dim' : ''}">${market.total == null ? '—' : `${COIN_ICON} ${nf(market.total)}`}</span>
+        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${nf(cheapest.total)}`}</span>
       </div>
       ${imb.supportsGoldTokenExchange ? `
       <div class="imb-compare">
@@ -358,15 +359,20 @@ const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
+  const cheapest = calc.cheapest;
   const market = calc.options.find((o) => o.method === 'market');
   const itemRow = (icon, label, copyText) => `
     <span class="imb-item-row">
       <span class="imb-item-row-label">${icon}${label}</span>
-      <span class="imb-item-row-actions">
-        ${imb.supportsGoldTokenExchange ? itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm') : ''}
-        <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
-      </span>
+      <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
     </span>`;
+  const showItems = cheapest && cheapest.method !== 'market';
+  const rows = showItems
+    ? [
+      ...(cheapest.tokenQuantity ? [itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`, `${cheapest.tokenQuantity}x Gold Token`)] : []),
+      ...cheapest.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`)),
+    ]
+    : t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`));
   return `
   <div class="imb-tier-card">
     <div class="imb-tier-head">
@@ -377,15 +383,16 @@ function tierCardHtml(imb, tierId, calc) {
       </div>
     </div>
     <div class="imb-tier-items">
-      ${t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`)).join('')}
+      ${rows.join('')}
     </div>
     <div class="imb-tier-total">
-      <span class="imb-item-row-label">Total ${INFO_ICON}</span>
+      <span class="imb-item-row-label">Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''} ${INFO_ICON}</span>
       <span class="imb-tier-total-right">
-        ${market.total == null ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(market.total)}</b>`}
-        ${market.total != null ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
+        ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)}</b>`}
+        ${cheapest ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
+    ${cheapest && cheapest.method !== 'market' && market.total != null ? `<p class="fine dim imb-tier-alt">Market only: ${COIN_ICON} ${nf(market.total)}</p>` : ''}
   </div>`;
 }
 
@@ -396,9 +403,8 @@ function renderModalTiers(imb, world) {
   $('#imb-tier-cards').querySelectorAll('[data-copy-tier]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const c = calc[btn.dataset.copyTier];
-      const market = c.options.find((o) => o.method === 'market');
-      if (market.total == null) return;
-      const text = formatShoppingList(imb.name, c.tier.name, world, market);
+      if (!c.cheapest) return;
+      const text = formatShoppingList(imb.name, c.tier.name, world, c.cheapest);
       try { await navigator.clipboard.writeText(text); say('Shopping list copied'); }
       catch { say('Could not copy — clipboard unavailable'); }
     });

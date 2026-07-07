@@ -480,12 +480,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: 6px;
 }
 .imb-item-row-label svg { width: 15px; height: 15px; color: rgb(var(--ink-2)); }
-.imb-item-row-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
 .imb-tier-card {
   display: flex;
   flex-direction: column;
@@ -542,6 +536,14 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: center;
   gap: var(--s2);
 }
+.imb-tier-alt {
+  margin: 0;
+  padding: 6px var(--s3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.imb-tier-alt svg { width: 12px; height: 12px; }
 .imb-copy-btn {
   display: grid;
   place-items: center;
