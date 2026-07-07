@@ -627,6 +627,29 @@ function bindTimezoneSelect() {
   });
 }
 
+/** Highlights the section-nav tab for whichever section is currently in view
+ * — an 8000px+ scrolling page gives no other "you are here" feedback. */
+function bindSectionNavSpy() {
+  const nav = $('.section-nav');
+  if (!nav || nav.dataset.bound) return;
+  nav.dataset.bound = '1';
+  const links = [...nav.querySelectorAll('a')];
+  const sections = links
+    .map((a) => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  if (!sections.length) return;
+  const setActive = (id) => links.forEach((a) => {
+    if (a.getAttribute('href') === `#${id}`) a.setAttribute('aria-current', 'true');
+    else a.removeAttribute('aria-current');
+  });
+  setActive(sections[0].id); // sane default before the first scroll/intersection fires
+  const io = new IntersectionObserver((entries) => {
+    const hit = entries.find((e) => e.isIntersecting);
+    if (hit) setActive(hit.target.id);
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach((s) => io.observe(s));
+}
+
 function avg(values) {
   const clean = values.filter((value) => Number.isFinite(value));
   return clean.length ? clean.reduce((sum, value) => sum + value, 0) / clean.length : null;
@@ -916,6 +939,7 @@ stage.innerHTML = `
   </section>`;
 
 bindTimezoneSelect();
+bindSectionNavSpy();
 
 // ---- chart controls ----
 const xpState = { metric: 'daily', range: '30' };
