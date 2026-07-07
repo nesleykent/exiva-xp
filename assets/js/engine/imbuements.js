@@ -20,6 +20,7 @@ export const GOLD_TOKEN_ITEM = 'gold-token';
 const TOKEN_COST = { basic: 2, intricate: 4, powerful: 6 };
 const TOKEN_HYBRID_SOURCE = { intricate: 'basic', powerful: ['intricate', 'basic'] };
 const TIER_ORDER = ['basic', 'intricate', 'powerful'];
+export const IMBUING_FEES = { basic: 15000, intricate: 55000, powerful: 250000 };
 
 /** Builds a tier's cumulative item list from a per-step item table. */
 function tier(name, bonus, steps, tokenCost) {
@@ -263,6 +264,10 @@ function tokenLine(tokenQuantity, prices) {
   };
 }
 
+function optionTotal(resourceTotal, tierId) {
+  return resourceTotal == null ? null : resourceTotal + IMBUING_FEES[tierId];
+}
+
 /** Items still owed after `coveredTierId`'s package is bought via tokens. */
 function remainderItems(tierId, coveredTierId) {
   const order = TIER_ORDER.slice(0, TIER_ORDER.indexOf(tierId) + 1);
@@ -285,7 +290,9 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
     label: 'Market only',
     items: market.lines,
     tokenQuantity: 0,
-    total: market.total,
+    resourceTotal: market.total,
+    fee: IMBUING_FEES[tierId],
+    total: optionTotal(market.total, tierId),
     missingItems: market.missingItems,
   });
 
@@ -297,7 +304,9 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
       items: [],
       tokenQuantity: t.tokenCost,
       tokenLine: tok,
-      total: tok.missing ? null : tok.subtotal,
+      resourceTotal: tok.missing ? null : tok.subtotal,
+      fee: IMBUING_FEES[tierId],
+      total: optionTotal(tok.missing ? null : tok.subtotal, tierId),
       missingItems: tok.missing ? ['Gold Token'] : [],
     });
 
@@ -314,7 +323,7 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
       });
       const remainingPricing = itemLines(remaining, prices);
       const tok = tokenLine(coveredTokenCost, prices);
-      const total = tok.missing || remainingPricing.total == null ? null : tok.subtotal + remainingPricing.total;
+      const resourceTotal = tok.missing || remainingPricing.total == null ? null : tok.subtotal + remainingPricing.total;
       options.push({
         method: 'hybrid',
         label: `Hybrid from ${imbuement.tiers[coveredTierId].name}`,
@@ -322,7 +331,9 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
         items: remainingPricing.lines,
         tokenQuantity: coveredTokenCost,
         tokenLine: tok,
-        total,
+        resourceTotal,
+        fee: IMBUING_FEES[tierId],
+        total: optionTotal(resourceTotal, tierId),
         missingItems: [...(tok.missing ? ['Gold Token'] : []), ...remainingPricing.missingItems],
       });
     }
@@ -370,6 +381,7 @@ export function formatShoppingList(imbuementName, tierName, world, option) {
   const lines = [`${tierName} ${imbuementName} on ${world}`, 'Recommended method:'];
   if (option.tokenQuantity) lines.push(`${option.tokenQuantity} Gold Token${option.tokenQuantity === 1 ? '' : 's'}`);
   for (const it of option.items) lines.push(`${it.quantity} ${it.name}`);
+  lines.push(`Imbuing fee: ${Math.round(option.fee).toLocaleString('en-US')} gp`);
   lines.push(`Total: ${Math.round(option.total).toLocaleString('en-US')} gp`);
   return lines.join('\n');
 }

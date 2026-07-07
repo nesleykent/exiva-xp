@@ -423,19 +423,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 #imb-modal .panel {
   box-shadow: var(--shadow-float);
 }
-#imb-toggle-filters .pill {
-  cursor: pointer;
-  border: 1px solid transparent;
-}
-#imb-toggle-filters .pill[aria-pressed="true"] {
-  border-color: rgb(var(--blue));
-}
-.imb-card {
-  display: grid;
-  gap: var(--s2);
-  text-align: left;
-  width: 100%;
-}
+.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--line)); cursor: pointer; }
 .imb-card-head {
   display: flex;
   justify-content: space-between;
@@ -483,6 +471,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: 6px;
 }
 .imb-item-row-label svg { width: 15px; height: 15px; color: rgb(var(--ink-2)); }
+#imb-tier-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.imb-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
 .imb-tier-card {
   display: flex;
   flex-direction: column;
@@ -542,11 +537,10 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .imb-tier-alt {
   margin: 0;
   padding: 6px var(--s3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  display: block;
+  line-height: 16px;
 }
-.imb-tier-alt svg { width: 12px; height: 12px; }
+.imb-tier-alt svg { width: 12px; height: 12px; margin: 0 2px; vertical-align: -2px; }
 /* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
 .imb-copy-btn {
   display: grid;
@@ -568,60 +562,10 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   width: 100px;
   min-width: 0;
 }
-.imb-card {
-  cursor: pointer;
-}
 .imb-card:focus-visible {
   outline: none;
   border-color: rgb(var(--line-strong));
 }
-.imb-compare {
-  position: relative;
-  width: fit-content;
-}
-/* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
-.imb-compare-trigger {
-  display: grid;
-  place-items: center;
-  width: 26px; height: 26px;
-  padding: 0; border: 0; border-radius: var(--r-circle);
-  background: transparent; color: rgb(var(--ink-2)); cursor: pointer;
-  transition: background var(--t-hover) var(--e-standard);
-}
-.imb-compare-trigger:hover {
-  background: rgba(var(--overlay), var(--overlay-a));
-  color: rgb(var(--ink));
-}
-.imb-compare-trigger[aria-expanded="true"] {
-  background: rgba(var(--overlay), var(--overlay-a));
-}
-.imb-compare-pop {
-  position: absolute;
-  z-index: 30;
-  top: calc(100% + 6px);
-  left: 0;
-  width: 200px;
-  padding: var(--s3);
-  background: rgb(var(--surface-raised));
-  border: 1px solid rgb(var(--line));
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-float);
-}
-.imb-compare-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--s2);
-  padding: 4px 0;
-  font-size: 13px;
-}
-.imb-compare-row b {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-variant-numeric: tabular-nums;
-}
-.imb-compare-row b svg { width: 12px; height: 12px; }
 
 /* ---------- character dashboard ---------- */
 
@@ -913,6 +857,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .sparkline .vtick { fill: rgb(var(--ink-2)); font-size: 11px; font-family: var(--f-ui); }
 
 @media (max-width: 700px) {
+  #imb-tier-cards { grid-template-columns: 1fr; }
   .tool-grid { grid-template-columns: 1fr; }
   .tool-fields .lbl,
   .tool-fields .lbl.lbl-wide,

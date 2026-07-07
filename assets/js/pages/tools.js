@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
 import { gp, hm, kk, nf, pct } from '../lib/fmt.js';
-import { $, bindSortMenu, pillEl, ring, say, sortMenu } from '../shell.js';
+import { $, pillEl, ring, say } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
@@ -93,43 +93,15 @@ stage.innerHTML = `
     <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
       <div class="tool-head">
         <h2>Imbuement price calculator</h2>
-        <span class="fine dim">cheapest way to gather each tier's resources</span>
+        <span class="fine dim">Intibia-style cheapest totals with imbuing fees</span>
       </div>
       <div class="filter-bar" id="imb-filter-bar">
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
-          ${profile?.world
-    ? `<input id="imb-world" type="text" value="${esc(profile.world)}" disabled>`
-    : `<input id="imb-world" type="text" value="Gentebra" placeholder="World">`}
+          <input id="imb-world" type="text" value="${esc(profile?.world || 'Gentebra')}" placeholder="World">
         </label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>
           <select id="imb-tier"><option value="basic">Basic</option><option value="intricate">Intricate</option><option value="powerful" selected>Powerful</option></select>
         </label>
-        <div class="filter-more" id="imb-filter-more">
-          <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('imb-sort', { default: ['Default'], alphabetical: ['Alphabetical'] }, 'default')}</label>
-          <label class="lbl"><span class="eyebrow">Effect type</span>
-            <select id="imb-category">
-              <option value="all">All types</option>
-              <option value="leech">Leech &amp; Critical</option>
-              <option value="utility">Utility</option>
-              <option value="protection">Protection</option>
-              <option value="skill">Skill</option>
-              <option value="damage">Elemental damage</option>
-            </select>
-          </label>
-          <label class="lbl"><span class="eyebrow">Cheapest by</span>
-            <select id="imb-cheapest-method">
-              <option value="all">Any method</option>
-              <option value="market">Market</option>
-              <option value="tokens">Gold Tokens</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
-          </label>
-        </div>
-        <button type="button" class="filter-toggle" id="imb-filter-toggle" aria-expanded="false" aria-controls="imb-filter-more"><span>Filters</span><span class="chevron">⌄</span></button>
-      </div>
-      <div class="tile-tags" id="imb-toggle-filters">
-        <button type="button" class="pill" id="imb-toggle-tokens" aria-pressed="false">Gold Token supported</button>
-        <button type="button" class="pill" id="imb-toggle-missing" aria-pressed="false">Missing prices</button>
       </div>
       <div class="tool-result-grid" id="imb-grid"></div>
     </section>
@@ -243,7 +215,7 @@ function renderProfit() {
 
 // ---------------------------------------------------------------- imbuements
 
-const imbState = { tier: 'powerful', sort: 'default', category: 'all', cheapestMethod: 'all', tokenOnly: false, missingOnly: false };
+const imbState = { tier: 'powerful', sort: 'default' };
 
 function imbWorld() {
   return $('#imb-world').value.trim() || 'Gentebra';
@@ -254,19 +226,7 @@ function imbPrices() {
 }
 
 function filteredImbuements() {
-  let list = sortImbuements(IMBUEMENTS, imbState.sort);
-  if (imbState.category !== 'all') list = list.filter((i) => i.category === imbState.category);
-  if (imbState.tokenOnly) list = list.filter((i) => i.supportsGoldTokenExchange);
-  if (imbState.missingOnly || imbState.cheapestMethod !== 'all') {
-    const prices = imbPrices();
-    list = list.filter((i) => {
-      const calc = calculateImbuement(i, prices)[imbState.tier];
-      if (imbState.missingOnly && calc.canCalculate) return false;
-      if (imbState.cheapestMethod !== 'all' && calc.cheapest?.method !== imbState.cheapestMethod) return false;
-      return true;
-    });
-  }
-  return list;
+  return sortImbuements(IMBUEMENTS, imbState.sort);
 }
 
 function imbIcon(imb, size = '') {
@@ -279,37 +239,24 @@ function itemIcon(itemId, size = '') {
   return src ? `<img class="imb-icon${size ? ` ${size}` : ''}" src="${esc(src)}" alt="" loading="lazy">` : '';
 }
 
+function imbCompact(value) {
+  if (value == null || !Number.isFinite(value)) return '—';
+  return value >= 1000000 ? kk(value) : `${Math.round(value / 1000)}k`;
+}
+
 function imbCardHtml(imb, prices) {
   const calc = calculateImbuement(imb, prices)[imbState.tier];
   const cheapest = calc.cheapest;
-  const market = calc.options.find((o) => o.method === 'market');
-  const tokens = calc.options.find((o) => o.method === 'tokens');
   return `
-    <div class="tool-mini-card imb-card" data-imb="${esc(imb.id)}" tabindex="0" role="button">
+    <button type="button" class="tool-mini-card imb-card" data-imb="${esc(imb.id)}">
       <div class="imb-card-head">
         <div class="imb-card-id">
           ${imbIcon(imb)}
           <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
         </div>
-        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${nf(cheapest.total)}`}</span>
+        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${imbCompact(cheapest.total)}`}</span>
       </div>
-      ${imb.supportsGoldTokenExchange ? `
-      <div class="imb-compare">
-        <button type="button" class="imb-compare-trigger" data-compare-trigger="${esc(imb.id)}" aria-haspopup="true" aria-expanded="false" title="Best buying methods">
-          ${itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm')}
-        </button>
-        <div class="imb-compare-pop" hidden>
-          <p class="fine dim" style="margin:0 0 6px">Best buying methods · ${esc(calc.tier.name)}</p>
-          <div class="imb-compare-row"><span>Market</span><b>${market.total == null ? '—' : `${COIN_ICON} ${nf(market.total)}`}</b></div>
-          <div class="imb-compare-row"><span>Gold Tokens</span><b>${tokens.total == null ? '—' : `${COIN_ICON} ${nf(tokens.total)}`}</b></div>
-        </div>
-      </div>` : ''}
-    </div>`;
-}
-
-function closeAllComparePopovers() {
-  $('#imb-grid').querySelectorAll('.imb-compare-pop').forEach((el) => { el.hidden = true; });
-  $('#imb-grid').querySelectorAll('[data-compare-trigger]').forEach((el) => el.setAttribute('aria-expanded', 'false'));
+    </button>`;
 }
 
 function renderImbuementGrid() {
@@ -319,23 +266,9 @@ function renderImbuementGrid() {
     ? list.map((imb) => imbCardHtml(imb, prices)).join('')
     : '<p class="dim">No imbuements match these filters.</p>';
   $('#imb-grid').querySelectorAll('[data-imb]').forEach((card) => {
-    const open = () => openImbuementModal(card.dataset.imb);
-    card.addEventListener('click', open);
-    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
-  });
-  $('#imb-grid').querySelectorAll('[data-compare-trigger]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const pop = btn.nextElementSibling;
-      const willOpen = pop.hidden;
-      closeAllComparePopovers();
-      pop.hidden = !willOpen;
-      btn.setAttribute('aria-expanded', String(willOpen));
-    });
+    card.addEventListener('click', () => openImbuementModal(card.dataset.imb));
   });
 }
-document.addEventListener('click', closeAllComparePopovers);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllComparePopovers(); });
 
 function priceInputRow(itemId, name, prices) {
   const entry = prices[itemId];
@@ -361,18 +294,16 @@ function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
   const market = calc.options.find((o) => o.method === 'market');
+  const tokenBacked = cheapest && cheapest.method !== 'market';
   const itemRow = (icon, label, copyText) => `
     <span class="imb-item-row">
       <span class="imb-item-row-label">${icon}${label}</span>
-      <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+      <span class="imb-row-actions">
+        ${tokenBacked ? itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm') : ''}
+        <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+      </span>
     </span>`;
-  const showItems = cheapest && cheapest.method !== 'market';
-  const rows = showItems
-    ? [
-      ...(cheapest.tokenQuantity ? [itemRow(itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), `${nf(cheapest.tokenQuantity)}x Gold Token`, `${cheapest.tokenQuantity}x Gold Token`)] : []),
-      ...cheapest.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`)),
-    ]
-    : t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`));
+  const rows = t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`));
   return `
   <div class="imb-tier-card">
     <div class="imb-tier-head">
@@ -386,13 +317,13 @@ function tierCardHtml(imb, tierId, calc) {
       ${rows.join('')}
     </div>
     <div class="imb-tier-total">
-      <span class="imb-item-row-label">Total${cheapest && cheapest.method !== 'market' ? ` · ${esc(cheapest.label)}` : ''} ${INFO_ICON}</span>
+      <span class="imb-item-row-label">Total ${INFO_ICON}</span>
       <span class="imb-tier-total-right">
         ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)}</b>`}
         ${cheapest ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
-    ${cheapest && cheapest.method !== 'market' && market.total != null ? `<p class="fine dim imb-tier-alt">Market only: ${COIN_ICON} ${nf(market.total)}</p>` : ''}
+    ${cheapest ? `<p class="fine dim imb-tier-alt">${esc(cheapest.label)} · fee ${COIN_ICON} ${nf(cheapest.fee)}${market && cheapest !== market && market.total != null ? ` · market ${COIN_ICON} ${nf(market.total)}` : ''}</p>` : ''}
   </div>`;
 }
 
@@ -462,25 +393,6 @@ function openImbuementModal(id) {
 
 $('#imb-world').addEventListener('input', () => renderImbuementGrid());
 $('#imb-tier').addEventListener('change', () => { imbState.tier = $('#imb-tier').value; renderImbuementGrid(); });
-$('#imb-category').addEventListener('change', () => { imbState.category = $('#imb-category').value; renderImbuementGrid(); });
-$('#imb-cheapest-method').addEventListener('change', () => { imbState.cheapestMethod = $('#imb-cheapest-method').value; renderImbuementGrid(); });
-bindSortMenu('imb-sort', (value) => { imbState.sort = value; renderImbuementGrid(); });
-$('#imb-toggle-tokens').addEventListener('click', () => {
-  imbState.tokenOnly = !imbState.tokenOnly;
-  $('#imb-toggle-tokens').setAttribute('aria-pressed', String(imbState.tokenOnly));
-  $('#imb-toggle-tokens').classList.toggle('pill-info', imbState.tokenOnly);
-  renderImbuementGrid();
-});
-$('#imb-toggle-missing').addEventListener('click', () => {
-  imbState.missingOnly = !imbState.missingOnly;
-  $('#imb-toggle-missing').setAttribute('aria-pressed', String(imbState.missingOnly));
-  $('#imb-toggle-missing').classList.toggle('pill-info', imbState.missingOnly);
-  renderImbuementGrid();
-});
-$('#imb-filter-toggle').addEventListener('click', () => {
-  const open = $('#imb-filter-more').classList.toggle('open');
-  $('#imb-filter-toggle').setAttribute('aria-expanded', String(open));
-});
 
 [
   '#stamina-current', '#stamina-session', '#stamina-target',
