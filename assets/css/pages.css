@@ -413,10 +413,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   max-height: 88vh;
   overflow: auto;
   color: rgb(var(--ink));
+  animation: modal-settle var(--t-hover) var(--e-confident);
 }
 #imb-modal::backdrop {
   background: rgba(0, 0, 0, .5);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
+@keyframes modal-settle { from { opacity: 0; transform: scale(.96); } }
 #imb-modal .panel {
   box-shadow: var(--shadow-float);
 }
@@ -544,12 +547,14 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: 4px;
 }
 .imb-tier-alt svg { width: 12px; height: 12px; }
+/* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
 .imb-copy-btn {
   display: grid;
   place-items: center;
   width: 22px; height: 22px;
   padding: 0; border: 0; background: transparent;
-  color: rgb(var(--ink-2)); cursor: pointer; border-radius: var(--r-sm);
+  color: rgb(var(--ink-2)); cursor: pointer; border-radius: var(--r-circle);
+  transition: background var(--t-hover) var(--e-standard);
 }
 .imb-copy-btn svg { width: 15px; height: 15px; }
 .imb-copy-btn:hover { background: rgba(var(--overlay), var(--overlay-a)); color: rgb(var(--ink)); }
@@ -574,14 +579,20 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   position: relative;
   width: fit-content;
 }
+/* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
 .imb-compare-trigger {
   display: grid;
   place-items: center;
   width: 26px; height: 26px;
-  padding: 0; border: 1px solid rgb(var(--line)); border-radius: var(--r-sm);
-  background: rgb(var(--surface-2)); cursor: pointer;
+  padding: 0; border: 0; border-radius: var(--r-circle);
+  background: transparent; color: rgb(var(--ink-2)); cursor: pointer;
+  transition: background var(--t-hover) var(--e-standard);
 }
 .imb-compare-trigger:hover {
+  background: rgba(var(--overlay), var(--overlay-a));
+  color: rgb(var(--ink));
+}
+.imb-compare-trigger[aria-expanded="true"] {
   background: rgba(var(--overlay), var(--overlay-a));
 }
 .imb-compare-pop {
