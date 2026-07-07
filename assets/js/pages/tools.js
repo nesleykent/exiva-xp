@@ -93,7 +93,7 @@ stage.innerHTML = `
     <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
       <div class="tool-head">
         <h2>Imbuement price calculator</h2>
-        <span class="fine dim">Intibia-style cheapest totals with imbuing fees</span>
+        <span class="fine dim">Current Tibia fees and Gold Token packages</span>
       </div>
       <div class="filter-bar" id="imb-filter-bar">
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>

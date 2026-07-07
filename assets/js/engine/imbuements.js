@@ -20,7 +20,8 @@ export const GOLD_TOKEN_ITEM = 'gold-token';
 const TOKEN_COST = { basic: 2, intricate: 4, powerful: 6 };
 const TOKEN_HYBRID_SOURCE = { intricate: 'basic', powerful: ['intricate', 'basic'] };
 const TIER_ORDER = ['basic', 'intricate', 'powerful'];
-export const IMBUING_FEES = { basic: 15000, intricate: 55000, powerful: 250000 };
+// Summer Update 2025 removed success-rate boosting; these are the current fixed shrine costs.
+export const IMBUING_FEES = { basic: 7500, intricate: 60000, powerful: 250000 };
 
 /** Builds a tier's cumulative item list from a per-step item table. */
 function tier(name, bonus, steps, tokenCost) {
