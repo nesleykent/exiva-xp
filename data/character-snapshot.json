@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1850,
-    "value": 105209964258
+    "value": 105248884126
    },
    {
     "rank": 11,
@@ -153,8 +153,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1544,
-    "value": 61193187083
+    "level": 1545,
+    "value": 61272404278
    },
    {
     "rank": 20,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1523,
-    "value": 58667387120
+    "value": 58730499809
    },
    {
     "rank": 22,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1459,
-    "value": 51596995306
+    "value": 51608695457
    },
    {
     "rank": 25,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1450,
-    "value": 50673474666
+    "value": 50683389267
    },
    {
     "rank": 26,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1397,
-    "value": 45254475182
+    "value": 45266175340
    },
    {
     "rank": 30,
@@ -246,6 +246,14 @@
    },
    {
     "rank": 31,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1349,
+    "value": 40735953876
+   },
+   {
+    "rank": 32,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -253,20 +261,12 @@
     "value": 40687307427
    },
    {
-    "rank": 32,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1348,
-    "value": 40676412450
-   },
-   {
     "rank": 33,
     "name": "Mithjynn",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1343,
-    "value": 40196846253
+    "value": 40271324723
    },
    {
     "rank": 34,
@@ -298,7 +298,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1303,
-    "value": 36714702934
+    "value": 36714916364
    },
    {
     "rank": 38,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1246,
-    "value": 32087345018
+    "value": 32098259694
    },
    {
     "rank": 41,
