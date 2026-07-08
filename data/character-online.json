@@ -3,7 +3,7 @@
  "world": "Gentebra",
  "cadenceMinutes": 15,
  "source": "TibiaData https://api.tibiadata.com/v4/world/Gentebra online_players",
- "updatedAt": "2026-07-08T08:45:43.151Z",
+ "updatedAt": "2026-07-08T10:50:14.305Z",
  "samples": [
   {
    "slot": "2026-07-05T18:15:00.000Z",
@@ -246,6 +246,15 @@
    "level": null,
    "vocation": null,
    "worldPlayersOnline": 64,
+   "worldStatus": "online"
+  },
+  {
+   "slot": "2026-07-08T10:45:00.000Z",
+   "sampledAt": "2026-07-08T10:50:14.305Z",
+   "online": false,
+   "level": null,
+   "vocation": null,
+   "worldPlayersOnline": 156,
    "worldStatus": "online"
   }
  ],
