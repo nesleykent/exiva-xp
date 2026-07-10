@@ -25,8 +25,8 @@
     "name": "Hiro Teensina",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2285,
-    "value": 198443571757
+    "level": 2286,
+    "value": 198622840268
    },
    {
     "rank": 4,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1756,
-    "value": 89986060380
+    "value": 90030068423
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1700,
-    "value": 81597183841
+    "value": 81657703216
    },
    {
     "rank": 13,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1681,
-    "value": 78894429086
+    "value": 78919627744
    },
    {
     "rank": 14,
@@ -178,7 +178,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1496,
-    "value": 55630330779
+    "value": 55630648862
    },
    {
     "rank": 23,
@@ -233,8 +233,8 @@
     "name": "Genezyzz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1397,
-    "value": 45301034459
+    "level": 1398,
+    "value": 45383134680
    },
    {
     "rank": 30,
@@ -246,19 +246,19 @@
    },
    {
     "rank": 31,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1350,
+    "value": 40836587665
+   },
+   {
+    "rank": 32,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1349,
     "value": 40796022755
-   },
-   {
-    "rank": 32,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1349,
-    "value": 40794176264
    },
    {
     "rank": 33,
@@ -314,7 +314,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1258,
-    "value": 33066168317
+    "value": 33084523804
    },
    {
     "rank": 40,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1246,
-    "value": 32109100691
+    "value": 32109621032
    },
    {
     "rank": 41,
