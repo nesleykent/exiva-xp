@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1701,
-    "value": 81782001650
+    "value": 81836882989
    },
    {
     "rank": 13,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1540,
-    "value": 60679265810
+    "value": 60710540810
    },
    {
     "rank": 21,
@@ -246,19 +246,19 @@
    },
    {
     "rank": 31,
+    "name": "Lab Jba",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1351,
+    "value": 40937815376
+   },
+   {
+    "rank": 32,
     "name": "Flandy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1351,
     "value": 40922460790
-   },
-   {
-    "rank": 32,
-    "name": "Lab Jba",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1350,
-    "value": 40865754019
    },
    {
     "rank": 33,
@@ -385,8 +385,8 @@
     "name": "Treko Coconut Seller",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1201,
-    "value": 28791521507
+    "level": 1202,
+    "value": 28822796507
    },
    {
     "rank": 49,
