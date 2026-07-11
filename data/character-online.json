@@ -3,7 +3,7 @@
  "world": "Gentebra",
  "cadenceMinutes": 15,
  "source": "TibiaData https://api.tibiadata.com/v4/world/Gentebra online_players",
- "updatedAt": "2026-07-11T14:12:30.855Z",
+ "updatedAt": "2026-07-11T15:18:05.466Z",
  "samples": [
   {
    "slot": "2026-07-05T18:15:00.000Z",
@@ -597,6 +597,15 @@
    "level": 478,
    "vocation": "Elder Druid",
    "worldPlayersOnline": 267,
+   "worldStatus": "online"
+  },
+  {
+   "slot": "2026-07-11T15:15:00.000Z",
+   "sampledAt": "2026-07-11T15:18:05.466Z",
+   "online": false,
+   "level": null,
+   "vocation": null,
+   "worldPlayersOnline": 266,
    "worldStatus": "online"
   }
  ],
