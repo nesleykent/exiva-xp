@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1541,
-    "value": 60818256275
+    "value": 60819735986
    },
    {
     "rank": 21,
@@ -170,15 +170,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1526,
-    "value": 59005258163
+    "value": 59050423203
    },
    {
     "rank": 22,
     "name": "Diinoco",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1498,
-    "value": 55893920784
+    "level": 1499,
+    "value": 55991396055
    },
    {
     "rank": 23,
@@ -242,7 +242,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1376,
-    "value": 43270399830
+    "value": 43306105677
    },
    {
     "rank": 31,
@@ -318,19 +318,19 @@
    },
    {
     "rank": 40,
+    "name": "Arianwen",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1246,
+    "value": 32143157649
+   },
+   {
+    "rank": 41,
     "name": "Brunin Himself",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1246,
     "value": 32141737561
-   },
-   {
-    "rank": 41,
-    "name": "Arianwen",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1246,
-    "value": 32132676184
    },
    {
     "rank": 42,
@@ -346,7 +346,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1239,
-    "value": 31563682166
+    "value": 31570821290
    },
    {
     "rank": 44,
