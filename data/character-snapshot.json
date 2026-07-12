@@ -57,8 +57,8 @@
     "name": "Jack Black Sabbath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2096,
-    "value": 153242782053
+    "level": 2097,
+    "value": 153280848437
    },
    {
     "rank": 8,
@@ -97,8 +97,8 @@
     "name": "Owanda Datribo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1701,
-    "value": 81847027682
+    "level": 1702,
+    "value": 81904046905
    },
    {
     "rank": 13,
@@ -154,7 +154,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1549,
-    "value": 61724925774
+    "value": 61732696638
    },
    {
     "rank": 20,
@@ -193,8 +193,8 @@
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1461,
-    "value": 51858620996
+    "level": 1462,
+    "value": 51897984856
    },
    {
     "rank": 25,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1431,
-    "value": 48647421050
+    "value": 48649024614
    },
    {
     "rank": 27,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1400,
-    "value": 45537966844
+    "value": 45541508523
    },
    {
     "rank": 30,
@@ -242,23 +242,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1376,
-    "value": 43244977133
+    "value": 43270231678
    },
    {
     "rank": 31,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1352,
+    "value": 41069036880
+   },
+   {
+    "rank": 32,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1351,
-    "value": 40998347580
-   },
-   {
-    "rank": 32,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1351,
-    "value": 40995232393
+    "value": 41004967148
    },
    {
     "rank": 33,
@@ -362,7 +362,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1235,
-    "value": 31287369077
+    "value": 31293531540
    },
    {
     "rank": 46,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1226,
-    "value": 30575722250
+    "value": 30587171525
    },
    {
     "rank": 47,
@@ -402,7 +402,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1188,
-    "value": 27852596372
+    "value": 27854258340
    }
   ],
   "highscore_page": {
