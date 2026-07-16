@@ -19,6 +19,7 @@ stage.innerHTML = `
   </header>
   <section class="section" style="margin-top:var(--s5)">
     <div class="section-bar"><h2>Local logbook</h2><span class="fine dim" id="k-count"></span></div>
+    <div id="k-undo" aria-live="polite"></div>
     <div id="k-book"></div>
   </section>
   <section class="section">
@@ -37,6 +38,31 @@ stage.innerHTML = `
     </div>
     <div id="k-io" aria-live="polite"></div>
   </section>`;
+
+let undoSnapshot = null;
+
+function clearUndo() {
+  undoSnapshot = null;
+  $('#k-undo').innerHTML = '';
+}
+
+function offerUndo(message, snapshot) {
+  undoSnapshot = snapshot;
+  $('#k-undo').innerHTML = `
+    <div class="note note-amber admin-undo">
+      <span>${esc(message)}</span>
+      <button type="button" class="btn btn-tertiary" data-undo>Undo</button>
+    </div>`;
+}
+
+$('#k-undo').addEventListener('click', (e) => {
+  if (!e.target.closest('[data-undo]') || !undoSnapshot) return;
+  const restore = undoSnapshot;
+  clearUndo();
+  writeLogbook(restore);
+  refresh();
+  say('Logbook restored.');
+});
 
 function refresh() {
   const book = logbook();
@@ -63,8 +89,11 @@ function refresh() {
   $('#k-book').onclick = (e) => {
     const id = e.target.dataset?.drop;
     if (!id) return;
-    writeLogbook(logbook().filter((h) => h.id !== id));
-    say('Hunt deleted.');
+    const before = logbook();
+    const after = before.filter((h) => String(h.id) !== id);
+    if (after.length === before.length) return;
+    writeLogbook(after);
+    offerUndo('Hunt deleted.', before);
     refresh();
   };
 
@@ -89,8 +118,9 @@ function refresh() {
       if (i == null) return;
       const pack = dupes[+i].sort((a, b) => String(a.loggedAt).localeCompare(String(b.loggedAt)));
       const drop = new Set(pack.slice(1).map((h) => h.id));
-      writeLogbook(logbook().filter((h) => !drop.has(h.id)));
-      say(`Swept ${pack.length - 1} duplicate${pack.length > 2 ? 's' : ''}.`);
+      const before = logbook();
+      writeLogbook(before.filter((h) => !drop.has(h.id)));
+      offerUndo(`Swept ${pack.length - 1} duplicate${pack.length > 2 ? 's' : ''}.`, before);
       refresh();
     };
   }
@@ -133,7 +163,10 @@ $('#k-import').addEventListener('change', async (e) => {
     if (!Array.isArray(incoming)) throw new Error('expected a JSON array of hunts');
     const book = logbook();
     const report = assessImport(incoming, book);
-    if (report.accepted.length) writeLogbook([...book, ...report.accepted]);
+    if (report.accepted.length) {
+      writeLogbook([...book, ...report.accepted]);
+      clearUndo();
+    }
     const summary = [
       `Imported ${report.accepted.length} new hunt${report.accepted.length === 1 ? '' : 's'}.`,
       `${report.duplicates.length} duplicate${report.duplicates.length === 1 ? '' : 's'} skipped.`,
