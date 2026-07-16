@@ -95,8 +95,6 @@ const grounds4me = [...new Map(
     .map((r) => [r.groundSlug, r]),
 ).values()].slice(0, 10);
 
-const historyByDate = new Map(historyRows.map((row) => [row.date, row]));
-
 const highscoreRows = latest ? HIGHSCORE_CATEGORIES
   .filter(({ valueField }) => latest[valueField] != null)
   .map((category) => {
@@ -110,18 +108,14 @@ const highscoreRows = latest ? HIGHSCORE_CATEGORIES
     return {
       key: valueField,
       rankKey,
-      rankHistoryKey: rankField,
       label,
       kind,
       value,
       rank: latestRank,
-      firstValue: first?.value ?? null,
       firstDate: first?.date ?? null,
       delta: first ? value - first.value : null,
       lastDelta: previousValue != null ? value - previousValue : null,
-      observations: series.length,
       series,
-      sourceDate: latest.date,
     };
   }) : [];
 
@@ -216,12 +210,6 @@ function levelCadence() {
   };
 }
 
-function xpOverWindow(row) {
-  const first = row.firstDate ? historyByDate.get(row.firstDate) : null;
-  const last = row.sourceDate ? historyByDate.get(row.sourceDate) : null;
-  return first && last ? last.experience - first.experience : null;
-}
-
 function xpRowsForChart(metric, range) {
   let rows = historyRows;
   if (range !== 'all') rows = rows.slice(-Number(range));
@@ -262,27 +250,6 @@ function xpRowsForChart(metric, range) {
   };
 }
 
-function profileRows() {
-  return [
-    ['Name', profile?.name],
-    ['Title', profile?.title],
-    ['Sex', profile?.sex],
-    ['Vocation', profile?.vocation],
-    ['World', profile?.world],
-    ['Residence', profile?.residence],
-    ['Profile level', profileLevel],
-    ['Highscore level', trackedLevel],
-    ['Highscore experience', experience != null ? nf(experience) : null],
-    ['Achievement points', profile?.achievementPoints],
-    ['Last login', fmtDateTime(profile?.lastLogin)],
-    ['Account status', profile?.accountStatus],
-    ['Account created', fmtDateOnly(profile?.accountCreated)],
-    ['Loyalty title', profile?.loyaltyTitle],
-    ['Houses', profile?.houses?.length ? profile.houses.map((h) => `${h.name} (${h.town})`).join(', ') : null],
-    ['Profile updated', fmtDateTime(profile?.updatedAt)],
-  ].filter(([, value]) => value != null && value !== '');
-}
-
 function profileGroupHtml(title, rows) {
   const clean = rows.filter(([, value]) => value != null && value !== '');
   if (!clean.length) return '';
@@ -319,13 +286,6 @@ function characterDetailsHtml() {
         ['Profile updated', fmtDateTime(profile?.updatedAt)],
       ])}
     </div>`;
-}
-
-function profileTableHtml() {
-  return tableHtml([
-    { label: 'Field', cell: (row) => esc(row[0]) },
-    { label: 'Value', cell: (row) => plain(row[1]) },
-  ], profileRows(), 'No character profile data yet.');
 }
 
 function deathsTableHtml() {
@@ -413,29 +373,6 @@ function sampledSeries(series, maxPoints = 40) {
   return out;
 }
 
-function highscoreCardHtml(row) {
-  const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
-  const trend = sampledSeries(row.series);
-  return `
-    <article class="panel skill-card">
-      <div class="skill-card-head">
-        <div>
-          <h3>${esc(row.label)}</h3>
-          <p class="fine dim">${esc(row.kind)} · ${row.firstDate ? `history since ${esc(row.firstDate)}` : 'new this update'}</p>
-        </div>
-        <b class="num">${nf(row.value)}</b>
-      </div>
-      <div class="mini-metrics">
-        <span><b class="num">${row.rank != null ? `#${nf(row.rank)}` : '-'}</b><small>Current rank</small></span>
-        <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
-        <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
-      </div>
-      <div class="sparkline">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next update for this skill.</span>'}
-      </div>
-    </article>`;
-}
-
 /** The one metric worth a full trend card — the rest read faster as a compact list. */
 function highscoreFeatureHtml(row) {
   const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
@@ -490,7 +427,7 @@ const standoutHighscores = highscoreRows
 const primaryHighscoreKeys = new Set(['experience', 'magicLevel', 'charmPoints', 'achievements', 'weeklyTasks', 'fishing']);
 const primaryHighscores = highscoreRows.filter((row) => primaryHighscoreKeys.has(row.key));
 const featuredHighscore = primaryHighscores.find((row) => row.key === 'experience') || primaryHighscores[0] || null;
-const secondaryHighscores = primaryHighscores.filter((row) => row !== featuredHighscore);
+const secondaryHighscores = highscoreRows.filter((row) => row !== featuredHighscore);
 
 /** This week's pace vs the 30-day average, as a conclusion rather than two
  * raw numbers — the one line the page should say before anything else. */
@@ -542,18 +479,13 @@ function progressionCardHtml() {
         <span><b class="num">${bestDay?.gain ? `+${kk(bestDay.gain)}` : '-'}</b><small>Best day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
       </div>
       ${canCustomize ? `
-      <div class="reveal compact">
-        <button type="button" class="reveal-toggle" id="pred-customize-toggle" aria-expanded="false" aria-controls="pred-customize-body">
-          <span>Customize projection</span><span class="chevron">⌄</span>
-        </button>
-        <div class="reveal-body" id="pred-customize-body">
-          <div class="tool-fields">
-            <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
-            <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
-          </div>
-          <div class="tool-result" id="pred-out"></div>
-          <p class="fine dim">Defaults to your last ${nf(recentGains.length)} days' average; edit either field.</p>
+      <div class="projection-tools">
+        <div class="section-subhead first"><h3>Adjust the projection</h3><span class="fine dim">defaults to the last ${nf(recentGains.length)} days</span></div>
+        <div class="tool-fields">
+          <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
+          <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
         </div>
+        <div class="tool-result" id="pred-out"></div>
       </div>` : ''}
       <div class="insight-actions">
         <a class="btn btn-primary btn-sm" href="grounds.html">Plan next hunt</a>
@@ -575,7 +507,8 @@ function standingHighlightsHtml() {
   return parts.length ? `<div class="mini-metrics">${parts.join('')}</div>` : '';
 }
 
-const xpTable = tableHtml([
+const recentXpRows = [...historyRows].reverse().slice(0, 30);
+const recentXpTable = tableHtml([
   { label: 'Date', cell: (row) => esc(row.date) },
   { label: 'Level', className: 'num', cell: (row) => nf(row.level) },
   { label: 'Delta', className: 'num', cell: (row) => signed(row.levelDelta) },
@@ -585,20 +518,7 @@ const xpTable = tableHtml([
   { label: 'Progress', className: 'num', cell: (row) => `${row.progress.toFixed(1)}%` },
   { label: 'Rank', className: 'num', cell: (row) => row.rank ? `#${nf(row.rank)}` : '<span class="dim">-</span>' },
   { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-], [...historyRows].reverse(), 'No XP rows yet.');
-
-const highscoresTable = tableHtml([
-  { label: 'Highscore', cell: (row) => esc(row.label) },
-  { label: 'Unit', cell: (row) => esc(row.kind) },
-  { label: 'Value', className: 'num', cell: (row) => nf(row.value) },
-  { label: 'Rank', className: 'num', cell: (row) => row.rank != null ? `#${nf(row.rank)}` : '<span class="dim">-</span>' },
-  { label: 'Updates', className: 'num', cell: (row) => nf(row.observations) },
-  { label: 'First recorded', className: 'num', cell: (row) => row.firstValue != null ? nf(row.firstValue) : '<span class="dim">-</span>' },
-  { label: 'Last change', className: 'num', cell: (row) => signed(row.lastDelta) },
-  { label: 'Delta', className: 'num', cell: (row) => signed(row.delta) },
-  { label: 'XP over window', className: 'num', cell: (row) => signed(xpOverWindow(row)) },
-  { label: 'Window', cell: (row) => esc([row.firstDate, row.sourceDate].filter(Boolean).join(' -> ')) },
-], highscoreRows, 'No highscore rows yet.');
+], recentXpRows, 'No XP rows yet.');
 
 const groundsTable = tableHtml([
   { label: 'Ground', cell: (row) => `<a href="ground.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
@@ -647,12 +567,8 @@ stage.innerHTML = `
   <section class="section character-act" id="progression">
     <div class="section-bar"><h2>Progression</h2><span class="fine dim">the one thing to know right now</span></div>
     ${progressionCardHtml()}
-    <div class="reveal">
-      <button type="button" class="reveal-toggle" id="xp-history-toggle" aria-expanded="false" aria-controls="xp-history-body">
-        <span>Chart and full day-by-day history</span><span class="chevron">⌄</span>
-      </button>
-      <div class="reveal-body" id="xp-history-body">
-        <div class="panel panel-pad viz" style="margin-top:12px">
+    <div class="progression-history">
+        <div class="panel panel-pad viz">
           <div class="chart-controls">
             <div>
               <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
@@ -677,9 +593,8 @@ stage.innerHTML = `
             <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
           </div>
         </div>
-        <div class="section-subhead"><h3>Every recorded day</h3><span class="fine dim">${cadenceTrend ? `~${cadenceTrend.recent.toFixed(1)} days per level recently` : 'full history'}</span></div>
-        ${xpTable}
-      </div>
+        <div class="section-subhead"><h3>Recent recorded days</h3><a class="fine dim" href="analytics.html">Explore full progression</a></div>
+        ${recentXpTable}
     </div>
   </section>
 
@@ -715,7 +630,7 @@ stage.innerHTML = `
 
   ${latest ? `
   <section class="section character-act" id="highscores">
-    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">top ranks first; full breakdown on request</span></div>
+    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">one trend plus every tracked category</span></div>
     ${standingHighlightsHtml()}
     <div class="narrative-strip">
       ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
@@ -724,18 +639,6 @@ stage.innerHTML = `
       ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
       <div class="hs-list panel">
         ${secondaryHighscores.map(highscoreRowHtml).join('')}
-      </div>
-    </div>
-    <div class="reveal">
-      <button type="button" class="reveal-toggle" id="highscore-breakdown-toggle" aria-expanded="false" aria-controls="highscore-breakdown-body">
-        <span>Full highscore breakdown</span><span class="chevron">⌄</span>
-      </button>
-      <div class="reveal-body" id="highscore-breakdown-body">
-        <div class="skill-grid detail-grid">
-          ${highscoreRows.map(highscoreCardHtml).join('')}
-        </div>
-        <div class="section-subhead"><h3>Every tracked category</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
-        ${highscoresTable}
       </div>
     </div>
   </section>` : ''}
@@ -747,12 +650,7 @@ stage.innerHTML = `
       <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none yet'}</small></span>
       <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
     </div>
-    <div class="reveal compact">
-      <button type="button" class="reveal-toggle" id="events-detail-toggle" aria-expanded="false" aria-controls="events-detail-body">
-        <span>Level-up and death details</span><span class="chevron">⌄</span>
-      </button>
-      <div class="reveal-body" id="events-detail-body">
-        <div class="event-grid">
+    <div class="event-grid">
       ${levelUps.length ? `
           <article class="event-panel">
             <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'level-up history'}</span></div>
@@ -767,47 +665,17 @@ stage.innerHTML = `
             <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
             <div id="deaths-table">${deathsTableHtml()}</div>
           </article>
-        </div>
-      </div>
     </div>
   </section>
 
   <section class="section character-act" id="details">
     <div class="section-bar"><h2>Character details</h2><span class="fine dim">stable facts that rarely change</span></div>
-    <div class="reveal compact">
-      <button type="button" class="reveal-toggle" id="profile-detail-toggle" aria-expanded="false" aria-controls="profile-detail-body">
-        <span>Show identity, residence and account details</span><span class="chevron">⌄</span>
-      </button>
-      <div class="reveal-body" id="profile-detail-body">
-        <div class="panel panel-pad profile-panel">
-          <div id="profile-summary">${characterDetailsHtml()}</div>
-          <div class="reveal compact">
-            <button type="button" class="reveal-toggle" id="profile-fields-toggle" aria-expanded="false" aria-controls="profile-fields-body">
-              <span>Full TibiaData profile fields</span><span class="chevron">⌄</span>
-            </button>
-            <div class="reveal-body" id="profile-fields-body">${profileTableHtml()}</div>
-          </div>
-        </div>
-      </div>
+    <div class="panel panel-pad profile-panel">
+      <div id="profile-summary">${characterDetailsHtml()}</div>
     </div>
   </section>`;
 
 bindSectionNavSpy();
-
-/** Wires a reveal()-style toggle button + body pair. A `<details>`
- * alternative — same show/hide behavior, but a plain button we fully
- * control instead of a native disclosure widget. */
-function bindReveal(id) {
-  const toggle = $(`#${id}-toggle`);
-  const body = $(`#${id}-body`);
-  if (!toggle || !body) return;
-  toggle.addEventListener('click', () => {
-    const open = body.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(open));
-  });
-}
-['pred-customize', 'xp-history', 'highscore-breakdown', 'events-detail', 'profile-detail', 'profile-fields']
-  .forEach(bindReveal);
 
 // ---- chart controls ----
 const xpState = { metric: 'daily', range: '30' };

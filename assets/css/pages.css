@@ -793,7 +793,12 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: 11px;
   line-height: 14px;
 }
-.prediction-panel { margin-top: var(--s4); }
+.projection-tools,
+.progression-history {
+  margin-top: var(--s4);
+  border-top: 1px solid rgb(var(--line));
+  padding-top: var(--s4);
+}
 .event-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -803,34 +808,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .next-block {
   min-width: 0;
 }
-/* Plain button + toggled div — a <details> alternative. Native disclosure
-   widgets render inconsistently (and this app hit real, confirmed Safari
-   print/OS-widget bugs from other native controls this same week), so this
-   stays scripted and fully ours instead of relying on browser chrome. */
-.reveal {
-  margin-top: var(--s4);
-  border-top: 1px solid rgb(var(--line));
-  padding-top: var(--s3);
-}
-.reveal.compact { margin-top: 0; }
-.reveal-toggle {
-  width: 100%; text-align: left;
-  display: flex; align-items: center; gap: var(--s2);
-  cursor: pointer; background: none; border: 0; padding: 0;
-  color: rgb(var(--ink));
-  font-size: 13px;
-  font-weight: 700;
-  font-family: inherit;
-  /* HIG minimum 44pt tap target — the text line alone is ~18px tall */
-  min-height: 44px;
-  margin: -14px 0;
-}
-.reveal-toggle:hover { color: rgb(var(--blue)); }
-.reveal-toggle .chevron { margin-left: auto; transition: transform var(--t-hover) var(--e-standard); }
-.reveal-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-.reveal-body { display: none; margin-top: var(--s3); }
-.reveal-body.open { display: block; }
-.detail-grid { margin-top: var(--s3); }
 .section-subhead.first { margin-top: 0; }
 .hunt-log-panel {
   margin-top: var(--s4);
@@ -838,11 +815,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   border-top: 1px solid rgb(var(--line));
 }
 .hunt-log-panel .pulse-row { margin-bottom: var(--s4); }
-.skill-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--s3);
-}
 .skill-card {
   display: grid;
   gap: var(--s3);
