@@ -573,27 +573,57 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 /* ---------- character dashboard ---------- */
 
-.dashboard-head,
+/* Instagram-profile-header pattern: avatar+stat-row, then identity block,
+   then actions — stacked at every width, matching the source's own profile
+   header composition rather than a generic bordered-tile dashboard hero.
+   The gradient wash is the design system's own sanctioned "whole-surface"
+   use of the brand gradient (AGENTS.md §5) — unused anywhere else on this
+   page, so the hero is the one place it earns its keep. */
 .character-hero {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s5);
+  flex-direction: column;
+  gap: var(--s4);
   padding: var(--s5);
 }
-.character-hero { align-items: flex-start; }
-.dashboard-identity {
+.character-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--grad-spectrum);
+  opacity: .1;
+  pointer-events: none;
+}
+[data-appearance="dark"] .character-hero::before { opacity: .16; }
+.character-hero > * { position: relative; z-index: 1; }
+.hero-top {
   display: flex;
   align-items: center;
-  gap: var(--s4);
+  gap: var(--s5);
+}
+.hero-top .ring { width: 88px; height: 88px; flex: 0 0 88px; }
+.hero-top .ring-core { width: 78px; height: 78px; font-size: 26px; }
+.hero-stats {
+  display: flex;
+  gap: var(--s5);
   min-width: 0;
 }
-.dashboard-identity .ring { width: 64px; height: 64px; flex: 0 0 64px; }
-.dashboard-identity .ring-core { width: 56px; height: 56px; font-size: 18px; }
-.dashboard-identity h1 {
-  font-size: 28px;
-  line-height: 32px;
-  letter-spacing: -.4px;
+.hero-stats > span {
+  display: grid;
+  gap: 2px;
+  padding-left: var(--s5);
+  border-left: 1px solid rgb(var(--line));
+  min-width: 0;
+}
+.hero-stats > span:first-child { padding-left: 0; border-left: 0; }
+.hero-stats b { font-size: 24px; line-height: 28px; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.hero-stats small { color: rgb(var(--ink-2)); font-size: 11px; line-height: 14px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+.hero-identity h1 {
+  font-family: var(--f-wordmark);
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  font-weight: 700;
 }
 .character-lede {
   max-width: 56ch;
@@ -608,45 +638,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   flex-wrap: wrap;
   margin-top: var(--s2);
 }
-.dashboard-actions {
-  display: flex;
-  align-items: end;
-  gap: var(--s3);
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-.dashboard-actions .actions {
-  display: flex;
-  gap: var(--s2);
-  flex-wrap: wrap;
-}
-.character-hero-readout {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(92px, 1fr));
-  gap: var(--s3);
-  min-width: min(420px, 100%);
-}
-.character-hero-readout > span {
-  display: grid;
-  gap: 2px;
-  padding: var(--s3);
-  border: 1px solid rgb(var(--line));
-  border-radius: var(--r-input);
-  background: rgb(var(--surface-2));
-}
-.character-hero-readout b { font-size: 18px; line-height: 22px; overflow-wrap: anywhere; }
-.character-hero-readout small {
-  color: rgb(var(--ink-2));
-  font-size: 11px;
-  line-height: 14px;
-}
-.character-hero-readout .actions {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: var(--s2);
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
+.hero-actions { display: flex; gap: var(--s3); flex-wrap: wrap; }
 .section-nav {
   display: flex;
   gap: var(--s2);
@@ -860,6 +852,33 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .sparkline .vdot { fill: rgb(var(--blue)); }
 .sparkline .vtick { fill: rgb(var(--ink-2)); font-size: 11px; font-family: var(--f-ui); }
 
+/* one featured metric (full trend card) beside a compact list for the rest —
+   the old equal-weight card grid made the one card with a real trend look
+   like a rendering bug next to five that had none */
+.skill-feature-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.1fr) minmax(240px, .9fr);
+  gap: var(--s3);
+  align-items: start;
+}
+.skill-feature { display: grid; gap: var(--s4); padding: var(--s5); }
+.skill-feature .skill-card-head h3 { font-size: 17px; line-height: 21px; }
+.skill-feature .skill-card-head > b { font-size: 28px; line-height: 32px; }
+.sparkline-lg { min-height: 84px; }
+.hs-list { padding: 0 var(--s4); }
+.hs-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+}
+.hs-row + .hs-row { border-top: 1px solid rgb(var(--line)); }
+.hs-row-label { display: grid; gap: 2px; min-width: 0; }
+.hs-row-label b { font-size: 14px; }
+.hs-row-value { display: grid; gap: 2px; text-align: right; flex-shrink: 0; }
+.hs-row-value b { font-size: 15px; }
+
 @media (max-width: 700px) {
   #imb-tier-cards { grid-template-columns: 1fr; }
   .tool-grid { grid-template-columns: 1fr; }
@@ -871,34 +890,18 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-wide > input,
   .tool-fields .lbl.lbl-narrow > input,
   .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
-  .dashboard-head,
-  .character-hero {
-    align-items: stretch;
-    flex-direction: column;
-    padding: var(--s4);
-  }
+  .character-hero { padding: var(--s4); }
+  .hero-top { gap: var(--s4); }
+  .hero-top .ring { width: 64px; height: 64px; flex: 0 0 64px; }
+  .hero-top .ring-core { width: 56px; height: 56px; font-size: 18px; }
+  .hero-stats { gap: var(--s4); }
+  .hero-stats > span { padding-left: var(--s4); }
+  .hero-stats b { font-size: 17px; line-height: 20px; }
   .character-lede {
     overflow: hidden; display: -webkit-box;
     -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   }
-  .character-hero-readout {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--s2);
-    min-width: 0;
-  }
-  .character-hero-readout > span { padding: var(--s2); }
-  .character-hero-readout .actions,
-  .character-hero-readout .btn {
-    width: 100%;
-  }
-  .dashboard-actions {
-    justify-content: stretch;
-  }
-  .dashboard-actions .actions,
-  .dashboard-actions .btn,
-  .dashboard-actions .lbl {
-    width: 100%;
-  }
+  .hero-actions .btn { width: 100%; }
   .chart-shell {
     grid-template-columns: 1fr;
   }
@@ -907,7 +910,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   }
   .snapshot-grid,
   .profile-groups,
-  .event-grid {
+  .event-grid,
+  .skill-feature-row {
     grid-template-columns: 1fr;
   }
   .profile-group div {
