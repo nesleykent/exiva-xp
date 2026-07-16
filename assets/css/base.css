@@ -362,3 +362,14 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   animation: toast-rise .35s var(--e-settle);
 }
 @keyframes toast-rise { from { opacity: 0; transform: translate(-50%, 10px); } }
+
+/* Safari's print/PDF renderer (Share ▸ Print, common on iOS) has a known
+   bug where a masked or backdrop-filtered element paints as a solid black
+   block instead of compositing — mobile Safari print output showed exactly
+   that over .section-nav's scroll-edge fade. Print doesn't scroll, so both
+   effects are meaningless there anyway: drop them and let the nav's
+   overflow show in full instead of clipping it. */
+@media print {
+  .section-nav { mask-image: none; -webkit-mask-image: none; overflow: visible; flex-wrap: wrap; }
+  .rail-foot { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
