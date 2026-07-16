@@ -334,7 +334,7 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   padding: 9px 10px; border: 0; border-radius: var(--r-input);
   background: transparent; color: rgb(var(--ink)); font-family: var(--f-ui); font-size: 14px; text-align: left; cursor: pointer;
 }
-.sort-menu-item:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+.sort-menu-item:hover, .sort-menu-item:focus-visible { outline: none; background: rgba(var(--overlay), var(--overlay-a)); }
 .sort-menu-item .check { width: 16px; height: 16px; flex-shrink: 0; color: rgb(var(--blue)); visibility: hidden; }
 .sort-menu-item[aria-checked="true"] .check { visibility: visible; }
 

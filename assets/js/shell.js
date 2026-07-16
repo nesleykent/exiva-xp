@@ -123,10 +123,10 @@ const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="curren
 export function sortMenu(id, sorts, selected) {
   return `
   <div class="sort-menu" id="${id}">
-    <button type="button" class="sort-menu-btn" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="sort-menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="${id}-list">
       <span class="value">${esc(sorts[selected]?.[0] || '')}</span>${CHEVRON}
     </button>
-    <div class="sort-menu-list" role="menu" hidden>
+    <div class="sort-menu-list" id="${id}-list" role="menu" hidden>
       ${Object.entries(sorts).map(([key, [label]]) => `
         <button type="button" class="sort-menu-item" role="menuitemradio" aria-checked="${key === selected}" data-value="${esc(key)}">
           ${CHECK}<span>${esc(label)}</span>
@@ -165,6 +165,16 @@ export function bindSortMenu(id, onSelect) {
     onSelect(item.dataset.value);
   });
   root.addEventListener('keydown', (e) => {
+    const item = e.target.closest('.sort-menu-item');
+    if ((e.key === 'Enter' || e.key === ' ') && item) {
+      e.preventDefault();
+      item.click();
+      return;
+    }
+    if (e.key === 'Tab') {
+      close();
+      return;
+    }
     if (e.key === 'Escape') {
       if (list.hidden) return;
       e.preventDefault();
