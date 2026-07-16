@@ -542,15 +542,19 @@ function progressionCardHtml() {
         <span><b class="num">${bestDay?.gain ? `+${kk(bestDay.gain)}` : '-'}</b><small>Best day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
       </div>
       ${canCustomize ? `
-      <details class="detail-block compact">
-        <summary>Customize projection</summary>
-        <div class="tool-fields">
-          <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
-          <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
+      <div class="reveal compact">
+        <button type="button" class="reveal-toggle" id="pred-customize-toggle" aria-expanded="false" aria-controls="pred-customize-body">
+          <span>Customize projection</span><span class="chevron">⌄</span>
+        </button>
+        <div class="reveal-body" id="pred-customize-body">
+          <div class="tool-fields">
+            <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
+            <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
+          </div>
+          <div class="tool-result" id="pred-out"></div>
+          <p class="fine dim">Defaults to your last ${nf(recentGains.length)} days' average; edit either field.</p>
         </div>
-        <div class="tool-result" id="pred-out"></div>
-        <p class="fine dim">Defaults to your last ${nf(recentGains.length)} days' average; edit either field.</p>
-      </details>` : ''}
+      </div>` : ''}
       <div class="insight-actions">
         <a class="btn btn-primary btn-sm" href="grounds.html">Plan next hunt</a>
       </div>
@@ -643,36 +647,40 @@ stage.innerHTML = `
   <section class="section character-act" id="progression">
     <div class="section-bar"><h2>Progression</h2><span class="fine dim">the one thing to know right now</span></div>
     ${progressionCardHtml()}
-    <details class="detail-block">
-      <summary>Chart and full day-by-day history</summary>
-      <div class="panel panel-pad viz" style="margin-top:12px">
-        <div class="chart-controls">
-          <div>
-            <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
-            <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
+    <div class="reveal">
+      <button type="button" class="reveal-toggle" id="xp-history-toggle" aria-expanded="false" aria-controls="xp-history-body">
+        <span>Chart and full day-by-day history</span><span class="chevron">⌄</span>
+      </button>
+      <div class="reveal-body" id="xp-history-body">
+        <div class="panel panel-pad viz" style="margin-top:12px">
+          <div class="chart-controls">
+            <div>
+              <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
+              <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
+            </div>
+            <div class="chart-control-groups">
+              <div class="chart-button-group" aria-label="XP chart metric">
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
+              </div>
+              <div class="chart-button-group" aria-label="XP chart range">
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="false">30d</button>
+                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="true">All</button>
+              </div>
+            </div>
           </div>
-          <div class="chart-control-groups">
-            <div class="chart-button-group" aria-label="XP chart metric">
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
-            </div>
-            <div class="chart-button-group" aria-label="XP chart range">
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="false">30d</button>
-              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="true">All</button>
-            </div>
+          <div class="chart-shell">
+            <div id="xp-chart"></div>
+            <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
           </div>
         </div>
-        <div class="chart-shell">
-          <div id="xp-chart"></div>
-          <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
-        </div>
+        <div class="section-subhead"><h3>Every recorded day</h3><span class="fine dim">${cadenceTrend ? `~${cadenceTrend.recent.toFixed(1)} days per level recently` : 'full history'}</span></div>
+        ${xpTable}
       </div>
-      <div class="section-subhead"><h3>Every recorded day</h3><span class="fine dim">${cadenceTrend ? `~${cadenceTrend.recent.toFixed(1)} days per level recently` : 'full history'}</span></div>
-      ${xpTable}
-    </details>
+    </div>
   </section>
 
   <section class="section character-act" id="next">
@@ -718,14 +726,18 @@ stage.innerHTML = `
         ${secondaryHighscores.map(highscoreRowHtml).join('')}
       </div>
     </div>
-    <details class="detail-block">
-      <summary>Full highscore breakdown</summary>
-      <div class="skill-grid detail-grid">
-        ${highscoreRows.map(highscoreCardHtml).join('')}
+    <div class="reveal">
+      <button type="button" class="reveal-toggle" id="highscore-breakdown-toggle" aria-expanded="false" aria-controls="highscore-breakdown-body">
+        <span>Full highscore breakdown</span><span class="chevron">⌄</span>
+      </button>
+      <div class="reveal-body" id="highscore-breakdown-body">
+        <div class="skill-grid detail-grid">
+          ${highscoreRows.map(highscoreCardHtml).join('')}
+        </div>
+        <div class="section-subhead"><h3>Every tracked category</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
+        ${highscoresTable}
       </div>
-      <div class="section-subhead"><h3>Every tracked category</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
-      ${highscoresTable}
-    </details>
+    </div>
   </section>` : ''}
 
   <section class="section character-act" id="story">
@@ -735,42 +747,67 @@ stage.innerHTML = `
       <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none yet'}</small></span>
       <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
     </div>
-    <details class="detail-block compact">
-      <summary>Level-up and death details</summary>
-      <div class="event-grid">
-    ${levelUps.length ? `
-        <article class="event-panel">
-          <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'level-up history'}</span></div>
-      ${tableHtml([
-        { label: 'Date', cell: (row) => esc(row.date) },
-        { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
-        { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
-        { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-      ], levelUps.slice(0, 12), 'No level-ups recorded yet.')}
-        </article>` : ''}
-        <article class="event-panel">
-          <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
-          <div id="deaths-table">${deathsTableHtml()}</div>
-        </article>
+    <div class="reveal compact">
+      <button type="button" class="reveal-toggle" id="events-detail-toggle" aria-expanded="false" aria-controls="events-detail-body">
+        <span>Level-up and death details</span><span class="chevron">⌄</span>
+      </button>
+      <div class="reveal-body" id="events-detail-body">
+        <div class="event-grid">
+      ${levelUps.length ? `
+          <article class="event-panel">
+            <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'level-up history'}</span></div>
+        ${tableHtml([
+          { label: 'Date', cell: (row) => esc(row.date) },
+          { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
+          { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
+          { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
+        ], levelUps.slice(0, 12), 'No level-ups recorded yet.')}
+          </article>` : ''}
+          <article class="event-panel">
+            <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
+            <div id="deaths-table">${deathsTableHtml()}</div>
+          </article>
+        </div>
       </div>
-    </details>
+    </div>
   </section>
 
   <section class="section character-act" id="details">
     <div class="section-bar"><h2>Character details</h2><span class="fine dim">stable facts that rarely change</span></div>
-    <details class="detail-block compact">
-      <summary>Show identity, residence and account details</summary>
-      <div class="panel panel-pad profile-panel">
-        <div id="profile-summary">${characterDetailsHtml()}</div>
-        <details class="detail-block compact">
-          <summary>Full TibiaData profile fields</summary>
-          <div id="profile-table">${profileTableHtml()}</div>
-        </details>
+    <div class="reveal compact">
+      <button type="button" class="reveal-toggle" id="profile-detail-toggle" aria-expanded="false" aria-controls="profile-detail-body">
+        <span>Show identity, residence and account details</span><span class="chevron">⌄</span>
+      </button>
+      <div class="reveal-body" id="profile-detail-body">
+        <div class="panel panel-pad profile-panel">
+          <div id="profile-summary">${characterDetailsHtml()}</div>
+          <div class="reveal compact">
+            <button type="button" class="reveal-toggle" id="profile-fields-toggle" aria-expanded="false" aria-controls="profile-fields-body">
+              <span>Full TibiaData profile fields</span><span class="chevron">⌄</span>
+            </button>
+            <div class="reveal-body" id="profile-fields-body">${profileTableHtml()}</div>
+          </div>
+        </div>
       </div>
-    </details>
+    </div>
   </section>`;
 
 bindSectionNavSpy();
+
+/** Wires a reveal()-style toggle button + body pair. A `<details>`
+ * alternative — same show/hide behavior, but a plain button we fully
+ * control instead of a native disclosure widget. */
+function bindReveal(id) {
+  const toggle = $(`#${id}-toggle`);
+  const body = $(`#${id}-body`);
+  if (!toggle || !body) return;
+  toggle.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+}
+['pred-customize', 'xp-history', 'highscore-breakdown', 'events-detail', 'profile-detail', 'profile-fields']
+  .forEach(bindReveal);
 
 // ---- chart controls ----
 const xpState = { metric: 'daily', range: '30' };
