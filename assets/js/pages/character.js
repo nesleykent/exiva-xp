@@ -34,9 +34,17 @@ const historyNote = latest && profileLevel != null && trackedLevel != null && pr
   ? `Profile shows level ${nf(profileLevel)}; last recorded update shows level ${nf(trackedLevel)} on ${latest.date}`
   : 'Updated automatically from TibiaData highscores';
 
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const historyRows = history.map((row, i) => {
   const prev = history[i - 1] || null;
-  const gain = prev ? Math.max(0, row.experience - prev.experience) : null;
+  // A tracker gap (see AGENTS.md, backfill sources drop out for weeks at a
+  // time) leaves adjacent rows more than a day apart; treating that span's
+  // whole XP delta as this row's "gain" would fabricate a single-day spike
+  // out of weeks of real progress, so gain is null across a gap. levelDelta
+  // stays a raw delta regardless — the table showing it always shows both
+  // rows' dates too, so a multi-level jump reads honestly as one.
+  const consecutiveDay = prev && (new Date(row.date) - new Date(prev.date)) === ONE_DAY_MS;
+  const gain = consecutiveDay ? Math.max(0, row.experience - prev.experience) : null;
   return {
     ...row,
     gain,

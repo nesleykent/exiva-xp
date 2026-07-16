@@ -19,13 +19,20 @@ const characterName = profile?.name || config.name;
 const label = (r) => [r.ground, r.vocation || 'Party', r.levelText].filter(Boolean).join(' · ');
 const latest = history.at(-1) || null;
 const previous = history.at(-2) || null;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+// Tracker gaps (see AGENTS.md) leave adjacent rows more than a day apart;
+// attributing that whole span's XP delta to a single day would fabricate a
+// spike out of weeks of real progress, so gaps are skipped entirely here.
+const isConsecutiveDay = (a, b) => (new Date(b.date) - new Date(a.date)) === ONE_DAY_MS;
 const dailyXp = [];
 for (let i = 1; i < history.length; i++) {
+  if (!isConsecutiveDay(history[i - 1], history[i])) continue;
   dailyXp.push({ key: history[i].date.slice(5), n: Math.max(0, history[i].experience - history[i - 1].experience) });
 }
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
 for (let i = 1; i < history.length; i++) {
+  if (!isConsecutiveDay(history[i - 1], history[i])) continue;
   const gain = Math.max(0, history[i].experience - history[i - 1].experience);
   const day = new Date(`${history[i].date}T00:00:00Z`).getUTCDay();
   weekdayBuckets[day].gains.push(gain);
@@ -107,7 +114,8 @@ const byVocation = tally(hunts, (h) => h.vocation || (h.party ? 'Team' : 'Unknow
 
 const meanMinutes = average(hunts.map((h) => h.minutes).filter((m) => m > 0));
 const meanProfit = average(hunts.map((h) => hourly(h).profitRate).filter((p) => p != null));
-const lastGain = latest && previous ? Math.max(0, latest.experience - previous.experience) : null;
+const lastGain = latest && previous && isConsecutiveDay(previous, latest)
+  ? Math.max(0, latest.experience - previous.experience) : null;
 
 const board = (title, data, svg) => (data.length ? `
   <section class="section">
