@@ -64,7 +64,7 @@ data/
   character.json           generated daily — Night'Flyn profile, highscore ranks, death log
   character-history.json   generated daily — {server-save date: {rank, level, experience, highscores...}}; older rows may be marked as imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
-  imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, updatedAt}}} TibiaMarket prefill for Gentebra
+  imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, basis, observedAt, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
   config.mjs               reads config.ini — the tracked character for every script below
   check-hunt.mjs           Action: judge an issue payload
@@ -73,7 +73,7 @@ pipeline/
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
   track-character.mjs      15-minute Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
-  fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (skips items refreshed within 4h)
+  fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (30-day sparse-market fallback; skips items fetched within 4h)
   imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
   smoke.mjs                engine smoke tests, run locally or by publish.yml
 .github/actions/

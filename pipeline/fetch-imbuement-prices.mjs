@@ -15,6 +15,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { IMBUEMENTS, GOLD_TOKEN_ITEM } from '../assets/js/engine/imbuements.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
 import { CHARACTER } from './config.mjs';
@@ -35,6 +36,7 @@ const PRICES_PATH = new URL('../data/imbuement-prices.json', import.meta.url);
 // that's far more expensive than just spacing requests out up front.
 const RATE_LIMIT_DELAY_MS = 6000;
 const FRESH_WITHIN_MS = 4 * 60 * 60 * 1000; // skip a refetch under 4h old, per item
+const HISTORY_WINDOW_DAYS = 30;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const readJson = (path, fallback) => {
@@ -52,7 +54,7 @@ const headers = {
 };
 
 async function fetchHistory(itemId, attempt = 1) {
-  const url = `${API}?${new URLSearchParams({ server: WORLD, item_id: itemId, start_days_ago: 2, end_days_ago: -1 })}`;
+  const url = `${API}?${new URLSearchParams({ server: WORLD, item_id: itemId, start_days_ago: HISTORY_WINDOW_DAYS, end_days_ago: -1 })}`;
   const res = await fetch(url, { headers });
   if (!res.ok) {
     if ((res.status === 429 || res.status >= 500) && attempt <= 4) {
@@ -67,62 +69,82 @@ async function fetchHistory(itemId, attempt = 1) {
   return res.json();
 }
 
-/** The price a buyer would pay right now: cheapest active sell offer today, else today's average sell. */
-function currentBuyPrice(history) {
-  const latest = Array.isArray(history) ? history.at(-1) : null;
-  if (!latest) return null;
-  if (Number.isFinite(latest.day_lowest_sell) && latest.day_lowest_sell > 0) return latest.day_lowest_sell;
-  if (Number.isFinite(latest.day_average_sell) && latest.day_average_sell > 0) return Math.round(latest.day_average_sell);
+/** Newest usable buyer-side observation, with its exact market timestamp and basis. */
+export function currentBuyPrice(history) {
+  if (!Array.isArray(history)) return null;
+  for (let index = history.length - 1; index >= 0; index--) {
+    const row = history[index];
+    const observedAt = Number.isFinite(row?.time) ? new Date(row.time * 1000).toISOString() : null;
+    if (row?.is_full_data && Number.isFinite(row.sell_offer) && row.sell_offer > 0) {
+      return { price: row.sell_offer, observedAt, basis: 'active-sell-offer' };
+    }
+    if (Number.isFinite(row?.day_lowest_sell) && row.day_lowest_sell > 0) {
+      return { price: row.day_lowest_sell, observedAt, basis: 'daily-lowest-sell' };
+    }
+    if (Number.isFinite(row?.day_average_sell) && row.day_average_sell > 0) {
+      return { price: Math.round(row.day_average_sell), observedAt, basis: 'daily-average-sell' };
+    }
+  }
   return null;
 }
 
-const items = new Map([[GOLD_TOKEN_ITEM, 'Gold Token']]);
-for (const imb of IMBUEMENTS) {
-  for (const tierId of ['basic', 'intricate', 'powerful']) {
-    for (const it of imb.tiers[tierId].items) items.set(it.itemId, it.name);
-  }
-}
-
-const store = readJson(PRICES_PATH, {});
-store[WORLD] ||= {};
-const now = new Date();
-let fetched = 0;
-let skippedFresh = 0;
-let missingId = 0;
-let failed = 0;
-
-for (const [slug, name] of items) {
-  const marketId = IMBUEMENT_MARKET_IDS[slug];
-  if (!marketId) { missingId++; console.error(`${slug}: no TibiaMarket item_id pinned`); continue; }
-
-  const existing = store[WORLD][slug];
-  if (existing?.updatedAt && now - new Date(existing.updatedAt) < FRESH_WITHIN_MS) {
-    skippedFresh++;
-    continue;
-  }
-
-  try {
-    const history = await fetchHistory(marketId);
-    const price = currentBuyPrice(history);
-    if (price != null) {
-      store[WORLD][slug] = { price, source: 'tibiamarket', updatedAt: now.toISOString() };
-      console.log(`${name}: ${price} gp`);
-    } else {
-      console.log(`${name}: no recent trades on ${WORLD}`);
+async function main() {
+  const items = new Map([[GOLD_TOKEN_ITEM, 'Gold Token']]);
+  for (const imb of IMBUEMENTS) {
+    for (const tierId of ['basic', 'intricate', 'powerful']) {
+      for (const it of imb.tiers[tierId].items) items.set(it.itemId, it.name);
     }
-    fetched++;
-  } catch (err) {
-    failed++;
-    console.error(`${name}: ${err.message}`);
   }
-  await sleep(RATE_LIMIT_DELAY_MS);
+
+  const store = readJson(PRICES_PATH, {});
+  store[WORLD] ||= {};
+  const now = new Date();
+  let fetched = 0;
+  let skippedFresh = 0;
+  let missingId = 0;
+  let failed = 0;
+
+  for (const [slug, name] of items) {
+    const marketId = IMBUEMENT_MARKET_IDS[slug];
+    if (!marketId) { missingId++; console.error(`${slug}: no TibiaMarket item_id pinned`); continue; }
+
+    const existing = store[WORLD][slug];
+    if (existing?.updatedAt && now - new Date(existing.updatedAt) < FRESH_WITHIN_MS) {
+      skippedFresh++;
+      continue;
+    }
+
+    try {
+      const history = await fetchHistory(marketId);
+      const observation = currentBuyPrice(history);
+      if (observation) {
+        store[WORLD][slug] = {
+          price: observation.price,
+          source: 'tibiamarket',
+          basis: observation.basis,
+          observedAt: observation.observedAt,
+          updatedAt: now.toISOString(),
+        };
+        console.log(`${name}: ${observation.price} gp (${observation.basis})`);
+      } else {
+        console.log(`${name}: no sell observation in the last ${HISTORY_WINDOW_DAYS} days on ${WORLD}`);
+      }
+      fetched++;
+    } catch (err) {
+      failed++;
+      console.error(`${name}: ${err.message}`);
+    }
+    await sleep(RATE_LIMIT_DELAY_MS);
+  }
+
+  writeJson(PRICES_PATH, store);
+
+  if (process.env.GITHUB_OUTPUT) {
+    const { appendFileSync } = await import('node:fs');
+    appendFileSync(process.env.GITHUB_OUTPUT, `commit-message=data: imbuement prices for ${WORLD} (${new Date().toISOString().slice(0, 10)})\n`);
+  }
+
+  console.log(`Done: ${fetched} fetched, ${skippedFresh} skipped (fresh), ${missingId} missing item_id, ${failed} failed.`);
 }
 
-writeJson(PRICES_PATH, store);
-
-if (process.env.GITHUB_OUTPUT) {
-  const { appendFileSync } = await import('node:fs');
-  appendFileSync(process.env.GITHUB_OUTPUT, `commit-message=data: imbuement prices for ${WORLD} (${new Date().toISOString().slice(0, 10)})\n`);
-}
-
-console.log(`Done: ${fetched} fetched, ${skippedFresh} skipped (fresh), ${missingId} missing item_id, ${failed} failed.`);
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

@@ -18,6 +18,7 @@ import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
+import { currentBuyPrice } from './fetch-imbuement-prices.mjs';
 import { CHARACTER } from './config.mjs';
 
 const data = (f) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), 'utf8'));
@@ -279,5 +280,24 @@ for (const imb of IMBUEMENTS) {
 for (const itemId of priceableItems) {
   assert(Number.isFinite(IMBUEMENT_MARKET_IDS[itemId]), `${itemId} has no TibiaMarket item_id pinned in pipeline/imbuement-market-ids.mjs`);
 }
+
+const sparseMarketHistory = [
+  { time: 1700000000, day_average_sell: 110.4 },
+  { time: 1700086400, is_full_data: true, sell_offer: 125, day_lowest_sell: 120 },
+  { time: 1700172800, day_lowest_sell: 0, day_average_sell: 0 },
+];
+const sparseMarketPrice = currentBuyPrice(sparseMarketHistory);
+assert(sparseMarketPrice.price === 125 && sparseMarketPrice.basis === 'active-sell-offer',
+  'market price fallback must use the newest usable active sell offer when later rows have no sells');
+assert(sparseMarketPrice.observedAt === new Date(1700086400 * 1000).toISOString(),
+  'market price fallback must preserve the source observation timestamp');
+const recentTradePrice = currentBuyPrice([
+  { time: 1700000000, is_full_data: true, sell_offer: 125 },
+  { time: 1700086400, day_lowest_sell: 118, day_average_sell: 121 },
+]);
+assert(recentTradePrice.price === 118 && recentTradePrice.basis === 'daily-lowest-sell',
+  'a newer daily sell observation must win over an older active-offer snapshot');
+assert(currentBuyPrice(null) == null && currentBuyPrice([]) == null,
+  'missing market history must remain missing instead of inventing a price');
 
 console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

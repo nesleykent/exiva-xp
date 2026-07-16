@@ -56,9 +56,11 @@
    "updatedAt": "2026-07-16T22:12:48.802Z"
   },
   "compass": {
-   "price": 300,
+   "price": 350,
    "source": "tibiamarket",
-   "updatedAt": "2026-07-13T04:39:37.584Z"
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.905Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   },
   "fairy-wings": {
    "price": 548,
@@ -86,9 +88,11 @@
    "updatedAt": "2026-07-16T22:12:48.802Z"
   },
   "quill": {
-   "price": 1000,
+   "price": 996,
    "source": "tibiamarket",
-   "updatedAt": "2026-07-09T05:03:02.588Z"
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:22.424Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   },
   "flask-of-embalming-fluid": {
    "price": 4000,
@@ -276,19 +280,25 @@
    "updatedAt": "2026-07-16T22:12:48.802Z"
   },
   "waspoid-wing": {
-   "price": 289,
+   "price": 180,
    "source": "tibiamarket",
-   "updatedAt": "2026-07-13T04:39:37.584Z"
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:21.380Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   },
   "petrified-scream": {
-   "price": 989,
+   "price": 900,
    "source": "tibiamarket",
-   "updatedAt": "2026-07-13T04:39:37.584Z"
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.976Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   },
   "piece-of-scarab-shell": {
-   "price": 1260,
+   "price": 990,
    "source": "tibiamarket",
-   "updatedAt": "2026-07-13T04:39:37.584Z"
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.791Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   },
   "brimstone-shell": {
    "price": 200,
@@ -319,6 +329,48 @@
    "price": 248,
    "source": "tibiamarket",
    "updatedAt": "2026-07-16T22:12:48.802Z"
+  },
+  "demon-horn": {
+   "price": 988,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:19.961Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
+  },
+  "swamp-grass": {
+   "price": 788,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.834Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
+  },
+  "poisonous-slime": {
+   "price": 39,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.790Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
+  },
+  "seacrest-hair": {
+   "price": 747,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:21.835Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
+  },
+  "rorc-feather": {
+   "price": 744,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:21.627Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
+  },
+  "demonic-skeletal-hand": {
+   "price": 120,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-07-15T06:45:20.801Z",
+   "updatedAt": "2026-07-16T23:35:14.156Z"
   }
  }
 }
