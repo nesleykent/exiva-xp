@@ -149,6 +149,8 @@ Analyser parser (all client formats) · hunt locator (word-boundary matching, au
 
 Cycle 5 hygiene/consistency debt: fixed the stale `GUIDELINES.md` link in README.md (→ `AGENTS.md`); fixed the stale "ten thin pages" count in README.md (→ eleven); removed banned publish/submit vocabulary from `sources.js`'s backend blurbs and submit.js-rendered messages (github-issues/github-discussions/static backend paths, currently dormant since `BACKEND='browser'`); reconciled the Node version claim so all five workflows + README agree on Node 22; extended `pipeline/smoke.mjs` to assert `isAnalyser()`, `armorSpots()`, `groundDossier()`, `nameCreatures()`/`population()`, and `progressWithinLevel`/`nextMilestoneLevel`/`baseValue`/`nextBaseBreakpointLevel`.
 
+GitHub Actions runtime maintenance (2026-07-16): every first-party action pin now uses its current Node 24-compatible major (`checkout@v7`, `setup-node@v7`, `github-script@v9`, `configure-pages@v6`, `upload-pages-artifact@v5`, `deploy-pages@v5`). This removes the runner's forced Node 24 compatibility shim while preserving the project's explicit Node 22 runtime for pipeline scripts.
+
 Cycle 5 hunt planner search depth: `grounds.js` now does multi-term AND search across ground, area, creature names, creature family, difficulty/rarity, and access quest/note text; adds Area, Element, and Creature type filters from existing access/codex/strategy data.
 
 Online-history rule (superseded 2026-07-16 — see decision log): sampled time online used to come only from `character-online.json`, grown by a 15-minute TibiaData world-list workflow. That sampler was removed; do not reintroduce it without owner approval, and do not use GuildStats as a live source if it ever is.
