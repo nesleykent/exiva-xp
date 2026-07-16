@@ -410,7 +410,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   padding: 0;
   background: transparent;
   width: min(760px, 92vw);
-  max-height: 88vh;
+  max-height: 96vh;
   overflow: auto;
   color: rgb(var(--ink));
   animation: modal-settle var(--t-hover) var(--e-confident);
@@ -478,12 +478,14 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: 6px;
   flex-shrink: 0;
 }
+.imb-method-svg { color: rgb(var(--ink-2)); }
 .imb-tier-card {
   display: flex;
   flex-direction: column;
   border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
 }
 .imb-tier-head {
   display: flex;
@@ -517,10 +519,21 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--s3);
+  min-height: 44px;
+  padding: 0 var(--s3);
   background: rgb(var(--surface-2));
   border-top: 1px solid rgb(var(--line));
 }
+.imb-total-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0; border: 0; background: transparent; color: rgb(var(--ink));
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.imb-total-label { font-weight: 700; }
+.imb-total-info svg { width: 15px; height: 15px; color: rgb(var(--ink-2)); }
 .imb-tier-total b {
   display: inline-flex;
   align-items: center;
@@ -534,18 +547,39 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: center;
   gap: var(--s2);
 }
-.imb-tier-alt {
-  margin: 0;
-  padding: 6px var(--s3);
-  display: block;
-  line-height: 16px;
+.imb-tier-pop {
+  margin: var(--s2);
+  padding: var(--s3);
+  background: rgb(var(--surface-raised));
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-float);
 }
-.imb-tier-alt svg { width: 12px; height: 12px; margin: 0 2px; vertical-align: -2px; }
+.imb-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s3);
+}
+.imb-compare-row {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.imb-compare-row span,
+.imb-compare-row strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.imb-compare-row strong { font-variant-numeric: tabular-nums; }
+.imb-compare-row strong svg { width: 12px; height: 12px; }
+.imb-compare-row em { color: rgb(var(--red)); font-style: normal; font-weight: 700; }
+.imb-tier-pop p { margin: var(--s3) 0 0; padding: 7px var(--s2); text-align: center; background: rgb(var(--surface-2)); border-radius: var(--r-sm); }
 /* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
 .imb-copy-btn {
   display: grid;
   place-items: center;
-  width: 22px; height: 22px;
+  width: 44px; height: 44px;
   padding: 0; border: 0; background: transparent;
   color: rgb(var(--ink-2)); cursor: pointer; border-radius: var(--r-circle);
   transition: background var(--t-hover) var(--e-standard);

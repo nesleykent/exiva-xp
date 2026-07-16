@@ -212,16 +212,30 @@ assert(powerful.savings.find((s) => s.against === 'Market only').amount === 6181
 
 const basic = calculateTier(vampirism, 'basic', gentebraPrices);
 const basicTotals = Object.fromEntries(basic.options.map((o) => [o.label, o.total]));
-assert(basicTotals['Market only'] === 27300, `Basic market-only total wrong: ${basicTotals['Market only']}`);
-assert(basicTotals['2 Gold Tokens'] === 99558, `Basic token total wrong: ${basicTotals['2 Gold Tokens']}`);
-assert(basic.cheapest.fee === 7500, `expected Basic imbuing fee in cheapest option, got ${basic.cheapest?.fee}`);
+assert(basicTotals['Market only'] === 34800, `Basic market-only total wrong: ${basicTotals['Market only']}`);
+assert(basicTotals['2 Gold Tokens'] === 107058, `Basic token total wrong: ${basicTotals['2 Gold Tokens']}`);
+assert(basic.cheapest.fee === 15000, `expected Basic imbuing fee in cheapest option, got ${basic.cheapest?.fee}`);
 
 const intricate = calculateTier(vampirism, 'intricate', gentebraPrices);
 const intricateTotals = Object.fromEntries(intricate.options.map((o) => [o.label, o.total]));
-assert(intricateTotals['Market only'] === 275130, `Intricate market-only total wrong: ${intricateTotals['Market only']}`);
-assert(intricateTotals['4 Gold Tokens'] === 244116, `Intricate token total wrong: ${intricateTotals['4 Gold Tokens']}`);
-assert(intricateTotals['Hybrid from Basic'] === 347388, `Intricate hybrid total wrong: ${intricateTotals['Hybrid from Basic']}`);
-assert(intricate.cheapest.fee === 60000, `expected Intricate imbuing fee in cheapest option, got ${intricate.cheapest?.fee}`);
+assert(intricateTotals['Market only'] === 270130, `Intricate market-only total wrong: ${intricateTotals['Market only']}`);
+assert(intricateTotals['4 Gold Tokens'] === 239116, `Intricate token total wrong: ${intricateTotals['4 Gold Tokens']}`);
+assert(intricateTotals['Hybrid from Basic'] === 342388, `Intricate hybrid total wrong: ${intricateTotals['Hybrid from Basic']}`);
+assert(intricate.cheapest.fee === 55000, `expected Intricate imbuing fee in cheapest option, got ${intricate.cheapest?.fee}`);
+
+const voidImbuement = imbuementById('void');
+const screenshotPrices = {
+  'gold-token': 46274,
+  'rope-belt': 4296,
+  'silencer-claws': 3362,
+  'grimeleech-wings': 1734,
+};
+const screenshotCalc = calculateImbuement(voidImbuement, screenshotPrices);
+assert(screenshotCalc.basic.cheapest.total === 107548, `screenshot Basic Void total wrong: ${screenshotCalc.basic.cheapest.total}`);
+assert(screenshotCalc.intricate.cheapest.label === 'Hybrid from Basic', `screenshot Intricate Void should use Basic package hybrid, got ${screenshotCalc.intricate.cheapest.label}`);
+assert(screenshotCalc.intricate.cheapest.total === 231598, `screenshot Intricate Void total wrong: ${screenshotCalc.intricate.cheapest.total}`);
+assert(screenshotCalc.powerful.cheapest.label === 'Hybrid from Basic', `screenshot Powerful Void should use Basic package hybrid, got ${screenshotCalc.powerful.cheapest.label}`);
+assert(screenshotCalc.powerful.cheapest.total === 435268, `screenshot Powerful Void total wrong: ${screenshotCalc.powerful.cheapest.total}`);
 
 const basicOptions = getAcquisitionOptions(vampirism, 'basic', gentebraPrices);
 assert(basicOptions.length === 2, `Basic Vampirism should have exactly market + token options, got ${basicOptions.length}`);

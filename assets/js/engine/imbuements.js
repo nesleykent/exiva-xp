@@ -20,8 +20,8 @@ export const GOLD_TOKEN_ITEM = 'gold-token';
 const TOKEN_COST = { basic: 2, intricate: 4, powerful: 6 };
 const TOKEN_HYBRID_SOURCE = { intricate: 'basic', powerful: ['intricate', 'basic'] };
 const TIER_ORDER = ['basic', 'intricate', 'powerful'];
-// Summer Update 2025 removed success-rate boosting; these are the current fixed shrine costs.
-export const IMBUING_FEES = { basic: 7500, intricate: 60000, powerful: 250000 };
+// Reference calculator parity: base price + 100% success fee.
+export const IMBUING_FEES = { basic: 15000, intricate: 55000, powerful: 250000 };
 
 /** Builds a tier's cumulative item list from a per-step item table. */
 function tier(name, bonus, steps, tokenCost) {
@@ -276,6 +276,7 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
 
   const market = itemLines(t.items, prices);
   options.push({
+    tierId,
     method: 'market',
     label: 'Market only',
     items: market.lines,
@@ -289,6 +290,7 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
   if (imbuement.supportsGoldTokenExchange) {
     const tok = tokenLine(t.tokenCost, prices);
     options.push({
+      tierId,
       method: 'tokens',
       label: `${t.tokenCost} Gold Tokens`,
       items: [],
@@ -315,6 +317,7 @@ export function getAcquisitionOptions(imbuement, tierId, prices) {
       const tok = tokenLine(coveredTokenCost, prices);
       const resourceTotal = tok.missing || remainingPricing.total == null ? null : tok.subtotal + remainingPricing.total;
       options.push({
+        tierId,
         method: 'hybrid',
         label: `Hybrid from ${imbuement.tiers[coveredTierId].name}`,
         hybridFrom: coveredTierId,

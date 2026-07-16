@@ -106,7 +106,7 @@ stage.innerHTML = `
     <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
       <div class="tool-head">
         <h2>Imbuement price calculator</h2>
-        <span class="fine dim">Current Tibia fees and Gold Token packages</span>
+        <span class="fine dim">Gold Token packages and resource prices</span>
       </div>
       <div class="filter-bar" id="imb-filter-bar">
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
@@ -301,21 +301,59 @@ const TIER_TEXT = { basic: 'imb-tier-text-basic', intricate: 'imb-tier-text-intr
 
 const INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.25" fill="currentColor" stroke-width="1.5"/></svg>';
 const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/></svg>';
+const MARKET_ICON = '<svg class="imb-icon imb-icon-sm imb-method-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16l-2 10H6L4 9Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/><path d="M9 13h6"/></svg>';
+
+function coveredTokenItems(imb, cheapest) {
+  if (!cheapest || cheapest.method === 'market') return new Set();
+  const coveredTierId = cheapest.method === 'tokens' ? cheapest.tierId : cheapest.hybridFrom;
+  return new Set((imb.tiers[coveredTierId]?.items || []).map((it) => it.itemId));
+}
+
+function acquisitionIcon(imb, cheapest, itemId) {
+  return coveredTokenItems(imb, cheapest).has(itemId)
+    ? itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm')
+    : MARKET_ICON;
+}
+
+function compareRowHtml(label, icon, option, cheapest) {
+  if (!option || option.total == null) return '';
+  const diff = option.total - cheapest.total;
+  return `
+    <div class="imb-compare-row">
+      <span>${icon}<b>${esc(label)}</b></span>
+      <strong>${COIN_ICON} ${nf(option.total)}</strong>
+      ${diff > 0 ? `<em>(+${nf(diff)}gp)</em>` : '<em>Best</em>'}
+    </div>`;
+}
+
+function tierCompareHtml(calc, tierId) {
+  const cheapest = calc.cheapest;
+  if (!cheapest) return '';
+  const tokens = calc.options.find((o) => o.method === 'tokens');
+  const market = calc.options.find((o) => o.method === 'market');
+  if (!tokens || tokens.total == null || !market || market.total == null) return '';
+  return `
+    <div class="imb-tier-pop" id="imb-tier-pop-${tierId}" hidden>
+      <div class="imb-compare-grid">
+        ${compareRowHtml('Gold Tokens only', itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm'), tokens, cheapest)}
+        ${compareRowHtml('Market only', MARKET_ICON, market, cheapest)}
+      </div>
+      <p class="fine dim">Best: ${esc(cheapest.label)} · includes base price + 100% success fee</p>
+    </div>`;
+}
 
 function tierCardHtml(imb, tierId, calc) {
   const t = calc.tier;
   const cheapest = calc.cheapest;
-  const market = calc.options.find((o) => o.method === 'market');
-  const tokenBacked = cheapest && cheapest.method !== 'market';
-  const itemRow = (icon, label, copyText) => `
+  const comparison = tierCompareHtml(calc, tierId);
+  const rows = t.items.map((it) => `
     <span class="imb-item-row">
-      <span class="imb-item-row-label">${icon}${label}</span>
+      <span class="imb-item-row-label">${itemIcon(it.itemId, 'imb-icon-sm')}${nf(it.quantity)}x ${esc(it.name)}</span>
       <span class="imb-row-actions">
-        ${tokenBacked ? itemIcon(GOLD_TOKEN_ITEM, 'imb-icon-sm') : ''}
-        <button type="button" class="imb-copy-btn" data-copy-text="${esc(copyText)}" title="Copy" aria-label="Copy ${esc(copyText)}">${COPY_ICON}</button>
+        ${acquisitionIcon(imb, cheapest, it.itemId)}
+        <button type="button" class="imb-copy-btn" data-copy-text="${esc(`${it.quantity}x ${it.name}`)}" title="Copy" aria-label="Copy ${esc(`${it.quantity}x ${it.name}`)}">${COPY_ICON}</button>
       </span>
-    </span>`;
-  const rows = t.items.map((it) => itemRow(itemIcon(it.itemId, 'imb-icon-sm'), `${nf(it.quantity)}x ${esc(it.name)}`, `${it.quantity}x ${it.name}`));
+    </span>`);
   return `
   <div class="imb-tier-card">
     <div class="imb-tier-head">
@@ -329,14 +367,21 @@ function tierCardHtml(imb, tierId, calc) {
       ${rows.join('')}
     </div>
     <div class="imb-tier-total">
-      <span class="imb-item-row-label">Total ${INFO_ICON}</span>
+      ${comparison
+    ? `<button type="button" class="imb-total-info" data-tier-info="${tierId}" aria-controls="imb-tier-pop-${tierId}" aria-expanded="false">Total ${INFO_ICON}</button>`
+    : '<span class="imb-total-label">Total</span>'}
       <span class="imb-tier-total-right">
         ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)}</b>`}
         ${cheapest ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
-    ${cheapest ? `<p class="fine dim imb-tier-alt">${esc(cheapest.label)} · fee ${COIN_ICON} ${nf(cheapest.fee)}${market && cheapest !== market && market.total != null ? ` · market ${COIN_ICON} ${nf(market.total)}` : ''}</p>` : ''}
+    ${comparison}
   </div>`;
+}
+
+function closeTierComparisons() {
+  $('#imb-tier-cards').querySelectorAll('.imb-tier-pop').forEach((el) => { el.hidden = true; });
+  $('#imb-tier-cards').querySelectorAll('[data-tier-info]').forEach((el) => el.setAttribute('aria-expanded', 'false'));
 }
 
 function renderModalTiers(imb, world) {
@@ -356,6 +401,15 @@ function renderModalTiers(imb, world) {
     btn.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(btn.dataset.copyText); say('Copied'); }
       catch { say('Could not copy — clipboard unavailable'); }
+    });
+  });
+  $('#imb-tier-cards').querySelectorAll('[data-tier-info]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pop = btn.closest('.imb-tier-card').querySelector('.imb-tier-pop');
+      const willOpen = pop.hidden;
+      closeTierComparisons();
+      pop.hidden = !willOpen;
+      btn.setAttribute('aria-expanded', String(willOpen));
     });
   });
 }
@@ -400,6 +454,18 @@ function openImbuementModal(id) {
       renderImbuementGrid();
     });
   });
+  modal.onclick = (e) => {
+    if (e.target.closest('[data-tier-info]') || e.target.closest('.imb-tier-pop')) return;
+    closeTierComparisons();
+  };
+  modal.onkeydown = (e) => {
+    if (e.key !== 'Escape') return;
+    const openButton = modal.querySelector('[data-tier-info][aria-expanded="true"]');
+    if (!openButton) return;
+    e.preventDefault();
+    closeTierComparisons();
+    openButton.focus();
+  };
   $('#imb-modal-close').addEventListener('click', () => modal.close());
   modal.showModal();
 }
