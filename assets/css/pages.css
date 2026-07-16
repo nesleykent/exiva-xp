@@ -222,6 +222,7 @@ table.grid tr:last-child td { border-bottom: 0; }
 table.grid tbody tr:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 table.grid .num { text-align: right; }
 table.grid a { color: rgb(var(--blue)); font-weight: 600; }
+.admin-transfer-actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .ok { color: rgb(var(--green)); font-weight: 600; }
 .bad { color: rgb(var(--red)); font-weight: 600; }
 
@@ -911,6 +912,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .hs-row-value b { font-size: 15px; }
 
 @media (max-width: 700px) {
+  .admin-transfer-actions .btn, .admin-delete, #k-dupes .btn { min-height: 44px; }
   #imb-tier-cards { grid-template-columns: 1fr; }
   .tool-grid { grid-template-columns: 1fr; }
   .tool-fields .lbl,

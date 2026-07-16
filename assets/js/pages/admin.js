@@ -4,7 +4,7 @@ import { boot } from './_boot.js';
 import { esc, fingerprint } from '../lib/text.js';
 import { kk, nf, day } from '../lib/fmt.js';
 import { $, say, dataTable, note } from '../shell.js';
-import { judge } from '../engine/rules.js';
+import { assessImport, judge } from '../engine/rules.js';
 import { logbook, writeLogbook } from '../data/sources.js';
 
 const { stage } = await boot('admin.html', { ledger: false });
@@ -28,13 +28,14 @@ stage.innerHTML = `
   </section>
   <section class="section">
     <div class="section-bar"><h2>Move data</h2></div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap">
-      <button class="btn btn-secondary" id="k-json">Export JSON</button>
-      <button class="btn btn-secondary" id="k-csv">Export CSV</button>
-      <button class="btn btn-secondary" id="k-xls">Export Excel</button>
-      <label class="btn btn-tertiary" style="cursor:pointer">Import JSON<input type="file" id="k-import" accept=".json" hidden></label>
+    <div class="admin-transfer-actions">
+      <button type="button" class="btn btn-secondary" id="k-json">Export JSON</button>
+      <button type="button" class="btn btn-secondary" id="k-csv">Export CSV</button>
+      <button type="button" class="btn btn-secondary" id="k-xls">Export Excel</button>
+      <button type="button" class="btn btn-tertiary" id="k-import-btn">Import JSON</button>
+      <input type="file" id="k-import" accept=".json,application/json" hidden>
     </div>
-    <div id="k-io"></div>
+    <div id="k-io" aria-live="polite"></div>
   </section>`;
 
 function refresh() {
@@ -54,7 +55,7 @@ function refresh() {
         if (v.flags.length) return `<span class="badge badge-warning" title="${esc(v.flags.join(' '))}">Flagged</span>`;
         return '<span class="badge badge-success">Clean</span>';
       } },
-      { id: 'x', label: '', cell: (h) => `<button class="btn btn-destructive" style="min-height:26px;padding:2px 10px;font-size:12px" data-drop="${esc(h.id)}">Delete</button>` },
+      { id: 'x', label: '', cell: (h) => `<button type="button" class="btn btn-destructive btn-sm admin-delete" data-drop="${esc(h.id)}">Delete</button>` },
     ],
     rows: book,
   });
@@ -81,7 +82,7 @@ function refresh() {
     host.innerHTML = dupes.map((p, i) => `
       <div class="panel panel-pad" style="display:flex; align-items:center; gap:12px; margin-bottom:8px">
         <span><b>${esc(p[0].ground || 'Unknown ground')}</b> — ${p.length} identical logs (${p.map((h) => day(h.loggedAt)).join(', ')})</span>
-        <button class="btn btn-secondary" style="margin-left:auto" data-sweep="${i}">Sweep</button>
+        <button type="button" class="btn btn-secondary" style="margin-left:auto" data-sweep="${i}">Sweep</button>
       </div>`).join('');
     host.onclick = (e) => {
       const i = e.target.dataset?.sweep;
@@ -122,6 +123,8 @@ $('#k-xls').addEventListener('click', () => {
     `<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Hunts"><Table>${rows}</Table></Worksheet></Workbook>`);
 });
 
+$('#k-import-btn').addEventListener('click', () => $('#k-import').click());
+
 $('#k-import').addEventListener('change', async (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -129,13 +132,23 @@ $('#k-import').addEventListener('change', async (e) => {
     const incoming = JSON.parse(await file.text());
     if (!Array.isArray(incoming)) throw new Error('expected a JSON array of hunts');
     const book = logbook();
-    const known = new Set(book.map((h) => h.id));
-    const fresh = incoming.filter((h) => h?.id && !known.has(h.id));
-    writeLogbook([...book, ...fresh]);
-    $('#k-io').innerHTML = note('green', `Imported ${fresh.length} new hunts (${incoming.length - fresh.length} already present).`);
+    const report = assessImport(incoming, book);
+    if (report.accepted.length) writeLogbook([...book, ...report.accepted]);
+    const summary = [
+      `Imported ${report.accepted.length} new hunt${report.accepted.length === 1 ? '' : 's'}.`,
+      `${report.duplicates.length} duplicate${report.duplicates.length === 1 ? '' : 's'} skipped.`,
+      `${report.rejected.length} invalid row${report.rejected.length === 1 ? '' : 's'} rejected.`,
+    ].join(' ');
+    const reasons = report.rejected.slice(0, 10)
+      .map((row) => `Row ${(row.index ?? 0) + 1}: ${row.faults.join(' ')}`)
+      .join(' · ');
+    const truncated = report.rejected.length > 10 ? ' Showing the first 10 rejection reasons.' : '';
+    $('#k-io').innerHTML = note(report.rejected.length ? 'amber' : 'green', `${summary}${reasons ? ` ${reasons}` : ''}${truncated}`);
     refresh();
   } catch (err) {
     $('#k-io').innerHTML = note('red', `Import failed: ${err.message}`);
+  } finally {
+    e.target.value = '';
   }
 });
 

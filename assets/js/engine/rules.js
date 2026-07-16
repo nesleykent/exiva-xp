@@ -91,3 +91,52 @@ export function judge(hunt, book = []) {
 
   return { ok: faults.length === 0, faults, flags };
 }
+
+/**
+ * Applies the normal submission contract to a JSON import before it can enter
+ * the local logbook. Existing IDs and repeated analyser text are reported as
+ * duplicates; structurally or mechanically invalid rows are rejected.
+ */
+export function assessImport(incoming, book = []) {
+  const accepted = [];
+  const duplicates = [];
+  const rejected = [];
+  if (!Array.isArray(incoming)) {
+    return { accepted, duplicates, rejected: [{ index: null, faults: ['Import must be a JSON array of hunts.'] }] };
+  }
+
+  const existing = Array.isArray(book) ? book : [];
+  const knownIds = new Set(existing.map((hunt) => String(hunt?.id || '').trim()).filter(Boolean));
+  const checked = [...existing];
+  incoming.forEach((hunt, index) => {
+    if (!hunt || typeof hunt !== 'object' || Array.isArray(hunt)) {
+      rejected.push({ index, faults: ['Hunt is not an object.'] });
+      return;
+    }
+    if (!hunt.id || !String(hunt.id).trim()) {
+      rejected.push({ index, faults: ['Hunt has no stable ID.'] });
+      return;
+    }
+    const id = String(hunt.id).trim();
+    if (knownIds.has(id)) {
+      duplicates.push({ index, id: hunt.id, reason: 'ID already present.' });
+      return;
+    }
+
+    const verdict = judge(hunt, checked);
+    const analyserDuplicate = verdict.faults.length === 1 && verdict.faults[0] === 'This exact analyser has already been submitted.';
+    if (analyserDuplicate) {
+      duplicates.push({ index, id: hunt.id, reason: verdict.faults[0] });
+      return;
+    }
+    if (!verdict.ok) {
+      rejected.push({ index, id: hunt.id, faults: verdict.faults });
+      return;
+    }
+
+    accepted.push(hunt);
+    checked.push(hunt);
+    knownIds.add(id);
+  });
+  return { accepted, duplicates, rejected };
+}

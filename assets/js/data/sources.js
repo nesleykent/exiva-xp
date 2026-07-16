@@ -171,11 +171,15 @@ export async function loadCharacterHistory(prefix = '') {
 const BOOK_KEY = 'exiva:logbook';
 
 export function logbook() {
-  try { return JSON.parse(localStorage.getItem(BOOK_KEY) || '[]'); }
+  try {
+    const parsed = JSON.parse(localStorage.getItem(BOOK_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  }
   catch { return []; }
 }
 
 export function writeLogbook(hunts) {
+  if (!Array.isArray(hunts)) throw new TypeError('Logbook must be an array of hunts.');
   localStorage.setItem(BOOK_KEY, JSON.stringify(hunts));
 }
 

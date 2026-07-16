@@ -7,7 +7,7 @@
 
 import { readFileSync } from 'node:fs';
 import { isAnalyser, readAnalyser } from '../assets/js/engine/analyser.js';
-import { judge } from '../assets/js/engine/rules.js';
+import { assessImport, judge } from '../assets/js/engine/rules.js';
 import { armorSpots, Codex, ELEMENT_CHARM } from '../assets/js/engine/codex.js';
 import { locateHunt, nameCreatures, population } from '../assets/js/engine/locator.js';
 import { readBattle } from '../assets/js/engine/strategy.js';
@@ -79,6 +79,20 @@ const hunt = {
 const verdict = judge(hunt, []);
 assert(verdict.ok, `rules rejected a clean hunt: ${verdict.faults.join('; ')}`);
 assert(!judge({ ...hunt, id: 't2' }, [hunt]).ok, 'duplicate slipped through');
+const importReport = assessImport([
+  { ...hunt, id: 'imported', raw: `${hunt.raw}\nImported backup marker` },
+  { ...hunt, id: 'imported', raw: `${hunt.raw}\nSecond row with repeated ID` },
+  { ...hunt, id: 'duplicate-analyser' },
+  { id: 'broken' },
+  null,
+], [hunt]);
+assert(importReport.accepted.length === 1, `import should accept one valid new hunt, got ${importReport.accepted.length}`);
+assert(importReport.duplicates.length === 2, `import should skip repeated ID + analyser duplicates, got ${importReport.duplicates.length}`);
+assert(importReport.rejected.length === 2, `import should reject malformed rows, got ${importReport.rejected.length}`);
+assert(importReport.rejected.some((row) => row.faults.includes('No hunting ground.')),
+  'import rejection must preserve normal hunt-rule faults');
+assert(assessImport({}, []).rejected[0].faults[0] === 'Import must be a JSON array of hunts.',
+  'non-array imports must fail closed');
 
 const table = buildLedger(grounds.entries, [hunt]);
 assert(table.some((r) => r.basis === 'logged'), 'ledger missing logged row');
