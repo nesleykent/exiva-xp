@@ -363,26 +363,14 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
 }
 @keyframes toast-rise { from { opacity: 0; transform: translate(-50%, 10px); } }
 
-/* .section-nav's mask-image (the actual cause of a solid black block over
-   it in iOS Safari print/PDF output — see pages.css) is gone entirely now,
-   not just disabled for print. backdrop-filter is a second, separate
-   WebKit print-compositing risk on .rail-foot's always-on mobile cluster;
-   print doesn't need a blur effect regardless, so drop it there too. */
-@media print {
-  .section-nav { overflow: visible; flex-wrap: wrap; }
-  .rail-foot { backdrop-filter: none; -webkit-backdrop-filter: none; }
-}
-
-/* Native <input>/<select> controls are OS-drawn widgets, not page paint —
-   Safari's print/PDF export can't reliably show their current value (an
-   iOS export of tools.html showed the World/Tier filter fields blank) and
-   has been seen leaving stray popup-shaped artifacts elsewhere on the page.
-   .print-value is a plain-text mirror of a control's current value, kept in
-   sync in JS; screen hides it and shows the real control, print does the
-   opposite, so the printed page states the value in plain text instead of
-   depending on a native widget printing correctly. */
-.print-value { display: none; }
-@media print {
-  .print-value { display: inline; font-weight: 600; }
-  #imb-filter-bar input, #imb-filter-bar select { display: none; }
-}
+/* @media print rules do not reliably fire in whatever pipeline iOS Safari's
+   Share ▸ Print export uses — confirmed directly: a `.section-nav {
+   overflow: visible }` print-only rule (meant to un-clip the 4th tab) was
+   deployed and live, and a fresh export still showed it clipped exactly as
+   before. Don't gate a fix behind @media print on this project; it either
+   does nothing, or you can't tell whether it did anything. .section-nav's
+   mask-image is gone unconditionally (see pages.css) and the World/Tier
+   filter's current value is shown as a permanent, always-rendered caption
+   below the filter bar (tools.js's #imb-filter-summary) rather than a
+   print-only swap — both fixes work regardless of whether print styles
+   apply at all. */

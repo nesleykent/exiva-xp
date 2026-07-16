@@ -100,13 +100,12 @@ stage.innerHTML = `
       <div class="filter-bar" id="imb-filter-bar">
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
           <input id="imb-world" type="text" value="${esc(profile?.world || config.world)}" placeholder="World">
-          <span class="print-value" id="imb-world-print">${esc(profile?.world || config.world)}</span>
         </label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>
           <select id="imb-tier"><option value="basic">Basic</option><option value="intricate">Intricate</option><option value="powerful" selected>Powerful</option></select>
-          <span class="print-value" id="imb-tier-print">Powerful</span>
         </label>
       </div>
+      <p class="fine dim" id="imb-filter-summary">World: ${esc(profile?.world || config.world)} · Tier: Powerful</p>
       <div class="tool-result-grid" id="imb-grid"></div>
     </section>
   </div>
@@ -398,13 +397,17 @@ function openImbuementModal(id) {
   modal.showModal();
 }
 
+function updateImbFilterSummary() {
+  const tierLabel = $('#imb-tier').selectedOptions[0]?.textContent || '';
+  $('#imb-filter-summary').textContent = `World: ${$('#imb-world').value} · Tier: ${tierLabel}`;
+}
 $('#imb-world').addEventListener('input', () => {
-  $('#imb-world-print').textContent = $('#imb-world').value;
+  updateImbFilterSummary();
   renderImbuementGrid();
 });
 $('#imb-tier').addEventListener('change', () => {
   imbState.tier = $('#imb-tier').value;
-  $('#imb-tier-print').textContent = $('#imb-tier').selectedOptions[0]?.textContent || '';
+  updateImbFilterSummary();
   renderImbuementGrid();
 });
 
