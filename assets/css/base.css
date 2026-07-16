@@ -363,13 +363,12 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
 }
 @keyframes toast-rise { from { opacity: 0; transform: translate(-50%, 10px); } }
 
-/* Safari's print/PDF renderer (Share ▸ Print, common on iOS) has a known
-   bug where a masked or backdrop-filtered element paints as a solid black
-   block instead of compositing — mobile Safari print output showed exactly
-   that over .section-nav's scroll-edge fade. Print doesn't scroll, so both
-   effects are meaningless there anyway: drop them and let the nav's
-   overflow show in full instead of clipping it. */
+/* .section-nav's mask-image (the actual cause of a solid black block over
+   it in iOS Safari print/PDF output — see pages.css) is gone entirely now,
+   not just disabled for print. backdrop-filter is a second, separate
+   WebKit print-compositing risk on .rail-foot's always-on mobile cluster;
+   print doesn't need a blur effect regardless, so drop it there too. */
 @media print {
-  .section-nav { mask-image: none; -webkit-mask-image: none; overflow: visible; flex-wrap: wrap; }
+  .section-nav { overflow: visible; flex-wrap: wrap; }
   .rail-foot { backdrop-filter: none; -webkit-backdrop-filter: none; }
 }

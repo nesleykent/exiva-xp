@@ -639,15 +639,26 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   margin-top: var(--s2);
 }
 .hero-actions { display: flex; gap: var(--s3); flex-wrap: wrap; }
+/* The edge fade used to be a mask-image on .section-nav itself — WebKit has
+   a known bug where mask-image on a horizontally-scrolling element renders
+   as a solid black block instead of compositing (reported live on iOS
+   Safari, unconfirmed whether @media print was even in play). A wrapper
+   with two plain gradient overlays gets the same fade with no masking or
+   compositing trickery involved, so there's nothing left for that bug class
+   to latch onto. */
+.section-nav-wrap { position: relative; }
+.section-nav-wrap::before, .section-nav-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: var(--s6);
+  pointer-events: none; z-index: 1;
+}
+.section-nav-wrap::before { left: 0; background: linear-gradient(to right, rgb(var(--surface)), transparent); }
+.section-nav-wrap::after { right: 0; background: linear-gradient(to left, rgb(var(--surface)), transparent); }
 .section-nav {
   display: flex;
   gap: var(--s2);
   overflow-x: auto;
   padding: var(--s3) 0;
   scrollbar-width: none;
-  /* edge fade hints there are more tabs to scroll to, on either side */
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--s3), black calc(100% - var(--s6)), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, black var(--s3), black calc(100% - var(--s6)), transparent 100%);
 }
 .section-nav::-webkit-scrollbar { display: none; }
 .section-nav a {

@@ -631,12 +631,14 @@ stage.innerHTML = `
     </div>
   </header>
 
-  <nav class="section-nav" aria-label="Character sections">
-    <a href="#progression">Progression</a>
-    <a href="#next">Next</a>
-    <a href="#highscores">Highscores</a>
-    <a href="#details">Details</a>
-  </nav>
+  <div class="section-nav-wrap">
+    <nav class="section-nav" aria-label="Character sections">
+      <a href="#progression">Progression</a>
+      <a href="#next">Next</a>
+      <a href="#highscores">Highscores</a>
+      <a href="#details">Details</a>
+    </nav>
+  </div>
 
   <section class="section character-act" id="progression">
     <div class="section-bar"><h2>Progression</h2><span class="fine dim">the one thing to know right now</span></div>
