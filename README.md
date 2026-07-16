@@ -32,7 +32,7 @@ Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dep
 
 ## Character Hub Scope
 
-Exiva XP is one Night'Flyn interface, not a generic public directory. Current implemented surfaces cover: Hunting Analyser parsing, personal hunt logbook, XP and highscore history, 15-minute online sampling from TibiaData's world list, level-fit hunt planning, creature codex, elemental recommendations, charm references, profit tracking, stamina calculation, a first TibiaTools-style damage sandbox and progression analytics. The remaining product work is explicit and should not be treated as done: deeper TibiaTools combat parity, richer planner search informed by the Respawn Finder reference, Wheel/equipment inference and historical data import.
+Exiva XP is one Night'Flyn interface, not a generic public directory. Current implemented surfaces cover: Hunting Analyser parsing, personal hunt logbook, XP and highscore history, level-fit hunt planning, creature codex, elemental recommendations, charm references, profit tracking, stamina calculation, a first TibiaTools-style damage sandbox and progression analytics. The remaining product work is explicit and should not be treated as done: deeper TibiaTools combat parity, richer planner search informed by the Respawn Finder reference, Wheel/equipment inference and historical data import.
 
 ## Layout
 
@@ -64,7 +64,6 @@ data/
   character.json           generated daily — Night'Flyn profile, highscore ranks, death log
   character-history.json   generated daily — {server-save date: {rank, level, experience, highscores...}}; older rows may be marked as imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
-  character-online.json    generated every 15 minutes — sampled world-list online status from TibiaData
   imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
   config.mjs               reads config.ini — the tracked character for every script below
@@ -74,7 +73,6 @@ pipeline/
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
   track-character.mjs      15-minute Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
-  track-online.mjs         15-minute Gentebra world-list sampler for Night'Flyn online status
   fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (skips items refreshed within 4h)
   imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
   smoke.mjs                engine smoke tests, run locally or by publish.yml
@@ -85,7 +83,6 @@ pipeline/
   check-hunt.yml           on issue opened/edited
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
   track-character.yml      every 15 minutes — refresh the current Tibia server-save day, commit, redeploy
-  track-online.yml         every 15 minutes — record one online/offline sample, commit, redeploy only for visible state changes
   fetch-imbuement-prices.yml  a few times daily — refresh TibiaMarket imbuement item prices for Gentebra, commit, redeploy
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```
@@ -108,8 +105,6 @@ The engine directory is DOM-free and runs identically in the browser and in Node
 ```
 
 Data precedence is strict: `raw` is never altered; curated files are read-only; generated files (`shared-hunts.json`, `ledger.json`) are never hand-edited; the local browser logbook is the default source for personal analytics; the `approved` label is only the gate into the optional shared dataset.
-
-Time online is sampled, not backfilled. `.github/workflows/track-online.yml` runs every 15 minutes and calls TibiaData's Gentebra world endpoint, which exposes the current `online_players` list. `pipeline/track-online.mjs` records whether Night'Flyn appears in that list for the slot, plus the observed level/vocation when online and the world population at sample time. Offline rows mean "not listed in this 15-minute sample"; they are not continuous telemetry. Level-up timing from this source is only an observed sample, separate from the daily highscore history. The dashboard's timezone selector is copied from the Tibia Warzones Schedule project: it stores the selected value under the shared `tz` localStorage key and uses that timezone for sample timestamps and daily grouping.
 
 ## The ledger
 

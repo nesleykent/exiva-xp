@@ -30,8 +30,6 @@ These are generated observations for Night'Flyn and must stay honest:
   forward a previous highscore value or rank as if it were measured today.
 - `character.json` - latest profile, highscore ranks and known deaths.
 - `character-snapshot.json` - highscore staleness guard for the tracker.
-- `character-online.json` - 15-minute sampled world-list observations. Offline
-  means "not listed in that sample", not continuous telemetry.
 
 ## Workflow Ownership
 

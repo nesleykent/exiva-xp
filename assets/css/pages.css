@@ -943,9 +943,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-controls .btn { min-height: 44px; }
 .chart-button-group { display: flex; gap: 6px; flex-wrap: wrap; }
 .chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
-#online-dynamic { scroll-margin-top: 84px; }
-.timezone-controls { margin-bottom: var(--s4); }
-.timezone-context { align-self: end; padding-bottom: 9px; }
 
 .section { margin-top: var(--s8); }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }

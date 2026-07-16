@@ -187,54 +187,6 @@ if (character) {
   }
 }
 
-let online = null;
-try { online = data('character-online.json'); } catch { /* online sampler has not run yet */ }
-if (online) {
-  assert(online.character === CHARACTER.name, `character-online.json tracks ${online.character}, expected ${CHARACTER.name} (config.ini)`);
-  assert(online.world === CHARACTER.world, `character-online.json world is ${online.world}, expected ${CHARACTER.world} (config.ini)`);
-  assert(online.cadenceMinutes === 15, `online cadence must stay at 15 minutes, got ${online.cadenceMinutes}`);
-  assert(/TibiaData/.test(online.source || ''), 'online sampler must declare TibiaData as its source');
-  assert(Array.isArray(online.samples), 'character-online.json samples must be an array');
-  let previousSlot = '';
-  for (const sample of online.samples) {
-    assert(/^\d{4}-\d{2}-\d{2}T\d{2}:(00|15|30|45):00\.000Z$/.test(sample.slot),
-      `online sample has a non-15-minute slot: ${sample.slot}`);
-    assert(sample.slot >= previousSlot, `online samples are out of order around ${sample.slot}`);
-    previousSlot = sample.slot;
-    assert(/^\d{4}-\d{2}-\d{2}T/.test(sample.sampledAt || ''), `online sample ${sample.slot} has no sampledAt timestamp`);
-    assert(typeof sample.online === 'boolean', `online sample ${sample.slot} has no boolean online flag`);
-    assert(sample.worldPlayersOnline == null || Number.isFinite(sample.worldPlayersOnline),
-      `online sample ${sample.slot} has bad worldPlayersOnline`);
-    if (sample.online) {
-      assert(Number.isFinite(sample.level), `online sample ${sample.slot} is online without a level`);
-      assert(sample.vocation, `online sample ${sample.slot} is online without a vocation`);
-    }
-  }
-  // compacted day summaries: internal consistency, never more online than observed
-  let previousDay = '';
-  for (const day of online.days || []) {
-    assert(/^\d{4}-\d{2}-\d{2}$/.test(day.date), `compacted day has a bad date: ${day.date}`);
-    assert(day.date > previousDay, `compacted days out of order around ${day.date}`);
-    previousDay = day.date;
-    assert(Number.isFinite(day.observed) && Number.isFinite(day.online) && day.online <= day.observed,
-      `compacted day ${day.date}: online (${day.online}) exceeds observed (${day.observed})`);
-    assert(day.minutes === day.online * online.cadenceMinutes,
-      `compacted day ${day.date}: minutes must equal online × cadence`);
-    if (online.samples.length) {
-      assert(day.date < online.samples[0].slot.slice(0, 10),
-        `compacted day ${day.date} overlaps the raw sample window`);
-    }
-  }
-  // observed level-ups are permanent and ordered
-  let previousUp = '';
-  for (const up of online.levelUps || []) {
-    assert(up.slot > previousUp, `level-ups out of order around ${up.slot}`);
-    previousUp = up.slot;
-    assert(Number.isFinite(up.level) && Number.isFinite(up.from) && up.level > up.from,
-      `level-up at ${up.slot} is not an increase (${up.from} → ${up.level})`);
-  }
-}
-
 // -------------------------------------------------------------- imbuements
 
 assert(IMBUEMENTS.length >= 20, `imbuement catalogue too small: ${IMBUEMENTS.length}`);
@@ -314,4 +266,4 @@ for (const itemId of priceableItems) {
   assert(Number.isFinite(IMBUEMENT_MARKET_IDS[itemId]), `${itemId} has no TibiaMarket item_id pinned in pipeline/imbuement-market-ids.mjs`);
 }
 
-console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''}${online ? ` / ${online.samples.length} online sample(s)` : ''} / ${IMBUEMENTS.length} imbuements`);
+console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

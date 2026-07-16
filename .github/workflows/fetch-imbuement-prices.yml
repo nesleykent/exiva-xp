@@ -1,9 +1,9 @@
 # TibiaMarket price prefill for the imbuement calculator (pipeline/fetch-
 # imbuement-prices.mjs). Prices don't need 15-minute freshness like the
-# character/online trackers, so this runs a few times a day; the script
+# character tracker, so this runs a few times a day; the script
 # itself skips any item refreshed within the last 4 hours, so overlapping
 # or delayed scheduled runs (GitHub's schedule trigger drifts by hours in
-# practice — see track-character.yml/track-online.yml) still converge
+# practice — see track-character.yml) still converge
 # without wasted TibiaMarket requests.
 name: Fetch imbuement prices
 

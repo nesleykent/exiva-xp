@@ -39,7 +39,6 @@ const FILES = {
   access: 'data/access.json',
   character: 'data/character.json',
   characterHistory: 'data/character-history.json',
-  characterOnline: 'data/character-online.json',
   imbuementArt: 'data/imbuement-art.json',
   imbuementPrices: 'data/imbuement-prices.json',
 };
@@ -165,19 +164,6 @@ export async function loadCharacterHistory(prefix = '') {
       .map(([date, entry]) => ({ date, ...entry }))
       .sort((a, b) => a.date.localeCompare(b.date));
   } catch { return []; }
-}
-
-/** 15-minute sampled online status from data/character-online.json. */
-export async function loadCharacterOnline(prefix = '') {
-  try {
-    const raw = await json(prefix + FILES.characterOnline);
-    return {
-      ...raw,
-      samples: [...(raw.samples || [])].sort((a, b) => a.slot.localeCompare(b.slot)),
-    };
-  } catch {
-    return { samples: [] };
-  }
 }
 
 // ---------------------------------------------------------------- logbook

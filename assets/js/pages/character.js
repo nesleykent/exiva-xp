@@ -1,6 +1,6 @@
 /**
  * Character - the tracked character's dashboard (config.ini): generated profile, progression,
- * sampled online status, highscores, deaths, and shortcuts into the planning tools.
+ * highscores, deaths, and shortcuts into the planning tools.
  */
 
 import { boot } from './_boot.js';
@@ -8,27 +8,22 @@ import { esc } from '../lib/text.js';
 import { kk, nf, day, hm } from '../lib/fmt.js';
 import {
   DEFAULT_TIMEZONE,
-  SUPPORTED_TIMEZONES,
   TIMEZONE_STORAGE_KEY,
-  datePartsInTimezone,
-  dateKeyInTimezone,
   formatDateInTimezone,
   formatDateTimeInTimezone,
-  getTimezoneDisplayLabel,
 } from '../lib/timezones.js';
 import { $, ring } from '../shell.js';
-import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
-import { loadCharacter, loadCharacterHistory, loadCharacterOnline, logbook } from '../data/sources.js';
+import { flow, sparkline, attachFlowHover } from '../viz/svg.js';
+import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const { stage, codex, grounds, table, config } = await boot('character.html');
-const [profile, history, onlineLog] = await Promise.all([
+const [profile, history] = await Promise.all([
   loadCharacter(),
   loadCharacterHistory(),
-  loadCharacterOnline(),
 ]);
-let timezone = loadTimezone();
+const timezone = loadTimezone();
 
 const latest = history.at(-1) || null;
 const profileLevel = profile?.level ?? null;
@@ -92,14 +87,7 @@ const grounds4me = [...new Map(
     .map((r) => [r.groundSlug, r]),
 ).values()].slice(0, 10);
 
-const onlineSamples = onlineLog?.samples || [];
-const cadence = onlineLog?.cadenceMinutes || 15;
-const onlineSeen = onlineSamples.filter((sample) => sample.online);
-const latestSample = onlineSamples.at(-1) || null;
 const historyByDate = new Map(historyRows.map((row) => [row.date, row]));
-// the sampler persists every observed level-up before compacting old raw
-// samples away; deriving from raw alone would forget anything >14 days old
-const onlineLevelUps = onlineLog?.levelUps?.length ? onlineLog.levelUps : observedOnlineLevelUps(onlineSamples);
 
 const highscoreRows = latest ? HIGHSCORE_CATEGORIES
   .filter(({ valueField }) => latest[valueField] != null)
@@ -141,29 +129,6 @@ function loadTimezone() {
   }
 }
 
-function saveTimezone(value) {
-  timezone = value || DEFAULT_TIMEZONE;
-  try { localStorage.setItem(TIMEZONE_STORAGE_KEY, timezone); } catch { /* best-effort */ }
-}
-
-function timezoneOptionsHtml() {
-  let group = null;
-  let html = '';
-  for (const item of SUPPORTED_TIMEZONES) {
-    if (item.group !== group) {
-      if (group) html += '</optgroup>';
-      group = item.group;
-      html += `<optgroup label="${esc(group)}">`;
-    }
-    html += `<option value="${esc(item.value)}"${item.value === timezone ? ' selected' : ''}>${esc(getTimezoneDisplayLabel(item.value))}</option>`;
-  }
-  return group ? `${html}</optgroup>` : html;
-}
-
-function timezoneSelectHtml(id) {
-  return `<label class="lbl lbl-wide"><span class="eyebrow">Show times in</span><select id="${esc(id)}" data-timezone-select>${timezoneOptionsHtml()}</select></label>`;
-}
-
 function plain(value) {
   return value == null || value === '' ? '<span class="dim">-</span>' : esc(String(value));
 }
@@ -203,10 +168,6 @@ function isVocationCompatible(rowVocation, profileVocation) {
   return row === character;
 }
 
-function statusBadge(online) {
-  return `<span class="badge ${online ? 'badge-success' : 'badge-error'}">${online ? 'Online' : 'Offline'}</span>`;
-}
-
 function tableHtml(columns, rows, empty) {
   if (!rows.length) return `<div class="panel panel-pad dim">${esc(empty || 'No rows yet.')}</div>`;
   return `<div class="sheet panel"><table class="grid">
@@ -215,35 +176,6 @@ function tableHtml(columns, rows, empty) {
       ${rows.map((row) => `<tr>${columns.map((col) => `<td${col.className ? ` class="${esc(col.className)}"` : ''}>${col.cell(row)}</td>`).join('')}</tr>`).join('')}
     </tbody>
   </table></div>`;
-}
-
-function dailyOnlineRows(samples, minutesPerSample, tz) {
-  const map = new Map();
-  for (const sample of samples) {
-    const date = dateKeyInTimezone(sample.slot, tz);
-    if (!date) continue;
-    if (!map.has(date)) {
-      map.set(date, {
-        date,
-        samples: 0,
-        onlineSamples: 0,
-        minutes: 0,
-        lastLevel: null,
-        lastSlot: null,
-        worldPlayersOnline: null,
-      });
-    }
-    const row = map.get(date);
-    row.samples += 1;
-    row.lastSlot = sample.slot;
-    row.worldPlayersOnline = sample.worldPlayersOnline ?? row.worldPlayersOnline;
-    if (sample.online) {
-      row.onlineSamples += 1;
-      row.minutes += minutesPerSample;
-      row.lastLevel = sample.level ?? row.lastLevel;
-    }
-  }
-  return [...map.values()].sort((a, b) => b.date.localeCompare(a.date));
 }
 
 function xpGainStreaks(rows) {
@@ -280,89 +212,6 @@ function xpOverWindow(row) {
   const first = row.firstDate ? historyByDate.get(row.firstDate) : null;
   const last = row.sourceDate ? historyByDate.get(row.sourceDate) : null;
   return first && last ? last.experience - first.experience : null;
-}
-
-function xpPerSampledOnlineHourRows(onlineDaily) {
-  const rows = onlineDaily
-    .map((row) => {
-      const historyRow = historyByDate.get(row.date);
-      if (!historyRow || historyRow.gain == null) return null;
-      return {
-        date: row.date,
-        gain: historyRow.gain,
-        minutes: row.minutes,
-        xpPerHour: row.minutes > 0 ? historyRow.gain / (row.minutes / 60) : null,
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.date.localeCompare(a.date));
-  return { count: rows.length, rows: rows.filter((row) => row.xpPerHour != null && Number.isFinite(row.xpPerHour)) };
-}
-
-function onlineHourRows(samples, tz) {
-  const map = new Map();
-  for (const sample of samples) {
-    const parts = datePartsInTimezone(sample.slot, tz);
-    if (!parts?.hour) continue;
-    const hour = parts.hour;
-    if (!map.has(hour)) map.set(hour, { hour, samples: 0, onlineSamples: 0 });
-    const row = map.get(hour);
-    row.samples += 1;
-    if (sample.online) row.onlineSamples += 1;
-  }
-  return [...map.values()]
-    .sort((a, b) => a.hour.localeCompare(b.hour))
-    .map((row) => ({
-      ...row,
-      key: `${row.hour}:00 (${nf(row.onlineSamples)}/${nf(row.samples)})`,
-      n: row.samples ? (row.onlineSamples / row.samples) * 100 : 0,
-    }));
-}
-
-function sampledSessionBlocks(samples, minutesPerSample) {
-  const blocks = [];
-  let current = null;
-  let previousSlot = null;
-  const expectedGap = minutesPerSample * 60_000 + 60_000;
-  for (const sample of samples) {
-    const slotTime = new Date(sample.slot).getTime();
-    const adjacent = previousSlot != null && Number.isFinite(slotTime) && slotTime - previousSlot <= expectedGap;
-    if (sample.online && current && adjacent) {
-      current.end = sample.slot;
-      current.samples += 1;
-    } else {
-      if (current) blocks.push(current);
-      current = sample.online ? { start: sample.slot, end: sample.slot, samples: 1 } : null;
-    }
-    previousSlot = Number.isFinite(slotTime) ? slotTime : null;
-  }
-  if (current) blocks.push(current);
-  const spans = blocks.map((block) => {
-    const start = new Date(block.start).getTime();
-    const end = new Date(block.end).getTime();
-    return Number.isFinite(start) && Number.isFinite(end) ? Math.max(0, (end - start) / 60_000) : 0;
-  });
-  return { blocks, averageSpan: avg(spans) };
-}
-
-function worldPopulationContext(samples) {
-  const online = samples.filter((sample) => sample.online && Number.isFinite(sample.worldPlayersOnline)).map((sample) => sample.worldPlayersOnline);
-  const offline = samples.filter((sample) => !sample.online && Number.isFinite(sample.worldPlayersOnline)).map((sample) => sample.worldPlayersOnline);
-  if (online.length < 20 || offline.length < 20) return { onlineCount: online.length, offlineCount: offline.length, ready: false };
-  return { onlineCount: online.length, offlineCount: offline.length, ready: true, onlineAvg: avg(online), offlineAvg: avg(offline) };
-}
-
-function observedOnlineLevelUps(samples) {
-  const rows = [];
-  let previousLevel = null;
-  for (const sample of samples) {
-    if (!sample.online || !Number.isFinite(sample.level)) continue;
-    if (previousLevel != null && sample.level > previousLevel) {
-      rows.push({ slot: sample.slot, from: previousLevel, level: sample.level, vocation: sample.vocation });
-    }
-    previousLevel = sample.level;
-  }
-  return rows.reverse();
 }
 
 function xpRowsForChart(metric, range) {
@@ -474,105 +323,6 @@ function profileTableHtml() {
   ], profileRows(), 'No character profile data yet.');
 }
 
-function onlineSampleTableHtml() {
-  return tableHtml([
-    { label: 'Slot', cell: (row) => esc(fmtDateTime(row.slot) || row.slot || '-') },
-    { label: 'Status', cell: (row) => statusBadge(row.online) },
-    { label: 'Level seen', className: 'num', cell: (row) => row.level != null ? nf(row.level) : '<span class="dim">-</span>' },
-    { label: 'Vocation', cell: (row) => plain(row.vocation) },
-    { label: 'World online', className: 'num', cell: (row) => row.worldPlayersOnline != null ? nf(row.worldPlayersOnline) : '<span class="dim">-</span>' },
-    { label: 'Sampled at', cell: (row) => esc(fmtDateTime(row.sampledAt) || '-') },
-  ], [...onlineSamples].reverse().slice(0, 48), 'No online samples yet. The 15-minute workflow will create the first row after it runs.');
-}
-
-function onlineDailyTableHtml(onlineDaily) {
-  // days older than the sampler's raw window arrive pre-compacted per UTC
-  // day (the raw slots are pruned); they join the recent timezone-grouped
-  // rows with an explicit UTC marker rather than being re-bucketed.
-  const compacted = (onlineLog?.days || []).map((d) => ({
-    date: `${d.date} <span class="dim">(UTC)</span>`,
-    sortKey: d.date,
-    samples: d.observed,
-    onlineSamples: d.online,
-    minutes: d.minutes,
-    lastLevel: d.maxLevel,
-    lastSlot: null,
-    worldPlayersOnline: null,
-  }));
-  const merged = [...onlineDaily.map((r) => ({ ...r, sortKey: r.date }))]
-    .concat(compacted)
-    .sort((a, b) => b.sortKey.localeCompare(a.sortKey));
-  return tableHtml([
-    { label: 'Date', cell: (row) => row.date },
-    { label: 'Observed online', className: 'num', cell: (row) => hm(row.minutes) },
-    { label: 'Online samples', className: 'num', cell: (row) => `${nf(row.onlineSamples)} / ${nf(row.samples)}` },
-    { label: 'Last seen level', className: 'num', cell: (row) => row.lastLevel != null ? nf(row.lastLevel) : '<span class="dim">-</span>' },
-    { label: 'Last slot', cell: (row) => esc(fmtDateTime(row.lastSlot) || '-') },
-    { label: 'World online', className: 'num', cell: (row) => row.worldPlayersOnline != null ? nf(row.worldPlayersOnline) : '<span class="dim">-</span>' },
-  ], merged.slice(0, 30), 'No daily online summary yet.');
-}
-
-function onlineLevelUpTableHtml() {
-  return tableHtml([
-    { label: 'Observed slot', cell: (row) => esc(fmtDateTime(row.slot) || row.slot) },
-    { label: 'From', className: 'num', cell: (row) => nf(row.from) },
-    { label: 'To', className: 'num', cell: (row) => nf(row.level) },
-    { label: 'Vocation', cell: (row) => plain(row.vocation) },
-  ], onlineLevelUps, 'No level-up was observed by the 15-minute online sampler yet.');
-}
-
-function onlineBodyHtml() {
-  const onlineDaily = dailyOnlineRows(onlineSamples, cadence, timezone);
-  const todayKey = dateKeyInTimezone(new Date(), timezone);
-  const todayOnline = onlineDaily.find((row) => row.date === todayKey);
-  const timezoneLabel = getTimezoneDisplayLabel(timezone);
-  const xpOnline = xpPerSampledOnlineHourRows(onlineDaily);
-  const hourlyRows = onlineHourRows(onlineSamples, timezone);
-  const sessions = sampledSessionBlocks(onlineSamples, cadence);
-  const population = worldPopulationContext(onlineSamples);
-  return `
-    <div class="tool-fields timezone-controls">
-      ${timezoneSelectHtml('timezone-select-online')}
-      <span class="fine dim timezone-context">Activity days use ${esc(timezoneLabel)}</span>
-    </div>
-    <div class="pulse-row">
-      <div class="panel pulse"><div class="big num">${latestSample ? (latestSample.online ? 'Online' : 'Offline') : '-'}</div><div class="eyebrow">Last sample</div></div>
-      <div class="panel pulse"><div class="big num">${todayOnline ? hm(todayOnline.minutes) : '0m'}</div><div class="eyebrow">Sampled online today</div></div>
-      <div class="panel pulse"><div class="big num">${nf(onlineSeen.length)}</div><div class="eyebrow">Online samples</div></div>
-      <div class="panel pulse"><div class="big num">${nf(onlineLevelUps.length)}</div><div class="eyebrow">Observed level-ups</div></div>
-      <div class="panel pulse"><div class="big num">${nf(sessions.blocks.length)}</div><div class="eyebrow">Sampled session blocks</div></div>
-      <div class="panel pulse"><div class="big num">${sessions.averageSpan != null ? hm(sessions.averageSpan) : '-'}</div><div class="eyebrow">Avg sampled block span</div></div>
-    </div>
-    ${onlineDaily.length ? `<div class="panel panel-pad viz" style="margin-top:12px">
-      <p class="eyebrow" style="margin:0 0 8px">Sampled online minutes by ${esc(timezoneLabel)} day</p>
-      ${bars([...onlineDaily].reverse().slice(-14).map((row) => ({ key: row.date.slice(5), n: row.minutes })), { fmt: hm })}
-    </div>` : ''}
-    <div class="section-subhead"><h3>XP per sampled-online hour</h3><span class="fine dim">tracked XP divided by observed online time</span></div>
-    ${xpOnline.count >= 3 ? tableHtml([
-      { label: 'Date', cell: (row) => esc(row.date) },
-      { label: 'XP gain', className: 'num', cell: (row) => `+${nf(row.gain)}` },
-      { label: 'Sampled online', className: 'num', cell: (row) => hm(row.minutes) },
-      { label: 'XP / sampled hour', className: 'num', cell: (row) => kk(row.xpPerHour) },
-    ], xpOnline.rows, 'No sampled-online XP rows yet.') : '<div class="panel panel-pad dim">Not enough overlapping tracked-XP and sampled-online days yet.</div>'}
-    <div class="section-subhead"><h3>Activity by hour</h3><span class="fine dim">online samples / total samples by ${esc(timezoneLabel)} hour</span></div>
-    ${onlineSamples.length >= 40 ? `<div class="panel panel-pad viz">${bars(hourlyRows, { fmt: (value) => `${Math.round(value)}%` })}</div>` : '<div class="panel panel-pad dim">Not enough sampled history yet.</div>'}
-    ${population.ready ? `<div class="section-subhead"><h3>World population context</h3><span class="fine dim">sampled world-list population when online vs offline</span></div>
-    <div class="mini-metrics">
-      <span><b class="num">${nf(Math.round(population.onlineAvg))}</b><small>Avg world online when listed</small></span>
-      <span><b class="num">${nf(Math.round(population.offlineAvg))}</b><small>Avg world online when not listed</small></span>
-    </div>` : '<div class="panel panel-pad dim" style="margin-top:12px">World population context needs at least 20 online and 20 offline samples.</div>'}
-    <details class="detail-block">
-      <summary>Source rows and sampling caveats</summary>
-      <p class="fine dim">This is sampled status, not continuous telemetry. Each online row means ${esc(profile?.name || config.name)} appeared in ${esc(onlineLog?.world || config.world)}'s public world list during that ${nf(cadence)}-minute slot. Session blocks can merge if two real sessions are closer than one sample interval, or split when a long session spans a missed sample.</p>
-      <div class="section-subhead"><h3>Daily sampled summary</h3><span class="fine dim">online samples / total samples</span></div>
-      ${onlineDailyTableHtml(onlineDaily)}
-      <div class="section-subhead"><h3>Observed level changes</h3><span class="fine dim">only when the sampler catches the character online</span></div>
-      ${onlineLevelUpTableHtml()}
-      <div class="section-subhead"><h3>Recent samples</h3><span class="fine dim">${esc(onlineLog?.source || 'TibiaData world endpoint')}</span></div>
-      ${onlineSampleTableHtml()}
-    </details>`;
-}
-
 function deathsTableHtml() {
   return tableHtml([
     { label: 'When', cell: (row) => esc(fmtDateTime(row.time) || day(row.time)) },
@@ -595,36 +345,6 @@ function huntColumns() {
 
 function huntTableHtml() {
   return tableHtml(huntColumns(), recentHunts, 'No saved analyser sessions in this browser yet.');
-}
-
-function renderTimeSensitiveSections() {
-  const profileTarget = $('#profile-table');
-  const profileSummaryTarget = $('#profile-summary');
-  const onlineTarget = $('#online-dynamic');
-  const deathsTarget = $('#deaths-table');
-  const huntTarget = $('#hunt-table');
-  const lastLoginTarget = $('#last-login-day');
-  if (profileTarget) profileTarget.innerHTML = profileTableHtml();
-  if (profileSummaryTarget) profileSummaryTarget.innerHTML = profileSummaryHtml();
-  if (onlineTarget) {
-    onlineTarget.innerHTML = onlineBodyHtml();
-    bindTimezoneSelect();
-  }
-  if (deathsTarget) deathsTarget.innerHTML = deathsTableHtml();
-  if (huntTarget) huntTarget.innerHTML = huntTableHtml();
-  if (lastLoginTarget) lastLoginTarget.textContent = profile ? (fmtDateOnly(profile.lastLogin) || '-') : '-';
-}
-
-function bindTimezoneSelect() {
-  document.querySelectorAll('[data-timezone-select]').forEach((select) => {
-    if (select.dataset.bound) return;
-    select.dataset.bound = '1';
-    select.addEventListener('change', () => {
-      saveTimezone(select.value);
-      document.querySelectorAll('[data-timezone-select]').forEach((other) => { other.value = timezone; });
-      renderTimeSensitiveSections();
-    });
-  });
 }
 
 /** Highlights the section-nav tab for whichever section is currently in view
@@ -769,7 +489,7 @@ stage.innerHTML = `
       <div>
         <p class="eyebrow">${esc(profile?.world || config.world)} · ${esc(profile?.vocation || 'character')}</p>
         <h1>${esc(profile?.name || config.name)}</h1>
-        <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, sampled activity, deaths and private hunt evidence.</p>
+        <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, deaths and private hunt evidence.</p>
         <div class="dashboard-meta">
           ${profileLevel != null ? `<span class="pill">Profile lvl ${nf(profileLevel)}</span>` : ''}
           ${trackedLevel != null ? `<span class="pill">Highscore lvl ${nf(trackedLevel)}</span>` : ''}
@@ -792,7 +512,6 @@ stage.innerHTML = `
   <nav class="section-nav" aria-label="Character sections">
     <a href="#snapshot">Snapshot</a>
     <a href="#progression">Progression</a>
-    <a href="#activity">Activity</a>
     <a href="#highscores">Highscores</a>
     <a href="#next">Next</a>
   </nav>
@@ -865,11 +584,6 @@ stage.innerHTML = `
     </details>
   </section>
 
-  <section class="section character-act" id="activity">
-    <div class="section-bar"><h2>Activity</h2><span class="fine dim">recent sampled presence, then details on demand</span></div>
-    <div id="online-dynamic">${onlineBodyHtml()}</div>
-  </section>
-
   ${latest ? `
   <section class="section character-act" id="highscores">
     <div class="section-bar"><h2>Highscores</h2><span class="fine dim">standouts first; full tracker behind the fold</span></div>
@@ -938,7 +652,6 @@ stage.innerHTML = `
     </div>
   </section>`;
 
-bindTimezoneSelect();
 bindSectionNavSpy();
 
 // ---- chart controls ----
