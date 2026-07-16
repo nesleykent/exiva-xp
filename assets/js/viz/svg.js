@@ -6,7 +6,7 @@ import { kk, nf } from '../lib/fmt.js';
 const clip = (s, n) => (String(s).length > n ? `${String(s).slice(0, n - 1)}…` : String(s));
 
 /** Horizontal bars: data = [{key, n}]. */
-export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 250, fmt = kk } = {}) {
+export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 290, fmt = kk } = {}) {
   const height = data.length * (rowH + gap) + gap;
   const top = Math.max(...data.map((d) => d.n), 1);
   const laneW = width - labelW - 86;
@@ -14,7 +14,7 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 250, fmt
     const y = gap + i * (rowH + gap);
     const w = Math.max(2, (d.n / top) * laneW);
     return `<g>
-      <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, 32))}</text>
+      <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, 42))}</text>
       <rect class="vbar" x="${labelW}" y="${y}" width="${w.toFixed(1)}" height="${rowH}" rx="4"><title>${esc(d.key)}: ${fmt(d.n)}</title></rect>
       <text class="vvalue" x="${labelW + w + 8}" y="${y + rowH / 2}" dominant-baseline="central">${fmt(d.n)}</text>
     </g>`;

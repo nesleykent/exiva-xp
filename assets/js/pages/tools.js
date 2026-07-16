@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
 import { gp, hm, kk, nf, pct } from '../lib/fmt.js';
-import { $, pillEl, ring, say } from '../shell.js';
+import { $, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
@@ -39,6 +39,17 @@ const defaultCreature = codex.identify('Girtablilu Warrior')?.creature ||
   codex.creatures[0];
 
 const creatures = [...codex.creatures].sort((a, b) => a.name.localeCompare(b.name));
+
+/**
+ * sortMenu()'s {key: [label]} shape reused for a plain (non-sorting) picker.
+ * A native <select> here caused real, confirmed damage in iOS Safari's
+ * print/PDF export: the control rendered blank at its own position and its
+ * open/value state leaked out, misplaced, overlapping several imbuement
+ * cards elsewhere on the page. sortMenu/bindSortMenu are plain DOM+CSS, no
+ * native OS widget involved, so there's nothing for that bug class to hit.
+ */
+const TIER_OPTIONS = { basic: ['Basic'], intricate: ['Intricate'], powerful: ['Powerful'] };
+const imbState = { tier: 'powerful' };
 
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
@@ -101,9 +112,7 @@ stage.innerHTML = `
         <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
           <input id="imb-world" type="text" value="${esc(profile?.world || config.world)}" placeholder="World">
         </label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>
-          <select id="imb-tier"><option value="basic">Basic</option><option value="intricate">Intricate</option><option value="powerful" selected>Powerful</option></select>
-        </label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>${sortMenu('imb-tier', TIER_OPTIONS, imbState.tier)}</label>
       </div>
       <p class="fine dim" id="imb-filter-summary">World: ${esc(profile?.world || config.world)} · Tier: Powerful</p>
       <div class="tool-result-grid" id="imb-grid"></div>
@@ -217,8 +226,6 @@ function renderProfit() {
 }
 
 // ---------------------------------------------------------------- imbuements
-
-const imbState = { tier: 'powerful' };
 
 function imbWorld() {
   return $('#imb-world').value.trim() || config.world;
@@ -398,15 +405,15 @@ function openImbuementModal(id) {
 }
 
 function updateImbFilterSummary() {
-  const tierLabel = $('#imb-tier').selectedOptions[0]?.textContent || '';
+  const tierLabel = TIER_OPTIONS[imbState.tier]?.[0] || '';
   $('#imb-filter-summary').textContent = `World: ${$('#imb-world').value} · Tier: ${tierLabel}`;
 }
 $('#imb-world').addEventListener('input', () => {
   updateImbFilterSummary();
   renderImbuementGrid();
 });
-$('#imb-tier').addEventListener('change', () => {
-  imbState.tier = $('#imb-tier').value;
+bindSortMenu('imb-tier', (key) => {
+  imbState.tier = key;
   updateImbFilterSummary();
   renderImbuementGrid();
 });

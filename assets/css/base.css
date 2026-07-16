@@ -209,9 +209,15 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   /* source IOSTabBar spec: icons render at 27px when the bar carries no labels */
   .rail-nav .rail-item svg { width: 27px; height: 27px; }
   /* GitHub + appearance are utilities, not destinations — a floating
-     corner cluster keeps the bottom tab bar to the real nav targets. */
+     corner cluster keeps the bottom tab bar to the real nav targets. On
+     pages whose first element is the full-bleed hero card (character.html),
+     main.stage's own s8 (32px) top padding put the cluster's fixed 8px `top`
+     above the card's top edge entirely — the pill visibly straddled the
+     card boundary, half sat on plain background, half overlapping the card.
+     Match the stage's own top padding instead of a flat s2 so the cluster
+     always starts safely inside whatever's at the top of the page. */
   .rail-foot {
-    position: fixed; top: calc(var(--s2) + env(safe-area-inset-top)); right: var(--s2); z-index: 60;
+    position: fixed; top: calc(var(--s8) + var(--s2) + env(safe-area-inset-top)); right: var(--s2); z-index: 60;
     flex-direction: row; gap: 2px; padding: 2px;
     background: rgba(var(--surface), .92);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);

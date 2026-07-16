@@ -907,10 +907,15 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-narrow > input,
   .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
   .character-hero { padding: var(--s4); }
-  .hero-top { gap: var(--s4); }
+  /* reserves room for the fixed GitHub/appearance cluster floating over
+     this card's top-right corner — without it the rightmost hero stat
+     (XP rank) renders straight under the cluster and gets clipped. Letting
+     hero-stats wrap means a stat that no longer fits drops to its own line
+     instead of getting force-compressed into a mid-number line break. */
+  .hero-top { gap: var(--s4); padding-right: 84px; flex-wrap: wrap; }
   .hero-top .ring { width: 64px; height: 64px; flex: 0 0 64px; }
   .hero-top .ring-core { width: 56px; height: 56px; font-size: 18px; }
-  .hero-stats { gap: var(--s4); }
+  .hero-stats { gap: var(--s4); flex-wrap: wrap; row-gap: var(--s2); }
   .hero-stats > span { padding-left: var(--s4); }
   .hero-stats b { font-size: 17px; line-height: 20px; }
   .character-lede {
