@@ -663,17 +663,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .section-nav a:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
 .section-nav a[aria-current="true"] { background: rgb(var(--ink)); color: rgb(var(--surface)); }
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--s3);
-}
-.dashboard-grid .pulse {
-  min-height: 92px;
-}
-.dashboard-grid .decision-link:hover {
-  background: rgba(var(--overlay), var(--overlay-a));
-}
 .chart-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
@@ -722,6 +711,17 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: start;
 }
 .profile-panel { display: grid; gap: var(--s4); }
+/* the one synthesized conclusion this page leads with — bigger and bolder
+   than every other snapshot number so it reads first, not just first in
+   DOM order */
+.insight-panel { display: grid; gap: var(--s4); align-content: start; }
+.insight-headline {
+  font-size: 19px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: -.2px;
+}
+.insight-actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
 .profile-groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

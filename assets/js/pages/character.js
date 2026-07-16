@@ -426,7 +426,7 @@ function highscoreCardHtml(row) {
         <span><b class="num">${signed(row.delta)}</b><small>Tracked delta</small></span>
       </div>
       <div class="sparkline">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Waiting for another distinct TibiaData row before drawing a trend.</span>'}
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next tracked update for this skill.</span>'}
       </div>
     </article>`;
 }
@@ -450,7 +450,7 @@ function highscoreFeatureHtml(row) {
         <span><b class="num">${signed(row.delta)}</b><small>Tracked delta</small></span>
       </div>
       <div class="sparkline sparkline-lg">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Waiting for another distinct TibiaData row before drawing a trend.</span>'}
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next tracked update for this skill.</span>'}
       </div>
     </article>`;
 }
@@ -486,6 +486,55 @@ const primaryHighscoreKeys = new Set(['experience', 'magicLevel', 'charmPoints',
 const primaryHighscores = highscoreRows.filter((row) => primaryHighscoreKeys.has(row.key));
 const featuredHighscore = primaryHighscores.find((row) => row.key === 'experience') || primaryHighscores[0] || null;
 const secondaryHighscores = primaryHighscores.filter((row) => row !== featuredHighscore);
+
+/** This week's pace vs the 30-day average, as a conclusion rather than two
+ * raw numbers — the one line the page should say before anything else. */
+function paceInsight() {
+  if (avg7 == null || avg30 == null || avg30 <= 0) return null;
+  const deltaPct = Math.round(((avg7 - avg30) / avg30) * 100);
+  const tone = Math.abs(deltaPct) < 8 ? 'even' : deltaPct > 0 ? 'up' : 'down';
+  const text = tone === 'even'
+    ? `right on your usual pace — averaging ${kk(avg7)} XP/day this week`
+    : `${Math.abs(deltaPct)}% ${tone === 'up' ? 'ahead of' : 'behind'} your 30-day pace — ${kk(avg7)} vs ${kk(avg30)} XP/day`;
+  return { tone, deltaPct, text };
+}
+
+/** Straight arithmetic to the next 50-level milestone at the recent pace. */
+function levelProjection() {
+  if (trackedLevel == null || experience == null || !avgDailyXp) return null;
+  const target = nextMilestoneLevel(trackedLevel);
+  const needed = experienceForLevel(target) - experience;
+  if (needed <= 0) return null;
+  const days = Math.ceil(needed / avgDailyXp);
+  const eta = new Date(Date.now() + days * 86_400_000);
+  return { target, days, eta: eta.toISOString().slice(0, 10) };
+}
+
+const insight = paceInsight();
+const projection = levelProjection();
+
+function insightCardHtml() {
+  const sentences = [];
+  if (insight) sentences.push(`${insight.text.charAt(0).toUpperCase()}${insight.text.slice(1)}.`);
+  if (projection) sentences.push(`Projected to reach level ${nf(projection.target)} in ${nf(projection.days)} day${projection.days === 1 ? '' : 's'} (around ${esc(projection.eta)}) at this pace.`);
+  const headline = sentences.length
+    ? sentences.join(' ')
+    : 'Not enough tracked days yet to summarize pace — check back after a few more updates.';
+  return `
+    <div class="panel panel-pad insight-panel">
+      <p class="eyebrow">Where things stand</p>
+      <p class="insight-headline">${headline}</p>
+      <div class="mini-metrics">
+        <span><b class="num">${nf(streaks.current)}</b><small>Current XP-gain streak</small></span>
+        <span><b class="num">${nf(streaks.best)}</b><small>Best XP-gain streak</small></span>
+        <span><b class="num">${bestDay?.gain ? `+${kk(bestDay.gain)}` : '-'}</b><small>Best day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
+      </div>
+      <div class="insight-actions">
+        <a class="btn btn-tertiary btn-sm" href="grounds.html">Plan next hunt</a>
+        <a class="btn btn-tertiary btn-sm" href="#highscores">View highscores</a>
+      </div>
+    </div>`;
+}
 
 const xpTable = tableHtml([
   { label: 'Date', cell: (row) => esc(row.date) },
@@ -566,19 +615,14 @@ stage.innerHTML = `
           <div id="profile-table">${profileTableHtml()}</div>
         </details>
       </div>
-      <div class="dashboard-grid" aria-label="Current character read">
-    <div class="panel pulse"><div class="big num">${avg7 != null ? kk(avg7) : '-'}</div><div class="eyebrow">7-day pace</div></div>
-    <div class="panel pulse"><div class="big num">${avg30 != null ? kk(avg30) : '-'}</div><div class="eyebrow">30-day pace</div></div>
-    <div class="panel pulse"><div class="big num">${nf(streaks.current)}</div><div class="eyebrow">Current XP-gain streak</div></div>
-    <div class="panel pulse"><div class="big num">${nf(streaks.best)}</div><div class="eyebrow">Best XP-gain streak</div></div>
-    <div class="panel pulse"><div class="big">${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</div><div class="eyebrow">${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt log yet'}</div></div>
-      </div>
+      ${insightCardHtml()}
     </div>
   </section>
 
   <section class="section character-act" id="progression">
     <div class="section-bar"><h2>Progression</h2><span class="fine dim">${esc(historyNote)}</span></div>
     <div class="narrative-strip">
+      <span><b class="num">${insight ? `${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%` : '-'}</b><small>vs 30-day pace</small></span>
       <span><b class="num">${nf(historyRows.length)}</b><small>tracked XP days</small></span>
       <span><b class="num">${bestDay?.gain ? `+${nf(bestDay.gain)}` : '-'}</b><small>best recorded day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
       <span><b class="num">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)}d` : '-'}</b><small>recent days per level</small></span>
@@ -648,22 +692,30 @@ stage.innerHTML = `
 
   <section class="section character-act" id="story">
     <div class="section-bar"><h2>Milestones and setbacks</h2><span class="fine dim">events, not just measurements</span></div>
-    <div class="event-grid">
-  ${levelUps.length ? `
-      <article class="event-panel">
-        <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'tracked level rises'}</span></div>
-    ${tableHtml([
-      { label: 'Date', cell: (row) => esc(row.date) },
-      { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
-      { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
-      { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-    ], levelUps.slice(0, 12), 'No tracked level-ups yet.')}
-      </article>` : ''}
-      <article class="event-panel">
-        <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
-        <div id="deaths-table">${deathsTableHtml()}</div>
-      </article>
+    <div class="narrative-strip">
+      <span><b class="num">${nf(levelUps.length)}</b><small>tracked level-ups</small></span>
+      <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none tracked yet'}</small></span>
+      <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
     </div>
+    <details class="detail-block compact">
+      <summary>Level-up and death details</summary>
+      <div class="event-grid">
+    ${levelUps.length ? `
+        <article class="event-panel">
+          <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'tracked level rises'}</span></div>
+      ${tableHtml([
+        { label: 'Date', cell: (row) => esc(row.date) },
+        { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
+        { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
+        { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
+      ], levelUps.slice(0, 12), 'No tracked level-ups yet.')}
+        </article>` : ''}
+        <article class="event-panel">
+          <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
+          <div id="deaths-table">${deathsTableHtml()}</div>
+        </article>
+      </div>
+    </details>
   </section>
 
   <section class="section character-act" id="next">
@@ -689,6 +741,7 @@ stage.innerHTML = `
       <div class="metric-tile pulse"><div class="big num">${nf(grounds.directory.length)}</div><div class="eyebrow">Grounds in the planner</div></div>
       <div class="metric-tile pulse"><div class="big num">${nf(codex.size)}</div><div class="eyebrow">Creatures in the codex</div></div>
       <div class="metric-tile pulse"><div class="big num" id="last-login-day">${profile ? (fmtDateOnly(profile.lastLogin) || '-') : '-'}</div><div class="eyebrow">Last login</div></div>
+      <div class="metric-tile pulse"><div class="big">${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</div><div class="eyebrow">${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt log yet'}</div></div>
     </div>
     <div class="section-subhead"><h3>Recent analyser sessions</h3><span class="fine dim">private browser logbook</span></div>
     <div id="hunt-table">${huntTableHtml()}</div>
