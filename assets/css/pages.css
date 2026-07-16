@@ -704,17 +704,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: 11px;
   line-height: 14px;
 }
-.snapshot-grid {
-  display: grid;
-  grid-template-columns: minmax(300px, 1.1fr) minmax(300px, .9fr);
-  gap: var(--s4);
-  align-items: start;
-}
 .profile-panel { display: grid; gap: var(--s4); }
 /* the one synthesized conclusion this page leads with — bigger and bolder
-   than every other snapshot number so it reads first, not just first in
-   DOM order */
-.insight-panel { display: grid; gap: var(--s4); align-content: start; }
+   than every other number on the page so it reads first, not just first in
+   DOM order. XP-to-next, avg pace, projected date and days-remaining all
+   describe progress toward the same goal, so they live in this one card
+   instead of as separate metrics scattered across the page. */
+.progression-card { display: grid; gap: var(--s4); align-content: start; }
 .insight-headline {
   font-size: 19px;
   line-height: 26px;
@@ -908,7 +904,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .chart-inspector {
     padding: var(--s3);
   }
-  .snapshot-grid,
   .profile-groups,
   .event-grid,
   .skill-feature-row {

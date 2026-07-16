@@ -31,8 +31,8 @@ const trackedLevel = latest?.level ?? null;
 const level = profileLevel ?? trackedLevel;
 const experience = latest?.experience ?? null;
 const historyNote = latest && profileLevel != null && trackedLevel != null && profileLevel !== trackedLevel
-  ? `profile level ${nf(profileLevel)}; exact highscore XP row level ${nf(trackedLevel)} as of ${latest.date}`
-  : 'tracked every 15 minutes from TibiaData highscores';
+  ? `Profile shows level ${nf(profileLevel)}; last recorded update shows level ${nf(trackedLevel)} on ${latest.date}`
+  : 'Updated automatically from TibiaData highscores';
 
 const historyRows = history.map((row, i) => {
   const prev = history[i - 1] || null;
@@ -52,7 +52,7 @@ const bestDay = historyRows.reduce((best, row) => (row.gain > (best?.gain ?? 0) 
 // Level-up log, derived from the daily rows: every day the tracked level rose.
 const levelUpsChronological = historyRows
   .filter((row) => row.levelDelta > 0)
-  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta, source: row.source || 'TibiaData tracker' }));
+  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta, source: row.source || 'TibiaData' }));
 const levelUps = [...levelUpsChronological].reverse();
 
 // Default prediction pace: mean of the last 7 recorded daily gains (zeros
@@ -148,7 +148,7 @@ function fmtDateOnly(iso) {
 }
 
 function sourceName(source) {
-  return source || 'TibiaData tracker';
+  return source || 'TibiaData';
 }
 
 function norm(value) {
@@ -220,7 +220,7 @@ function xpRowsForChart(metric, range) {
   if (metric === 'daily') {
     return {
       title: 'Daily XP gained',
-      note: `${rows.filter((row) => row.gain != null).length} gain rows`,
+      note: `${rows.filter((row) => row.gain != null).length} days with a recorded gain`,
       baseline: 'zero',
       fmt: kk,
       data: rows.filter((row) => row.gain != null).map((row) => ({ id: row.date, key: row.date.slice(5), n: row.gain })),
@@ -228,8 +228,8 @@ function xpRowsForChart(metric, range) {
   }
   if (metric === 'level') {
     return {
-      title: 'Tracked level',
-      note: `${rows.length} daily levels`,
+      title: 'Character level',
+      note: `${rows.length} days recorded`,
       baseline: 'min',
       fmt: nf,
       data: rows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.level })),
@@ -239,7 +239,7 @@ function xpRowsForChart(metric, range) {
     const rankRows = rows.filter((row) => row.rank != null);
     return {
       title: 'World XP rank',
-      note: `${rankRows.length} rank rows; raw rank number, lower = better`,
+      note: `${rankRows.length} days with a recorded rank; lower number is better`,
       baseline: 'min',
       fmt: (value) => `#${nf(value)}`,
       data: rankRows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.rank })),
@@ -247,7 +247,7 @@ function xpRowsForChart(metric, range) {
   }
   return {
     title: 'Total experience',
-    note: `${rows.length} exact highscore rows`,
+    note: `${rows.length} days recorded`,
     baseline: 'min',
     fmt: kk,
     data: rows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.experience })),
@@ -263,8 +263,8 @@ function profileRows() {
     ['World', profile?.world],
     ['Residence', profile?.residence],
     ['Profile level', profileLevel],
-    ['Tracked highscore level', trackedLevel],
-    ['Tracked experience', experience != null ? nf(experience) : null],
+    ['Highscore level', trackedLevel],
+    ['Highscore experience', experience != null ? nf(experience) : null],
     ['Achievement points', profile?.achievementPoints],
     ['Last login', fmtDateTime(profile?.lastLogin)],
     ['Account status', profile?.accountStatus],
@@ -287,7 +287,9 @@ function profileGroupHtml(title, rows) {
     </article>`;
 }
 
-function profileSummaryHtml() {
+/** Stable, rarely-changing facts — kept out of the primary view since
+ * nothing here answers "what should I do now". */
+function characterDetailsHtml() {
   const houses = profile?.houses?.length ? profile.houses.map((h) => `${h.name} (${h.town})`).join(', ') : null;
   return `
     <div class="profile-groups">
@@ -302,11 +304,6 @@ function profileSummaryHtml() {
         ['Residence', profile?.residence],
         ['House', houses],
         ['Account status', profile?.accountStatus],
-      ])}
-      ${profileGroupHtml('Standing', [
-        ['Achievement points', profile?.achievementPoints],
-        ['Loyalty title', profile?.loyaltyTitle],
-        ['XP rank', latest?.rank ? `#${nf(latest.rank)}` : null],
       ])}
       ${profileGroupHtml('Dates', [
         ['Last login', fmtDateTime(profile?.lastLogin)],
@@ -380,7 +377,7 @@ function gainAverage(days) {
 }
 
 function xpDetailHtml(row = historyRows.at(-1)) {
-  if (!row) return '<p class="dim">No tracked XP row selected.</p>';
+  if (!row) return '<p class="dim">No day selected yet.</p>';
   const prev = historyRows[historyRows.findIndex((r) => r.date === row.date) - 1] || null;
   const gained = row.gain == null ? '<span class="dim">-</span>' : `+${nf(row.gain)}`;
   return `
@@ -394,7 +391,7 @@ function xpDetailHtml(row = historyRows.at(-1)) {
       <span><b class="num">${kk(row.xpToNext)}</b><small>XP to next</small></span>
       <span><b class="num">${row.progress.toFixed(1)}%</b><small>Level progress</small></span>
       <span><b class="num">${row.rank ? `#${nf(row.rank)}` : '-'}</b><small>Rank</small></span>
-      <span><b class="num">${prev ? signed(row.level - prev.level) : '<span class="dim">-</span>'}</b><small>Level delta</small></span>
+      <span><b class="num">${prev ? signed(row.level - prev.level) : '<span class="dim">-</span>'}</b><small>Level change</small></span>
     </div>`;
 }
 
@@ -416,17 +413,17 @@ function highscoreCardHtml(row) {
       <div class="skill-card-head">
         <div>
           <h3>${esc(row.label)}</h3>
-          <p class="fine dim">${esc(row.kind)} · ${nf(row.observations)} tracked row${row.observations === 1 ? '' : 's'}</p>
+          <p class="fine dim">${esc(row.kind)} · ${row.firstDate ? `history since ${esc(row.firstDate)}` : 'new this update'}</p>
         </div>
         <b class="num">${nf(row.value)}</b>
       </div>
       <div class="mini-metrics">
         <span><b class="num">${row.rank != null ? `#${nf(row.rank)}` : '-'}</b><small>Current rank</small></span>
         <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
-        <span><b class="num">${signed(row.delta)}</b><small>Tracked delta</small></span>
+        <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
       </div>
       <div class="sparkline">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next tracked update for this skill.</span>'}
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next update for this skill.</span>'}
       </div>
     </article>`;
 }
@@ -440,17 +437,17 @@ function highscoreFeatureHtml(row) {
       <div class="skill-card-head">
         <div>
           <h3>${esc(row.label)}</h3>
-          <p class="fine dim">${esc(row.kind)} · ${nf(row.observations)} tracked row${row.observations === 1 ? '' : 's'}</p>
+          <p class="fine dim">${esc(row.kind)} · ${row.firstDate ? `history since ${esc(row.firstDate)}` : 'new this update'}</p>
         </div>
         <b class="num">${nf(row.value)}</b>
       </div>
       <div class="mini-metrics">
         <span><b class="num">${row.rank != null ? `#${nf(row.rank)}` : '-'}</b><small>Current rank</small></span>
         <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
-        <span><b class="num">${signed(row.delta)}</b><small>Tracked delta</small></span>
+        <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
       </div>
       <div class="sparkline sparkline-lg">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next tracked update for this skill.</span>'}
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next update for this skill.</span>'}
       </div>
     </article>`;
 }
@@ -512,28 +509,58 @@ function levelProjection() {
 
 const insight = paceInsight();
 const projection = levelProjection();
+const levelProgressPct = trackedLevel != null && experience != null ? progressWithinLevel(trackedLevel, experience) : null;
 
-function insightCardHtml() {
+/** The one card this page leads with: current level, the conclusion drawn
+ * from it (pace + projection), and the tool to act on it — XP-to-next,
+ * avg pace, projected date and days-remaining all describe the same goal,
+ * so they live here together instead of as separate metrics. */
+function progressionCardHtml() {
   const sentences = [];
   if (insight) sentences.push(`${insight.text.charAt(0).toUpperCase()}${insight.text.slice(1)}.`);
   if (projection) sentences.push(`Projected to reach level ${nf(projection.target)} in ${nf(projection.days)} day${projection.days === 1 ? '' : 's'} (around ${esc(projection.eta)}) at this pace.`);
   const headline = sentences.length
     ? sentences.join(' ')
-    : 'Not enough tracked days yet to summarize pace — check back after a few more updates.';
+    : 'Not enough history yet to summarize pace — check back after a few more updates.';
+  const canCustomize = trackedLevel != null && experience != null && avgDailyXp != null;
   return `
-    <div class="panel panel-pad insight-panel">
-      <p class="eyebrow">Where things stand</p>
+    <div class="panel panel-pad progression-card">
+      <p class="eyebrow">Level ${level != null ? nf(level) : '-'}${historyNote !== 'Updated automatically from TibiaData highscores' ? ` · ${esc(historyNote)}` : ''}</p>
       <p class="insight-headline">${headline}</p>
       <div class="mini-metrics">
-        <span><b class="num">${nf(streaks.current)}</b><small>Current XP-gain streak</small></span>
-        <span><b class="num">${nf(streaks.best)}</b><small>Best XP-gain streak</small></span>
+        <span><b class="num">${levelProgressPct != null ? `${levelProgressPct.toFixed(0)}%` : '-'}</b><small>Progress to next level</small></span>
+        <span><b class="num">${nf(streaks.current)}</b><small>Days improving in a row</small></span>
+        <span><b class="num">${nf(streaks.best)}</b><small>Best run of progress</small></span>
         <span><b class="num">${bestDay?.gain ? `+${kk(bestDay.gain)}` : '-'}</b><small>Best day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
       </div>
+      ${canCustomize ? `
+      <details class="detail-block compact">
+        <summary>Customize projection</summary>
+        <div class="tool-fields">
+          <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
+          <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
+        </div>
+        <div class="tool-result" id="pred-out"></div>
+        <p class="fine dim">Defaults to your last ${nf(recentGains.length)} days' average; edit either field.</p>
+      </details>` : ''}
       <div class="insight-actions">
-        <a class="btn btn-tertiary btn-sm" href="grounds.html">Plan next hunt</a>
-        <a class="btn btn-tertiary btn-sm" href="#highscores">View highscores</a>
+        <a class="btn btn-primary btn-sm" href="grounds.html">Plan next hunt</a>
       </div>
     </div>`;
+}
+
+/** Achievement points and loyalty standing, framed as a comparison against
+ * the world rather than a bare number. */
+function standingHighlightsHtml() {
+  const achievementsRank = highscoreRows.find((row) => row.key === 'achievements')?.rank ?? null;
+  const parts = [];
+  if (profile?.achievementPoints != null) {
+    parts.push(`<span><b class="num">${nf(profile.achievementPoints)}</b><small>Achievement points${achievementsRank != null ? ` · #${nf(achievementsRank)} in the world` : ''}</small></span>`);
+  }
+  if (profile?.loyaltyTitle) {
+    parts.push(`<span><b class="num">${esc(profile.loyaltyTitle)}</b><small>Loyalty title</small></span>`);
+  }
+  return parts.length ? `<div class="mini-metrics">${parts.join('')}</div>` : '';
 }
 
 const xpTable = tableHtml([
@@ -553,8 +580,8 @@ const highscoresTable = tableHtml([
   { label: 'Unit', cell: (row) => esc(row.kind) },
   { label: 'Value', className: 'num', cell: (row) => nf(row.value) },
   { label: 'Rank', className: 'num', cell: (row) => row.rank != null ? `#${nf(row.rank)}` : '<span class="dim">-</span>' },
-  { label: 'Rows', className: 'num', cell: (row) => nf(row.observations) },
-  { label: 'First tracked', className: 'num', cell: (row) => row.firstValue != null ? nf(row.firstValue) : '<span class="dim">-</span>' },
+  { label: 'Updates', className: 'num', cell: (row) => nf(row.observations) },
+  { label: 'First recorded', className: 'num', cell: (row) => row.firstValue != null ? nf(row.firstValue) : '<span class="dim">-</span>' },
   { label: 'Last change', className: 'num', cell: (row) => signed(row.lastDelta) },
   { label: 'Delta', className: 'num', cell: (row) => signed(row.delta) },
   { label: 'XP over window', className: 'num', cell: (row) => signed(xpOverWindow(row)) },
@@ -576,20 +603,18 @@ stage.innerHTML = `
     <div class="hero-top">
       ${ring(profile?.name || config.name)}
       <div class="hero-stats">
+        <span><b class="num">${level != null ? nf(level) : '-'}</b><small>Level</small></span>
         <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
         <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
-        <span><b class="num">${trackedLevel != null && experience != null ? kk(experienceUntilNextLevel(trackedLevel, experience)) : '-'}</b><small>XP to next</small></span>
       </div>
     </div>
     <div class="hero-identity">
       <p class="eyebrow">${esc(profile?.world || config.world)} · ${esc(profile?.vocation || 'character')}</p>
       <h1>${esc(profile?.name || config.name)}</h1>
-      <p class="character-lede">${esc(profile?.title || 'Tracked character')} at level ${level != null ? nf(level) : '-'}, followed through exact XP rows, highscore standings, deaths and private hunt evidence.</p>
+      <p class="character-lede">${esc(profile?.title || 'Adventurer')}, followed day by day through XP, highscore rank, deaths and private hunt evidence.</p>
       <div class="dashboard-meta">
-        ${profileLevel != null ? `<span class="pill">Profile lvl ${nf(profileLevel)}</span>` : ''}
-        ${trackedLevel != null ? `<span class="pill">Highscore lvl ${nf(trackedLevel)}</span>` : ''}
         ${experience != null ? `<span class="pill">XP ${kk(experience)}</span>` : ''}
-        ${latest?.date ? `<span class="pill">Tracker ${esc(latest.date)}</span>` : ''}
+        ${latest?.date ? `<span class="pill">Updated ${esc(latest.date)}</span>` : ''}
       </div>
     </div>
     <div class="hero-actions actions">
@@ -599,122 +624,44 @@ stage.innerHTML = `
   </header>
 
   <nav class="section-nav" aria-label="Character sections">
-    <a href="#snapshot">Snapshot</a>
     <a href="#progression">Progression</a>
-    <a href="#highscores">Highscores</a>
     <a href="#next">Next</a>
+    <a href="#highscores">Highscores</a>
+    <a href="#details">Details</a>
   </nav>
 
-  <section class="section character-act" id="snapshot">
-    <div class="section-bar"><h2>Snapshot</h2><span class="fine dim">who the character is now</span></div>
-    <div class="snapshot-grid">
-      <div class="panel panel-pad profile-panel">
-        <div id="profile-summary">${profileSummaryHtml()}</div>
-        <details class="detail-block compact">
-          <summary>Full TibiaData profile fields</summary>
-          <div id="profile-table">${profileTableHtml()}</div>
-        </details>
-      </div>
-      ${insightCardHtml()}
-    </div>
-  </section>
-
   <section class="section character-act" id="progression">
-    <div class="section-bar"><h2>Progression</h2><span class="fine dim">${esc(historyNote)}</span></div>
-    <div class="narrative-strip">
-      <span><b class="num">${insight ? `${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%` : '-'}</b><small>vs 30-day pace</small></span>
-      <span><b class="num">${nf(historyRows.length)}</b><small>tracked XP days</small></span>
-      <span><b class="num">${bestDay?.gain ? `+${nf(bestDay.gain)}` : '-'}</b><small>best recorded day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
-      <span><b class="num">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)}d` : '-'}</b><small>recent days per level</small></span>
-    </div>
-    <div class="panel panel-pad viz">
-      <div class="chart-controls">
-        <div>
-          <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
-          <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
-        </div>
-        <div class="chart-control-groups">
-          <div class="chart-button-group" aria-label="XP chart metric">
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
-          </div>
-          <div class="chart-button-group" aria-label="XP chart range">
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="false">30d</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="true">All</button>
-          </div>
-        </div>
-      </div>
-      <div class="chart-shell">
-        <div id="xp-chart"></div>
-        <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
-      </div>
-    </div>
-  ${trackedLevel != null && experience != null && avgDailyXp != null ? `
-    <div class="panel panel-pad prediction-panel">
-      <div class="section-subhead first"><h3>Where this pace points</h3><span class="fine dim">straight arithmetic from tracked data</span></div>
-      <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
-        <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
-      </div>
-      <div class="tool-result" id="pred-out"></div>
-      <p class="fine dim">Pace defaults to the last ${nf(recentGains.length)} tracked days' average; edit either field.</p>
-    </div>` : ''}
+    <div class="section-bar"><h2>Progression</h2><span class="fine dim">the one thing to know right now</span></div>
+    ${progressionCardHtml()}
     <details class="detail-block">
-      <summary>Daily XP source rows</summary>
+      <summary>Chart and full day-by-day history</summary>
+      <div class="panel panel-pad viz" style="margin-top:12px">
+        <div class="chart-controls">
+          <div>
+            <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
+            <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
+          </div>
+          <div class="chart-control-groups">
+            <div class="chart-button-group" aria-label="XP chart metric">
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
+            </div>
+            <div class="chart-button-group" aria-label="XP chart range">
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="false">30d</button>
+              <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="true">All</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-shell">
+          <div id="xp-chart"></div>
+          <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
+        </div>
+      </div>
+      <div class="section-subhead"><h3>Every recorded day</h3><span class="fine dim">${cadenceTrend ? `~${cadenceTrend.recent.toFixed(1)} days per level recently` : 'full history'}</span></div>
       ${xpTable}
-    </details>
-  </section>
-
-  ${latest ? `
-  <section class="section character-act" id="highscores">
-    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">standouts first; full tracker behind the fold</span></div>
-    <div class="narrative-strip">
-      ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
-    </div>
-    <div class="skill-feature-row">
-      ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
-      <div class="hs-list panel">
-        ${secondaryHighscores.map(highscoreRowHtml).join('')}
-      </div>
-    </div>
-    <details class="detail-block">
-      <summary>All highscore cards and rows</summary>
-      <div class="skill-grid detail-grid">
-        ${highscoreRows.map(highscoreCardHtml).join('')}
-      </div>
-      <div class="section-subhead"><h3>Highscore rows</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
-      ${highscoresTable}
-    </details>
-  </section>` : ''}
-
-  <section class="section character-act" id="story">
-    <div class="section-bar"><h2>Milestones and setbacks</h2><span class="fine dim">events, not just measurements</span></div>
-    <div class="narrative-strip">
-      <span><b class="num">${nf(levelUps.length)}</b><small>tracked level-ups</small></span>
-      <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none tracked yet'}</small></span>
-      <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
-    </div>
-    <details class="detail-block compact">
-      <summary>Level-up and death details</summary>
-      <div class="event-grid">
-    ${levelUps.length ? `
-        <article class="event-panel">
-          <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'tracked level rises'}</span></div>
-      ${tableHtml([
-        { label: 'Date', cell: (row) => esc(row.date) },
-        { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
-        { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
-        { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-      ], levelUps.slice(0, 12), 'No tracked level-ups yet.')}
-        </article>` : ''}
-        <article class="event-panel">
-          <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
-          <div id="deaths-table">${deathsTableHtml()}</div>
-        </article>
-      </div>
     </details>
   </section>
 
@@ -746,6 +693,71 @@ stage.innerHTML = `
     <div class="section-subhead"><h3>Recent analyser sessions</h3><span class="fine dim">private browser logbook</span></div>
     <div id="hunt-table">${huntTableHtml()}</div>
     </div>
+  </section>
+
+  ${latest ? `
+  <section class="section character-act" id="highscores">
+    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">top ranks first; full breakdown on request</span></div>
+    ${standingHighlightsHtml()}
+    <div class="narrative-strip">
+      ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
+    </div>
+    <div class="skill-feature-row">
+      ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
+      <div class="hs-list panel">
+        ${secondaryHighscores.map(highscoreRowHtml).join('')}
+      </div>
+    </div>
+    <details class="detail-block">
+      <summary>Full highscore breakdown</summary>
+      <div class="skill-grid detail-grid">
+        ${highscoreRows.map(highscoreCardHtml).join('')}
+      </div>
+      <div class="section-subhead"><h3>Every tracked category</h3><span class="fine dim">separate units, ranks and trend readiness</span></div>
+      ${highscoresTable}
+    </details>
+  </section>` : ''}
+
+  <section class="section character-act" id="story">
+    <div class="section-bar"><h2>Milestones and setbacks</h2><span class="fine dim">events, not just measurements</span></div>
+    <div class="narrative-strip">
+      <span><b class="num">${nf(levelUps.length)}</b><small>level-ups logged</small></span>
+      <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none yet'}</small></span>
+      <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
+    </div>
+    <details class="detail-block compact">
+      <summary>Level-up and death details</summary>
+      <div class="event-grid">
+    ${levelUps.length ? `
+        <article class="event-panel">
+          <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'level-up history'}</span></div>
+      ${tableHtml([
+        { label: 'Date', cell: (row) => esc(row.date) },
+        { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
+        { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
+        { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
+      ], levelUps.slice(0, 12), 'No level-ups recorded yet.')}
+        </article>` : ''}
+        <article class="event-panel">
+          <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
+          <div id="deaths-table">${deathsTableHtml()}</div>
+        </article>
+      </div>
+    </details>
+  </section>
+
+  <section class="section character-act" id="details">
+    <div class="section-bar"><h2>Character details</h2><span class="fine dim">stable facts that rarely change</span></div>
+    <details class="detail-block compact">
+      <summary>Show identity, residence and account details</summary>
+      <div class="panel panel-pad profile-panel">
+        <div id="profile-summary">${characterDetailsHtml()}</div>
+        <details class="detail-block compact">
+          <summary>Full TibiaData profile fields</summary>
+          <div id="profile-table">${profileTableHtml()}</div>
+        </details>
+      </div>
+    </details>
   </section>`;
 
 bindSectionNavSpy();
@@ -800,7 +812,7 @@ function renderPrediction() {
   const target = Math.floor(Number($('#pred-level').value));
   const pace = Number($('#pred-pace').value);
   if (!Number.isFinite(target) || target <= trackedLevel || !Number.isFinite(pace) || pace <= 0) {
-    out.innerHTML = '<span class="dim">Pick a target above the tracked level and a positive daily pace.</span>';
+    out.innerHTML = '<span class="dim">Pick a target above the current level and a positive daily pace.</span>';
     return;
   }
   const needed = experienceForLevel(target) - experience;
