@@ -673,7 +673,16 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-weight: 600;
 }
 .section-nav a:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
-.section-nav a[aria-current="true"] { background: rgb(var(--ink)); color: rgb(var(--surface)); }
+/* Was an --ink/--surface background+text swap (full black in light mode —
+   see base.css's --ink token). An iOS Safari print/PDF export consistently
+   showed every pill in this row painted solid black, matching that exact
+   color, well after two rounds of fixes targeting mask-image/backdrop-filter
+   on this element turned up nothing — whatever the real print-timing
+   mechanism is (the active tab is toggled by an async IntersectionObserver,
+   and print has no real scrolling viewport for it to key off), a low-risk
+   tint can't ever produce a solid black block the way a black/white swap
+   can, so this drops the swap instead of chasing the exact cause further. */
+.section-nav a[aria-current="true"] { background: rgba(var(--blue), .12); color: rgb(var(--blue)); font-weight: 700; }
 .chart-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
