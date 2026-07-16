@@ -217,7 +217,7 @@ function renderProfit() {
 
 // ---------------------------------------------------------------- imbuements
 
-const imbState = { tier: 'powerful', sort: 'default' };
+const imbState = { tier: 'powerful' };
 
 function imbWorld() {
   return $('#imb-world').value.trim() || config.world;
@@ -228,7 +228,7 @@ function imbPrices(world = imbWorld()) {
 }
 
 function filteredImbuements() {
-  return sortImbuements(IMBUEMENTS, imbState.sort);
+  return sortImbuements(IMBUEMENTS);
 }
 
 function imbIcon(imb, size = '') {

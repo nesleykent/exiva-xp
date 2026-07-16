@@ -205,8 +205,7 @@ const DEFAULT_ORDER = [
   'chop', 'slash', 'bash', 'blockade',
 ];
 
-export function sortImbuements(list, mode = 'default') {
-  if (mode === 'alphabetical') return [...list].sort((a, b) => a.name.localeCompare(b.name));
+export function sortImbuements(list) {
   return [...list].sort((a, b) => DEFAULT_ORDER.indexOf(a.id) - DEFAULT_ORDER.indexOf(b.id));
 }
 
