@@ -198,8 +198,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   .shell { flex-direction: column; }
   .rail {
     position: fixed; top: auto; bottom: 0; left: 0; right: 0;
-    width: 100%; height: 52px; flex-direction: row; align-items: center;
-    justify-content: space-around; padding: 0 var(--s2);
+    width: 100%; height: calc(52px + env(safe-area-inset-bottom));
+    flex-direction: row; align-items: center;
+    justify-content: space-around; padding: 0 var(--s2) env(safe-area-inset-bottom);
     border-right: 0; border-top: 1px solid rgb(var(--line));
   }
   .wordmark, .rail-foot .theme-label { display: none; }
@@ -210,7 +211,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   /* GitHub + appearance are utilities, not destinations — a floating
      corner cluster keeps the bottom tab bar to the real nav targets. */
   .rail-foot {
-    position: fixed; top: var(--s2); right: var(--s2); z-index: 60;
+    position: fixed; top: calc(var(--s2) + env(safe-area-inset-top)); right: var(--s2); z-index: 60;
     flex-direction: row; gap: 2px; padding: 2px;
     background: rgba(var(--surface), .92);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -220,7 +221,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   /* the tab bar carries only the five daily-loop destinations; the rest
      stay in the desktop sidebar and on the home workspace grid */
   .rail-nav .rail-desktop-only { display: none; }
-  main.stage { padding-bottom: 72px !important; }
+  main.stage { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
 }
 
 main.stage {
