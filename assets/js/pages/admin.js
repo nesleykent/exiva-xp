@@ -49,7 +49,7 @@ function refresh() {
       { id: 'level', label: 'Level', num: true, cell: (h) => nf(h.level) },
       { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (h) => kk(h.xpRawRate) },
       { id: 'check', label: 'Rules', cell: (h) => {
-        const v = judge(h, []);
+        const v = judge(h, book);
         if (!v.ok) return `<span class="badge badge-error" title="${esc(v.faults.join(' '))}">Faulted</span>`;
         if (v.flags.length) return `<span class="badge badge-warning" title="${esc(v.flags.join(' '))}">Flagged</span>`;
         return '<span class="badge badge-success">Clean</span>';
