@@ -135,13 +135,25 @@ export function sortMenu(id, sorts, selected) {
   </div>`;
 }
 
-/** Wires a sortMenu()'d element up; calls onSelect(key) when a choice is made. */
+/**
+ * Wires a sortMenu()'d element up; calls onSelect(key) when a choice is made.
+ * Keydown is bound on `root`, not `list` — some browsers keep focus on
+ * `.sort-menu-btn` after opening rather than moving it into the list (the
+ * `.focus()` calls below are attempted regardless, since they do work in
+ * most browsers), so both the button and the items must be able to drive
+ * arrow-key navigation for the widget to be keyboard-operable everywhere.
+ */
 export function bindSortMenu(id, onSelect) {
   const root = document.getElementById(id);
   const btn = root.querySelector('.sort-menu-btn');
   const list = root.querySelector('.sort-menu-list');
+  const items = [...root.querySelectorAll('.sort-menu-item')];
   const close = () => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
-  const open = () => { list.hidden = false; btn.setAttribute('aria-expanded', 'true'); };
+  const open = (focusTarget) => {
+    list.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    (focusTarget || items.find((item) => item.getAttribute('aria-checked') === 'true') || items[0])?.focus();
+  };
   btn.addEventListener('click', (e) => { e.stopPropagation(); list.hidden ? open() : close(); });
   list.addEventListener('click', (e) => {
     const item = e.target.closest('.sort-menu-item');
@@ -149,10 +161,29 @@ export function bindSortMenu(id, onSelect) {
     root.querySelectorAll('.sort-menu-item').forEach((el) => el.setAttribute('aria-checked', String(el === item)));
     btn.querySelector('.value').textContent = item.querySelector('span').textContent;
     close();
+    btn.focus();
     onSelect(item.dataset.value);
   });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (list.hidden) return;
+      e.preventDefault();
+      close();
+      btn.focus();
+      return;
+    }
+    const opening = list.hidden;
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const current = items.indexOf(document.activeElement);
+    let next;
+    if (e.key === 'ArrowDown') next = items[opening ? 0 : (current + 1) % items.length];
+    if (e.key === 'ArrowUp') next = items[opening ? items.length - 1 : (current - 1 + items.length) % items.length];
+    if (e.key === 'Home') next = items[0];
+    if (e.key === 'End') next = items[items.length - 1];
+    if (opening) open(next); else next?.focus();
+  });
   document.addEventListener('click', (e) => { if (!root.contains(e.target)) close(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 }
 
 export function basisPill(basis) {

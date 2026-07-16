@@ -214,16 +214,6 @@ export function imbuementById(id) {
   return IMBUEMENTS.find((i) => i.id === id) || null;
 }
 
-export function allItemIds() {
-  const ids = new Set([GOLD_TOKEN_ITEM]);
-  for (const imb of IMBUEMENTS) {
-    for (const t of Object.values(imb.tiers)) {
-      for (const it of t.items) ids.add(it.itemId);
-    }
-  }
-  return [...ids];
-}
-
 // ---------------------------------------------------------------- pricing
 
 /** A price is "missing" if absent, non-finite, or zero without explicit confirmation. */
