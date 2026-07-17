@@ -80,8 +80,8 @@ function workspaceTiles(items) {
 stage.innerHTML = `
   <header class="hello">
     <p class="eyebrow">Exiva XP</p>
-    <h1><span class="grad-text">Tibia character intelligence</span></h1>
-    <p>Plan ${esc(characterName)}'s next hunt, read progression and turn saved analyser evidence into better decisions.</p>
+    <h1><span class="grad-text">${esc(characterName)}</span></h1>
+    <p>Plan your next hunt, read progression and turn saved analyser evidence into better decisions.</p>
   </header>
 
   <section class="section home-workspace-group" style="margin-top:0">
