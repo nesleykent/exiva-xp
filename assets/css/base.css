@@ -142,7 +142,7 @@ button { font-family: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-.skip-link { position: fixed; left: -9999px; z-index: 200; background: rgb(var(--surface-raised)); padding: var(--s3) var(--s4); border-radius: var(--r-md); box-shadow: var(--shadow-float); }
+.skip-link { position: fixed; left: -9999px; min-height: var(--tap); z-index: 200; background: rgb(var(--surface-raised)); color: rgb(var(--ink)); padding: var(--s3) var(--s4); border: 0; border-radius: var(--r-md); box-shadow: var(--shadow-float); font: inherit; cursor: pointer; }
 .skip-link:focus { left: var(--s3); top: var(--s3); }
 :focus-visible { outline: 2px solid rgb(var(--line-strong)); outline-offset: 2px; }
 
@@ -382,14 +382,6 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
 }
 @keyframes toast-rise { from { opacity: 0; transform: translate(-50%, 10px); } }
 
-/* @media print rules do not reliably fire in whatever pipeline iOS Safari's
-   Share ▸ Print export uses — confirmed directly: a `.section-nav {
-   overflow: visible }` print-only rule (meant to un-clip the 4th tab) was
-   deployed and live, and a fresh export still showed it clipped exactly as
-   before. Don't gate a fix behind @media print on this project; it either
-   does nothing, or you can't tell whether it did anything. .section-nav's
-   mask-image is gone unconditionally (see pages.css) and the World/Tier
-   filter's current value is shown as a permanent, always-rendered caption
-   below the filter bar (tools.js's #imb-filter-summary) rather than a
-   print-only swap — both fixes work regardless of whether print styles
-   apply at all. */
+/* @media print rules do not reliably fire in the pipeline behind iOS
+   Safari's Share ▸ Print export. Keep essential state visible in the normal
+   render instead of relying on print-only substitutions. */

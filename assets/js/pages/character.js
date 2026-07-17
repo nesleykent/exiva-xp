@@ -18,7 +18,7 @@ import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
-const { stage, codex, grounds, table, config } = await boot('character.html');
+const { stage, table, config } = await boot('character.html');
 const [profile, history] = await Promise.all([
   loadCharacter(),
   loadCharacterHistory(),
@@ -219,7 +219,7 @@ function xpRowsForChart(metric, range) {
       note: `${rows.filter((row) => row.gain != null).length} days with a recorded gain`,
       baseline: 'zero',
       fmt: kk,
-      data: rows.filter((row) => row.gain != null).map((row) => ({ id: row.date, key: row.date.slice(5), n: row.gain })),
+      data: rows.filter((row) => row.gain != null).map((row) => chartPoint(row, row.gain)),
     };
   }
   if (metric === 'level') {
@@ -228,7 +228,7 @@ function xpRowsForChart(metric, range) {
       note: `${rows.length} days recorded`,
       baseline: 'min',
       fmt: nf,
-      data: rows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.level })),
+      data: rows.map((row) => chartPoint(row, row.level)),
     };
   }
   if (metric === 'rank') {
@@ -238,7 +238,7 @@ function xpRowsForChart(metric, range) {
       note: `${rankRows.length} days with a recorded rank; lower number is better`,
       baseline: 'min',
       fmt: (value) => `#${nf(value)}`,
-      data: rankRows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.rank })),
+      data: rankRows.map((row) => chartPoint(row, row.rank)),
     };
   }
   return {
@@ -246,7 +246,7 @@ function xpRowsForChart(metric, range) {
     note: `${rows.length} days recorded`,
     baseline: 'min',
     fmt: kk,
-    data: rows.map((row) => ({ id: row.date, key: row.date.slice(5), n: row.experience })),
+    data: rows.map((row) => chartPoint(row, row.experience)),
   };
 }
 
@@ -312,27 +312,36 @@ function huntTableHtml() {
   return tableHtml(huntColumns(), recentHunts, 'No saved analyser sessions in this browser yet.');
 }
 
-/** Highlights the section-nav tab for whichever section is currently in view
- * — an 8000px+ scrolling page gives no other "you are here" feedback. */
-function bindSectionNavSpy() {
-  const nav = $('.section-nav');
-  if (!nav || nav.dataset.bound) return;
-  nav.dataset.bound = '1';
-  const links = [...nav.querySelectorAll('a')];
-  const sections = links
-    .map((a) => document.getElementById(a.getAttribute('href').slice(1)))
-    .filter(Boolean);
-  if (!sections.length) return;
-  const setActive = (id) => links.forEach((a) => {
-    if (a.getAttribute('href') === `#${id}`) a.setAttribute('aria-current', 'true');
-    else a.removeAttribute('aria-current');
+/** Task tabs replace the old hash-link section rail. They preserve browser
+ * history, keep one deep-dive workflow visible at a time, and support the
+ * WAI-ARIA tab keyboard model without changing the URL. */
+function bindCharacterTabs() {
+  const list = $('[role="tablist"]');
+  if (!list) return;
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls'))).filter(Boolean);
+  const select = (tab, focus = false) => {
+    tabs.forEach((candidate) => {
+      const active = candidate === tab;
+      candidate.setAttribute('aria-selected', String(active));
+      candidate.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', (event) => {
+      let next = null;
+      if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+      if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+      if (event.key === 'Home') next = tabs[0];
+      if (event.key === 'End') next = tabs.at(-1);
+      if (!next) return;
+      event.preventDefault();
+      select(next, true);
+    });
   });
-  setActive(sections[0].id); // sane default before the first scroll/intersection fires
-  const io = new IntersectionObserver((entries) => {
-    const hit = entries.find((e) => e.isIntersecting);
-    if (hit) setActive(hit.target.id);
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach((s) => io.observe(s));
 }
 
 function avg(values) {
@@ -342,6 +351,20 @@ function avg(values) {
 
 function gainAverage(days) {
   return avg(historyRows.slice(-days).map((row) => row.gain).filter((gain) => gain != null));
+}
+
+function chartEvents(date) {
+  const events = [];
+  const levelUp = levelUpsChronological.find((row) => row.date === date);
+  if (levelUp) events.push({ type: 'level', label: `Reached level ${nf(levelUp.level)}` });
+  deaths.filter((row) => String(row.time || '').slice(0, 10) === date).forEach((row) => {
+    events.push({ type: 'death', label: row.reason || `Died at level ${nf(row.level)}` });
+  });
+  return events;
+}
+
+function chartPoint(row, n) {
+  return { id: row.date, key: row.date.slice(5), n, events: chartEvents(row.date) };
 }
 
 function xpDetailHtml(row = historyRows.at(-1)) {
@@ -456,40 +479,51 @@ const insight = paceInsight();
 const projection = levelProjection();
 const levelProgressPct = trackedLevel != null && experience != null ? progressWithinLevel(trackedLevel, experience) : null;
 
-/** The one card this page leads with: current level, the conclusion drawn
- * from it (pace + projection), and the tool to act on it — XP-to-next,
- * avg pace, projected date and days-remaining all describe the same goal,
- * so they live here together instead of as separate metrics. */
-function progressionCardHtml() {
-  const sentences = [];
-  if (insight) sentences.push(`${insight.text.charAt(0).toUpperCase()}${insight.text.slice(1)}.`);
-  if (projection) sentences.push(`Projected to reach level ${nf(projection.target)} in ${nf(projection.days)} day${projection.days === 1 ? '' : 's'} (around ${esc(projection.eta)}) at this pace.`);
-  const headline = sentences.length
-    ? sentences.join(' ')
-    : 'Not enough history yet to summarize pace — check back after a few more updates.';
-  const canCustomize = trackedLevel != null && experience != null && avgDailyXp != null;
+/** One progression zone: current state, target and ETA are distinct values,
+ * while pace, recent gain and rank share one comparison band. */
+function progressionOverviewHtml() {
+  const needed = projection ? experienceForLevel(projection.target) - experience : null;
   return `
-    <div class="panel panel-pad progression-card">
-      <p class="eyebrow">Level ${level != null ? nf(level) : '-'}${historyNote !== 'Updated automatically from TibiaData highscores' ? ` · ${esc(historyNote)}` : ''}</p>
-      <p class="insight-headline">${headline}</p>
-      <div class="mini-metrics">
-        <span><b class="num">${levelProgressPct != null ? `${levelProgressPct.toFixed(0)}%` : '-'}</b><small>Progress to next level</small></span>
-        <span><b class="num">${nf(streaks.current)}</b><small>Days improving in a row</small></span>
-        <span><b class="num">${nf(streaks.best)}</b><small>Best run of progress</small></span>
-        <span><b class="num">${bestDay?.gain ? `+${kk(bestDay.gain)}` : '-'}</b><small>Best day${bestDay?.date ? ` (${esc(bestDay.date)})` : ''}</small></span>
+    <div class="dashboard-metrics" aria-label="Progression at a glance">
+      <article class="dashboard-metric">
+        <span>Current level</span>
+        <b class="num">${level != null ? nf(level) : '-'}</b>
+        <small>${levelProgressPct != null ? `${levelProgressPct.toFixed(0)}% to the next level` : historyNote}</small>
+      </article>
+      <article class="dashboard-metric">
+        <span>Target level</span>
+        <b class="num">${projection ? nf(projection.target) : '-'}</b>
+        <small>${needed != null ? `${kk(needed)} XP remaining` : 'Not enough pace data yet'}</small>
+      </article>
+      <article class="dashboard-metric">
+        <span>Projected date</span>
+        <b class="num dashboard-date">${projection ? esc(projection.eta) : '-'}</b>
+        <small>${projection ? `${nf(projection.days)} days at the recent pace` : 'Check back after more updates'}</small>
+      </article>
+    </div>
+    <div class="pace-band pace-${esc(insight?.tone || 'even')}">
+      <div class="pace-message">
+        <b>${insight ? esc(insight.text) : 'Not enough history yet to compare recent pace.'}</b>
+        <span class="fine dim">${bestDay?.gain ? `Best recorded day: +${kk(bestDay.gain)} on ${esc(bestDay.date)}` : historyNote}</span>
       </div>
-      ${canCustomize ? `
-      <div class="projection-tools">
-        <div class="section-subhead first"><h3>Adjust the projection</h3><span class="fine dim">defaults to the last ${nf(recentGains.length)} days</span></div>
-        <div class="tool-fields">
-          <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
-          <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
-        </div>
-        <div class="tool-result" id="pred-out"></div>
-      </div>` : ''}
-      <div class="insight-actions">
-        <a class="btn btn-primary btn-sm" href="grounds.html">Plan next hunt</a>
+      <div class="pace-support">
+        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
+        <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
+        <span><b class="num">${nf(streaks.current)}</b><small>Day streak</small></span>
       </div>
+    </div>`;
+}
+
+function projectionControlsHtml() {
+  if (trackedLevel == null || experience == null || avgDailyXp == null) return '';
+  return `
+    <div class="projection-tools">
+      <div class="section-subhead first"><h3>Adjust target and pace</h3><span class="fine dim">defaults to the last ${nf(recentGains.length)} days</span></div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
+        <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
+      </div>
+      <div class="tool-result" id="pred-out"></div>
     </div>`;
 }
 
@@ -507,19 +541,6 @@ function standingHighlightsHtml() {
   return parts.length ? `<div class="mini-metrics">${parts.join('')}</div>` : '';
 }
 
-const recentXpRows = [...historyRows].reverse().slice(0, 30);
-const recentXpTable = tableHtml([
-  { label: 'Date', cell: (row) => esc(row.date) },
-  { label: 'Level', className: 'num', cell: (row) => nf(row.level) },
-  { label: 'Delta', className: 'num', cell: (row) => signed(row.levelDelta) },
-  { label: 'Experience', className: 'num', cell: (row) => nf(row.experience) },
-  { label: 'XP gain', className: 'num', cell: (row) => row.gain == null ? '<span class="dim">-</span>' : `+${nf(row.gain)}` },
-  { label: 'XP to next', className: 'num', cell: (row) => kk(row.xpToNext) },
-  { label: 'Progress', className: 'num', cell: (row) => `${row.progress.toFixed(1)}%` },
-  { label: 'Rank', className: 'num', cell: (row) => row.rank ? `#${nf(row.rank)}` : '<span class="dim">-</span>' },
-  { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-], recentXpRows, 'No XP rows yet.');
-
 const groundsTable = tableHtml([
   { label: 'Ground', cell: (row) => `<a href="ground.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
   { label: 'Level', className: 'num', cell: (row) => plain(row.levelText || (row.level != null ? `${row.level}+` : null)) },
@@ -532,150 +553,126 @@ const groundsTable = tableHtml([
 
 stage.innerHTML = `
   <header class="character-hero panel">
-    <div class="hero-top">
+    <div class="character-profile">
       ${ring(profile?.name || config.name)}
-      <div class="hero-stats">
-        <span><b class="num">${level != null ? nf(level) : '-'}</b><small>Level</small></span>
-        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
-        <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
-      </div>
-    </div>
-    <div class="hero-identity">
-      <p class="eyebrow">${esc(profile?.world || config.world)} · ${esc(profile?.vocation || 'character')}</p>
-      <h1>${esc(profile?.name || config.name)}</h1>
-      <p class="character-lede">${esc(profile?.title || 'Adventurer')}, followed day by day through XP, highscore rank, deaths and private hunt evidence.</p>
-      <div class="dashboard-meta">
-        ${experience != null ? `<span class="pill">XP ${kk(experience)}</span>` : ''}
-        ${latest?.date ? `<span class="pill">Updated ${esc(latest.date)}</span>` : ''}
+      <div class="hero-identity">
+        <h1>${esc(profile?.name || config.name)}</h1>
+        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${profile?.accountStatus ? ` · ${esc(profile.accountStatus)}` : ''}</p>
+        ${profile?.title ? `<p class="fine dim">${esc(profile.title)}</p>` : ''}
       </div>
     </div>
     <div class="hero-actions actions">
-      <a class="btn btn-primary btn-lg" href="submit.html">Save hunt</a>
+      <a class="btn btn-primary btn-lg" href="submit.html">Log a hunt</a>
       <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan hunt</a>
     </div>
   </header>
 
-  <div class="section-nav-wrap">
-    <nav class="section-nav" aria-label="Character sections">
-      <a href="#progression">Progression</a>
-      <a href="#next">Next</a>
-      <a href="#highscores">Highscores</a>
-      <a href="#details">Details</a>
-    </nav>
-  </div>
-
-  <section class="section character-act" id="progression">
-    <div class="section-bar"><h2>Progression</h2><span class="fine dim">the one thing to know right now</span></div>
-    ${progressionCardHtml()}
-    <div class="progression-history">
-        <div class="panel panel-pad viz">
-          <div class="chart-controls">
-            <div>
-              <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Total experience</p>
-              <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
-            </div>
-            <div class="chart-control-groups">
-              <div class="chart-button-group" aria-label="XP chart metric">
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="true">Total XP</button>
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="false">Daily gain</button>
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
-              </div>
-              <div class="chart-button-group" aria-label="XP chart range">
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="false">30d</button>
-                <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="true">All</button>
-              </div>
-            </div>
-          </div>
-          <div class="chart-shell">
-            <div id="xp-chart"></div>
-            <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
+  <section class="progression-overview" aria-labelledby="progression-title">
+    <div class="section-bar"><h2 id="progression-title">Progression</h2><span class="fine dim">current state, target and pace</span></div>
+    ${progressionOverviewHtml()}
+    <div class="panel panel-pad viz progression-chart">
+      <div class="chart-controls">
+        <div>
+          <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Daily XP gained</p>
+          <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
+          <div class="chart-event-legend" aria-label="Chart event markers">
+            <span><i class="event-level"></i>Level-up</span>
+            <span><i class="event-death"></i>Death</span>
           </div>
         </div>
-        <div class="section-subhead"><h3>Recent recorded days</h3><a class="fine dim" href="analytics.html">Explore full progression</a></div>
-        ${recentXpTable}
+        <div class="chart-control-groups">
+          <div class="chart-button-group" aria-label="XP chart metric">
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="true">Daily gain</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="false">Total XP</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
+          </div>
+          <div class="chart-button-group" aria-label="XP chart range">
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="true">30d</button>
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="false">All</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-shell">
+        <div id="xp-chart"></div>
+        <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
+      </div>
+      <div class="chart-foot"><a class="fine dim" href="analytics.html">Explore full progression</a></div>
     </div>
   </section>
 
-  <section class="section character-act" id="next">
-    <div class="section-bar"><h2>What next</h2><span class="fine dim">planning from the character state</span></div>
-  ${grounds4me.length ? `
-    <div class="next-block">
-      <div class="section-subhead first"><h3>Level-fit hunt targets</h3><a class="fine dim" href="grounds.html">Open full planner</a></div>
-    <div class="story-rail">
-      ${grounds4me.slice(0, 8).map((r) => `
-        <a class="story" href="ground.html?g=${esc(r.groundSlug)}" title="${esc(r.ground)} - ${kk(r.xpRawRate)} raw XP/h from level ${nf(r.level)}">
-          ${ring(r.ground)}
-          <span class="cap">${esc(r.ground)}</span>
-        </a>`).join('')}
-    </div>
-      <div class="section-subhead"><h3>Planner rows</h3><span class="fine dim">${esc(characterVocation || 'character')} rows around level ${nf(level)}</span></div>
-    ${groundsTable}
-    </div>` : `<div class="panel panel-pad dim">No raw-XP-rated ${esc(characterVocation || 'character')} planner rows are available around level ${level != null ? nf(level) : '-'}. Open the full planner to inspect unrated rows and wider level bands.</div>`}
-
-    <div class="hunt-log-panel">
-      <div class="section-subhead first"><h3>My hunt log</h3><a class="fine dim" href="analytics.html">Progress</a></div>
-    <div class="pulse-row">
-      <div class="metric-tile pulse"><div class="big num">${nf(myHunts.length)}</div><div class="eyebrow">Logged hunts</div></div>
-      <div class="metric-tile pulse"><div class="big num">${nf(grounds.directory.length)}</div><div class="eyebrow">Grounds in the planner</div></div>
-      <div class="metric-tile pulse"><div class="big num">${nf(codex.size)}</div><div class="eyebrow">Creatures in the codex</div></div>
-      <div class="metric-tile pulse"><div class="big num" id="last-login-day">${profile ? (fmtDateOnly(profile.lastLogin) || '-') : '-'}</div><div class="eyebrow">Last login</div></div>
-      <div class="metric-tile pulse"><div class="big">${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</div><div class="eyebrow">${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt log yet'}</div></div>
-    </div>
-    <div class="section-subhead"><h3>Recent analyser sessions</h3><span class="fine dim">private browser logbook</span></div>
-    <div id="hunt-table">${huntTableHtml()}</div>
-    </div>
-  </section>
-
-  ${latest ? `
-  <section class="section character-act" id="highscores">
-    <div class="section-bar"><h2>Highscores</h2><span class="fine dim">one trend plus every tracked category</span></div>
-    ${standingHighlightsHtml()}
-    <div class="narrative-strip">
-      ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
-    </div>
-    <div class="skill-feature-row">
-      ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
-      <div class="hs-list panel">
-        ${secondaryHighscores.map(highscoreRowHtml).join('')}
+  <section class="character-deep-dive" aria-labelledby="deep-dive-title">
+    <h2 class="visually-hidden" id="deep-dive-title">Character deep dives</h2>
+    <div class="character-tabs-wrap">
+      <div class="character-tabs" role="tablist" aria-label="Character deep dives">
+        <button type="button" role="tab" id="tab-next" aria-controls="panel-next" aria-selected="true">Next hunt</button>
+        <button type="button" role="tab" id="tab-highscores" aria-controls="panel-highscores" aria-selected="false" tabindex="-1">Highscores</button>
+        <button type="button" role="tab" id="tab-hunts" aria-controls="panel-hunts" aria-selected="false" tabindex="-1">Hunt log</button>
+        <button type="button" role="tab" id="tab-details" aria-controls="panel-details" aria-selected="false" tabindex="-1">Details</button>
       </div>
     </div>
-  </section>` : ''}
 
-  <section class="section character-act" id="story">
-    <div class="section-bar"><h2>Milestones and setbacks</h2><span class="fine dim">events, not just measurements</span></div>
-    <div class="narrative-strip">
-      <span><b class="num">${nf(levelUps.length)}</b><small>level-ups logged</small></span>
-      <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `most recent, ${esc(levelUps[0].date)}` : 'none yet'}</small></span>
-      <span><b class="num">${nf(deaths.length)}</b><small>death${deaths.length === 1 ? '' : 's'} on record</small></span>
+    <div class="character-tab-panel" role="tabpanel" id="panel-next" aria-labelledby="tab-next" tabindex="0">
+      ${projectionControlsHtml()}
+      ${grounds4me.length ? `
+      <div class="section-subhead"><h3>Level-fit hunt targets</h3><a class="fine dim" href="grounds.html">Open full planner</a></div>
+      <div class="story-rail">
+        ${grounds4me.slice(0, 8).map((row) => `
+          <a class="story" href="ground.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
+            ${ring(row.ground)}
+            <span class="cap">${esc(row.ground)}</span>
+          </a>`).join('')}
+      </div>
+      <div class="section-subhead"><h3>Planner rows</h3><span class="fine dim">${esc(characterVocation || 'character')} rows around level ${nf(level)}</span></div>
+      ${groundsTable}` : `
+      <div class="empty-action">
+        <div><h3>No rated ${esc(characterVocation || 'character')} hunts in this band</h3><p class="dim">The full planner still includes unrated grounds and lets you inspect a wider level range.</p></div>
+        <a class="btn btn-primary" href="grounds.html">Adjust planner filters</a>
+      </div>`}
     </div>
-    <div class="event-grid">
-      ${levelUps.length ? `
-          <article class="event-panel">
-            <div class="section-subhead first"><h3>Level breakthroughs</h3><span class="fine dim">${cadenceTrend ? `${cadenceTrend.recent.toFixed(1)} recent days/level` : 'level-up history'}</span></div>
-        ${tableHtml([
-          { label: 'Date', cell: (row) => esc(row.date) },
-          { label: 'Reached', className: 'num', cell: (row) => nf(row.level) },
-          { label: 'Step', className: 'num', cell: (row) => `+${nf(row.step)}` },
-          { label: 'Source', cell: (row) => esc(sourceName(row.source)) },
-        ], levelUps.slice(0, 12), 'No level-ups recorded yet.')}
-          </article>` : ''}
-          <article class="event-panel">
-            <div class="section-subhead first"><h3>Deaths</h3><span class="fine dim">${nf(profile?.deaths?.length || 0)} on record</span></div>
-            <div id="deaths-table">${deathsTableHtml()}</div>
-          </article>
-    </div>
-  </section>
 
-  <section class="section character-act" id="details">
-    <div class="section-bar"><h2>Character details</h2><span class="fine dim">stable facts that rarely change</span></div>
-    <div class="panel panel-pad profile-panel">
-      <div id="profile-summary">${characterDetailsHtml()}</div>
+    <div class="character-tab-panel" role="tabpanel" id="panel-highscores" aria-labelledby="tab-highscores" tabindex="0" hidden>
+      ${latest ? `
+      <div class="section-subhead first"><h3>Highscores</h3><span class="fine dim">one trend plus every tracked category</span></div>
+      ${standingHighlightsHtml()}
+      <div class="narrative-strip">
+        ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
+      </div>
+      <div class="skill-feature-row">
+        ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
+        <div class="hs-list panel">${secondaryHighscores.map(highscoreRowHtml).join('')}</div>
+      </div>` : '<div class="empty-action"><div><h3>No highscore snapshot yet</h3><p class="dim">The scheduled tracker will populate this view after a successful crawl.</p></div></div>'}
+    </div>
+
+    <div class="character-tab-panel" role="tabpanel" id="panel-hunts" aria-labelledby="tab-hunts" tabindex="0" hidden>
+      ${myHunts.length ? `
+      <div class="section-subhead first"><h3>Recent analyser sessions</h3><a class="fine dim" href="analytics.html">Progress</a></div>
+      <div class="hunt-summary">
+        <span><b class="num">${nf(myHunts.length)}</b><small>Logged hunts</small></span>
+        <span><b>${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</b><small>${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt yet'}</small></span>
+      </div>
+      <div id="hunt-table">${huntTableHtml()}</div>` : `
+      <div class="empty-action">
+        <div><h3>Build your first personal hunt baseline</h3><p class="dim">Paste a Hunting Analyser to start comparing raw XP, profit and creature kills.</p></div>
+        <a class="btn btn-primary" href="submit.html">Log your first hunt</a>
+      </div>`}
+    </div>
+
+    <div class="character-tab-panel" role="tabpanel" id="panel-details" aria-labelledby="tab-details" tabindex="0" hidden>
+      <div class="section-subhead first"><h3>Character details</h3><span class="fine dim">stable profile facts and recorded events</span></div>
+      <div class="panel panel-pad profile-panel"><div id="profile-summary">${characterDetailsHtml()}</div></div>
+      <div class="event-summary">
+        <span><b class="num">${nf(levelUps.length)}</b><small>Level-ups recorded</small></span>
+        <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `Most recent · ${esc(levelUps[0].date)}` : 'No level-up yet'}</small></span>
+        <span><b class="num">${cadenceTrend ? cadenceTrend.recent.toFixed(1) : '-'}</b><small>Recent days per level</small></span>
+        <span><b class="num">${nf(deaths.length)}</b><small>Deaths on record</small></span>
+      </div>
+      ${deaths.length ? `<div class="section-subhead"><h3>Deaths</h3><span class="fine dim">also marked on the XP chart when dates overlap</span></div><div id="deaths-table">${deathsTableHtml()}</div>` : ''}
     </div>
   </section>`;
 
-bindSectionNavSpy();
+bindCharacterTabs();
 
 // ---- chart controls ----
 const xpState = { metric: 'daily', range: '30' };

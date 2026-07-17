@@ -17,6 +17,7 @@ import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapsh
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
+import { flow } from '../assets/js/viz/svg.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
 import { currentBuyPrice } from './fetch-imbuement-prices.mjs';
 import { CHARACTER } from './config.mjs';
@@ -313,5 +314,24 @@ assert(recentTradePrice.price === 118 && recentTradePrice.basis === 'daily-lowes
   'a newer daily sell observation must win over an older active-offer snapshot');
 assert(currentBuyPrice(null) == null && currentBuyPrice([]) == null,
   'missing market history must remain missing instead of inventing a price');
+
+const pageFiles = ['index', 'character', 'grounds', 'ground', 'creatures', 'creature', 'charms', 'submit', 'tools', 'analytics', 'admin'];
+for (const page of pageFiles) {
+  const html = readFileSync(new URL(`../${page}.html`, import.meta.url), 'utf8');
+  assert(!/href\s*=\s*["']#/.test(html), `${page}.html reintroduced hash navigation`);
+  assert(html.includes('data-skip-stage'), `${page}.html is missing the non-hash skip control`);
+}
+const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
+const charmsController = readFileSync(new URL('../assets/js/pages/charms.js', import.meta.url), 'utf8');
+assert(!/location\.hash|href\s*=\s*["']#/.test(`${characterController}\n${charmsController}`),
+  'page controllers reintroduced hash-driven navigation');
+assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
+  'character deep dives must remain accessible task tabs');
+const markedFlow = flow([
+  { key: '07-01', n: 10, events: [{ type: 'level', label: 'Reached level 10' }] },
+  { key: '07-02', n: 5, events: [{ type: 'death', label: 'Death at level 10' }] },
+]);
+assert(markedFlow.includes('vevent-level') && markedFlow.includes('vevent-death'),
+  'progression chart must render both level-up and death markers');
 
 console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

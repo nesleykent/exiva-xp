@@ -62,6 +62,14 @@ function applyLook(mode) {
 export function mountShell(active) {
   applyLook(localStorage.getItem(LOOK_KEY) || 'auto');
 
+  document.querySelector('[data-skip-stage]')?.addEventListener('click', () => {
+    const stage = document.getElementById('stage');
+    if (!stage) return;
+    stage.tabIndex = -1;
+    stage.scrollIntoView({ block: 'start' });
+    setTimeout(() => stage.focus({ preventScroll: true }), 0);
+  });
+
   const rail = document.getElementById('rail');
   rail.innerHTML = `
     <a class="wordmark" href="index.html">${GLYPH}<span>Exiva&nbsp;XP</span></a>

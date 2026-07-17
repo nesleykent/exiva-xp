@@ -44,6 +44,14 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const area = `${line} L${x(data.length - 1).toFixed(1)},${pad.t + h} L${x(0).toFixed(1)},${pad.t + h} Z`;
   const dots = data.map((d, i) =>
     `<circle class="vdot" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="3" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-label="${esc(`${d.key}: ${fmt(d.n)}`)}"><title>${esc(d.key)}: ${fmt(d.n)}</title></circle>`).join('');
+  const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
+    const cx = x(i) + (eventIndex * 8);
+    const cy = y(d.n) - 9;
+    if (event.type === 'death') {
+      return `<g class="vevent vevent-death"><path d="M${(cx - 4).toFixed(1)} ${(cy - 4).toFixed(1)}L${(cx + 4).toFixed(1)} ${(cy + 4).toFixed(1)}M${(cx + 4).toFixed(1)} ${(cy - 4).toFixed(1)}L${(cx - 4).toFixed(1)} ${(cy + 4).toFixed(1)}"/><title>${esc(event.label)}</title></g>`;
+    }
+    return `<circle class="vevent vevent-level" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"><title>${esc(event.label)}</title></circle>`;
+  })).join('');
   const grid = [0, 0.5, 1].map((f) => {
     const gy = (pad.t + h - f * h).toFixed(1);
     return `<line class="vaxis" x1="${pad.l}" y1="${gy}" x2="${width - pad.r}" y2="${gy}"/>
@@ -52,7 +60,7 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const marks = [...new Set([0, (data.length - 1) >> 1, data.length - 1])].map((i) =>
     `<text class="vtick" x="${x(i).toFixed(1)}" y="${height - 6}" text-anchor="middle">${esc(data[i].key)}</text>`).join('');
 
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" xmlns="http://www.w3.org/2000/svg">${grid}<path class="varea" d="${area}"/><path class="vline" d="${line}"/>${dots}${marks}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" xmlns="http://www.w3.org/2000/svg">${grid}<path class="varea" d="${area}"/><path class="vline" d="${line}"/>${dots}${events}${marks}</svg>`;
 }
 
 /** Compact independently-scaled trend, for table/card rows where a full axis would overstate precision. */

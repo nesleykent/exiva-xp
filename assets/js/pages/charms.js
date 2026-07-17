@@ -46,7 +46,7 @@ function adviceCard(row) {
   <div class="panel panel-pad">
     <div class="tile-top" style="margin-bottom:10px">
       <div>
-        <a class="name" href="#${esc(row.charm.slug)}">${esc(row.charm.name)}</a>
+        <div class="name">${esc(row.charm.name)}</div>
         <div class="tile-tags" style="margin-top:6px">${pillEl(row.charm.element)}</div>
       </div>
     </div>
@@ -111,7 +111,4 @@ stage.innerHTML = `
     <div class="tiles">${minor.map(card).join('')}</div>
   </section>`;
 
-if (location.hash) {
-  document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'center' });
-}
 export {};
