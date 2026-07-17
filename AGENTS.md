@@ -170,6 +170,8 @@ Log-a-hunt accessibility pass (2026-07-16): the analyser paste field is programm
 
 Page-bootstrap performance pass (2026-07-16): controllers now opt into only the datasets they consume. Logbook no longer downloads/parses the 3.2 MB creature codex or planner rows; Character and Progress skip the codex; Creature list skips planner/config/hunt data; Tools skips planner rows. Ledger mode remains one flag and automatically supplies grounds plus hunt evidence.
 
+Tools accessibility pass (2026-07-16): stamina and damage results are polite atomic status regions, world/tier filter changes announce their summary, and the imbuement dialog is labelled by its imbuement name and described by its effect.
+
 ## 10. Active tasks (in priority order)
 
 1. **Historical backfill** — extend `character-history.json` when the owner supplies older GuildStats webarchives.

@@ -325,6 +325,7 @@ const characterController = readFileSync(new URL('../assets/js/pages/character.j
 const charmsController = readFileSync(new URL('../assets/js/pages/charms.js', import.meta.url), 'utf8');
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
+const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
 assert(!/location\.hash|href\s*=\s*["']#/.test(`${characterController}\n${charmsController}`),
   'page controllers reintroduced hash-driven navigation');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
@@ -337,6 +338,10 @@ assert(bootController.includes('codex = false') && bootController.includes('grou
   'page bootstrap datasets must stay opt-in to prevent multi-megabyte unrelated fetches');
 assert(bootController.includes('const needsGrounds = grounds || ledger') && bootController.includes('const needsHunts = hunts || ledger'),
   'ledger pages must automatically load their grounds and hunt evidence');
+assert(toolsController.includes('id="stamina-out" role="status"') && toolsController.includes('id="damage-out" role="status"'),
+  'interactive calculator results must remain polite live status regions');
+assert(toolsController.includes('aria-labelledby="imb-modal-title"') && toolsController.includes('id="imb-modal-effect"'),
+  'imbuement dialog must remain programmatically named and described');
 const markedFlow = flow([
   { key: '07-01', n: 10, events: [{ type: 'level', label: 'Reached level 10' }] },
   { key: '07-02', n: 5, events: [{ type: 'death', label: 'Death at level 10' }] },

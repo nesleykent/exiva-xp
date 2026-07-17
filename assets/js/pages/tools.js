@@ -68,7 +68,7 @@ stage.innerHTML = `
         <label class="lbl lbl-narrow"><span class="eyebrow">Hunt time</span><input id="stamina-session" type="text" value="2:00" inputmode="numeric"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Target</span><input id="stamina-target" type="text" value="42:00" inputmode="numeric"></label>
       </div>
-      <div class="tool-result" id="stamina-out"></div>
+      <div class="tool-result" id="stamina-out" role="status" aria-live="polite" aria-atomic="true"></div>
       <p class="fine dim">Offline regeneration: no regen for the first 10 minutes, then 3 min per stamina minute up to 39:00 and twice that (6 min) for the 39:00–42:00 bonus hours — 39:00 → 42:00 takes 18h10m offline.</p>
     </section>
 
@@ -92,7 +92,7 @@ stage.innerHTML = `
       </div>
       <p class="fine dim">Enter your own damage range (client or analyser numbers); the calculator applies only the target's resistance, mitigation, crit/fatal expectation and the charm proc — elemental charms deal 5% of initial HP with a per-stage trigger chance (5/10/11%, maxed default). It never invents your raw roll.</p>
       <datalist id="creature-list">${creatures.map((c) => `<option value="${esc(c.name)}"></option>`).join('')}</datalist>
-      <div class="tool-result" id="damage-out"></div>
+      <div class="tool-result" id="damage-out" role="status" aria-live="polite" aria-atomic="true"></div>
     </section>
 
     <section class="panel panel-pad tool-card tool-wide" id="profit-tool">
@@ -114,12 +114,12 @@ stage.innerHTML = `
         </label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>${sortMenu('imb-tier', TIER_OPTIONS, imbState.tier)}</label>
       </div>
-      <p class="fine dim" id="imb-filter-summary">World: ${esc(profile?.world || config.world)} · Tier: Powerful</p>
+      <p class="fine dim" id="imb-filter-summary" role="status" aria-live="polite">World: ${esc(profile?.world || config.world)} · Tier: Powerful</p>
       <div class="tool-result-grid" id="imb-grid"></div>
     </section>
   </div>
 
-  <dialog id="imb-modal"></dialog>`;
+  <dialog id="imb-modal" aria-labelledby="imb-modal-title" aria-describedby="imb-modal-effect"></dialog>`;
 
 $('#damage-element').value = elementOrder(defaultCreature)[0]?.el || 'physical';
 
@@ -426,8 +426,8 @@ function openImbuementModal(id) {
     <div class="panel panel-pad" style="max-width:760px;display:grid;gap:var(--s4)">
       <div class="tool-head">
         <div>
-          <h2 style="margin:0">${esc(imb.name)}</h2>
-          <span class="fine dim">${esc(imb.effect)}</span>
+          <h2 id="imb-modal-title" style="margin:0">${esc(imb.name)}</h2>
+          <span class="fine dim" id="imb-modal-effect">${esc(imb.effect)}</span>
         </div>
         <button type="button" class="btn btn-tertiary btn-sm" id="imb-modal-close">Close</button>
       </div>
