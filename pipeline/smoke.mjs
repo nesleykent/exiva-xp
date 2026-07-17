@@ -80,6 +80,11 @@ const hunt = {
 const verdict = judge(hunt, []);
 assert(verdict.ok, `rules rejected a clean hunt: ${verdict.faults.join('; ')}`);
 assert(!judge({ ...hunt, id: 't2' }, [hunt]).ok, 'duplicate slipped through');
+const soloWithoutVocation = judge({ ...hunt, id: 'solo-no-vocation', vocation: null }, []);
+assert(soloWithoutVocation.faults.includes('Vocation is required for a solo hunt.'),
+  'solo hunts must retain vocation evidence');
+assert(judge({ ...hunt, id: 'team-no-vocation', vocation: null, party: true }, []).ok,
+  'team hunts must remain valid without a single vocation');
 const importReport = assessImport([
   { ...hunt, id: 'imported', raw: `${hunt.raw}\nImported backup marker` },
   { ...hunt, id: 'imported', raw: `${hunt.raw}\nSecond row with repeated ID` },
@@ -334,6 +339,10 @@ assert(submitController.includes('aria-labelledby="paste-heading"') && submitCon
   'analyser input and parser feedback must remain available to assistive technology');
 assert(submitController.includes('class="guess ${i === 0') && !submitController.includes('role="button"'),
   'hunt-location choices must remain native buttons instead of keyboard-emulated divs');
+assert(submitController.includes('id="hunt-form"') && submitController.includes("addEventListener('submit'") && submitController.includes('let saving = false'),
+  'hunt confirmation must remain a native form guarded against concurrent saves');
+assert(submitController.includes('id="review-heading" tabindex="-1"') && submitController.includes("$('#review-heading').focus()"),
+  'successful analyser parsing must move focus to the review workflow');
 assert(bootController.includes('codex = false') && bootController.includes('grounds = false') && bootController.includes('ledger = false'),
   'page bootstrap datasets must stay opt-in to prevent multi-megabyte unrelated fetches');
 assert(bootController.includes('const needsGrounds = grounds || ledger') && bootController.includes('const needsHunts = hunts || ledger'),

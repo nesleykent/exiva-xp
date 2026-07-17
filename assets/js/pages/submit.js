@@ -60,7 +60,7 @@ function renderFlow(session) {
 
   $('#flow').innerHTML = `
   <section class="step">
-    <div class="step-head"><h2>What we read</h2></div>
+    <div class="step-head"><h2 id="review-heading" tabindex="-1">What we read</h2></div>
     <div class="panel panel-pad">
       <div class="facts">
         <div class="fact"><b class="num">${hm(session.minutes)}</b><span class="fine dim">Session</span></div>
@@ -113,18 +113,18 @@ function renderFlow(session) {
 
   <section class="step">
     <div class="step-head"><h2>Confirm and save</h2></div>
-    <div class="panel panel-pad">
+    <form class="panel panel-pad" id="hunt-form">
       <div class="form-row">
         <label class="lbl lbl-wide"><span class="eyebrow">Ground *</span><input type="text" id="h-ground" list="ground-names" required></label>
         <datalist id="ground-names">${[...grounds.directory].sort((a, b) => a.name.localeCompare(b.name)).map((g) => `<option value="${esc(g.name)}">`).join('')}</datalist>
-        <label class="lbl"><span class="eyebrow">Vocation *</span><select id="h-voc"><option value="">Pick…</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Level *</span><input type="number" id="h-level" min="8" max="2000"></label>
+        <label class="lbl"><span class="eyebrow" id="h-voc-label">Vocation (solo) *</span><select id="h-voc" required><option value="">Pick…</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Level *</span><input type="number" id="h-level" min="8" max="2000" required></label>
         <label class="lbl"><span class="eyebrow">Hunt type</span><select id="h-party"><option value="">Solo</option><option value="party">Team hunt</option></select></label>
         <label class="lbl"><span class="eyebrow">World</span><input type="text" id="h-world" placeholder="Optional"></label>
       </div>
-      <div id="verdict"></div>
-      <div style="margin-top:14px"><button class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
-    </div>
+      <div id="verdict" role="status" aria-live="polite"></div>
+      <div style="margin-top:14px"><button type="submit" class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
+    </form>
   </section>`;
 
   const guessHost = $('#guesses');
@@ -145,7 +145,19 @@ function renderFlow(session) {
     $('#h-ground').value = guessHost.querySelector('.guess').dataset.name;
   }
 
-  $('#publish').addEventListener('click', async () => {
+  const huntForm = $('#hunt-form');
+  const publishButton = $('#publish');
+  const syncVocationRequirement = () => {
+    const solo = $('#h-party').value !== 'party';
+    $('#h-voc').required = solo;
+    $('#h-voc-label').textContent = solo ? 'Vocation (solo) *' : 'Vocation (optional)';
+  };
+  $('#h-party').addEventListener('change', syncVocationRequirement);
+  syncVocationRequirement();
+  let saving = false;
+  huntForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (saving) return;
     const hunt = {
       id: newId(),
       loggedAt: new Date().toISOString(),
@@ -178,6 +190,10 @@ function renderFlow(session) {
     ].join('');
     if (!verdict.ok) return;
 
+    saving = true;
+    huntForm.setAttribute('aria-busy', 'true');
+    publishButton.disabled = true;
+    publishButton.textContent = 'Saving…';
     try {
       const result = await backend().send(hunt);
       if (result.followUp) window.open(result.followUp, '_blank', 'noopener');
@@ -185,7 +201,13 @@ function renderFlow(session) {
       say(result.ok ? 'Hunt saved to your logbook.' : result.message);
     } catch (err) {
       $('#verdict').innerHTML += note('red', `Saving failed: ${err.message}`);
+    } finally {
+      saving = false;
+      huntForm.removeAttribute('aria-busy');
+      publishButton.disabled = false;
+      publishButton.textContent = 'Save hunt';
     }
   });
+  $('#review-heading').focus();
 }
 export {};

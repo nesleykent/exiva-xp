@@ -59,7 +59,8 @@ export function judge(hunt, book = []) {
   if (hunt.level == null || hunt.level < lo || hunt.level > hi) {
     faults.push(`Level must be between ${lo} and ${hi}.`);
   }
-  if (hunt.vocation && !VOCATIONS.includes(hunt.vocation)) faults.push(`Unknown vocation "${hunt.vocation}".`);
+  if (!hunt.party && !hunt.vocation) faults.push('Vocation is required for a solo hunt.');
+  else if (hunt.vocation && !VOCATIONS.includes(hunt.vocation)) faults.push(`Unknown vocation "${hunt.vocation}".`);
   for (const f of NON_NEGATIVE) {
     if (hunt[f] != null && hunt[f] < 0) faults.push(`Field "${f}" cannot be negative.`);
   }
