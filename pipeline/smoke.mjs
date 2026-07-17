@@ -348,6 +348,9 @@ assert(characterController.includes('role="tablist"') && characterController.inc
 assert(homeController.includes("boot('index.html', { config: true })") &&
   !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
   'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');
+assert(!homeController.includes('class="actions"') &&
+  !homeController.includes('Open character dashboard') && !homeController.includes('Plan next hunt'),
+  'Home routes must appear once in the workspace map instead of repeating as hero actions');
 for (const route of ['analytics.html', 'creatures.html', 'charms.html', 'admin.html']) {
   assert(homeController.includes(`href: '${route}'`), `${route} must remain reachable from the mobile Home doorway`);
 }

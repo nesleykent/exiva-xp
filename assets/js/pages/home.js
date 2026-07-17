@@ -81,11 +81,7 @@ stage.innerHTML = `
   <header class="hello">
     <p class="eyebrow">Exiva XP</p>
     <h1><span class="grad-text">Tibia character intelligence</span></h1>
-    <p>A private-first workspace for ${esc(characterName)}. Start here, then open the character dashboard, planner, analyser log, tools or progression boards.</p>
-    <div class="actions">
-      <a class="btn btn-primary btn-lg" href="character.html">Open character dashboard</a>
-      <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan next hunt</a>
-    </div>
+    <p>Plan ${esc(characterName)}'s next hunt, read progression and turn saved analyser evidence into better decisions.</p>
   </header>
 
   <section class="section home-workspace-group" style="margin-top:0">
