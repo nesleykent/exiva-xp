@@ -93,6 +93,26 @@ export function mountShell(active) {
     localStorage.setItem(LOOK_KEY, now);
     applyLook(now);
   });
+
+  const utilities = rail.querySelector('.rail-foot');
+  const mobileShell = window.matchMedia('(max-width: 700px)');
+  const syncMobileUtilities = () => {
+    const hidden = mobileShell.matches && window.scrollY > 64;
+    utilities.classList.toggle('rail-foot-scrolled', hidden);
+    utilities.inert = hidden;
+    if (hidden) utilities.setAttribute('aria-hidden', 'true');
+    else utilities.removeAttribute('aria-hidden');
+  };
+  let utilityFrame = 0;
+  window.addEventListener('scroll', () => {
+    if (utilityFrame) return;
+    utilityFrame = window.requestAnimationFrame(() => {
+      utilityFrame = 0;
+      syncMobileUtilities();
+    });
+  }, { passive: true });
+  mobileShell.addEventListener?.('change', syncMobileUtilities);
+  syncMobileUtilities();
 }
 
 // ---------------------------------------------------------------- helpers

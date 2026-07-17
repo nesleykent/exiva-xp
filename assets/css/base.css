@@ -224,7 +224,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
     background: rgba(var(--surface), .92);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgb(var(--line)); border-radius: var(--r-pill);
+    transition: opacity var(--t-hover) var(--e-standard), transform var(--t-hover) var(--e-standard);
   }
+  .rail-foot.rail-foot-scrolled { opacity: 0; transform: translateY(-8px); pointer-events: none; }
   .rail-foot .rail-item { padding: 8px; }
   /* the tab bar carries only the five daily-loop destinations; the rest
      stay in the desktop sidebar and on the home workspace grid */
