@@ -270,6 +270,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .guess-list { display: grid; gap: var(--s2); }
 .guess {
   display: flex; align-items: center; gap: var(--s3);
+  width: 100%; min-height: var(--tap); text-align: left; color: rgb(var(--ink)); font: inherit;
   padding: var(--s3) var(--s4); cursor: pointer;
   border: 1.5px solid rgb(var(--line)); border-radius: var(--r-input);
   background: rgb(var(--surface-raised));
@@ -277,6 +278,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .guess:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 .guess.picked { border-color: rgb(var(--blue)); }
+.guess-copy { display: grid; gap: 2px; }
 .guess .pct { margin-left: auto; font-weight: 700; font-size: 15px; }
 
 .note { border-radius: var(--r-md); padding: var(--s3) var(--s4); font-size: 14px; margin: var(--s2) 0; }

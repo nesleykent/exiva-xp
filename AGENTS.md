@@ -165,6 +165,8 @@ Imbuement calculator built (2026-07-06; screenshot parity correction 2026-07-07)
 
 Character narrative pass (2026-07-07; task-tab correction 2026-07-16): `character.html` now reads as Identity → Progression at a glance → one event-marked chart → Next hunt / Highscores / Hunt log / Details tabs. The exact same level/history meaning is no longer repeated in a recent-30 table and a level-breakthrough list; level-ups and overlapping recorded deaths are markers on the interactive chart, while the full row history remains on Analytics. Empty planner/log states are direct actions, every non-featured highscore remains in one compact list, and off-vocation planner rows are never substituted when no raw-XP-rated Elder Druid target exists.
 
+Log-a-hunt accessibility pass (2026-07-16): the analyser paste field is programmatically labelled and described, parser feedback is an announced status region, and hunt-location candidates are native toggle buttons with `aria-pressed` state instead of clickable divs with hand-written keyboard emulation.
+
 ## 10. Active tasks (in priority order)
 
 1. **Historical backfill** — extend `character-history.json` when the owner supplies older GuildStats webarchives.

@@ -323,10 +323,15 @@ for (const page of pageFiles) {
 }
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
 const charmsController = readFileSync(new URL('../assets/js/pages/charms.js', import.meta.url), 'utf8');
+const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 assert(!/location\.hash|href\s*=\s*["']#/.test(`${characterController}\n${charmsController}`),
   'page controllers reintroduced hash-driven navigation');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
   'character deep dives must remain accessible task tabs');
+assert(submitController.includes('aria-labelledby="paste-heading"') && submitController.includes('id="read-note" role="status"'),
+  'analyser input and parser feedback must remain available to assistive technology');
+assert(submitController.includes('class="guess ${i === 0') && !submitController.includes('role="button"'),
+  'hunt-location choices must remain native buttons instead of keyboard-emulated divs');
 const markedFlow = flow([
   { key: '07-01', n: 10, events: [{ type: 'level', label: 'Reached level 10' }] },
   { key: '07-02', n: 5, events: [{ type: 'death', label: 'Death at level 10' }] },

@@ -16,12 +16,12 @@ stage.classList.add('narrow');
 stage.innerHTML = `
   <header style="padding: 8px 0 20px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Log a hunt</h1>
-    <p class="dim">Paste the Hunting Analyser exactly as the client copies it. Parsing happens in your browser; the original text is saved untouched in your personal logbook.</p>
+    <p class="dim" id="paste-help">Paste the Hunting Analyser exactly as the client copies it. Parsing happens in your browser; the original text is saved untouched in your personal logbook.</p>
   </header>
   <div class="steps">
     <section class="step">
-      <div class="step-head"><h2>Paste your analyser</h2></div>
-      <textarea id="paste" rows="12" placeholder="Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
+      <div class="step-head"><h2 id="paste-heading">Paste your analyser</h2></div>
+      <textarea id="paste" rows="12" aria-labelledby="paste-heading" aria-describedby="paste-help" placeholder="Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
 Session: 02:30h
 Raw XP Gain: 3,412,500
 XP Gain: 4,095,000
@@ -34,10 +34,10 @@ Killed Monsters:
 Looted Items:
   1024x gold coin"></textarea>
       <div style="margin-top:12px; display:flex; gap:12px; align-items:center">
-        <button class="btn btn-primary" id="go">Read analyser</button>
+        <button type="button" class="btn btn-primary" id="go">Read analyser</button>
         <span class="fine dim">Backend: ${esc(backend().label)}</span>
       </div>
-      <div id="read-note"></div>
+      <div id="read-note" role="status" aria-live="polite"></div>
     </section>
     <div id="flow"></div>
   </div>`;
@@ -85,13 +85,13 @@ function renderFlow(session) {
     <div class="step-head"><h2>Where were you?</h2></div>
     <div class="guess-list" id="guesses">
       ${located.candidates.map((cand, i) => `
-        <div class="guess ${i === 0 ? 'picked' : ''}" role="button" tabindex="0" data-name="${esc(cand.ground?.name || cand.habitat)}">
-          <div>
+        <button type="button" class="guess ${i === 0 ? 'picked' : ''}" aria-pressed="${i === 0 ? 'true' : 'false'}" data-name="${esc(cand.ground?.name || cand.habitat)}">
+          <span class="guess-copy">
             <b>${esc(cand.ground?.name || cand.habitat)}</b>
-            <div class="fine dim">${cand.dwellers.length} matched creature${cand.dwellers.length === 1 ? '' : 's'} · explains ${pct(cand.coverage * 100)} of your kills${cand.ground && cand.ground.name !== cand.habitat ? ` · codex habitat: ${esc(cand.habitat)}` : ''}</div>
-          </div>
+            <span class="fine dim">${cand.dwellers.length} matched creature${cand.dwellers.length === 1 ? '' : 's'} · explains ${pct(cand.coverage * 100)} of your kills${cand.ground && cand.ground.name !== cand.habitat ? ` · codex habitat: ${esc(cand.habitat)}` : ''}</span>
+          </span>
           <span class="pct num">${cand.certainty}</span>
-        </div>`).join('')}
+        </button>`).join('')}
     </div>
     <p class="fine dim" style="margin:8px 0 0">Scored by creature overlap, kill volume, rarity and coverage. Pick one or type the ground below.</p>
   </section>` : ''}
@@ -130,17 +130,17 @@ function renderFlow(session) {
   const guessHost = $('#guesses');
   if (guessHost) {
     const pick = (el) => {
-      guessHost.querySelectorAll('.guess').forEach((g) => g.classList.remove('picked'));
+      guessHost.querySelectorAll('.guess').forEach((guess) => {
+        guess.classList.remove('picked');
+        guess.setAttribute('aria-pressed', 'false');
+      });
       el.classList.add('picked');
+      el.setAttribute('aria-pressed', 'true');
       $('#h-ground').value = el.dataset.name;
     };
     guessHost.addEventListener('click', (e) => {
       const g = e.target.closest('.guess');
       if (g) pick(g);
-    });
-    guessHost.addEventListener('keydown', (e) => {
-      const g = e.target.closest('.guess');
-      if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(g); }
     });
     $('#h-ground').value = guessHost.querySelector('.guess').dataset.name;
   }
