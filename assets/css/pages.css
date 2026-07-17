@@ -786,9 +786,12 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   line-height: 18px;
   overflow-wrap: anywhere;
 }
-.projection-tools { margin-top: var(--s3); }
-.character-tab-panel .projection-tools { margin-top: 0; }
-.projection-tools + .empty-action { margin-top: var(--s4); }
+.projection-settings { margin-top: var(--s3); overflow: hidden; }
+.projection-settings summary { display: flex; align-items: center; min-height: var(--tap); padding: 0 var(--s4); font-weight: 600; cursor: pointer; }
+.projection-settings summary:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+.projection-settings-body { display: grid; gap: var(--s3); padding: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.projection-settings-body > p { margin: 0; }
+.projection-feedback { min-height: 16px; }
 .section-subhead.first { margin-top: 0; }
 .skill-card {
   display: grid;
@@ -879,7 +882,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .pace-support { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pace-support > span { min-width: 0; padding: 0 var(--s2); }
   .pace-support > span:first-child { padding-left: 0; border-left: 0; }
-  .projection-tools .tool-fields { flex-direction: column; align-items: stretch; }
+  .projection-settings .tool-fields { flex-direction: column; align-items: stretch; }
   .character-tab-panel { padding: var(--s4); }
   .empty-action { align-items: stretch; flex-direction: column; }
   .empty-action .btn { width: 100%; }

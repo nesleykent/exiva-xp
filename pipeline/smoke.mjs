@@ -353,6 +353,10 @@ assert(characterController.includes('role="tablist"') && characterController.inc
 assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
   characterController.includes('Other tracked categories') && characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
   'Highscores must remain one featured trend plus one non-duplicated list without losing Loyalty title');
+assert(characterController.match(/projectionControlsHtml\(\)/g)?.length === 2 &&
+  characterController.includes('id="projection-target"') && characterController.includes("$('#projection-target').textContent") &&
+  !characterController.includes('id="pred-out"') && !characterController.includes('tool-kpis'),
+  'projection controls must update the single at-a-glance result instead of rendering duplicate KPI cards');
 assert(homeController.includes("boot('index.html', { config: true })") &&
   !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
   'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');
