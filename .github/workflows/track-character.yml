@@ -11,9 +11,14 @@ name: Track character
 
 on:
   schedule:
-    # Avoid GitHub Actions' busiest scheduler slots (:00/:15/:30/:45)
-    # while preserving the 15-minute cadence.
-    - cron: '3,18,33,48 * * * *'
+    # A 15-minute cadence (4 crons/hour) was configured here, but GitHub
+    # Actions' scheduler is well-documented to be unreliable at that
+    # frequency under load — the same failure mode already forced removing
+    # the separate online-presence tracker (see AGENTS.md). Run history
+    # confirmed it: real gaps between runs were routinely 1-3 hours, not
+    # 15 minutes. One honest hourly cron (off :00, GitHub's busiest slot)
+    # is what this schedule can actually deliver.
+    - cron: '7 * * * *'
   workflow_dispatch:
 
 permissions:

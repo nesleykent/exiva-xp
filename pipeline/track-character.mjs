@@ -13,7 +13,7 @@
  * deaths are preserved from earlier imports and extended if TibiaData
  * exposes new ones.
  *
- * Run by .github/workflows/track-character.yml every 15 minutes, or locally:
+ * Run by .github/workflows/track-character.yml every hour, or locally:
  *   node pipeline/track-character.mjs
  */
 
@@ -112,9 +112,9 @@ for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
     console.log(`${category}: ${hit ? `rank ${hit.rank}, value ${hit.value}` : 'not in top 1000'}`);
   } catch (err) {
     // Leave the category unset — "not measured this run", distinct from a
-    // confirmed "not in top 1000". Under the 15-minute cadence a run's
-    // transient failure must not overwrite a value an earlier run today
-    // already recorded; that's handled by falling back below.
+    // confirmed "not in top 1000". A run's transient failure must not
+    // overwrite a value an earlier run today already recorded; that's
+    // handled by falling back below.
     console.error(`${category}: ${err.message}`);
   }
   await sleep(400);

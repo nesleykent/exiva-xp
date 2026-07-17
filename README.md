@@ -72,7 +72,7 @@ pipeline/
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
-  track-character.mjs      15-minute Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
+  track-character.mjs      hourly Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (30-day sparse-market fallback; skips items fetched within 4h)
   imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
   smoke.mjs                engine smoke tests, run locally or by publish.yml
@@ -82,7 +82,7 @@ pipeline/
 .github/workflows/
   check-hunt.yml           on issue opened/edited
   merge-hunts.yml          optional shared evidence, on `approved` label + nightly sweep
-  track-character.yml      every 15 minutes — refresh the current Tibia server-save day, commit, redeploy
+  track-character.yml      every hour — refresh the current Tibia server-save day, commit, redeploy
   fetch-imbuement-prices.yml  a few times daily — refresh TibiaMarket imbuement item prices for Gentebra, commit, redeploy
   publish.yml              syntax checks + engine smoke tests + Pages deploy
 ```
