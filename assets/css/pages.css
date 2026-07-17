@@ -98,7 +98,7 @@
   }
   .filter-toggle {
     display: flex; align-items: center; justify-content: center; gap: 6px;
-    min-height: 36px; padding: 0 var(--s4);
+    min-height: var(--tap); padding: 0 var(--s4);
     background: rgb(var(--wash)); color: rgb(var(--ink));
     border: 0; border-radius: var(--r-input);
     font-size: 13px; font-weight: 600; cursor: pointer;
@@ -521,7 +521,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 44px;
+  min-height: var(--tap);
   padding: 0 var(--s3);
   background: rgb(var(--surface-2));
   border-top: 1px solid rgb(var(--line));
@@ -530,7 +530,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 44px;
+  min-height: var(--tap);
   padding: 0; border: 0; background: transparent; color: rgb(var(--ink));
   font: inherit; font-weight: 700; cursor: pointer;
 }
@@ -581,7 +581,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .imb-copy-btn {
   display: grid;
   place-items: center;
-  width: 44px; height: 44px;
+  width: var(--tap); height: var(--tap);
   padding: 0; border: 0; background: transparent;
   color: rgb(var(--ink-2)); cursor: pointer; border-radius: var(--r-circle);
   transition: background var(--t-hover) var(--e-standard);
@@ -682,7 +682,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
    with two plain gradient overlays gets the same fade with no masking or
    compositing trickery involved, so there's nothing left for that bug class
    to latch onto. */
-.section-nav-wrap { position: relative; }
+.section-nav-wrap { position: relative; min-width: 0; overflow: hidden; }
 .section-nav-wrap::before, .section-nav-wrap::after {
   content: ''; position: absolute; top: 0; bottom: 0; width: var(--s6);
   pointer-events: none; z-index: 1;
@@ -700,7 +700,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .section-nav a {
   display: flex; align-items: center;
   flex: 0 0 auto;
-  min-height: 44px; /* HIG minimum tap target */
+  min-height: var(--tap); /* HIG minimum tap target */
   padding: 0 var(--s4);
   border-radius: var(--r-input);
   background: rgb(var(--surface-2));
@@ -869,6 +869,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .skill-card-head > b {
   font-size: 22px;
   line-height: 26px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 .sparkline {
   min-height: 58px;
@@ -913,9 +916,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .hs-row-value b { font-size: 15px; }
 
 @media (max-width: 700px) {
-  .admin-transfer-actions .btn, .admin-delete, .admin-undo .btn, #k-dupes .btn { min-height: 44px; }
   #imb-tier-cards { grid-template-columns: 1fr; }
-  .tool-grid { grid-template-columns: 1fr; }
+  .tool-grid { grid-template-columns: minmax(0, 1fr); }
   .tool-fields .lbl,
   .tool-fields .lbl.lbl-wide,
   .tool-fields .lbl.lbl-narrow { width: 100%; }
@@ -930,7 +932,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
      (XP rank) renders straight under the cluster and gets clipped. Letting
      hero-stats wrap means a stat that no longer fits drops to its own line
      instead of getting force-compressed into a mid-number line break. */
-  .hero-top { gap: var(--s4); padding-right: 84px; flex-wrap: wrap; }
+  .hero-top { gap: var(--s4); padding-right: calc(var(--tap) * 2 + var(--s2)); flex-wrap: wrap; }
   .hero-top .ring { width: 64px; height: 64px; flex: 0 0 64px; }
   .hero-top .ring-core { width: 56px; height: 56px; font-size: 18px; }
   .hero-stats { gap: var(--s4); flex-wrap: wrap; row-gap: var(--s2); }
@@ -942,7 +944,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   }
   .hero-actions .btn { width: 100%; }
   .chart-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .chart-inspector {
     padding: var(--s3);
@@ -950,7 +952,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .profile-groups,
   .event-grid,
   .skill-feature-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .profile-group div {
     grid-template-columns: 1fr;
@@ -982,7 +984,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-controls { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); margin-bottom: var(--s3); flex-wrap: wrap; }
 .chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
 /* the metric/range toggles are this page's primary chart controls — HIG minimum tap target */
-.chart-controls .btn { min-height: 44px; }
+.chart-controls .btn { min-height: var(--tap); }
 .chart-button-group { display: flex; gap: 6px; flex-wrap: wrap; }
 .chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
 
@@ -997,7 +999,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
    hit the HIG 44pt minimum without changing their visual size or position */
 .section-bar a.fine, .section-subhead a.fine {
   display: inline-flex; align-items: center;
-  min-height: 44px; margin: -14px 0;
+  min-height: var(--tap); margin: -14px 0;
 }
 
 @media (max-width: 700px) {
