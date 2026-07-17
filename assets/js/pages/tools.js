@@ -12,6 +12,7 @@ import {
   profitSnapshot,
   staminaProjection,
 } from '../engine/planning.js';
+import { experienceForLevel, experienceUntilNextLevel } from '../engine/progression.js';
 import {
   calculateImbuement,
   formatShoppingList,
@@ -50,6 +51,7 @@ const creatures = [...codex.creatures].sort((a, b) => a.name.localeCompare(b.nam
  */
 const TIER_OPTIONS = { basic: ['Basic'], intricate: ['Intricate'], powerful: ['Powerful'] };
 const imbState = { tier: 'powerful' };
+const IMB_WORLD = profile?.world || config.world;
 
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
@@ -106,16 +108,24 @@ stage.innerHTML = `
     <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
       <div class="tool-head">
         <h2>Imbuement price calculator</h2>
-        <span class="fine dim">Gold Token packages and resource prices</span>
+        <span class="fine dim">Gold Token packages and resource prices — World: ${esc(IMB_WORLD)}</span>
       </div>
       <div class="filter-bar" id="imb-filter-bar">
-        <label class="lbl lbl-narrow"><span class="eyebrow">World</span>
-          <input id="imb-world" type="text" value="${esc(profile?.world || config.world)}" placeholder="World">
-        </label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>${sortMenu('imb-tier', TIER_OPTIONS, imbState.tier)}</label>
       </div>
-      <p class="fine dim" id="imb-filter-summary" role="status" aria-live="polite">World: ${esc(profile?.world || config.world)} · Tier: Powerful</p>
       <div class="tool-result-grid" id="imb-grid"></div>
+    </section>
+
+    <section class="panel panel-pad tool-card tool-wide" id="level-tool">
+      <div class="tool-head">
+        <h2>Level &amp; experience table</h2>
+        <span class="fine dim">total exp and exp to next level, per level</span>
+      </div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
+      </div>
+      <div class="tool-result" id="level-out"></div>
     </section>
   </div>
 
@@ -225,10 +235,45 @@ function renderProfit() {
     </div>`;
 }
 
+function renderLevelTable() {
+  const from = Math.floor(numberInput('#level-from'));
+  const to = Math.floor(numberInput('#level-to'));
+  if (!Number.isFinite(from) || !Number.isFinite(to) || from < 1 || to <= from) {
+    $('#level-out').innerHTML = '<span class="dim">Pick a "to" level above the "from" level.</span>';
+    return;
+  }
+  const span = to - from;
+  if (span > 500) {
+    $('#level-out').innerHTML = '<span class="dim">Keep the range to 500 levels or fewer.</span>';
+    return;
+  }
+  const rows = [];
+  for (let lvl = from; lvl <= to; lvl++) {
+    rows.push({
+      level: lvl,
+      total: experienceForLevel(lvl),
+      toNext: experienceUntilNextLevel(lvl, experienceForLevel(lvl)),
+    });
+  }
+  $('#level-out').innerHTML = `
+    <div class="sheet panel">
+      <table class="grid">
+        <thead><tr><th>Level</th><th class="num">Total exp</th><th class="num">Exp to next level</th></tr></thead>
+        <tbody>
+          ${rows.map((row) => `<tr${row.level === characterLevel ? ' style="background:rgba(var(--overlay), var(--overlay-a))"' : ''}>
+            <td>${row.level === characterLevel ? `<b>${nf(row.level)}</b> <span class="fine dim">(you)</span>` : nf(row.level)}</td>
+            <td class="num">${nf(row.total)}</td>
+            <td class="num">${nf(row.toNext)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
 // ---------------------------------------------------------------- imbuements
 
 function imbWorld() {
-  return $('#imb-world').value.trim() || config.world;
+  return IMB_WORLD;
 }
 
 function imbPrices(world = imbWorld()) {
@@ -264,7 +309,7 @@ function imbCardHtml(imb, prices) {
           ${imbIcon(imb)}
           <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
         </div>
-        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${imbCompact(cheapest.total)}`}</span>
+        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${imbCompact(cheapest.total)} gp`}</span>
       </div>
     </button>`;
 }
@@ -280,16 +325,31 @@ function renderImbuementGrid() {
   });
 }
 
-function priceInputRow(itemId, name, prices) {
+function priceInputRow(itemId, name, prices, marketForWorld) {
   const entry = prices[itemId];
   const value = entry ? entry.price : '';
   const fromMarket = entry?.source === 'tibiamarket';
-  const title = fromMarket ? `${name} — TibiaMarket estimate, edit to override` : name;
+  const hasMarketFallback = marketForWorld?.[itemId] != null;
+  const canReset = entry?.source === 'manual' && hasMarketFallback;
+  const title = fromMarket ? `${name} — TibiaMarket estimate, edit to use your own price instead` : name;
   return `
     <label class="imb-price-input${fromMarket ? ' imb-price-input-market' : ''}" title="${esc(title)}">
       ${itemIcon(itemId, 'imb-icon-sm')}
       <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="${esc(name)}" aria-label="${esc(title)}">
+      ${canReset ? `<button type="button" class="imb-copy-btn" data-reset-item="${esc(itemId)}" title="Reset to TibiaMarket price" aria-label="Reset ${esc(name)} to TibiaMarket price">${RESET_ICON}</button>` : ''}
     </label>`;
+}
+
+function marketUpdatedNote(marketForWorld) {
+  const timestamps = Object.values(marketForWorld || {})
+    .map((entry) => entry?.updatedAt)
+    .filter(Boolean)
+    .sort();
+  const latestTimestamp = timestamps.at(-1);
+  if (!latestTimestamp) return '';
+  const date = new Date(latestTimestamp);
+  if (Number.isNaN(date.getTime())) return '';
+  return ` · TibiaMarket prices updated ${date.toISOString().slice(0, 10)}`;
 }
 
 const TIER_BADGE = { basic: 'badge-success', intricate: 'badge-info', powerful: 'badge-error' };
@@ -300,7 +360,8 @@ const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const TIER_TEXT = { basic: 'imb-tier-text-basic', intricate: 'imb-tier-text-intricate', powerful: 'imb-tier-text-powerful' };
 
 const INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.25" fill="currentColor" stroke-width="1.5"/></svg>';
-const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/></svg>';
+const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-label="Gold pieces" role="img"><title>Gold pieces</title><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/></svg>';
+const RESET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';
 const MARKET_ICON = '<svg class="imb-icon imb-icon-sm imb-method-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16l-2 10H6L4 9Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/><path d="M9 13h6"/></svg>';
 
 function coveredTokenItems(imb, cheapest) {
@@ -321,7 +382,7 @@ function compareRowHtml(label, icon, option, cheapest) {
   return `
     <div class="imb-compare-row">
       <span>${icon}<b>${esc(label)}</b></span>
-      <strong>${COIN_ICON} ${nf(option.total)}</strong>
+      <strong>${COIN_ICON} ${nf(option.total)} gp</strong>
       ${diff > 0 ? `<em>(+${nf(diff)}gp)</em>` : '<em>Best</em>'}
     </div>`;
 }
@@ -371,7 +432,7 @@ function tierCardHtml(imb, tierId, calc) {
     ? `<button type="button" class="imb-total-info" data-tier-info="${tierId}" aria-controls="imb-tier-pop-${tierId}" aria-expanded="false">Total ${INFO_ICON}</button>`
     : '<span class="imb-total-label">Total</span>'}
       <span class="imb-tier-total-right">
-        ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)}</b>`}
+        ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)} gp</b>`}
         ${cheapest ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
@@ -419,6 +480,7 @@ function openImbuementModal(id) {
   if (!imb) return;
   const world = imbWorld();
   const prices = imbPrices(world);
+  const marketForWorld = marketPrices[world] || {};
   const itemIds = [...new Set(imb.tiers.powerful.items.map((it) => it.itemId))];
   const items = imb.tiers.powerful.items;
   const modal = $('#imb-modal');
@@ -439,10 +501,10 @@ function openImbuementModal(id) {
           <span class="fine dim">World: ${esc(world)}</span>
         </div>
         <div class="tool-fields" id="imb-price-inputs">
-          ${imb.supportsGoldTokenExchange ? priceInputRow(GOLD_TOKEN_ITEM, 'Gold Token', prices) : ''}
-          ${itemIds.map((iid) => priceInputRow(iid, items.find((it) => it.itemId === iid).name, prices)).join('')}
+          ${imb.supportsGoldTokenExchange ? priceInputRow(GOLD_TOKEN_ITEM, 'Gold Token', prices, marketForWorld) : ''}
+          ${itemIds.map((iid) => priceInputRow(iid, items.find((it) => it.itemId === iid).name, prices, marketForWorld)).join('')}
         </div>
-        ${Object.values(prices).some((p) => p?.source === 'tibiamarket') ? '<p class="fine dim" style="margin-top:6px">Highlighted fields are TibiaMarket estimates — edit any of them to use your own price instead.</p>' : ''}
+        ${Object.values(prices).some((p) => p?.source === 'tibiamarket') ? `<p class="fine dim" style="margin-top:6px">Highlighted (blue) fields are TibiaMarket estimates${esc(marketUpdatedNote(marketForWorld))} — edit any of them to use your own price instead, or use the reset icon to go back to the estimate.</p>` : ''}
       </div>
     </div>`;
   renderModalTiers(imb, world);
@@ -452,6 +514,15 @@ function openImbuementModal(id) {
       saveItemPrice(world, input.dataset.priceItem, value);
       renderModalTiers(imb, world);
       renderImbuementGrid();
+    });
+  });
+  modal.querySelectorAll('[data-reset-item]').forEach((button) => {
+    button.addEventListener('click', () => {
+      saveItemPrice(world, button.dataset.resetItem, null);
+      renderModalTiers(imb, world);
+      renderImbuementGrid();
+      openImbuementModal(id);
+      say('Reset to TibiaMarket price');
     });
   });
   modal.onclick = (e) => {
@@ -470,17 +541,8 @@ function openImbuementModal(id) {
   modal.showModal();
 }
 
-function updateImbFilterSummary() {
-  const tierLabel = TIER_OPTIONS[imbState.tier]?.[0] || '';
-  $('#imb-filter-summary').textContent = `World: ${$('#imb-world').value} · Tier: ${tierLabel}`;
-}
-$('#imb-world').addEventListener('input', () => {
-  updateImbFilterSummary();
-  renderImbuementGrid();
-});
 bindSortMenu('imb-tier', (key) => {
   imbState.tier = key;
-  updateImbFilterSummary();
   renderImbuementGrid();
 });
 
@@ -492,10 +554,14 @@ bindSortMenu('imb-tier', (key) => {
   '#damage-mitigation', '#damage-crit-chance', '#damage-crit-damage',
   '#damage-fatal-chance', '#damage-fatal-damage', '#damage-charm', '#damage-charm-chance',
 ].forEach((id) => $(id).addEventListener('input', renderDamage));
+[
+  '#level-from', '#level-to',
+].forEach((id) => $(id).addEventListener('input', renderLevelTable));
 
 renderStamina();
 renderDamage();
 renderProfit();
 renderImbuementGrid();
+renderLevelTable();
 
 export {};

@@ -9,6 +9,7 @@ import { kk, nf, day, hm } from '../lib/fmt.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
+  dateKeyInTimezone,
   formatDateInTimezone,
   formatDateTimeInTimezone,
 } from '../lib/timezones.js';
@@ -32,7 +33,7 @@ const level = profileLevel ?? trackedLevel;
 const experience = latest?.experience ?? null;
 const historyNote = latest && profileLevel != null && trackedLevel != null && profileLevel !== trackedLevel
   ? `Profile shows level ${nf(profileLevel)}; last recorded update shows level ${nf(trackedLevel)} on ${latest.date}`
-  : 'Updated automatically from TibiaData highscores';
+  : 'Updated automatically';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const historyRows = history.map((row, i) => {
@@ -60,7 +61,7 @@ const bestDay = historyRows.reduce((best, row) => (row.gain > (best?.gain ?? 0) 
 // Level-up log, derived from the daily rows: every day the tracked level rose.
 const levelUpsChronological = historyRows
   .filter((row) => row.levelDelta > 0)
-  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta, source: row.source || 'TibiaData' }));
+  .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta }));
 const levelUps = [...levelUpsChronological].reverse();
 
 // Default prediction pace: mean of the last 7 recorded daily gains (zeros
@@ -147,10 +148,6 @@ function fmtDateTime(iso) {
 
 function fmtDateOnly(iso) {
   return iso ? formatDateInTimezone(iso, timezone) : null;
-}
-
-function sourceName(source) {
-  return source || 'TibiaData';
 }
 
 function norm(value) {
@@ -270,7 +267,6 @@ function characterDetailsHtml() {
     <div class="profile-groups">
       ${profileGroupHtml('Identity', [
         ['Name', profile?.name],
-        ['Title', profile?.title],
         ['Sex', profile?.sex],
         ['Vocation', profile?.vocation],
         ['World', profile?.world],
@@ -279,7 +275,6 @@ function characterDetailsHtml() {
       ${profileGroupHtml('Place', [
         ['Residence', profile?.residence],
         ['House', houses],
-        ['Account status', profile?.accountStatus],
       ])}
       ${profileGroupHtml('Dates', [
         ['Last login', fmtDateTime(profile?.lastLogin)],
@@ -372,10 +367,11 @@ function xpDetailHtml(row = historyRows.at(-1)) {
   if (!row) return '<p class="dim">No day selected yet.</p>';
   const prev = historyRows[historyRows.findIndex((r) => r.date === row.date) - 1] || null;
   const gained = row.gain == null ? '<span class="dim">-</span>' : `+${nf(row.gain)}`;
+  const isToday = row.date === dateKeyInTimezone(new Date(), timezone);
   return `
     <div class="inspector-head">
       <b>${esc(row.date)}</b>
-      <span class="badge ${/backfill/i.test(row.source || '') ? 'badge-warning' : 'badge-info'}">${esc(sourceName(row.source))}</span>
+      ${isToday ? '<span class="badge badge-success">Today</span>' : ''}
     </div>
     <div class="mini-metrics">
       <span><b class="num">${nf(row.level)}</b><small>Level</small></span>
@@ -436,6 +432,8 @@ function highscoreRowHtml(row) {
 }
 
 const lastGain = historyRows.at(-1)?.gain ?? null;
+const lastGainIsToday = historyRows.at(-1)?.date === dateKeyInTimezone(new Date(), timezone);
+const lastGainLabel = lastGainIsToday ? "Today's XP" : 'Last daily XP';
 const avg7 = gainAverage(7);
 const avg30 = gainAverage(30);
 const bestProfitHunt = myHunts
@@ -502,7 +500,7 @@ function progressionOverviewHtml() {
         <span class="fine dim">${bestDay?.gain ? `Best recorded day: +${kk(bestDay.gain)} on ${esc(bestDay.date)}` : historyNote}</span>
       </div>
       <div class="pace-support">
-        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>Last daily XP</small></span>
+        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>${esc(lastGainLabel)}</small></span>
         <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
         <span><b class="num">${nf(streaks.current)}</b><small>Day streak</small></span>
       </div>
@@ -538,8 +536,7 @@ stage.innerHTML = `
       ${ring(profile?.name || config.name)}
       <div class="hero-identity">
         <h1>${esc(profile?.name || config.name)}</h1>
-        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${profile?.accountStatus ? ` · ${esc(profile.accountStatus)}` : ''}</p>
-        ${profile?.title ? `<p class="fine dim">${esc(profile.title)}</p>` : ''}
+        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}</p>
       </div>
     </div>
     <div class="hero-actions actions">
