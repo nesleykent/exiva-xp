@@ -786,28 +786,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   line-height: 18px;
   overflow-wrap: anywhere;
 }
-.narrative-strip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--s3);
-  margin-bottom: var(--s4);
-}
-.narrative-strip > span,
-.metric-tile {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-  padding: var(--s4);
-  border: 1px solid rgb(var(--line));
-  border-radius: var(--r-input);
-  background: rgb(var(--surface-2));
-}
-.narrative-strip b { font-size: 18px; line-height: 22px; overflow-wrap: anywhere; }
-.narrative-strip small {
-  color: rgb(var(--ink-2));
-  font-size: 11px;
-  line-height: 14px;
-}
 .projection-tools { margin-top: var(--s3); }
 .character-tab-panel .projection-tools { margin-top: 0; }
 .projection-tools + .empty-action { margin-top: var(--s4); }
@@ -862,6 +840,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .skill-feature .skill-card-head h3 { font-size: 17px; line-height: 21px; }
 .skill-feature .skill-card-head > b { font-size: 28px; line-height: 32px; }
 .sparkline-lg { min-height: 84px; }
+.hs-list-wrap { display: grid; gap: var(--s2); }
+.hs-list-wrap > h3 { margin: 0; }
 .hs-list { padding: 0 var(--s4); }
 .hs-row {
   display: flex;
@@ -913,6 +893,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .skill-feature-row {
     grid-template-columns: minmax(0, 1fr);
   }
+  .skill-feature .skill-card-head { display: grid; }
+  .skill-feature .skill-card-head > b { text-align: left; }
   .profile-group div {
     grid-template-columns: 1fr;
     gap: 1px;

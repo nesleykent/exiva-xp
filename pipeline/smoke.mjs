@@ -350,6 +350,9 @@ const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', impor
 const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
   'character deep dives must remain accessible task tabs');
+assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
+  characterController.includes('Other tracked categories') && characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
+  'Highscores must remain one featured trend plus one non-duplicated list without losing Loyalty title');
 assert(homeController.includes("boot('index.html', { config: true })") &&
   !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
   'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');

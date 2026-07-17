@@ -274,6 +274,7 @@ function characterDetailsHtml() {
         ['Sex', profile?.sex],
         ['Vocation', profile?.vocation],
         ['World', profile?.world],
+        ['Loyalty title', profile?.loyaltyTitle],
       ])}
       ${profileGroupHtml('Place', [
         ['Residence', profile?.residence],
@@ -443,13 +444,7 @@ const bestProfitHunt = myHunts
   .sort((a, b) => b.profitRate - a.profitRate)[0] || null;
 const streaks = xpGainStreaks(historyRows);
 const cadenceTrend = levelCadence();
-const standoutHighscores = highscoreRows
-  .filter((row) => row.rank != null)
-  .sort((a, b) => a.rank - b.rank)
-  .slice(0, 6);
-const primaryHighscoreKeys = new Set(['experience', 'magicLevel', 'charmPoints', 'achievements', 'weeklyTasks', 'fishing']);
-const primaryHighscores = highscoreRows.filter((row) => primaryHighscoreKeys.has(row.key));
-const featuredHighscore = primaryHighscores.find((row) => row.key === 'experience') || primaryHighscores[0] || null;
+const featuredHighscore = highscoreRows.find((row) => row.key === 'experience') || highscoreRows[0] || null;
 const secondaryHighscores = highscoreRows.filter((row) => row !== featuredHighscore);
 
 /** This week's pace vs the 30-day average, as a conclusion rather than two
@@ -525,20 +520,6 @@ function projectionControlsHtml() {
       </div>
       <div class="tool-result" id="pred-out"></div>
     </div>`;
-}
-
-/** Achievement points and loyalty standing, framed as a comparison against
- * the world rather than a bare number. */
-function standingHighlightsHtml() {
-  const achievementsRank = highscoreRows.find((row) => row.key === 'achievements')?.rank ?? null;
-  const parts = [];
-  if (profile?.achievementPoints != null) {
-    parts.push(`<span><b class="num">${nf(profile.achievementPoints)}</b><small>Achievement points${achievementsRank != null ? ` · #${nf(achievementsRank)} in the world` : ''}</small></span>`);
-  }
-  if (profile?.loyaltyTitle) {
-    parts.push(`<span><b class="num">${esc(profile.loyaltyTitle)}</b><small>Loyalty title</small></span>`);
-  }
-  return parts.length ? `<div class="mini-metrics">${parts.join('')}</div>` : '';
 }
 
 const groundsTable = tableHtml([
@@ -634,14 +615,13 @@ stage.innerHTML = `
 
     <div class="character-tab-panel" role="tabpanel" id="panel-highscores" aria-labelledby="tab-highscores" tabindex="0" hidden>
       ${latest ? `
-      <div class="section-subhead first"><h3>Highscores</h3><span class="fine dim">one trend plus every tracked category</span></div>
-      ${standingHighlightsHtml()}
-      <div class="narrative-strip">
-        ${standoutHighscores.map((row) => `<span><b class="num">#${nf(row.rank)}</b><small>${esc(row.label)} · ${nf(row.value)}</small></span>`).join('')}
-      </div>
+      <div class="section-subhead first"><h3>Highscores</h3><span class="fine dim">${nf(highscoreRows.length)} tracked categories</span></div>
       <div class="skill-feature-row">
         ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
-        <div class="hs-list panel">${secondaryHighscores.map(highscoreRowHtml).join('')}</div>
+        <section class="hs-list-wrap" aria-labelledby="other-highscores-title">
+          <h3 class="eyebrow" id="other-highscores-title">Other tracked categories</h3>
+          <div class="hs-list panel">${secondaryHighscores.map(highscoreRowHtml).join('')}</div>
+        </section>
       </div>` : '<div class="empty-action"><div><h3>No highscore snapshot yet</h3><p class="dim">The scheduled tracker will populate this view after a successful crawl.</p></div></div>'}
     </div>
 
