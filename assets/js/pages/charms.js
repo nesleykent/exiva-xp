@@ -25,9 +25,13 @@ try {
   throw err;
 }
 
-const elemental = charms.filter((c) => c.element);
-const major = charms.filter((c) => c.tier === 'Major' && !c.element);
-const minor = charms.filter((c) => c.tier === 'Minor');
+const selectedSlug = new URLSearchParams(location.search).get('charm');
+const selectedCharm = charms.find((charm) => charm.slug === selectedSlug) || null;
+const withoutSelected = (list) => list.filter((charm) => charm !== selectedCharm);
+const elemental = withoutSelected(charms.filter((c) => c.element));
+const major = withoutSelected(charms.filter((c) => c.tier === 'Major' && !c.element));
+const minor = withoutSelected(charms.filter((c) => c.tier === 'Minor'));
+if (selectedCharm) document.title = `${selectedCharm.name} Charm · Exiva XP`;
 
 function latestTrackedCharmPoints() {
   for (let i = history.length - 1; i >= 0; i--) {
@@ -62,7 +66,7 @@ function card(c) {
       <b class="num">${nf(s.cost)}</b><span class="fine dim">Stage ${i + 1} · ${s.value}%</span>
     </div>`).join('');
   return `
-  <div class="panel panel-pad" id="${esc(c.slug)}">
+  <div class="panel panel-pad">
     <div class="tile-top" style="margin-bottom:10px">
       ${c.image ? `<span class="art-disc"><img class="critter" src="${esc(c.image)}" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>` : ''}
       <div>
@@ -90,6 +94,11 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="big num">${esc(trackedCharmPoints.date)}</div><div class="eyebrow">tracked date</div></div>
   </div>
   <p class="fine dim" style="margin:8px 0 0">earned points from the daily highscore tracker; spent points are not visible — check the Cyclopedia in game.</p>` : ''}
+
+  ${selectedCharm ? `<section class="section" style="margin-top:0">
+    <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>
+    <div class="tiles">${card(selectedCharm)}</div>
+  </section>` : ''}
 
   ${advice.length ? `<section class="section" style="margin-top:0">
     <div class="section-bar"><h2>Charms for your hunts</h2><span class="fine dim">elemental Major charms · per-attack expectation (maxed trigger chance × 5% of initial HP) weighted by your logged kills</span></div>

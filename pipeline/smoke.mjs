@@ -5,7 +5,7 @@
  * ledger, against the real datasets. Any thrown error fails the deploy.
  */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { isAnalyser, readAnalyser } from '../assets/js/engine/analyser.js';
 import { assessImport, judge } from '../assets/js/engine/rules.js';
 import { armorSpots, Codex, ELEMENT_CHARM } from '../assets/js/engine/codex.js';
@@ -70,6 +70,8 @@ assert(codexPopulation?.evidence === 'codex' && codexPopulation.set.some((row) =
 
 const battle = readBattle(loc.known.map((k) => ({ creature: k.creature, n: k.n })));
 assert(battle && battle.tips.length > 0, 'strategy returned nothing');
+assert(battle.tips.some((tip) => tip.includes('charms.html?charm=')) && battle.tips.every((tip) => !tip.includes('#')),
+  'strategy charm links must use query-backed route state instead of fragments');
 
 const hunt = {
   id: 't', loggedAt: '2026-01-01T12:00:00Z', ground: 'Dragon Lair',
@@ -323,16 +325,23 @@ assert(currentBuyPrice(null) == null && currentBuyPrice([]) == null,
 const pageFiles = ['index', 'character', 'grounds', 'ground', 'creatures', 'creature', 'charms', 'submit', 'tools', 'analytics', 'admin'];
 for (const page of pageFiles) {
   const html = readFileSync(new URL(`../${page}.html`, import.meta.url), 'utf8');
-  assert(!/href\s*=\s*["']#/.test(html), `${page}.html reintroduced hash navigation`);
+  assert(!/href\s*=\s*["'][^"']*#/.test(html), `${page}.html reintroduced hash navigation`);
   assert(html.includes('data-skip-stage'), `${page}.html is missing the non-hash skip control`);
 }
+const jsSourceUrls = [new URL('../assets/js/shell.js', import.meta.url)];
+for (const directory of ['lib', 'engine', 'data', 'viz', 'pages']) {
+  const directoryUrl = new URL(`../assets/js/${directory}/`, import.meta.url);
+  readdirSync(directoryUrl).filter((name) => name.endsWith('.js')).forEach((name) => jsSourceUrls.push(new URL(name, directoryUrl)));
+}
+for (const sourceUrl of jsSourceUrls) {
+  const source = readFileSync(sourceUrl, 'utf8');
+  assert(!/href\s*=\s*["'][^"']*#|location\.hash|hashchange/.test(source),
+    `${sourceUrl.pathname} reintroduced hash-based navigation`);
+}
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
-const charmsController = readFileSync(new URL('../assets/js/pages/charms.js', import.meta.url), 'utf8');
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
 const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
-assert(!/location\.hash|href\s*=\s*["']#/.test(`${characterController}\n${charmsController}`),
-  'page controllers reintroduced hash-driven navigation');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
   'character deep dives must remain accessible task tabs');
 assert(submitController.includes('aria-labelledby="paste-heading"') && submitController.includes('id="read-note" role="status"'),

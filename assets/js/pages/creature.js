@@ -37,7 +37,7 @@ if (!c) {
   if (c.seeInvisible) plan.push('It sees through invisibility.');
   if (c.charm && weak.length) {
     const charmName = ELEMENT_CHARM[weak[0].el];
-    plan.push(`The <a href="charms.html#${esc(slug(charmName))}">${esc(charmName)} Charm</a> procs at ${pct(weak[0].taken)} on this creature; finishing its Bestiary entry (${c.charm.stages.map(nf).join(' / ')} kills) grants ${c.charm.points} charm points.`);
+    plan.push(`The <a href="charms.html?charm=${esc(slug(charmName))}">${esc(charmName)} Charm</a> procs at ${pct(weak[0].taken)} on this creature; finishing its Bestiary entry (${c.charm.stages.map(nf).join(' / ')} kills) grants ${c.charm.points} charm points.`);
   }
 
   const habitatLinks = [...c.habitats].sort((a, b) => a.localeCompare(b)).map((h) => {

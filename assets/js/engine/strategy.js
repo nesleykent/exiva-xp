@@ -104,7 +104,7 @@ export function readBattle(set) {
   if (charms.length) {
     const c = charms[0];
     const charmName = ELEMENT_CHARM[c.el];
-    tips.push(`Equip the <a href="charms.html#${esc(slug(charmName))}">${esc(charmName)} Charm</a> on ${esc(c.creature.name)} — it takes ${pct(c.taken)} ${ELEMENT_NAME[c.el].toLowerCase()} damage${c.points ? `, and finishing its Bestiary entry grants ${c.points} charm points` : ''}.`);
+    tips.push(`Equip the <a href="charms.html?charm=${esc(slug(charmName))}">${esc(charmName)} Charm</a> on ${esc(c.creature.name)} — it takes ${pct(c.taken)} ${ELEMENT_NAME[c.el].toLowerCase()} damage${c.points ? `, and finishing its Bestiary entry grants ${c.points} charm points` : ''}.`);
   }
 
   return { profile, order, attack, avoid, blockers, softest, threats, charms, tips, mass };
