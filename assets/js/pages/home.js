@@ -5,18 +5,12 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { day, nf } from '../lib/fmt.js';
 import { ICONS, ring } from '../shell.js';
-import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 
-const { stage, codex, grounds, config } = await boot('index.html', { codex: true, grounds: true, config: true });
-const [profile, history] = await Promise.all([loadCharacter(), loadCharacterHistory()]);
+const { stage, config } = await boot('index.html', { config: true });
+const characterName = config.name;
 
-const latest = history[history.length - 1] || null;
-const hunts = logbook();
-const characterName = profile?.name || config.name;
-
-const workspaces = [
+const dailyWorkspaces = [
   {
     href: 'character.html',
     icon: ring(characterName, { quiet: true }),
@@ -41,6 +35,9 @@ const workspaces = [
     title: 'Tools',
     text: 'Stamina planning, TibiaTools-style damage logic and profit tracking.',
   },
+];
+
+const referenceWorkspaces = [
   {
     href: 'analytics.html',
     icon: ICONS.chart,
@@ -53,7 +50,32 @@ const workspaces = [
     title: 'Creature codex',
     text: 'Creature data, elemental weaknesses, habitats, loot and charm context.',
   },
+  {
+    href: 'charms.html',
+    icon: ICONS.gem,
+    title: 'Charms',
+    text: 'Charm costs, effects, affordability and recommendations from your saved kills.',
+  },
+  {
+    href: 'admin.html',
+    icon: ICONS.shield,
+    title: 'Logbook',
+    text: 'Review, validate, import and export the analyser evidence stored in this browser.',
+  },
 ];
+
+function workspaceTiles(items) {
+  return items.map((item) => `
+    <a class="panel tile home-workspace" href="${esc(item.href)}">
+      <div class="tile-top">
+        <span class="home-workspace-icon">${item.icon}</span>
+        <div>
+          <div class="name">${esc(item.title)}</div>
+          <p class="fine dim">${esc(item.text)}</p>
+        </div>
+      </div>
+    </a>`).join('');
+}
 
 stage.innerHTML = `
   <header class="hello">
@@ -66,33 +88,18 @@ stage.innerHTML = `
     </div>
   </header>
 
-  <section class="section" style="margin-top:0">
-    <div class="section-bar"><h2>Workspaces</h2><span class="fine dim">${esc(characterName)} workspace</span></div>
+  <section class="section home-workspace-group" style="margin-top:0">
+    <div class="section-bar"><h2>Daily loop</h2><span class="fine dim">Plan, hunt, save, review</span></div>
     <div class="tiles home-workspaces">
-      ${workspaces.map((item) => `
-        <a class="panel tile home-workspace" href="${esc(item.href)}">
-          <div class="tile-top">
-            <span class="home-workspace-icon">${item.icon}</span>
-            <div>
-              <div class="name">${esc(item.title)}</div>
-              <p class="fine dim">${esc(item.text)}</p>
-            </div>
-          </div>
-        </a>`).join('')}
+      ${workspaceTiles(dailyWorkspaces)}
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-bar"><h2>Current context</h2><a class="fine dim" href="character.html">Character dashboard</a></div>
-    <div class="pulse-row">
-      <div class="panel pulse"><div class="big num">${nf(profile?.level)}</div><div class="eyebrow">Profile level</div></div>
-      <div class="panel pulse"><div class="big num">${nf(latest?.level)}</div><div class="eyebrow">Tracked highscore level</div></div>
-      <div class="panel pulse"><div class="big num">${nf(history.length)}</div><div class="eyebrow">Tracked days</div></div>
-      <div class="panel pulse"><div class="big num">${nf(hunts.length)}</div><div class="eyebrow">Logged hunts</div></div>
-      <div class="panel pulse"><div class="big num">${nf(grounds.directory.length)}</div><div class="eyebrow">Planner grounds</div></div>
-      <div class="panel pulse"><div class="big num">${nf(codex.size)}</div><div class="eyebrow">Creatures</div></div>
+  <section class="section home-workspace-group">
+    <div class="section-bar"><h2>Reference and records</h2><span class="fine dim">Deep dives when you need them</span></div>
+    <div class="tiles home-workspaces">
+      ${workspaceTiles(referenceWorkspaces)}
     </div>
-    <p class="fine dim">Profile update ${profile?.updatedAt ? day(profile.updatedAt) : 'pending'} · tracker row ${latest?.date || 'pending'}</p>
   </section>`;
 
 export {};

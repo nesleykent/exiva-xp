@@ -339,11 +339,18 @@ for (const sourceUrl of jsSourceUrls) {
     `${sourceUrl.pathname} reintroduced hash-based navigation`);
 }
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
+const homeController = readFileSync(new URL('../assets/js/pages/home.js', import.meta.url), 'utf8');
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
 const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
   'character deep dives must remain accessible task tabs');
+assert(homeController.includes("boot('index.html', { config: true })") &&
+  !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
+  'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');
+for (const route of ['analytics.html', 'creatures.html', 'charms.html', 'admin.html']) {
+  assert(homeController.includes(`href: '${route}'`), `${route} must remain reachable from the mobile Home doorway`);
+}
 assert(submitController.includes('aria-labelledby="paste-heading"') && submitController.includes('id="read-note" role="status"'),
   'analyser input and parser feedback must remain available to assistive technology');
 assert(submitController.includes('class="guess ${i === 0') && !submitController.includes('role="button"'),

@@ -18,7 +18,7 @@ Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dep
 
 | Page | What it does |
 | --- | --- |
-| `index.html` | App home/start screen with links to the working surfaces |
+| `index.html` | Fast app doorway grouped into the daily loop and reference/record workspaces; dashboard metrics stay on Character instead of repeating on Home |
 | `character.html` | Night'Flyn's character dashboard: slim identity, current/target/projected progression, one interactive XP chart with level-up/death markers, then task tabs for next hunt, highscores, hunt log and details. The full row history lives on Analytics; planner shortcuts never recommend off-vocation rows |
 | `grounds.html` | Hunt planner. It opens around Night'Flyn's tracked level, then shows one tile per ground with best-effort **area** (nearest city/region), best attack element and logged evidence. Filter bar: Search (matches ground *or* creature names), Level, Vocation, Hunt type (solo/team), Playstyle (free text against the loadout column, e.g. "fork" for druids, "arrows" for paladins), and Sort. Sorting happens after grouping into cards, against each card's own aggregate value, so the numbers shown always match what you sorted by. Each ground's curated rows keep tibiapal's vocation-specific **loadout** column verbatim (knight/monk weapon element, paladin ammo/barrage, sorcerer mastery, druid spell/fork playstyle) |
 | `tools.html` | Character tools: stamina calculator, TibiaTools-style element damage sandbox, imbuement price calculator, and profit tracker from saved analyser sessions |

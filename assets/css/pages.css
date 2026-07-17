@@ -14,10 +14,7 @@
 .hello p { max-width: 560px; font-size: 16px; line-height: 24px; color: rgb(var(--ink-2)); margin: 0; }
 .hello .actions { display: flex; gap: var(--s3); margin-top: var(--s2); flex-wrap: wrap; }
 
-.pulse-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--s3); margin-bottom: var(--s8); }
-.pulse { padding: var(--s4) var(--s5); }
-.pulse .big { font-size: 26px; line-height: 28px; font-weight: 700; letter-spacing: 0; overflow-wrap: anywhere; }
-.pulse .eyebrow { margin-top: 4px; }
+.home-workspace-group + .home-workspace-group { margin-top: var(--s10); }
 .home-workspace .tile-top { align-items: flex-start; }
 .home-workspace-icon {
   display: grid;
@@ -966,11 +963,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .section-bar a.fine, .section-subhead a.fine {
   display: inline-flex; align-items: center;
   min-height: var(--tap); margin: -14px 0;
-}
-
-@media (max-width: 700px) {
-  .pulse { padding: var(--s3); }
-  .pulse .big { font-size: 22px; line-height: 24px; }
 }
 
 /* skeleton shimmer */
