@@ -487,13 +487,13 @@ function progressionOverviewHtml() {
       </article>
       <article class="dashboard-metric">
         <span>Target level</span>
-        <b class="num" id="projection-target">${projection ? nf(projection.target) : '-'}</b>
-        <small id="projection-needed">${needed != null ? `${kk(needed)} XP remaining` : 'Not enough pace data yet'}</small>
+        <b class="num">${projection ? nf(projection.target) : '-'}</b>
+        <small>${needed != null ? `${kk(needed)} XP remaining` : 'Not enough pace data yet'}</small>
       </article>
       <article class="dashboard-metric">
         <span>Projected date</span>
-        <b class="num dashboard-date" id="projection-date">${projection ? esc(projection.eta) : '-'}</b>
-        <small id="projection-days">${projection ? `${nf(projection.days)} days at the recent pace` : 'Check back after more updates'}</small>
+        <b class="num dashboard-date">${projection ? esc(projection.eta) : '-'}</b>
+        <small>${projection ? `${nf(projection.days)} days at the recent pace` : 'Check back after more updates'}</small>
       </article>
     </div>
     <div class="pace-band pace-${esc(insight?.tone || 'even')}">
@@ -512,17 +512,14 @@ function progressionOverviewHtml() {
 function projectionControlsHtml() {
   if (trackedLevel == null || experience == null || avgDailyXp == null) return '';
   return `
-    <details class="projection-settings panel">
-      <summary>Adjust target and pace</summary>
-      <div class="projection-settings-body">
-        <p class="fine dim" id="projection-help">Change the assumptions used by the target and projected-date cards above. Pace defaults to the last ${nf(recentGains.length)} days.</p>
-        <div class="tool-fields">
-          <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}" aria-describedby="projection-help projection-feedback"></label>
-          <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}" aria-describedby="projection-help projection-feedback"></label>
-        </div>
-        <p class="fine dim projection-feedback" id="projection-feedback" aria-live="polite"></p>
+    <div class="projection-tools">
+      <div class="section-subhead first"><h3>Adjust target and pace</h3><span class="fine dim">defaults to the last ${nf(recentGains.length)} days</span></div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
+        <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
       </div>
-    </details>`;
+      <div class="tool-result" id="pred-out"></div>
+    </div>`;
 }
 
 const groundsTable = tableHtml([
@@ -554,7 +551,6 @@ stage.innerHTML = `
   <section class="progression-overview" aria-labelledby="progression-title">
     <div class="section-bar"><h2 id="progression-title">Progression</h2><span class="fine dim">current state, target and pace</span></div>
     ${progressionOverviewHtml()}
-    ${projectionControlsHtml()}
     <div class="panel panel-pad viz progression-chart">
       <div class="chart-controls">
         <div>
@@ -599,6 +595,7 @@ stage.innerHTML = `
     </div>
 
     <div class="character-tab-panel" role="tabpanel" id="panel-next" aria-labelledby="tab-next" tabindex="0">
+      ${projectionControlsHtml()}
       ${grounds4me.length ? `
       <div class="section-subhead"><h3>Level-fit hunt targets</h3><a class="fine dim" href="grounds.html">Open full planner</a></div>
       <div class="story-rail">
@@ -702,24 +699,25 @@ renderXpChart();
 
 // ---- level prediction wiring (pure arithmetic over tracked data) ----
 function renderPrediction() {
-  const feedback = $('#projection-feedback');
-  if (!feedback) return;
+  const out = $('#pred-out');
+  if (!out) return;
   const target = Math.floor(Number($('#pred-level').value));
   const pace = Number($('#pred-pace').value);
   if (!Number.isFinite(target) || target <= trackedLevel || !Number.isFinite(pace) || pace <= 0) {
-    feedback.textContent = 'Pick a target above the current level and a positive daily pace.';
+    out.innerHTML = '<span class="dim">Pick a target above the current level and a positive daily pace.</span>';
     return;
   }
   const needed = experienceForLevel(target) - experience;
   const days = Math.ceil(needed / pace);
   const eta = new Date(Date.now() + days * 86_400_000);
-  $('#projection-target').textContent = nf(target);
-  $('#projection-needed').textContent = `${kk(needed)} XP remaining`;
-  $('#projection-date').textContent = eta.toISOString().slice(0, 10);
-  $('#projection-days').textContent = `${nf(days)} days at this pace`;
-  feedback.textContent = `Projection updated for level ${nf(target)}.`;
+  out.innerHTML = `
+    <div class="tool-kpis">
+      <span><b>${kk(needed)}</b><small>exp to level ${nf(target)}</small></span>
+      <span><b>${nf(days)}</b><small>days at this pace</small></span>
+      <span><b>${eta.toISOString().slice(0, 10)}</b><small>projected date</small></span>
+    </div>`;
 }
-if ($('#projection-feedback')) {
+if ($('#pred-out')) {
   ['#pred-level', '#pred-pace'].forEach((id) => $(id).addEventListener('input', renderPrediction));
   renderPrediction();
 }

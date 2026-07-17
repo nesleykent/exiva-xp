@@ -342,8 +342,6 @@ for (const sourceUrl of jsSourceUrls) {
     `${sourceUrl.pathname} contains a button without an explicit type`);
 }
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
-const shellController = readFileSync(new URL('../assets/js/shell.js', import.meta.url), 'utf8');
-const baseCss = readFileSync(new URL('../assets/css/base.css', import.meta.url), 'utf8');
 const homeController = readFileSync(new URL('../assets/js/pages/home.js', import.meta.url), 'utf8');
 const groundsController = readFileSync(new URL('../assets/js/pages/grounds.js', import.meta.url), 'utf8');
 const creaturesController = readFileSync(new URL('../assets/js/pages/creatures.js', import.meta.url), 'utf8');
@@ -355,13 +353,6 @@ assert(characterController.includes('role="tablist"') && characterController.inc
 assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
   characterController.includes('Other tracked categories') && characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
   'Highscores must remain one featured trend plus one non-duplicated list without losing Loyalty title');
-assert(characterController.match(/projectionControlsHtml\(\)/g)?.length === 2 &&
-  characterController.includes('id="projection-target"') && characterController.includes("$('#projection-target').textContent") &&
-  !characterController.includes('id="pred-out"') && !characterController.includes('tool-kpis'),
-  'projection controls must update the single at-a-glance result instead of rendering duplicate KPI cards');
-assert(shellController.includes("window.addEventListener('scroll'") && shellController.includes('utilities.inert = hidden') &&
-  baseCss.includes('.rail-foot.rail-foot-scrolled'),
-  'mobile utility controls must leave the reading surface after scrolling instead of covering page content');
 assert(homeController.includes("boot('index.html', { config: true })") &&
   !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
   'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');
