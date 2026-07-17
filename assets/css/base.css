@@ -93,6 +93,7 @@
   --r-pill: 1000px; --r-circle: 50%;
   --shadow-card: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1);
   --shadow-float: 0 4px 12px rgba(0,0,0,.15);
+  --shadow-dropdown: 0 3px 8px rgba(0,0,0,.3);
 
   /* motion — curves match the source's --ig-ease-standard/--ig-ease-confident/--ig-ease-settle exactly */
   --e-standard: cubic-bezier(.33, 0, .67, 1);
@@ -336,7 +337,9 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20;
   padding: 6px; margin: 0;
   background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--stroke));
-  border-radius: var(--r-lg); box-shadow: var(--shadow-float);
+  /* --shadow-dropdown (not -float) — this is an anchored menu list, the
+     exact case the source's tighter, darker dropdown shadow is for. */
+  border-radius: var(--r-lg); box-shadow: var(--shadow-dropdown);
 }
 .sort-menu-item {
   display: flex; align-items: center; gap: 10px; width: 100%;
