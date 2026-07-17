@@ -53,6 +53,12 @@
   --ink-2: 115, 115, 115;
   --icon: 38, 38, 38;
   --wash: 239, 239, 239;
+  /* the source's --ig-secondary-button (button fill) is a shade lighter than
+     --ig-highlight-background/--wash in light mode (250 vs 239) though they
+     collapse to the same value in dark (38); kept distinct so real buttons
+     (.btn-secondary, .filter-toggle) don't borrow the badge/skeleton tone. */
+  --surface-btn2: 250, 250, 250;
+  --surface-btn2-hover: 219, 219, 219;
   --line: 219, 219, 219;
   /* the source's --ig-separator (list/section dividers, --line above) and
      --ig-stroke (visible borders on cards/buttons/inputs) share one value
@@ -124,6 +130,8 @@
   --ink-2: 168, 168, 168;
   --icon: 245, 245, 245;
   --wash: 38, 38, 38;
+  --surface-btn2: 38, 38, 38;
+  --surface-btn2-hover: 38, 38, 38;
   --line: 38, 38, 38;
   --stroke: 85, 85, 85;
   --line-strong: 85, 85, 85;
@@ -267,8 +275,8 @@ main.stage {
 }
 .btn-primary { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
 .btn-primary:hover { background: rgb(var(--blue-press)); }
-.btn-secondary { background: rgb(var(--wash)); color: rgb(var(--ink)); }
-.btn-secondary:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
+.btn-secondary { background: rgb(var(--surface-btn2)); color: rgb(var(--ink)); }
+.btn-secondary:hover { background: rgb(var(--surface-btn2-hover)); }
 .btn-tertiary { background: transparent; color: rgb(var(--ink)); border: 1px solid rgb(var(--stroke)); }
 .btn-tertiary:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 .btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }

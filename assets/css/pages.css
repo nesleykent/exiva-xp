@@ -95,10 +95,12 @@
   .filter-toggle {
     display: flex; align-items: center; justify-content: center; gap: 6px;
     min-height: var(--tap); padding: 0 var(--s4);
-    background: rgb(var(--wash)); color: rgb(var(--ink));
+    background: rgb(var(--surface-btn2)); color: rgb(var(--ink));
     border: 0; border-radius: var(--r-input);
     font-size: var(--fs-13); font-weight: 600; cursor: pointer;
+    transition: background var(--t-hover) var(--e-standard);
   }
+  .filter-toggle:hover { background: rgb(var(--surface-btn2-hover)); }
   .filter-toggle .chevron { transition: transform var(--t-hover) var(--e-standard); }
   .filter-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
   .filter-more { display: none; grid-template-columns: 1fr 1fr; gap: var(--s2); }
