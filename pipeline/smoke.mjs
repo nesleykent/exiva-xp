@@ -324,6 +324,7 @@ for (const page of pageFiles) {
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
 const charmsController = readFileSync(new URL('../assets/js/pages/charms.js', import.meta.url), 'utf8');
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
+const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
 assert(!/location\.hash|href\s*=\s*["']#/.test(`${characterController}\n${charmsController}`),
   'page controllers reintroduced hash-driven navigation');
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
@@ -332,6 +333,10 @@ assert(submitController.includes('aria-labelledby="paste-heading"') && submitCon
   'analyser input and parser feedback must remain available to assistive technology');
 assert(submitController.includes('class="guess ${i === 0') && !submitController.includes('role="button"'),
   'hunt-location choices must remain native buttons instead of keyboard-emulated divs');
+assert(bootController.includes('codex = false') && bootController.includes('grounds = false') && bootController.includes('ledger = false'),
+  'page bootstrap datasets must stay opt-in to prevent multi-megabyte unrelated fetches');
+assert(bootController.includes('const needsGrounds = grounds || ledger') && bootController.includes('const needsHunts = hunts || ledger'),
+  'ledger pages must automatically load their grounds and hunt evidence');
 const markedFlow = flow([
   { key: '07-01', n: 10, events: [{ type: 'level', label: 'Reached level 10' }] },
   { key: '07-02', n: 5, events: [{ type: 'death', label: 'Death at level 10' }] },

@@ -9,7 +9,7 @@ import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
-const { stage, hunts, table, config } = await boot('analytics.html');
+const { stage, hunts, table, config } = await boot('analytics.html', { ledger: true, config: true });
 const [history, profile] = await Promise.all([
   loadCharacterHistory().catch(() => []),
   loadCharacter().catch(() => null),

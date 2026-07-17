@@ -18,7 +18,7 @@ import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
-const { stage, table, config } = await boot('character.html');
+const { stage, table, config } = await boot('character.html', { ledger: true, config: true });
 const [profile, history] = await Promise.all([
   loadCharacter(),
   loadCharacterHistory(),

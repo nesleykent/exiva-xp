@@ -9,7 +9,7 @@ import { day, nf } from '../lib/fmt.js';
 import { ICONS, ring } from '../shell.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 
-const { stage, codex, grounds, config } = await boot('index.html', { ledger: false });
+const { stage, codex, grounds, config } = await boot('index.html', { codex: true, grounds: true, config: true });
 const [profile, history] = await Promise.all([loadCharacter(), loadCharacterHistory()]);
 
 const latest = history[history.length - 1] || null;

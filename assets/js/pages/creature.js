@@ -7,7 +7,7 @@ import { ring, pillEl, meters, note } from '../shell.js';
 import { elementOrder, weakSpots, armorSpots, ELEMENT_NAME, ELEMENT_CHARM } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
-const { stage, codex, grounds, hunts } = await boot('creature.html', { ledger: false });
+const { stage, codex, grounds, hunts } = await boot('creature.html', { codex: true, grounds: true, hunts: true });
 
 const c = codex.creature(param('c'));
 

@@ -10,7 +10,7 @@ import { readBattle } from '../engine/strategy.js';
 import { judge, VOCATIONS } from '../engine/rules.js';
 import { backend, logbook } from '../data/sources.js';
 
-const { stage, codex, grounds, hunts } = await boot('submit.html', { ledger: false });
+const { stage, codex, grounds, hunts } = await boot('submit.html', { codex: true, grounds: true, hunts: true });
 
 stage.classList.add('narrow');
 stage.innerHTML = `

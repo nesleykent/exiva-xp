@@ -6,7 +6,7 @@ import { nf, pct } from '../lib/fmt.js';
 import { $, ring, pillEl, sortMenu, bindSortMenu } from '../shell.js';
 import { weakSpots } from '../engine/codex.js';
 
-const { stage, codex } = await boot('creatures.html', { ledger: false });
+const { stage, codex } = await boot('creatures.html', { codex: true });
 
 const families = [...new Set(codex.creatures.map((c) => c.family).filter(Boolean))].sort();
 const tiers = [...new Set(codex.creatures.map((c) => c.tier).filter(Boolean))].sort();

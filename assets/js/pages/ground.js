@@ -10,7 +10,7 @@ import { readBattle } from '../engine/strategy.js';
 import { groundDossier, trustOf } from '../engine/ledger.js';
 import { loadAccess } from '../data/sources.js';
 
-const { stage, codex, grounds, hunts, table } = await boot('ground.html');
+const { stage, codex, grounds, hunts, table } = await boot('ground.html', { codex: true, ledger: true });
 const access = await loadAccess().catch(() => ({ grounds: {} }));
 
 const slugParam = param('g');

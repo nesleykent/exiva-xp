@@ -23,7 +23,7 @@ import {
 import { loadWorldPrices, mergeMarketPrices, saveItemPrice } from '../data/imbuement-prices.js';
 import { loadCharacter, loadCharacterHistory, loadImbuementArt, loadImbuementPrices } from '../data/sources.js';
 
-const { stage, codex, hunts, config } = await boot('tools.html', { ledger: false });
+const { stage, codex, hunts, config } = await boot('tools.html', { codex: true, hunts: true, config: true });
 const [profile, history, imbuementArt, marketPrices] = await Promise.all([
   loadCharacter().catch(() => null),
   loadCharacterHistory().catch(() => []),

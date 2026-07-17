@@ -17,7 +17,7 @@ import { readBattle } from '../engine/strategy.js';
 import { VOCATIONS, VOCATION_ELEMENTS } from '../engine/rules.js';
 import { loadAccess, loadCharacter } from '../data/sources.js';
 
-const { stage, codex, grounds, hunts, table, config } = await boot('grounds.html');
+const { stage, codex, grounds, hunts, table, config } = await boot('grounds.html', { codex: true, ledger: true, config: true });
 const [access, profile] = await Promise.all([
   loadAccess().catch(() => ({ grounds: {} })),
   loadCharacter().catch(() => null),

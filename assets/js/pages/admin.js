@@ -7,7 +7,7 @@ import { $, say, dataTable, note } from '../shell.js';
 import { assessImport, judge } from '../engine/rules.js';
 import { logbook, writeLogbook } from '../data/sources.js';
 
-const { stage } = await boot('admin.html', { ledger: false });
+const { stage } = await boot('admin.html');
 
 const FIELDS = ['id', 'loggedAt', 'ground', 'vocation', 'level', 'party', 'world',
   'minutes', 'xpRaw', 'xpRawRate', 'xpRate', 'loot', 'supplies', 'balance'];
