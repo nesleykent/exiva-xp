@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1858,
-    "value": 106576581116
+    "value": 106615285346
    },
    {
     "rank": 11,
@@ -114,15 +114,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1680,
-    "value": 78860408191
+    "value": 78884708191
    },
    {
     "rank": 15,
     "name": "Gilby",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1602,
-    "value": 68313370546
+    "level": 1603,
+    "value": 68410310632
    },
    {
     "rank": 16,
@@ -130,7 +130,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1586,
-    "value": 66297823819
+    "value": 66302009031
    },
    {
     "rank": 17,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1575,
-    "value": 64871040773
+    "value": 64907490773
    },
    {
     "rank": 18,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1465,
-    "value": 52197961280
+    "value": 52197961373
    },
    {
     "rank": 25,
@@ -225,8 +225,8 @@
     "name": "Luuh Druid",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1417,
-    "value": 47247043774
+    "level": 1418,
+    "value": 47325885440
    },
    {
     "rank": 29,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1404,
-    "value": 45937854655
+    "value": 45951637634
    },
    {
     "rank": 30,
@@ -250,7 +250,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1357,
-    "value": 41508828492
+    "value": 41509188717
    },
    {
     "rank": 32,
@@ -361,8 +361,8 @@
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1237,
-    "value": 31468777168
+    "level": 1238,
+    "value": 31504956006
    },
    {
     "rank": 46,
