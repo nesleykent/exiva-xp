@@ -25,7 +25,7 @@ stage.innerHTML = `
     <h1 style="font-size:26px; letter-spacing:-.4px">Creature codex</h1>
     <p class="dim">${nf(codex.size)} creatures with resistances, weaknesses, damage types, charm data and habitats.</p>
   </header>
-  <form class="filter-bar">
+  <form class="filter-bar" id="c-filter" role="search">
     <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="c-q" placeholder="Creature name"></label>
     <button type="button" class="filter-toggle" id="c-toggle" aria-expanded="false" aria-controls="c-more"><span>Filters</span><span class="chevron">⌄</span></button>
     <div class="filter-more" id="c-more">
@@ -35,7 +35,7 @@ stage.innerHTML = `
     </div>
   </form>
   <div id="out"></div>
-  <div style="text-align:center; margin-top:var(--s5)"><button class="btn btn-secondary" id="more" hidden>Show more</button></div>`;
+  <div style="text-align:center; margin-top:var(--s5)"><button type="button" class="btn btn-secondary" id="more" hidden>Show more</button></div>`;
 
 function render() {
   const q = fold(state.q);
@@ -83,6 +83,7 @@ function render() {
 for (const [sel, prop] of [['#c-q', 'q'], ['#c-tier', 'tier'], ['#c-family', 'family']]) {
   $(sel).addEventListener('input', (e) => { state[prop] = e.target.value; state.shown = 72; render(); });
 }
+$('#c-filter').addEventListener('submit', (e) => e.preventDefault());
 bindSortMenu('c-sort', (key) => { state.sort = key; state.shown = 72; render(); });
 $('#more').addEventListener('click', () => { state.shown += 144; render(); });
 $('#c-toggle').addEventListener('click', () => {

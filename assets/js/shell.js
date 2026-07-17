@@ -83,7 +83,7 @@ export function mountShell(active) {
       <a class="rail-item" href="https://github.com/${SITE.owner}/${SITE.repo}" target="_blank" rel="noopener" title="Source on GitHub">
         ${ICONS.github}<span class="theme-label">GitHub</span>
       </a>
-      <button class="rail-item" id="look-flip" title="Switch appearance">
+      <button type="button" class="rail-item" id="look-flip" title="Switch appearance">
         ${ICONS.moon}<span class="theme-label">Appearance</span>
       </button>
     </div>`;

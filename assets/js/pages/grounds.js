@@ -144,7 +144,7 @@ stage.innerHTML = `
     <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
     <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around ${esc(characterName)}'s tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}${characterVocation ? ` and vocation (${esc(characterVocation)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
-  <form class="filter-bar" id="f">
+  <form class="filter-bar" id="f" role="search">
     <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
     <button type="button" class="filter-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more"><span>Filters</span><span class="chevron">⌄</span></button>
     <div class="filter-more" id="f-more">
@@ -206,6 +206,7 @@ function render() {
 const bind = (id, prop, map = (v) => v) => {
   $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); render(); });
 };
+$('#f').addEventListener('submit', (e) => e.preventDefault());
 bind('#f-q', 'q');
 bind('#f-level', 'level', (v) => (v ? +v : null));
 bind('#f-voc', 'vocation');

@@ -327,6 +327,7 @@ for (const page of pageFiles) {
   const html = readFileSync(new URL(`../${page}.html`, import.meta.url), 'utf8');
   assert(!/href\s*=\s*["'][^"']*#/.test(html), `${page}.html reintroduced hash navigation`);
   assert(html.includes('data-skip-stage'), `${page}.html is missing the non-hash skip control`);
+  assert(!/<button\b(?![^>]*\btype\s*=)[^>]*>/.test(html), `${page}.html contains a button without an explicit type`);
 }
 const jsSourceUrls = [new URL('../assets/js/shell.js', import.meta.url)];
 for (const directory of ['lib', 'engine', 'data', 'viz', 'pages']) {
@@ -337,9 +338,13 @@ for (const sourceUrl of jsSourceUrls) {
   const source = readFileSync(sourceUrl, 'utf8');
   assert(!/href\s*=\s*["'][^"']*#|location\.hash|hashchange/.test(source),
     `${sourceUrl.pathname} reintroduced hash-based navigation`);
+  assert(!/<button\b(?![^>]*\btype\s*=)[^>]*>/.test(source),
+    `${sourceUrl.pathname} contains a button without an explicit type`);
 }
 const characterController = readFileSync(new URL('../assets/js/pages/character.js', import.meta.url), 'utf8');
 const homeController = readFileSync(new URL('../assets/js/pages/home.js', import.meta.url), 'utf8');
+const groundsController = readFileSync(new URL('../assets/js/pages/grounds.js', import.meta.url), 'utf8');
+const creaturesController = readFileSync(new URL('../assets/js/pages/creatures.js', import.meta.url), 'utf8');
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
 const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
@@ -354,6 +359,12 @@ assert(!homeController.includes('class="actions"') &&
 for (const route of ['analytics.html', 'creatures.html', 'charms.html', 'admin.html']) {
   assert(homeController.includes(`href: '${route}'`), `${route} must remain reachable from the mobile Home doorway`);
 }
+assert(groundsController.includes('id="f" role="search"') &&
+  groundsController.includes("$('#f').addEventListener('submit', (e) => e.preventDefault())"),
+  'Planner live filters must keep Enter from submitting and losing filter state');
+assert(creaturesController.includes('id="c-filter" role="search"') &&
+  creaturesController.includes("$('#c-filter').addEventListener('submit', (e) => e.preventDefault())"),
+  'Codex live filters must keep Enter from submitting and losing filter state');
 assert(submitController.includes('aria-labelledby="paste-heading"') && submitController.includes('id="read-note" role="status"'),
   'analyser input and parser feedback must remain available to assistive technology');
 assert(submitController.includes('class="guess ${i === 0') && !submitController.includes('role="button"'),
