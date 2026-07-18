@@ -12,7 +12,6 @@ import {
   profitSnapshot,
   staminaProjection,
 } from '../engine/planning.js';
-import { experienceForLevel, experienceUntilNextLevel } from '../engine/progression.js';
 import {
   calculateImbuement,
   formatShoppingList,
@@ -114,18 +113,6 @@ stage.innerHTML = `
         <label class="lbl lbl-narrow"><span class="eyebrow">Tier</span>${sortMenu('imb-tier', TIER_OPTIONS, imbState.tier)}</label>
       </div>
       <div class="tool-result-grid" id="imb-grid"></div>
-    </section>
-
-    <section class="panel panel-pad tool-card tool-wide" id="level-tool">
-      <div class="tool-head">
-        <h2>Level &amp; experience table</h2>
-        <span class="fine dim">total exp and exp to next level, per level</span>
-      </div>
-      <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
-      </div>
-      <div class="tool-result" id="level-out"></div>
     </section>
   </div>
 
@@ -232,41 +219,6 @@ function renderProfit() {
           ${snapshot.recent.map((h) => `<span>${esc(h.ground || 'Unknown')} · ${gp(h.balance)} · ${hm(h.minutes)}</span>`).join('')}
         </div>
       </div>
-    </div>`;
-}
-
-function renderLevelTable() {
-  const from = Math.floor(numberInput('#level-from'));
-  const to = Math.floor(numberInput('#level-to'));
-  if (!Number.isFinite(from) || !Number.isFinite(to) || from < 1 || to <= from) {
-    $('#level-out').innerHTML = '<span class="dim">Pick a "to" level above the "from" level.</span>';
-    return;
-  }
-  const span = to - from;
-  if (span > 500) {
-    $('#level-out').innerHTML = '<span class="dim">Keep the range to 500 levels or fewer.</span>';
-    return;
-  }
-  const rows = [];
-  for (let lvl = from; lvl <= to; lvl++) {
-    rows.push({
-      level: lvl,
-      total: experienceForLevel(lvl),
-      toNext: experienceUntilNextLevel(lvl, experienceForLevel(lvl)),
-    });
-  }
-  $('#level-out').innerHTML = `
-    <div class="sheet panel">
-      <table class="grid">
-        <thead><tr><th>Level</th><th class="num">Total exp</th><th class="num">Exp to next level</th></tr></thead>
-        <tbody>
-          ${rows.map((row) => `<tr${row.level === characterLevel ? ' style="background:rgba(var(--overlay), var(--overlay-a))"' : ''}>
-            <td>${row.level === characterLevel ? `<b>${nf(row.level)}</b> <span class="fine dim">(you)</span>` : nf(row.level)}</td>
-            <td class="num">${nf(row.total)}</td>
-            <td class="num">${nf(row.toNext)}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
     </div>`;
 }
 
@@ -554,14 +506,10 @@ bindSortMenu('imb-tier', (key) => {
   '#damage-mitigation', '#damage-crit-chance', '#damage-crit-damage',
   '#damage-fatal-chance', '#damage-fatal-damage', '#damage-charm', '#damage-charm-chance',
 ].forEach((id) => $(id).addEventListener('input', renderDamage));
-[
-  '#level-from', '#level-to',
-].forEach((id) => $(id).addEventListener('input', renderLevelTable));
 
 renderStamina();
 renderDamage();
 renderProfit();
 renderImbuementGrid();
-renderLevelTable();
 
 export {};

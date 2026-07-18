@@ -50,6 +50,7 @@ const historyRows = history.map((row, i) => {
     ...row,
     gain,
     levelDelta: prev ? row.level - prev.level : null,
+    rankDelta: prev && row.rank != null && prev.rank != null ? row.rank - prev.rank : null,
     xpToNext: experienceUntilNextLevel(row.level, row.experience),
     progress: progressWithinLevel(row.level, row.experience),
   };
@@ -282,6 +283,47 @@ function characterDetailsHtml() {
         ['Profile updated', fmtDateTime(profile?.updatedAt)],
       ])}
     </div>`;
+}
+
+function deltaSpan(delta) {
+  if (!delta) return '';
+  return ` <span class="fine dim">(${delta > 0 ? '+' : ''}${nf(delta)})</span>`;
+}
+
+/** GuildStats-style daily history: date, exp gained, rank/level with their
+ * day-over-day delta, and running total experience — most recent day first.
+ * Time online / avg exp per hour aren't in TibiaData highscores, so unlike
+ * a scraped guildstats.eu table this doesn't fabricate those two columns. */
+function dailyHistoryTableHtml() {
+  const rows = [...historyRows].reverse();
+  const totalGain = historyRows.reduce((sum, row) => sum + (row.gain || 0), 0);
+  const totalLevelChange = historyRows.length > 1 ? historyRows.at(-1).level - historyRows[0].level : 0;
+  return `
+    <div class="sheet panel"><table class="grid">
+      <thead><tr>
+        <th>When</th>
+        <th class="num">Exp change</th>
+        <th class="num">Rank</th>
+        <th class="num">Level</th>
+        <th class="num">Experience</th>
+      </tr></thead>
+      <tbody>
+        ${rows.map((row) => `<tr>
+          <td>${esc(row.date)}</td>
+          <td class="num">${row.gain != null ? `+${nf(row.gain)}` : '<span class="dim">-</span>'}</td>
+          <td class="num">${row.rank != null ? nf(row.rank) : '<span class="dim">-</span>'}${deltaSpan(row.rankDelta)}</td>
+          <td class="num">${nf(row.level)}${deltaSpan(row.levelDelta)}</td>
+          <td class="num">${nf(row.experience)}</td>
+        </tr>`).join('')}
+      </tbody>
+      <tfoot><tr>
+        <td>Total</td>
+        <td class="num">+${nf(totalGain)}</td>
+        <td class="num"></td>
+        <td class="num">${totalLevelChange > 0 ? '+' : ''}${nf(totalLevelChange)}</td>
+        <td class="num"></td>
+      </tr></tfoot>
+    </table></div>`;
 }
 
 function deathsTableHtml() {
@@ -645,6 +687,7 @@ stage.innerHTML = `
         <span><b class="num">${cadenceTrend ? cadenceTrend.recent.toFixed(1) : '-'}</b><small>Recent days per level</small></span>
         <span><b class="num">${nf(deaths.length)}</b><small>Deaths on record</small></span>
       </div>
+      ${historyRows.length ? `<div class="section-subhead"><h3>Daily history</h3><span class="fine dim">${nf(historyRows.length)} tracked days, most recent first</span></div><div id="daily-history-table">${dailyHistoryTableHtml()}</div>` : ''}
       ${deaths.length ? `<div class="section-subhead"><h3>Deaths</h3><span class="fine dim">also marked on the XP chart when dates overlap</span></div><div id="deaths-table">${deathsTableHtml()}</div>` : ''}
     </div>
   </section>`;
