@@ -81,6 +81,24 @@ function wordIn(word, text) {
   return new RegExp(`\\b${escapeRegex(word)}\\b`).test(text);
 }
 
+const WORD_NUMBERS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+
+/**
+ * A ground/habitat's distinguishing number, if it has one — "Warzone 1" and
+ * "Ingol -3" both extract to a digit; "Warzone Four" extracts via the word
+ * form (the only habitat names that spell numbers out, per the bestiary).
+ * Returns null when the name carries no number at all.
+ */
+function extractNumber(text) {
+  const folded = fold(text);
+  const digitMatch = folded.match(/\b(\d+)\b/);
+  if (digitMatch) return Number(digitMatch[1]);
+  for (const [word, n] of Object.entries(WORD_NUMBERS)) {
+    if (wordIn(word, folded)) return n;
+  }
+  return null;
+}
+
 /**
  * Creatures named directly by a ground name. Curated names are often the
  * creature, not the place — "Sea Serpents", "Issavi Goannas", "Flimsy
@@ -133,10 +151,17 @@ export function population(ground, codex, huntsAtGround = []) {
     }
   }
 
+  const groundNumber = extractNumber(ground.name);
   const key = fold(ground.name).replace(/\b\d+\b/g, ' ').replace(/\s+/g, ' ').trim();
   const words = key.split(' ').filter((w) => w.length > 3 && !NAME_NOISE.has(w));
   const habitats = [];
   for (const h of codex.allHabitats()) {
+    // "Warzone 1" must never match "Warzone Four" just because "warzone" is
+    // shared — the digit strip above makes numbered variants look identical
+    // otherwise. Only reject when BOTH sides carry a number and they differ;
+    // an unnumbered habitat (e.g. plain "Ingol") is still a valid match.
+    const habitatNumber = extractNumber(h.name);
+    if (groundNumber != null && habitatNumber != null && groundNumber !== habitatNumber) continue;
     const hKey = fold(h.name);
     let grade = closeness(key, hKey);
     if (hKey.includes(key) || key.includes(hKey)) grade = Math.max(grade, 0.9);
