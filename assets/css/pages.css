@@ -79,12 +79,6 @@
 .advanced-toggle { min-height: 30px; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .advanced-filters[hidden] { display: none; }
 .advanced-filters { display: flex; flex-wrap: wrap; gap: var(--s3); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
-.hot-strip { display: flex; gap: var(--s4); overflow-x: auto; padding: 0 0 var(--s2); scrollbar-width: none; }
-.hot-strip::-webkit-scrollbar { display: none; }
-.hot-ground { display: grid; justify-items: center; gap: var(--s2); width: 76px; flex: 0 0 76px; border: 0; background: transparent; color: rgb(var(--ink)); font: inherit; cursor: pointer; }
-.hot-ground .ring { width: 64px; height: 64px; }
-.hot-ground .ring > .ring-core { width: 56px; height: 56px; }
-.hot-ground span:last-child { max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-11); }
 .tile.is-selected { border-color: rgb(var(--blue)); box-shadow: 0 0 0 1px rgb(var(--blue)); }
 .tile-rank { position: absolute; top: -9px; right: var(--s3); }
 .planner-card { position: relative; display: grid; gap: var(--s3); }

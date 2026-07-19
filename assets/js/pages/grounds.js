@@ -156,7 +156,6 @@ stage.innerHTML = `
     <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
     <p class="dim" style="max-width:60ch">Pick a ground matched to ${esc(characterName)}'s level, vocation and party size. Curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
-  <section class="section" aria-labelledby="hot-title"><p class="eyebrow" id="hot-title">Hot right now</p><div class="hot-strip" id="hot-grounds"></div></section>
   <form class="filter-bar filter-compact" id="f" role="search">
     <div class="filter-compact-head">
       <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
@@ -367,9 +366,6 @@ function render() {
     : cards.slice(0, state.shown);
 
   $('#filter-count').textContent = `${nf(cards.length)} grounds · ${nf(rows.length)} rows`;
-  const hottest = [...groundCards(table)].sort((a, b) => (b.bestXp ?? -1) - (a.bestXp ?? -1)).slice(0, 6);
-  $('#hot-grounds').innerHTML = hottest.map((ground) => `<button type="button" class="hot-ground" data-hot-slug="${esc(ground.slug)}" title="Open ${esc(ground.name)}">${ring(ground.name)}<span>${esc(ground.name)}</span></button>`).join('');
-
   $('#out').innerHTML = `
     <p class="fine dim count-line">Showing ${nf(visibleCards.length)} of ${nf(cards.length)} matching grounds</p>
     <div class="tiles planner-grid">
@@ -431,7 +427,6 @@ $('#f-toggle').addEventListener('click', () => {
   $('#f-toggle').setAttribute('aria-expanded', String(open));
   $('#f-toggle').textContent = open ? 'Fewer filters' : 'More filters';
 });
-$('#hot-grounds').addEventListener('click', (e) => { const item = e.target.closest('[data-hot-slug]'); if (item) openDetail(item.dataset.hotSlug); });
 $('#out').addEventListener('click', (e) => {
   if (e.target.closest('[data-show-more]')) {
     state.shown += 18;
