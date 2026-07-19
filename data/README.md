@@ -8,7 +8,9 @@ fresh cache keys at deploy time.
 
 Do not hand-edit these during feature work:
 
-- `bestiary.json` - Cyclopedia creature export.
+- `bestiary.json` - Cyclopedia creature export. Refresh it only through
+  `pipeline/update-bestiary.mjs`; the script joins the paginated TibiaDraptor
+  API and refuses totals that do not match the reviewed release metadata.
 - `grounds.json` - curated hunting-ground rows.
 - `charms.json` - Cyclopedia charm export.
 

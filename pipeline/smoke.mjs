@@ -39,8 +39,31 @@ const tibiaServerSaveDate = (date = new Date()) => {
 let extra = null;
 try { extra = data('codex-extra.json'); } catch { /* enrichment is optional */ }
 const taskData = data('creature-tasks.json');
-const codex = new Codex(data('bestiary.json'), extra, taskData);
-assert(codex.size > 500, `codex too small: ${codex.size}`);
+const bestiary = data('bestiary.json');
+const su2026Names = [
+  'Devoted Radiant Acolyte', 'Devoted Radiant Inquisitor', 'Devoted Radiant Paragon',
+  'Devoted Radiant Templar', 'Devoted Radiant Warden', 'Devoted Radiant Zealot',
+  'Iceplume Strider', 'Jaracal', 'Moonspawn Blightspitter', 'Moonspawn Oozecrown',
+  'Moonstone Excavator', 'Moonstone Overseer', 'Radiant Acolyte', 'Radiant Inquisitor',
+  'Radiant Paragon', 'Radiant Templar', 'Radiant Warden', 'Radiant Zealot',
+  'Silverfrost Sentinel', 'True Feverbloom Asura', 'Winged Jaracal',
+];
+const su2026 = bestiary.data.filter((creature) => creature.released_in === 'Summer Update 2026');
+assert(bestiary.meta.total === 833 && bestiary.data.length === 833
+  && bestiary.viewing_total_monsters === 833 && bestiary.viewing_total_points === 28_734,
+  'SU2026 Bestiary totals must match the owner-supplied Cyclopedia metadata');
+assert(bestiary.viewing_total_echo_warden_charm_points === 8_497,
+  'SU2026 Echo Warden charm-point total must match the owner-supplied metadata');
+assert(bestiary.source?.version === '15.30' && bestiary.source?.release === 'Summer Update 2026',
+  'Bestiary import lineage must identify the SU2026 release');
+assert(su2026.length === su2026Names.length
+  && su2026Names.every((name) => su2026.some((creature) => creature.name === name))
+  && su2026.reduce((sum, creature) => sum + creature.charm_details.charm_points, 0) === 1_650,
+  'SU2026 Bestiary must contain the exact 21-creature, 1,650-point roster');
+assert(su2026.every((creature) => creature.resistances?.length === 7 && creature.class?.name),
+  'SU2026 creatures must retain complete Cyclopedia combat fields');
+const codex = new Codex(bestiary, extra, taskData);
+assert(codex.size === 833, `codex size drifted from the SU2026 Bestiary: ${codex.size}`);
 const taskCreatures = codex.creatures.filter((creature) => creature.taskSpeed);
 const taskRates = codex.creatures.flatMap((creature) => creature.taskRates);
 assert(taskCreatures.length === 131 && TASK_SPEEDS.every((speed) => taskCreatures.some((creature) => creature.taskSpeed === speed)),
@@ -188,9 +211,12 @@ assert(dragonWeaknesses.size > 0, 'dragon has no elemental weakness to test agai
 assert(dragonWeaknesses.has(advice[0].charm.element), `top dragon charm is ${advice[0].charm.element}, not a dragon weakness`);
 
 if (extra) {
-  const enriched = codex.creatures.filter((c) => c.art).length;
-  assert(enriched > 100, `enrichment wiring broken: ${enriched}`);
-  console.log(`enrichment: ${enriched}/${codex.size} creatures carry TibiaData extras`);
+  const artwork = codex.creatures.filter((creature) => creature.art).length;
+  const tibiaData = codex.creatures
+    .filter((creature) => Object.hasOwn(extra.creatures?.[creature.slug] || {}, 'race')).length;
+  assert(artwork > 100 && tibiaData > 100,
+    `enrichment wiring broken: ${tibiaData} TibiaData records, ${artwork} artwork records`);
+  console.log(`enrichment: ${tibiaData}/${codex.size} TibiaData records; ${artwork}/${codex.size} artwork records`);
 }
 
 assert(charms.length >= 24, `charm catalogue too small: ${charms.length}`);

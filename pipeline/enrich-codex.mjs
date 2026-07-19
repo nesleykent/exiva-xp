@@ -25,7 +25,13 @@ try {
   existing = JSON.parse(readFileSync(new URL('../data/codex-extra.json', import.meta.url), 'utf8')).creatures || {};
 } catch { /* first run */ }
 
-const names = (bestiary.data || []).map((c) => c.name).filter((n) => !existing[slug(n)]);
+const hasTibiaData = (entry) => entry && Object.hasOwn(entry, 'race');
+const currentRelease = bestiary.source?.release || null;
+const names = (bestiary.data || [])
+  .filter((creature) => !existing[slug(creature.name)]
+    || (currentRelease && !hasTibiaData(existing[slug(creature.name)])
+      && creature.released_in === currentRelease))
+  .map((creature) => creature.name);
 console.log(`${names.length} creatures to look up (${Object.keys(existing).length} already enriched).`);
 
 async function lookup(name, attempt = 0) {
@@ -73,7 +79,14 @@ await Promise.all(Array.from({ length: CONCURRENCY }, async () => {
     const name = queue.shift();
     const data = await lookup(name);
     done += 1;
-    if (data) { extra[slug(name)] = data; found += 1; }
+    if (data) {
+      const key = slug(name);
+      const wikiImage = extra[key]?.image && !extra[key].image.includes('static.tibia.com')
+        ? extra[key].image
+        : null;
+      extra[key] = { ...extra[key], ...data, image: wikiImage || data.image };
+      found += 1;
+    }
     if (done % 100 === 0) console.log(`  ${done}/${names.length} (${found} enriched)`);
   }
 }));

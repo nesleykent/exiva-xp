@@ -1,6 +1,6 @@
 {
  "source": "api.tibiadata.com/v4",
- "fetchedAt": "2026-07-03T14:30:35.298Z",
+ "fetchedAt": "2026-07-19T18:52:20.793Z",
  "creatures": {
   "toad": {
    "race": "toad",
@@ -17807,7 +17807,517 @@
   "sacred-spider": {
    "image": "https://static.wikia.nocookie.net/tibia/images/4/47/Tarantula.gif/revision/latest?cb=20150422152827&path-prefix=en",
    "loot": []
+  },
+  "iceplume-strider": {
+   "race": "iceplumestrider",
+   "image": "https://static.wikia.nocookie.net/tibia/images/3/3a/Iceplume_Strider.gif/revision/latest?cb=20260623210559&path-prefix=en",
+   "description": "Iceplume striders are constructs made from ice and shaped like long-legged birds. They bear a distant resemblance to the moas that inhabit Marapur. They are hollow and can be filled with various liquids: mana fluid, acid, blood - whatever the asuri find useful. The frost flower asuri created these constructs by shaping them from ice and enhancing them with moonsilver. Now they guard and patrol the old asura citadel beneath the Emerald Gardens of Marapur. \n\nDespite their fragile appearance, iceplume striders move with surprising speed and precision. With each step, their bodies crack faintly, shedding sharp tiny fragments of ice. When they attack, they strike with their long, pointed beaks, injecting their victims with the fluids they have been filled with.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against energy, holy and ice damage. On the other hand, they are weak against death, earth, fire and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "energy",
+    "holy",
+    "ice"
+   ],
+   "weakness": [
+    "death",
+    "earth",
+    "fire",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins",
+    "small sapphires"
+   ]
+  },
+  "silverfrost-sentinel": {
+   "race": "silverfrostsentinel",
+   "image": "https://static.wikia.nocookie.net/tibia/images/8/8c/Silverfrost_Sentinel.gif/revision/latest?cb=20260704205200&path-prefix=en",
+   "description": "The silverfrost sentinels are hulking constructs with four arms, made of translucent ice, reinforced with moonsilver. The frost flower asuri created them as guardians of their old citadel beneath the Emerald Gardens of Marapur. They are hollow and can be filled with various liquids: mana fluid, acid, blood - whatever the asuri find useful. \n\nTheir bodies are very robust, and cracks that form across their surface from incoming attacks quickly seal themselves. In combat, they rely on slow, devastating blows and waves of intense cold to freeze their enemies.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against energy, holy and ice damage. On the other hand, they are weak against death, earth, fire and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "energy",
+    "holy",
+    "ice"
+   ],
+   "weakness": [
+    "death",
+    "earth",
+    "fire",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins",
+    "small sapphires"
+   ]
+  },
+  "radiant-warden": {
+   "race": "radiantwarden",
+   "image": "https://static.wikia.nocookie.net/tibia/images/7/74/Radiant_Warden.gif/revision/latest?cb=20260623210637&path-prefix=en",
+   "description": "Radiant Wardens serve as enforcers of order wherever they are stationed. They move with measured precision, reacting swiftly to anything that deviates from the expected pattern. Their behavior suggests constant observation rather than simple vigilance. It is said that they are trained to recognize even the smallest irregularities, as if guided by a deeper understanding of the cult's doctrine. Those who draw their attention rarely remain unnoticed for long.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, ice and physical damage. On the other hand, they are weak against earth, energy and holy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "radiant-paragon": {
+   "race": "radiantparagon",
+   "image": "https://static.wikia.nocookie.net/tibia/images/7/70/Radiant_Paragon.gif/revision/latest?cb=20260623210629&path-prefix=en",
+   "description": "Paragons are regarded as exemplars of the cult's teachings, shaped through discipline and unwavering belief. Their actions are deliberate, almost ceremonial, as if each movement serves a purpose beyond combat. They do not waste effort, nor do they act without intent. Among the cult, they are often seen as proof that the path of devotion leads to refinement. Facing one can feel less like confronting an opponent and more like being measured against an unseen standard.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, ice and physical damage. On the other hand, they are weak against earth and energy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-warden": {
+   "race": "devotedradiantwarden",
+   "image": "https://static.wikia.nocookie.net/tibia/images/9/9b/Devoted_Radiant_Warden.gif/revision/latest?cb=20260623134031&path-prefix=en",
+   "description": "Devoted Radiant Wardens are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radiantwarden\">Radiant Wardens</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, ice and physical damage. On the other hand, they are weak against earth, energy and holy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-paragon": {
+   "race": "devotedradiantparagon",
+   "image": "https://static.wikia.nocookie.net/tibia/images/2/2e/Devoted_Radiant_Paragon.gif/revision/latest?cb=20260623134025&path-prefix=en",
+   "description": "Devoted Radiant Paragons are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radiantparagon\">Radiant Paragons</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, ice and physical damage. On the other hand, they are weak against earth and energy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "radiant-acolyte": {
+   "race": "radiantacolyte",
+   "image": "https://static.wikia.nocookie.net/tibia/images/7/78/Radiant_Acolyte.gif/revision/latest?cb=20260623210621&path-prefix=en",
+   "description": "Acolytes represent those newly drawn into the influence of the cult, still adapting to its structure and expectations. Though not yet fully attuned, they already display signs of change in both demeanor and perception. Their confidence often exceeds their experience, suggesting a strong reliance on belief rather than skill. They are encouraged to observe and emulate those above them, gradually aligning themselves with the cult's ideals. In time, those who endure may advance beyond this stage.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, holy, ice and physical damage. On the other hand, they are weak against earth and energy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "holy",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-acolyte": {
+   "race": "devotedradiantacolyte",
+   "image": "https://static.wikia.nocookie.net/tibia/images/b/b2/Devoted_Radiant_Acolyte.gif/revision/latest?cb=20260623134019&path-prefix=en",
+   "description": "Devoted Radiant Acolytes are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radiantacolyte\">Radiant Acolytes</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, holy, ice and physical damage. On the other hand, they are weak against earth and energy damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "holy",
+    "ice",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "radiant-templar": {
+   "race": "radianttemplar",
+   "image": "https://static.wikia.nocookie.net/tibia/images/7/74/Radiant_Templar.gif/revision/latest?cb=20260623210633&path-prefix=en",
+   "description": "Templars act as the disciplined arm of the cult, tasked with maintaining stability in uncertain conditions. Their movements are controlled and efficient, leaving little room for hesitation or error. They rely on coordination and consistency rather than brute force, making them difficult to overwhelm. Within the cult's structure, they are valued for their reliability and endurance. Their presence often marks areas where order must be upheld without compromise.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy, holy and physical damage. On the other hand, they are weak against death, fire and ice damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy",
+    "physical"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-templar": {
+   "race": "devotedradianttemplar",
+   "image": "https://static.wikia.nocookie.net/tibia/images/9/9f/Devoted_Radiant_Templar.gif/revision/latest?cb=20260623134028&path-prefix=en",
+   "description": "Devoted Radiant Templars are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radianttemplar\">Radiant Templars</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy, holy and physical damage. On the other hand, they are weak against death, fire and ice damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy",
+    "physical"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "radiant-inquisitor": {
+   "race": "radiantinquisitor",
+   "image": "https://static.wikia.nocookie.net/tibia/images/b/b3/Radiant_Inquisitor.gif/revision/latest?cb=20260623210625&path-prefix=en",
+   "description": "Inquisitors are entrusted with identifying flaws within both individuals and the environment. Their scrutiny goes beyond the obvious, as if they are trained to perceive subtle inconsistencies others would overlook. They employ controlled applications of power, focusing on precision rather than excess. Among the cult, they are both respected and feared, as their judgment is rarely questioned. Those who come under their attention seldom remain unaffected.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy and holy damage. On the other hand, they are weak against death, fire, ice and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-inquisitor": {
+   "race": "devotedradiantinquisitor",
+   "image": "https://static.wikia.nocookie.net/tibia/images/5/59/Devoted_Radiant_Inquisitor.gif/revision/latest?cb=20260623134022&path-prefix=en",
+   "description": "Devoted Radiant Inquisitors are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radiantinquisitor\">Radiant Inquisitors</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy and holy damage. On the other hand, they are weak against death, fire, ice and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "radiant-zealot": {
+   "race": "radiantzealot",
+   "image": "https://static.wikia.nocookie.net/tibia/images/b/bd/Radiant_Zealot.gif/revision/latest?cb=20260623210641&path-prefix=en",
+   "description": "Zealots embody absolute conviction, acting without hesitation or visible doubt. Their dedication appears to remove the need for caution, allowing them to commit fully to their purpose. They are often found at the forefront of conflict, where their resolve is most apparent. Within the cult, such individuals are seen as proof of unwavering faith. Encounters with them are marked by intensity, as they rarely retreat once engaged.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy and holy damage. On the other hand, they are weak against death, fire, ice and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "devoted-radiant-zealot": {
+   "race": "devotedradiantzealot",
+   "image": "https://static.wikia.nocookie.net/tibia/images/1/17/Devoted_Radiant_Zealot.gif/revision/latest?cb=20260623134034&path-prefix=en",
+   "description": "Devoted Radiant Zealots are more powerful than <a href=\"https://www.tibia.com/library/?subtopic=creatures&race=radiantzealot\">Radiant Zealots</a>.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against earth, energy and holy damage. On the other hand, they are weak against death, fire, ice and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "earth",
+    "energy",
+    "holy"
+   ],
+   "weakness": [
+    "death",
+    "fire",
+    "ice",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": []
+  },
+  "moonstone-excavator": {
+   "race": "moonstoneexcavator",
+   "image": "https://static.wikia.nocookie.net/tibia/images/1/1d/Moonstone_Excavator.gif/revision/latest?cb=20260623210614&path-prefix=en",
+   "description": "Moonstone Excavators are tasked with the physical labor required to extract fragments of the fallen stone. They work with steady persistence, often ignoring exhaustion or discomfort. Their focus seems fixed on the task at hand, as if repetition alone holds meaning. Though not trained fighters, they will defend their work when disturbed. It is unclear how much of their behavior is discipline, and how much is influence.",
+   "behaviour": "They are immune to agony damage and cannot be paralysed. Moreover, they are strong against death, earth, holy and ice damage. On the other hand, they are weak against energy, fire and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [
+    "agony"
+   ],
+   "strong": [
+    "death",
+    "earth",
+    "holy",
+    "ice"
+   ],
+   "weakness": [
+    "energy",
+    "fire",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins",
+    "small amethysts",
+    "small diamonds",
+    "small emeralds",
+    "small rubies",
+    "small sapphires",
+    "small topazes"
+   ]
+  },
+  "moonstone-overseer": {
+   "race": "moonstoneoverseer",
+   "image": "https://static.wikia.nocookie.net/tibia/images/5/54/Moonstone_Overseer.gif/revision/latest?cb=20260629185623&path-prefix=en",
+   "description": "Overseers coordinate the excavation efforts, ensuring that progress continues without interruption. They observe both workers and surroundings with careful attention, intervening when necessary. Their authority is rarely challenged, suggesting a strict hierarchy within the operation. Unlike the laborers, they show a clearer awareness of their role and its importance. Their presence often keeps the otherwise chaotic activity under control.",
+   "behaviour": "They are immune to agony damage and cannot be paralysed. Moreover, they are strong against death, earth, holy and ice damage. On the other hand, they are weak against energy, fire and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [
+    "agony"
+   ],
+   "strong": [
+    "death",
+    "earth",
+    "holy",
+    "ice"
+   ],
+   "weakness": [
+    "energy",
+    "fire",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins"
+   ]
+  },
+  "jaracal": {
+   "race": "jaracal",
+   "image": "https://static.wikia.nocookie.net/tibia/images/f/f2/Jaracal.gif/revision/latest?cb=20260623210603&path-prefix=en",
+   "description": "The jaracals are six-legged feline predators native to Marapur. They are equally at home in the dense jungle and along the submerging coastline of the Emerald Gardens. Their additional limbs grant them remarkable balance, allowing them to change direction very quickly and to outmaneuver almost any prey. \n\nJaracals are patient hunters, stalking their targets silently before striking. Their keen senses and sharp instincts make them difficult to surprise. Despite their ferocity, though, they can be tamed. Those who earn their trust may find them to be loyal and capable companions.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, holy and physical damage. On the other hand, they are weak against earth, energy and ice damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "holy",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy",
+    "ice"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins",
+    "strong health potions"
+   ]
+  },
+  "winged-jaracal": {
+   "race": "wingedjaracal",
+   "image": "https://static.wikia.nocookie.net/tibia/images/7/7a/Winged_Jaracal.gif/revision/latest?cb=20260623134122&path-prefix=en",
+   "description": "The winged jaracals are the result of asuri experimentation. The natural predators have been twisted by moonsilver and dark asuri magic. Their bodies retain their speed and agility, but their form is altered: They have grown a pair of demonic wings. Unlike their natural counterparts, the winged jaracals show relentless aggression rather than patience. The demonic corruption has dulled their instincts but amplified their ferocity, turning them into creatures that hunt out of compulsion, not out of necessity.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, fire, holy and physical damage. On the other hand, they are weak against earth, energy and ice damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "fire",
+    "holy",
+    "physical"
+   ],
+   "weakness": [
+    "earth",
+    "energy",
+    "ice"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins",
+    "strong health potions"
+   ]
+  },
+  "moonspawn-oozecrown": {
+   "race": "moonspawnoozecrown",
+   "image": "https://static.wikia.nocookie.net/tibia/images/5/5b/Moonspawn_Oozecrown.gif/revision/latest?cb=20260626183103&path-prefix=en",
+   "description": "The oozecrown manifests as a swollen accumulation of growth, layered with shifting and unstable matter. It seems less concerned with movement and more with expansion, slowly reshaping its surroundings. Its surface pulses irregularly, suggesting ongoing internal processes that are not fully understood. Areas under its influence tend to become difficult to traverse, as if the environment itself resists intrusion. Those who approach too closely may find themselves overwhelmed by its unpredictable nature.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, earth and energy damage. On the other hand, they are weak against fire, holy, ice and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "earth",
+    "energy"
+   ],
+   "weakness": [
+    "fire",
+    "holy",
+    "ice",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins"
+   ]
+  },
+  "moonspawn-blightspitter": {
+   "race": "moonspawnblightspitter",
+   "image": "https://static.wikia.nocookie.net/tibia/images/6/6b/Moonspawn_Blightspitter.gif/revision/latest?cb=20260626183000&path-prefix=en",
+   "description": "The blightspitter appears to be a specialized variant of the moonspawn, adapted to spread its influence across a wider area. It expels viscous matter that clings to surfaces and continues to corrupt them over time. The terrain around such creatures often shows signs of prolonged exposure, marked by decay and instability. Unlike other variants, it does not rely solely on proximity to pose a threat. Its presence alone can alter the conditions of a battlefield in subtle but persistent ways.",
+   "behaviour": "They cannot be paralysed. Moreover, they are strong against death, earth and energy damage. On the other hand, they are weak against fire, holy and physical damage. These creatures can neither be summoned nor convinced. In addition, they are able to sense invisible creatures.",
+   "immune": [],
+   "strong": [
+    "death",
+    "earth",
+    "energy"
+   ],
+   "weakness": [
+    "fire",
+    "holy",
+    "physical"
+   ],
+   "healedBy": null,
+   "paralysable": false,
+   "summonMana": null,
+   "convinceMana": null,
+   "seeInvisible": true,
+   "loot": [
+    "platinum coins"
+   ]
+  },
+  "true-feverbloom-asura": {
+   "image": "https://static.wikia.nocookie.net/tibia/images/9/97/True_Feverbloom_Asura.gif/revision/latest?cb=20260623210650&path-prefix=en",
+   "loot": []
   }
- },
- "artFixedAt": "2026-07-04T08:22:44.334Z"
+ }
 }

@@ -52,7 +52,7 @@ assets/
 data/
   README.md                source-of-truth contract for curated inputs,
                            generated caches and character observations
-  bestiary.json            creature reference (read-only)
+  bestiary.json            generated TibiaDraptor Cyclopedia creature reference
   codex-extra.json         TibiaData enrichment: artwork, lore, behaviour, loot, summon data
   creature-tasks.json      owner-curated task speed + workbook route-rate observations
   charms.json              the Charm catalogue (read-only, sourced from TibiaWiki)
@@ -67,6 +67,7 @@ data/
   imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, basis, observedAt, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
   config.mjs               reads config.ini — the tracked character for every script below
+  update-bestiary.mjs      refresh the audited, paginated Cyclopedia creature export
   check-hunt.mjs           Action: judge an issue payload
   merge-hunts.mjs          Optional Action: merge approved shared issues, rebuild the shared ledger
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
@@ -117,9 +118,11 @@ Codex resistances mean *% of damage taken* — 100 neutral, 110 weak, 80 resista
 
 Task intelligence comes from the owner-supplied `Kusnier's Tracker.xlsx` plus the owner's five speed tiers. The curated import keeps 313 route-specific observations across 205 creatures; rates retain whether they were measured per hour or per lap and never collapse multiple locations into a fabricated global average. Nine workbook spelling/plural variants were reconciled to canonical Bestiary names. The Hard Monsters worksheet identifies its measurements as approximately level-750 Monk results, and every creature dossier repeats the broader level/vocation/skill/route caveat.
 
-The bestiary is complemented by the [TibiaData API](https://docs.tibiadata.com) (`GET /v4/creature/{race}`): descriptions, behaviour notes, summon/convince mana, paralysability, invisibility sense and loot lists, cached into `data/codex-extra.json` by `pipeline/enrich-codex.mjs`. The script is incremental — re-running it only fetches creatures that are still missing — and the site works fine without the file.
+`pipeline/update-bestiary.mjs` rebuilds the canonical creature reference from every page of TibiaDraptor's public Cyclopedia API, then validates the response against the owner-supplied release metadata before writing it. The SU2026 snapshot contains 833 creatures and 28,734 total Charm Points, including the exact 21-creature Summer Update 2026 roster. The generated file retains its provider, endpoint, version, release and fetch timestamp for audit; it is never edited by hand.
 
-Artwork comes entirely from [TibiaWiki](https://tibia.fandom.com), not TibiaData: `static.tibia.com` (TibiaData's image host) blocks hotlinking and 403s from any foreign origin, including GitHub Pages, so those URLs never render once deployed. `pipeline/enrich-art.mjs` flags any `static.tibia.com` URL for replacement, HEAD-validates the rest, and resolves every gap against the TibiaWiki MediaWiki API (`File:<Name>.gif`, falling back to `.png`, then an opensearch pass for disambiguated or oddly-cased pages), batched 50 titles per request. Wiki file redirects are followed at the imageinfo level, so variant creatures that reuse a base sprite (e.g. Haunted Dragon → Undead Dragon) resolve to the sprite they actually show in-game. Current coverage: all 812 creatures, 100% wiki-sourced.
+The bestiary is complemented by the [TibiaData API](https://docs.tibiadata.com) (`GET /v4/creature/{race}`): descriptions, behaviour notes, summon/convince mana, paralysability, invisibility sense and loot lists, cached into `data/codex-extra.json` by `pipeline/enrich-codex.mjs`. The script is incremental — re-running it fetches creatures that are missing TibiaData fields while preserving any already-resolved TibiaWiki artwork — and the site works fine without the file.
+
+Artwork comes entirely from [TibiaWiki](https://tibia.fandom.com), not TibiaData: `static.tibia.com` (TibiaData's image host) blocks hotlinking and 403s from any foreign origin, including GitHub Pages, so those URLs never render once deployed. `pipeline/enrich-art.mjs` flags any `static.tibia.com` URL for replacement, HEAD-validates the rest, and resolves every gap against the TibiaWiki MediaWiki API (`File:<Name>.gif`, falling back to `.png`, then an opensearch pass for disambiguated or oddly-cased pages), batched 50 titles per request. Wiki file redirects are followed at the imageinfo level, so variant creatures that reuse a base sprite (e.g. Haunted Dragon → Undead Dragon) resolve to the sprite they actually show in-game. Current coverage: all 833 creatures, 100% wiki-sourced.
 
 ## Charms
 
