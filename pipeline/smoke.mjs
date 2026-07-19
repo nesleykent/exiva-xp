@@ -50,8 +50,14 @@ assert(taskRates.length === 313 && taskRates.every((rate) => rate.kills > 0 && [
 assert(codex.creature('emerald-damselfly').taskRates.some((rate) => rate.source.row === 7),
   'workbook spelling aliases must reconcile to canonical codex creatures');
 
-const grounds = normalizeGrounds(data('grounds.json'));
+const groundRosters = data('ground-creatures.json');
+const grounds = normalizeGrounds(data('grounds.json'), groundRosters);
 assert(grounds.entries.length > 500, `grounds too small: ${grounds.entries.length}`);
+assert(Object.keys(groundRosters.grounds).length >= 325,
+  `TibiaWiki ground roster coverage regressed: ${Object.keys(groundRosters.grounds).length}`);
+assert(Object.values(groundRosters.grounds).every((roster) =>
+  roster.creatures.length && roster.creatures.every((name) => codex.identify(name)?.grade >= 0.97)),
+'TibiaWiki ground rosters must contain only canonical Bestiary creatures');
 
 const s = readAnalyser([
   'Session data: From 2026-01-01, 10:00:00 to 2026-01-01, 12:00:00',
@@ -74,8 +80,20 @@ assert(loc.candidates.length > 0, 'locator returned nothing');
 const seaSerpents = nameCreatures('Sea Serpents', codex).map((c) => c.name);
 assert(seaSerpents.includes('Sea Serpent'), 'nameCreatures missed the creature named by Sea Serpents');
 const codexPopulation = population({ name: 'Sea Serpents' }, codex);
-assert(codexPopulation?.evidence === 'codex' && codexPopulation.set.some((row) => row.creature.name === 'Sea Serpent'),
-  'population missed the codex population for Sea Serpents');
+const seaSerpentGround = grounds.directory.find((ground) => ground.slug === 'sea-serpents');
+const wikiPopulation = population(seaSerpentGround, codex);
+assert(wikiPopulation?.evidence === 'wiki' && wikiPopulation.set.some((row) => row.creature.name === 'Sea Serpent'),
+  'population missed the TibiaWiki roster for Sea Serpents');
+assert(codexPopulation?.evidence === 'name' && codexPopulation.set.some((row) => row.creature.name === 'Sea Serpent'),
+  'population missed the safe name-only fallback without a roster');
+const warzoneTwo = population(grounds.directory.find((ground) => ground.slug === 'warzone-2'), codex);
+assert(warzoneTwo?.set.some((row) => row.creature.name === 'Magma Crawler')
+  && !warzoneTwo.set.some((row) => row.creature.name === 'Humongous Fungus'),
+'numbered Warzones must not inherit Warzone 1 creatures');
+const upperRoshamuul = population(grounds.directory.find((ground) => ground.slug === 'upper-roshamuul'), codex);
+assert(upperRoshamuul?.set.some((row) => row.creature.name === 'Guzzlemaw')
+  && !upperRoshamuul.set.some((row) => row.creature.name === 'Shock Head'),
+'Upper Roshamuul must not inherit Lower Roshamuul creatures');
 
 const battle = readBattle(loc.known.map((k) => ({ creature: k.creature, n: k.n })));
 assert(battle && battle.tips.length > 0, 'strategy returned nothing');
@@ -195,27 +213,33 @@ let character = null;
 try { character = data('character.json'); } catch { /* tracker has not run yet */ }
 if (character) {
   assert(character.name === CHARACTER.name, `character.json tracks ${character.name}, expected ${CHARACTER.name} (config.ini)`);
-  const charHistory = data('character-history.json');
-  const entries = Object.entries(charHistory);
-  assert(entries.length >= 1, 'character-history.json is empty despite character.json existing');
-  assert(entries.at(-1)[0] <= tibiaServerSaveDate(), 'latest character-history row is after the current Tibia server-save day');
-  for (const [date, e] of entries) {
-    assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `bad history date key: ${date}`);
-    assert(Number.isFinite(e.level) && Number.isFinite(e.experience) && (e.rank == null || Number.isFinite(e.rank)),
-      `history[${date}] missing level/experience or has a bad rank`);
-    assert(experienceUntilNextLevel(e.level, e.experience) > 0,
-      `history[${date}]: recorded XP exceeds the next level's requirement — level/XP mismatch`);
-  }
-  const latestEntry = entries.at(-1)?.[1] || {};
-  if (character.highscoreRanks?.dromescore != null || character.skillRanks?.drome != null) {
-    assert(Number.isFinite(latestEntry.dromeScore), 'latest character-history entry is missing TibiaData Drome score despite a Drome rank in character.json');
-  }
-  for (const { valueField, rankField } of HIGHSCORE_CATEGORIES) {
-    assert(Object.hasOwn(latestEntry, valueField), `latest character-history entry is missing ${valueField}`);
-    assert(Object.hasOwn(latestEntry, rankField), `latest character-history entry is missing ${rankField}`);
-    if (latestEntry[valueField] != null && latestEntry[rankField] != null) {
-      assert(Number.isFinite(latestEntry[rankField]), `latest character-history entry has a bad ${rankField}`);
+  const highscoreHistories = Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
+    category,
+    data(`highscores/${category}.json`),
+  ]));
+  const experienceEntries = Object.entries(highscoreHistories.experience);
+  assert(experienceEntries.length >= 1, 'highscores/experience.json is empty despite character.json existing');
+  assert(experienceEntries.at(-1)[0] <= tibiaServerSaveDate(), 'latest experience row is after the current Tibia server-save day');
+  for (const { category, primary } of HIGHSCORE_CATEGORIES) {
+    const entries = Object.entries(highscoreHistories[category]);
+    for (const [date, observation] of entries) {
+      assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `bad ${category} history date key: ${date}`);
+      assert(Object.hasOwn(observation, 'value') && Object.hasOwn(observation, 'rank'),
+        `${category}[${date}] must store value and rank explicitly`);
+      assert(observation.value == null || Number.isFinite(observation.value), `${category}[${date}] has a bad value`);
+      assert(observation.rank == null || Number.isFinite(observation.rank), `${category}[${date}] has a bad rank`);
+      assert(typeof observation.source === 'string' && observation.source, `${category}[${date}] is missing source lineage`);
+      if (primary) {
+        assert(Number.isFinite(observation.level) && Number.isFinite(observation.value),
+          `experience[${date}] is missing level or XP`);
+        assert(experienceUntilNextLevel(observation.level, observation.value) > 0,
+          `experience[${date}]: recorded XP exceeds the next level's requirement — level/XP mismatch`);
+      }
     }
+  }
+  const latestDrome = Object.values(highscoreHistories.dromescore).at(-1);
+  if (character.highscoreRanks?.dromescore != null || character.skillRanks?.drome != null) {
+    assert(Number.isFinite(latestDrome?.value), 'latest Drome history is missing a value despite a Drome rank in character.json');
   }
 }
 
@@ -400,4 +424,4 @@ const markedFlow = flow([
 assert(markedFlow.includes('vevent-level') && markedFlow.includes('vevent-death'),
   'progression chart must render both level-up and death markers');
 
-console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('character-history.json')).length} tracked day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);
+console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('highscores/experience.json')).length} tracked XP day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

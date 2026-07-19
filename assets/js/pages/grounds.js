@@ -216,7 +216,11 @@ function renderDetail(slug) {
         ${req?.area ? `<span class="pill pill-info">${esc(req.area)}</span>` : ''}
         ${trustMeter(trust, dossier.n)}
         ${(ground.vocations || []).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
-        ${pop ? (pop.evidence === 'logged' ? '<span class="badge badge-success">Log-weighted evidence</span>' : '<span class="badge">Codex spawn lists</span>') : ''}
+        ${pop ? (pop.evidence === 'logged'
+          ? '<span class="badge badge-success">Log-weighted evidence</span>'
+          : pop.evidence === 'wiki'
+            ? '<span class="badge badge-info">TibiaWiki roster</span>'
+            : '<span class="badge badge-warning">Name-only match</span>') : ''}
       </div>
     </div>
   </header>
@@ -275,7 +279,7 @@ function renderDetail(slug) {
 
   const battleHost = document.getElementById('ground-battle');
   if (!battle) {
-    battleHost.innerHTML = '<section class="section"><div class="note note-amber">No population data: nothing logged here yet and no codex habitat matches this ground\'s name.</div></section>';
+    battleHost.innerHTML = '<section class="section"><div class="note note-amber">No trustworthy population data: nothing is logged here, TibiaWiki has no resolved hunting-place roster, and the ground name does not identify a Bestiary creature.</div></section>';
   } else {
     const creatures = pop.set
       .map((s) => ({ ...s, share: s.n / (battle.mass || 1) }))
@@ -285,6 +289,8 @@ function renderDetail(slug) {
     battleHost.innerHTML = `
     <section class="section">
       <div class="section-bar"><h2>Battle plan</h2></div>
+      ${pop.evidence === 'wiki' ? `<p class="fine dim" style="margin:-8px 0 16px">Equal-weight planning profile from <a href="${esc(pop.source.wikiUrl)}" target="_blank" rel="noopener">${esc(pop.source.wikiTitle)}</a> on TibiaWiki.</p>` : ''}
+      ${pop.evidence === 'name' ? '<p class="fine dim" style="margin:-8px 0 16px">Only creatures explicitly named by this ground label are included; no broader regional spawn is inferred.</p>' : ''}
       <div class="duo">
         <div class="panel panel-pad">
           <p class="eyebrow" style="margin:0 0 10px">Damage profile — % taken per element</p>
@@ -310,7 +316,7 @@ function renderDetail(slug) {
     dataTable(document.getElementById('ground-matchups'), {
       cols: [
         { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:8px">${s.creature.art ? `<img class="critter" src="${esc(s.creature.art)}" alt="" loading="lazy" style="width:28px;height:28px" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
-        { id: 'share', label: pop.evidence === 'logged' ? 'Kill share' : 'Weight', num: true, cell: (s) => pct(s.share * 100) },
+        { id: 'share', label: pop.evidence === 'logged' ? 'Kill share' : 'Planning weight', num: true, cell: (s) => pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },
         { id: 'task', label: 'Task', cell: (s) => s.creature.taskSpeed ? `<span class="pill pill-info">${TASK_SPEED_LABEL[s.creature.taskSpeed]}</span>` : '<span class="dim">—</span>' },

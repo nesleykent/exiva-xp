@@ -8,7 +8,7 @@
  * snapshot of page 1 guards against recording the same upstream day twice.
  *
  * Extended beyond the reference: every TibiaData highscore category for the
- * character is tracked the same way, and the character profile (achievement points,
+ * character is tracked in its own history file, and the character profile (achievement points,
  * last login, account details) comes from the character endpoint. Known
  * deaths are preserved from earlier imports and extended if TibiaData
  * exposes new ones.
@@ -25,7 +25,10 @@ const { name: NAME, world: WORLD, vocation: VOCATION } = CHARACTER;
 // Public api.tibiadata.com keeps highscores in "restriction mode"; the dev
 // instance serves them — and is what the reference project queries too.
 const API = 'https://dev.tibiadata.com/v4';
-const HISTORY_PATH = new URL('../data/character-history.json', import.meta.url);
+const HISTORY_PATHS = Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
+  category,
+  new URL(`../data/highscores/${category}.json`, import.meta.url),
+]));
 const PROFILE_PATH = new URL('../data/character.json', import.meta.url);
 const SNAPSHOT_PATH = new URL('../data/character-snapshot.json', import.meta.url);
 
@@ -62,7 +65,11 @@ async function fetchJson(url, attempt = 1) {
 }
 
 const today = serverSaveDate();
-const history = readJson(HISTORY_PATH, {});
+const histories = Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
+  category,
+  readJson(HISTORY_PATHS[category], {}),
+]));
+const experienceHistory = histories.experience;
 const previousProfile = readJson(PROFILE_PATH, {});
 
 let pendingSnapshot = null;
@@ -99,7 +106,7 @@ const xp = await findInHighscores('experience', { snapshotFirstPage: true });
 if (!xp) throw new Error(`${NAME} not found in the ${WORLD} ${VOCATION} experience highscores.`);
 console.log(`experience: rank ${xp.rank}, level ${xp.level}, xp ${xp.value}`);
 
-if (snapshotUnchanged && !Object.hasOwn(history, today)) {
+if (snapshotUnchanged && !Object.hasOwn(experienceHistory, today)) {
   throw new Error('Highscores identical to the stored snapshot — upstream has not rolled a new day yet. Try again later.');
 }
 
@@ -113,8 +120,7 @@ for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
   } catch (err) {
     // Leave the category unset — "not measured this run", distinct from a
     // confirmed "not in top 1000". A run's transient failure must not
-    // overwrite a value an earlier run today already recorded; that's
-    // handled by falling back below.
+    // overwrite an observation an earlier run today already recorded.
     console.error(`${category}: ${err.message}`);
   }
   await sleep(400);
@@ -126,23 +132,29 @@ const c = profileData?.character?.character;
 if (!c || c.name !== NAME) throw new Error('character endpoint returned no matching profile');
 
 // ---- persist ----
-const todayEntry = {
-  rank: xp.rank,
-  level: xp.level,
-  experience: xp.value,
-  source: 'TibiaData highscores',
+const observations = {
+  experience: {
+    value: xp.value,
+    rank: xp.rank,
+    level: xp.level,
+    source: 'TibiaData highscores',
+  },
 };
-const existingToday = history[today] || null;
-for (const { category, valueField, rankField } of TRACKED_HIGHSCORE_CATEGORIES) {
-  const measured = Object.hasOwn(highscores, category);
-  todayEntry[valueField] = measured ? highscores[category]?.value ?? null : existingToday?.[valueField] ?? null;
-  todayEntry[rankField] = measured ? highscores[category]?.rank ?? null : existingToday?.[rankField] ?? null;
+for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
+  if (!Object.hasOwn(highscores, category)) continue;
+  observations[category] = {
+    value: highscores[category]?.value ?? null,
+    rank: highscores[category]?.rank ?? null,
+    source: 'TibiaData highscores',
+  };
 }
 
 let changed = false;
-if (JSON.stringify(history[today] || null) !== JSON.stringify(todayEntry)) {
-  history[today] = todayEntry;
-  writeJson(HISTORY_PATH, history);
+for (const { category } of HIGHSCORE_CATEGORIES) {
+  const observation = observations[category];
+  if (!observation || JSON.stringify(histories[category][today] || null) === JSON.stringify(observation)) continue;
+  histories[category][today] = observation;
+  writeJson(HISTORY_PATHS[category], histories[category]);
   changed = true;
 }
 
@@ -202,5 +214,5 @@ if (process.env.GITHUB_OUTPUT) {
 }
 
 console.log(changed
-  ? `Recorded ${today}: level ${xp.level}, ${Object.keys(history).length} day(s) of history, ${knownDeaths.length} known death(s).`
+  ? `Recorded ${today}: level ${xp.level}, ${Object.keys(experienceHistory).length} XP day(s), ${Object.keys(observations).length} highscore category observation(s), ${knownDeaths.length} known death(s).`
   : `No data changes for ${today}: TibiaData still reports level ${xp.level}, ${xp.value} xp.`);

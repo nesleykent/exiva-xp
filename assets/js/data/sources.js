@@ -7,6 +7,7 @@
 
 import { slug, fold } from '../lib/text.js';
 import { Codex, ELEMENT_CHARM } from '../engine/codex.js';
+import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const CHARM_ELEMENT = Object.fromEntries(Object.entries(ELEMENT_CHARM).map(([el, name]) => [name, el]));
 /** "Curse" alone lands on a disambiguation page — the charm's real title has a qualifier. */
@@ -35,11 +36,30 @@ const FILES = {
   codexExtra: 'data/codex-extra.json',
   creatureTasks: 'data/creature-tasks.json',
   grounds: 'data/grounds.json',
+  groundCreatures: 'data/ground-creatures.json',
   sharedHunts: 'data/shared-hunts.json',
   charms: 'data/charms.json',
   access: 'data/access.json',
   character: 'data/character.json',
-  characterHistory: 'data/character-history.json',
+  highscoreHistory: {
+    achievements: 'data/highscores/achievements.json',
+    axefighting: 'data/highscores/axefighting.json',
+    bosspoints: 'data/highscores/bosspoints.json',
+    bountypoints: 'data/highscores/bountypoints.json',
+    charmpoints: 'data/highscores/charmpoints.json',
+    clubfighting: 'data/highscores/clubfighting.json',
+    distancefighting: 'data/highscores/distancefighting.json',
+    dromescore: 'data/highscores/dromescore.json',
+    experience: 'data/highscores/experience.json',
+    fishing: 'data/highscores/fishing.json',
+    fistfighting: 'data/highscores/fistfighting.json',
+    goshnarstaint: 'data/highscores/goshnarstaint.json',
+    loyaltypoints: 'data/highscores/loyaltypoints.json',
+    magiclevel: 'data/highscores/magiclevel.json',
+    shielding: 'data/highscores/shielding.json',
+    swordfighting: 'data/highscores/swordfighting.json',
+    weeklytasks: 'data/highscores/weeklytasks.json',
+  },
   imbuementArt: 'data/imbuement-art.json',
   imbuementPrices: 'data/imbuement-prices.json',
 };
@@ -61,7 +81,7 @@ export async function loadCodex(prefix = '') {
   return new Codex(raw, extra, tasks);
 }
 
-export function normalizeGrounds(raw) {
+export function normalizeGrounds(raw, rosterCache = null) {
   const entries = (raw?.entries || []).map((e, i) => ({
     id: `c${i}`,
     ground: e.ground,
@@ -82,6 +102,7 @@ export function normalizeGrounds(raw) {
       dir.set(e.groundSlug, {
         name: e.ground, slug: e.groundSlug, key: fold(e.ground),
         vocations: new Set(), party: false, entryLevel: e.level, entries: [],
+        roster: rosterCache?.grounds?.[e.groundSlug] || null,
       });
     }
     const g = dir.get(e.groundSlug);
@@ -99,7 +120,11 @@ export function normalizeGrounds(raw) {
 }
 
 export async function loadGrounds(prefix = '') {
-  return normalizeGrounds(await json(prefix + FILES.grounds));
+  const [raw, rosters] = await Promise.all([
+    json(prefix + FILES.grounds),
+    json(prefix + FILES.groundCreatures).catch(() => null),
+  ]);
+  return normalizeGrounds(raw, rosters);
 }
 
 export async function loadSharedHunts(prefix = '') {
@@ -158,14 +183,42 @@ export async function loadImbuementPrices(prefix = '') {
   catch { return {}; }
 }
 
-/** Daily {date: {rank, level, experience, highscores...}} history, oldest first. */
-export async function loadCharacterHistory(prefix = '') {
+/** One highscore category's daily [{date, value, rank, ...}] observations, oldest first. */
+export async function loadHighscoreHistory(category, prefix = '') {
+  const path = FILES.highscoreHistory[category];
+  if (!path) throw new Error(`Unknown highscore category: ${category}`);
   try {
-    const raw = await json(prefix + FILES.characterHistory);
+    const raw = await json(prefix + path);
     return Object.entries(raw)
       .map(([date, entry]) => ({ date, ...entry }))
       .sort((a, b) => a.date.localeCompare(b.date));
   } catch { return []; }
+}
+
+/** Compatibility view of every per-category history merged into daily rows, oldest first. */
+export async function loadCharacterHistory(prefix = '') {
+  const series = await Promise.all(HIGHSCORE_CATEGORIES.map(async (descriptor) => [
+    descriptor,
+    await loadHighscoreHistory(descriptor.category, prefix),
+  ]));
+  const experience = series.find(([descriptor]) => descriptor.primary)?.[1] || [];
+  const rows = new Map(experience.map((observation) => [observation.date, {
+    date: observation.date,
+    experience: observation.value,
+    rank: observation.rank,
+    level: observation.level,
+    source: observation.source,
+  }]));
+  for (const [descriptor, observations] of series) {
+    if (descriptor.primary) continue;
+    for (const observation of observations) {
+      if (!rows.has(observation.date)) continue;
+      const row = rows.get(observation.date);
+      row[descriptor.valueField] = observation.value;
+      row[descriptor.rankField] = observation.rank;
+    }
+  }
+  return [...rows.values()].sort((a, b) => a.date.localeCompare(b.date));
 }
 
 // ---------------------------------------------------------------- logbook

@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/commit-generated-data
         with:
           paths: |
-            data/character-history.json
+            data/highscores
             data/character.json
             data/character-snapshot.json
           message: ${{ steps.character.outputs.commit-message }}

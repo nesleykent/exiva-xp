@@ -17,6 +17,10 @@ Do not hand-edit these during feature work:
 These are rebuilt by pipeline scripts and committed:
 
 - `codex-extra.json` - TibiaData/TibiaWiki creature enrichment.
+- `ground-creatures.json` - explicit Bestiary-compatible creature rosters from
+  TibiaWiki Hunting Places articles. Tactical local aliases retain their linked
+  article and match method; unresolved aliases stay absent rather than inheriting
+  a broad city or region population.
 - `access.json` - best-effort TibiaWiki access and area notes.
 - `ledger.json` - derived shared-hunt ledger cache.
 - `shared-hunts.json` - optional approved shared hunt evidence.
@@ -34,9 +38,12 @@ These are rebuilt by pipeline scripts and committed:
 
 These are generated observations for Night'Flyn and must stay honest:
 
-- `character-history.json` - daily XP/rank/highscore rows keyed by Tibia's
-  10:00 Europe/Berlin server-save day. Unknown values stay `null`; never carry
-  forward a previous highscore value or rank as if it were measured today.
+- `highscores/*.json` - one daily observation history per TibiaData highscore
+  category, keyed by Tibia's 10:00 Europe/Berlin server-save day. Every row
+  stores `{value, rank, source}`; `experience.json` also stores `level` and
+  contains the older GuildStats backfill. A confirmed unranked category stores
+  explicit `null` values, while a category that failed to load gets no new row.
+  Never carry forward an earlier observation as if it were measured today.
 - `character.json` - latest profile, highscore ranks and known deaths.
 - `character-snapshot.json` - highscore staleness guard for the tracker.
 

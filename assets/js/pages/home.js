@@ -81,7 +81,7 @@ if (!book.length) {
 if (profile?.level != null && latest?.level != null && profile.level !== latest.level) {
   attention.push({ text: `The live profile is level ${nf(profile.level)} while the last history row is level ${nf(latest.level)}.`, label: 'Details', href: 'character.html' });
 }
-if (!latest) attention.push({ text: 'No character-history snapshot is available yet.', label: 'Character', href: 'character.html' });
+if (!latest) attention.push({ text: 'No experience history is available yet.', label: 'Character', href: 'character.html' });
 if (!attention.length) attention.push({ text: `Character tracking is current through ${esc(latest.date)}.`, label: 'Open profile', href: 'character.html' });
 
 const shortcuts = [

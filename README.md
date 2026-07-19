@@ -57,11 +57,12 @@ data/
   creature-tasks.json      owner-curated task speed + workbook route-rate observations
   charms.json              the Charm catalogue (read-only, sourced from TibiaWiki)
   grounds.json             curated entries from tibiapal.com/hunting (read-only)
+  ground-creatures.json    generated — TibiaWiki hunting-place creature rosters
   access.json              generated — best-effort ground access notes (unverified)
   shared-hunts.json        generated — optional shared/approved hunts
   ledger.json              generated — prebuilt shared ledger cache
   character.json           generated daily — Night'Flyn profile, highscore ranks, death log
-  character-history.json   generated daily — {server-save date: {rank, level, experience, highscores...}}; older rows may be marked as imported backfill
+  highscores/              generated daily — one history file per TibiaData highscore category; experience includes older imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
   imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, basis, observedAt, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
@@ -71,6 +72,7 @@ pipeline/
   enrich-codex.mjs         refresh codex-extra.json from the TibiaData API (incremental)
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
+  enrich-ground-creatures.mjs explicit TibiaWiki creature rosters (rebuilds fully)
   track-character.mjs      hourly Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (30-day sparse-market fallback; skips items fetched within 4h)
   imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
@@ -111,7 +113,7 @@ Hunts group by ground × vocation × party-mode × level tier (8–49, 50–99, 
 
 ## Creature & combat intelligence
 
-Codex resistances mean *% of damage taken* — 100 neutral, 110 weak, 80 resistant, 0 immune — across Physical, Earth, Fire, Energy, Ice, Holy and Death. From that one semantic the strategy engine derives per-creature element rankings, kill-weighted profiles for sessions and grounds, incoming-damage exposure, charm targets ranked by kills × HP × weakness, and plain-language tips. Ground intelligence prefers real logged kill counts over codex spawn lists, and labels which it used.
+Codex resistances mean *% of damage taken* — 100 neutral, 110 weak, 80 resistant, 0 immune — across Physical, Earth, Fire, Energy, Ice, Holy and Death. From that one semantic the strategy engine derives per-creature element rankings, kill-weighted profiles for sessions and grounds, incoming-damage exposure, charm targets ranked by kills × HP × weakness, and plain-language tips. Ground intelligence prefers real logged kill counts over explicit TibiaWiki hunting-place rosters, then falls back only to creatures named directly by the ground label; every dossier labels which evidence it used.
 
 Task intelligence comes from the owner-supplied `Kusnier's Tracker.xlsx` plus the owner's five speed tiers. The curated import keeps 313 route-specific observations across 205 creatures; rates retain whether they were measured per hour or per lap and never collapse multiple locations into a fabricated global average. Nine workbook spelling/plural variants were reconciled to canonical Bestiary names. The Hard Monsters worksheet identifies its measurements as approximately level-750 Monk results, and every creature dossier repeats the broader level/vocation/skill/route caveat.
 
@@ -131,9 +133,11 @@ There's no structured API for hunting-ground access requirements or their broade
 
 Many curated names are just the creature that spawns there ("Bashmu", "Werelions", "Falcons"), with no separate location article to read a city/near field from — for these, TibiaWiki genuinely has no structured place data to extract, and the panel correctly shows "no requirement found" rather than guessing. Two matching safeguards keep the fuzzy resolution honest: (1) when a whole-phrase search fails, each individual word is retried as its own exact-title search and every candidate is actually fetched — not just title-matched — so a wrong-but-plausible word (e.g. "Wyrms" from "Elder Wyrms Drefia") gets skipped in favour of the real one ("Drefia") once its page turns out to have nothing usable; (2) a candidate page is only trusted if its infobox is actually `Hunt` or `Geography` — early versions accepted any page whose intro text happened to mention a "Quest" link or level number, which let creature pages (e.g. "Nightmare", matched from "Nightmare Scions Krailos") leak in irrelevant lore-text signals.
 
-## Locator accuracy
+## Ground creature rosters
 
-The ground↔creature matcher (`assets/js/engine/locator.js`) had a real bug: its weak-match fallback used substring containment on ground-name words, so "Kazo" (from "Otherworld (Kazo)") matched inside "**Kazo**rdoon Surroundings" — an unrelated dwarf city — and pulled in dozens of wrong creatures (Green Frog, Seagull, …) that don't actually live there. An audit found 413 such false matches across the 410 curated grounds. Both `nameCreatures()` and `population()`'s habitat fallback now require a whole-word match (`\bword\b`), and the weak fallback tier only fires when no precise signal exists and only uses the single best-scoring habitat, not every habitat above a loose threshold — a ground with no reliable match now honestly shows "no population data" instead of a wrong one.
+`pipeline/enrich-ground-creatures.mjs` rebuilds `data/ground-creatures.json` from TibiaWiki's `Category:Hunting Places`. It fetches every article's wikitext, reads canonical `CreatureList` templates (or exact creature links in short articles that have no list), drops bosses and other names absent from the Cyclopedia Bestiary, and resolves the planner's tactical aliases only through exact/strong titles, previously resolved Wiki access pages, or reviewed alias rules. Number and direction guards keep Warzone 2 away from Warzone 1 and Upper Roshamuul away from Lower Roshamuul. Section-aware parsing keeps Book World chapters, Hive subareas, Banuta's ape floors and the Fire/Energy/Ice Library populations separate. Floor aliases stay unresolved when TibiaWiki only publishes an article-wide list. Current coverage is 330 of 410 planner grounds.
+
+The runtime evidence order is logged analyser kills → TibiaWiki roster → creatures explicitly named by the ground label. The old broad Bestiary-habitat similarity fallback was removed: labels such as “Yalahar”, “Drefia”, “Banuta” and “Ingol” describe regions containing many unrelated spawns, so an unresolved ground now honestly shows no trustworthy population instead of fabricating a matchup. TibiaWiki rosters use equal planning weight until a saved analyser supplies real kill shares, and each dossier links the exact source article.
 
 ## Backends
 
