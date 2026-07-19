@@ -61,7 +61,7 @@ function intel() {
     for (const g of grounds.directory) {
       const pop = population(g, codex, hunts);
       if (!pop) continue;
-      const battle = readBattle(pop.set);
+      const battle = readBattle(pop.battleSet || pop.set);
       intelCache.set(g.slug, {
         attackOrder: battle?.order || null,
         names: new Set(pop.set.map((s) => s.creature.key)),
@@ -202,7 +202,7 @@ function renderDetail(slug) {
   const dossier = groundDossier(ground.slug, hunts);
   const trust = trustOf(dossier.n);
   const pop = population(ground, codex, hunts);
-  const battle = pop ? readBattle(pop.set) : null;
+  const battle = pop ? readBattle(pop.battleSet || pop.set) : null;
   const req = access.grounds?.[ground.slug] || null;
 
   detail.innerHTML = `
@@ -215,7 +215,9 @@ function renderDetail(slug) {
         ${req?.area ? `<span class="pill pill-info">${esc(req.area)}</span>` : ''}
         ${trustMeter(trust, dossier.n)}
         ${(ground.vocations || []).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
-        ${pop ? (pop.evidence === 'logged'
+        ${pop ? (pop.evidence === 'logged-wiki'
+          ? '<span class="badge badge-success">Log-weighted + Wiki roster</span>'
+          : pop.evidence === 'logged'
           ? '<span class="badge badge-success">Log-weighted evidence</span>'
           : pop.evidence === 'wiki'
             ? '<span class="badge badge-info">TibiaWiki roster</span>'
@@ -282,12 +284,12 @@ function renderDetail(slug) {
   } else {
     const creatures = pop.set
       .map((s) => ({ ...s, share: s.n / (battle.mass || 1) }))
-      .sort((a, b) => b.n - a.n)
-      .slice(0, 15);
+      .sort((a, b) => b.n - a.n || a.creature.name.localeCompare(b.creature.name));
 
     battleHost.innerHTML = `
     <section class="section">
       <div class="section-bar"><h2>Battle plan</h2></div>
+      ${pop.evidence === 'logged-wiki' ? `<p class="fine dim" style="margin:-8px 0 16px">Battle advice is weighted by your saved analyser kills. The matchup table keeps the full roster from <a href="${esc(pop.source.wikiUrl)}" target="_blank" rel="noopener">${esc(pop.source.wikiTitle)}</a> on TibiaWiki; creatures absent from the loaded hunts show no logged kill share.</p>` : ''}
       ${pop.evidence === 'wiki' ? `<p class="fine dim" style="margin:-8px 0 16px">Equal-weight planning profile from <a href="${esc(pop.source.wikiUrl)}" target="_blank" rel="noopener">${esc(pop.source.wikiTitle)}</a> on TibiaWiki.</p>` : ''}
       ${pop.evidence === 'name' ? '<p class="fine dim" style="margin:-8px 0 16px">Only creatures explicitly named by this ground label are included; no broader regional spawn is inferred.</p>' : ''}
       <div class="duo">
@@ -315,7 +317,7 @@ function renderDetail(slug) {
     dataTable(document.getElementById('ground-matchups'), {
       cols: [
         { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:8px">${s.creature.art ? `<img class="critter" src="${esc(s.creature.art)}" alt="" loading="lazy" style="width:28px;height:28px" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
-        { id: 'share', label: pop.evidence === 'logged' ? 'Kill share' : 'Planning weight', num: true, cell: (s) => pct(s.share * 100) },
+        { id: 'share', label: pop.evidence === 'logged' || pop.evidence === 'logged-wiki' ? 'Logged kill share' : 'Planning weight', num: true, cell: (s) => pop.evidence === 'logged-wiki' && !s.logged ? '<span class="dim">—</span>' : pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },
         { id: 'task', label: 'Task', cell: (s) => s.creature.taskSpeed ? `<span class="pill pill-info">${TASK_SPEED_LABEL[s.creature.taskSpeed]}</span>` : '<span class="dim">—</span>' },

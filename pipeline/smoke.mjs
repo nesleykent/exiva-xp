@@ -138,6 +138,15 @@ assert(dossier.profitRate.avg === 150_000, `groundDossier profit rate failed: ${
 const loggedPopulation = population({ name: hunt.ground }, codex, [hunt]);
 assert(loggedPopulation?.evidence === 'logged' && loggedPopulation.set.some((row) => row.creature.name === 'Dragon' && row.n === 120),
   'population did not prefer logged kill evidence');
+const loggedWarzoneTwo = population(grounds.directory.find((ground) => ground.slug === 'warzone-2'), codex, [{
+  kills: [{ name: 'Magma Crawler', n: 10 }],
+}]);
+assert(loggedWarzoneTwo?.evidence === 'logged-wiki'
+  && loggedWarzoneTwo.set.length === warzoneTwo.set.length
+  && loggedWarzoneTwo.set.some((row) => row.creature.name === 'Lava Golem' && row.n === 0)
+  && loggedWarzoneTwo.battleSet.length === 1
+  && loggedWarzoneTwo.battleSet[0].creature.name === 'Magma Crawler',
+'saved analyser kills must weight combat advice without hiding unobserved TibiaWiki roster creatures');
 
 assert(formatStamina(parseStamina('39:30')) === '39:30', 'stamina parsing/formatting failed');
 const stamina = staminaProjection(parseStamina('39:00'), parseStamina('2:00'), parseStamina('42:00'));
