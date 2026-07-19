@@ -1,14 +1,14 @@
 {
- "updatedAt": "2026-07-19T03:44:49.899Z",
+ "updatedAt": "2026-07-19T09:14:51.684Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
  "vocation": "Elder Druid",
- "level": 484,
+ "level": 485,
  "world": "Gentebra",
  "residence": "Thais",
  "achievementPoints": 711,
- "lastLogin": "2026-07-19T02:39:29Z",
+ "lastLogin": "2026-07-19T08:59:43Z",
  "accountStatus": "Premium Account",
  "accountCreated": "2003-08-01T22:04:00Z",
  "loyaltyTitle": "Warrior of Tibia",
@@ -16,7 +16,7 @@
   {
    "name": "Fibula Village 3",
    "town": "Thais",
-   "paidUntil": "2026-07-18"
+   "paidUntil": "2026-08-17"
   }
  ],
  "highscoreRanks": {
@@ -28,7 +28,7 @@
   "clubfighting": 496,
   "distancefighting": null,
   "dromescore": 242,
-  "experience": 317,
+  "experience": 314,
   "fishing": 3,
   "fistfighting": 4,
   "goshnarstaint": null,
