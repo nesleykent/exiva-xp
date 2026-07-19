@@ -284,14 +284,12 @@ main.stage {
 .btn-sm { min-height: 28px; padding: 5px var(--s3); font-size: var(--fs-12); }
 .btn-lg { min-height: var(--tap); padding: 11px var(--s6); font-size: var(--fs-15); }
 
-/* utility card — 6px radius matches the source's Card "utility" variant.
-   The source keeps --shadow-card on at rest; here it's hover-only (.tile:hover)
-   since hundreds of small cards render at once — an always-on shadow at this
-   density reads as noisy, which conflicts with the source's own "used
-   sparingly" guidance more than a resting-shadow mismatch would. */
+/* Utility card — the standalone design uses the quiet separator tone around
+   filled surfaces, while the stronger stroke is reserved for controls. Keep
+   the contract's 6px utility radius and hover-only elevation at list density. */
 .panel {
   background: rgb(var(--surface-raised));
-  border: 1px solid rgb(var(--stroke));
+  border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
 }
 .panel-pad { padding: var(--s5); }

@@ -66,9 +66,10 @@
 
 .filter-bar {
   display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: flex-start;
-  padding: var(--s4) 0 var(--s5);
-  position: sticky; top: 0; z-index: 10;
-  background: rgba(var(--surface), .92);
+  margin: var(--s5) 0 var(--s4); padding: var(--s5);
+  position: sticky; top: var(--s2); z-index: 10;
+  background: rgba(var(--surface-raised), .96);
+  border: 1px solid rgb(var(--line)); border-radius: var(--r-input);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
 
@@ -88,8 +89,8 @@
      stick-while-scrolling isn't a real loss, and a plain flow bar sidesteps
      the whole bug class. */
   .filter-bar {
-    flex-direction: column; align-items: stretch; gap: var(--s2); padding: var(--s3) 0 var(--s4);
-    position: static; background: rgb(var(--surface));
+    flex-direction: column; align-items: stretch; gap: var(--s2); margin: var(--s4) 0; padding: var(--s3);
+    position: static; background: rgb(var(--surface-raised));
     backdrop-filter: none; -webkit-backdrop-filter: none;
   }
   .filter-toggle {
@@ -393,7 +394,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: grid;
   gap: var(--s3);
   padding: var(--s4);
-  border: 1px solid rgb(var(--stroke));
+  border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
   background: rgb(var(--surface-raised));
   transition: background var(--t-hover) var(--e-standard), box-shadow var(--t-hover) var(--e-standard);
@@ -441,7 +442,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 #imb-modal .panel {
   box-shadow: var(--shadow-float);
 }
-.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--stroke)); cursor: pointer; }
+.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--line)); cursor: pointer; }
 .imb-card-head {
   display: flex;
   justify-content: space-between;
@@ -500,7 +501,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .imb-tier-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(var(--stroke));
+  border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
   position: relative;
   overflow: visible;
@@ -634,7 +635,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: center;
   justify-content: space-between;
   gap: var(--s4);
-  padding: var(--s4) var(--s5);
+  padding: 0 0 var(--s5);
+  background: transparent;
+  border-color: transparent;
 }
 .character-profile {
   display: flex;
@@ -664,12 +667,12 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .dashboard-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border: 1px solid rgb(var(--stroke));
-  border-radius: var(--r-input);
-  background: rgb(var(--surface-raised));
+  gap: var(--s3);
 }
-.dashboard-metric { display: grid; gap: var(--s2); padding: var(--s5); min-width: 0; }
-.dashboard-metric + .dashboard-metric { border-left: 1px solid rgb(var(--line)); }
+.dashboard-metric {
+  display: grid; gap: var(--s2); padding: var(--s5); min-width: 0;
+  background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--line)); border-radius: var(--r-input);
+}
 .dashboard-metric > span { color: rgb(var(--ink-2)); font-size: var(--fs-12); line-height: 16px; font-weight: 600; }
 .dashboard-metric > b { font-size: clamp(30px, 4vw, 44px); line-height: 1; letter-spacing: -1px; overflow-wrap: anywhere; }
 .dashboard-metric > b.dashboard-date { font-size: clamp(23px, 3vw, 34px); }
@@ -681,7 +684,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: var(--s5);
   margin-top: var(--s3);
   padding: var(--s4) var(--s5);
-  border: 1px solid rgb(var(--stroke));
+  border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
   background: rgb(var(--surface-2));
 }
@@ -706,7 +709,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-event-legend .event-death::before { transform: rotate(45deg); }
 .chart-event-legend .event-death::after { transform: rotate(-45deg); }
 .character-deep-dive { margin-top: var(--s6); }
-.character-tabs-wrap { overflow-x: auto; border: 1px solid rgb(var(--stroke)); border-radius: var(--r-input) var(--r-input) 0 0; scrollbar-width: none; }
+.character-tabs-wrap { overflow-x: auto; border: 1px solid rgb(var(--line)); border-radius: var(--r-input) var(--r-input) 0 0; scrollbar-width: none; }
 .character-tabs-wrap::-webkit-scrollbar { display: none; }
 .character-tabs {
   display: flex;
@@ -721,7 +724,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .character-tabs button:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 .character-tabs button[aria-selected="true"] { border-bottom-color: rgb(var(--blue)); color: rgb(var(--blue)); }
-.character-tab-panel { padding: var(--s5); border: 1px solid rgb(var(--stroke)); border-top: 0; border-radius: 0 0 var(--r-input) var(--r-input); }
+.character-tab-panel { padding: var(--s5); border: 1px solid rgb(var(--line)); border-top: 0; border-radius: 0 0 var(--r-input) var(--r-input); }
 .character-tab-panel[hidden] { display: none; }
 .empty-action { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 132px; padding: var(--s5); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
 .empty-action h3, .empty-action p { margin: 0; }
@@ -741,7 +744,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-content: start;
   gap: var(--s3);
   padding: var(--s4);
-  border: 1px solid rgb(var(--stroke));
+  border: 1px solid rgb(var(--line));
   border-radius: var(--r-input);
   background: rgb(var(--surface-2));
 }
@@ -886,10 +889,11 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-wide > input,
   .tool-fields .lbl.lbl-narrow > input,
   .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
-  .character-hero { align-items: stretch; flex-direction: column; padding: var(--s4); }
+  .character-hero { align-items: stretch; flex-direction: column; padding: 0 0 var(--s4); }
   .character-profile { padding-right: calc(var(--tap) * 2 + var(--s2)); }
   .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-actions .btn { width: 100%; padding-inline: var(--s2); }
+  .dashboard-metrics { gap: 4px; }
   .dashboard-metric { padding: var(--s2); }
   .dashboard-metric > b { font-size: var(--fs-28); }
   .dashboard-metric > b.dashboard-date { font-size: var(--fs-14); line-height: 28px; white-space: nowrap; }
