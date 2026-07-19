@@ -11,7 +11,7 @@ import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
 import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
-import { ELEMENTS, elementOrder, armorSpots } from '../engine/codex.js';
+import { ELEMENTS, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
 import { groundDossier, trustOf } from '../engine/ledger.js';
@@ -37,7 +37,7 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'xpRawRate', dir: 'desc',
+  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', taskSpeed: '', sort: 'xpRawRate', dir: 'desc',
   levelBand: 'tracked', detailSlug: param('g') || null, shown: 6,
 };
 
@@ -68,6 +68,7 @@ function intel() {
         families: new Set(pop.set.map((s) => s.creature.family).filter(Boolean)),
         tiers: new Set(pop.set.map((s) => s.creature.tier).filter(Boolean)),
         rarities: new Set(pop.set.map((s) => s.creature.rarity).filter(Boolean)),
+        taskSpeeds: new Set(pop.set.map((s) => s.creature.taskSpeed).filter(Boolean)),
         weak: new Set(ELEMENTS.filter((el) => pop.set.some((s) => s.creature.taken[el] > 100))),
       });
     }
@@ -85,7 +86,7 @@ const questText = (groundSlug) => {
 
 function filteredRows() {
   const tokens = fold(state.q).split(/\s+/).filter(Boolean);
-  const ix = (tokens.length || state.element || state.family) ? intel() : null;
+  const ix = (tokens.length || state.element || state.family || state.taskSpeed) ? intel() : null;
 
   return table.filter((r) => {
     if (state.levelBand === 'tracked' && state.level != null && (r.level == null || r.level > state.level)) return false;
@@ -101,6 +102,7 @@ function filteredRows() {
     if (state.area && areaBySlug.get(r.groundSlug) !== fold(state.area)) return false;
     if (state.element && ix.get(r.groundSlug)?.attackOrder?.[0]?.el !== state.element) return false;
     if (state.family && !ix.get(r.groundSlug)?.families.has(state.family)) return false;
+    if (state.taskSpeed && !ix.get(r.groundSlug)?.taskSpeeds.has(state.taskSpeed)) return false;
     if (tokens.length) {
       const i = ix.get(r.groundSlug);
       const searchSets = [
@@ -171,6 +173,7 @@ stage.innerHTML = `
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Creature type</span><select id="f-family"><option value="">All</option>${familyOptions().map((family) => `<option>${esc(family)}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Task speed</span><select id="f-task-speed"><option value="">All</option>${TASK_SPEEDS.map((speed) => `<option value="${speed}">${TASK_SPEED_LABEL[speed]}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Playstyle</span><input type="search" id="f-playstyle" placeholder="e.g. forked, arrows"></label>
       <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('f-sort', SORTS, state.sort)}</label>
     </div>
@@ -310,6 +313,7 @@ function renderDetail(slug) {
         { id: 'share', label: pop.evidence === 'logged' ? 'Kill share' : 'Weight', num: true, cell: (s) => pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },
+        { id: 'task', label: 'Task', cell: (s) => s.creature.taskSpeed ? `<span class="pill pill-info">${TASK_SPEED_LABEL[s.creature.taskSpeed]}</span>` : '<span class="dim">—</span>' },
         { id: 'hit', label: 'Hit with', cell: (s) => { const [best] = elementOrder(s.creature); return pillEl(best.el, `<span class="num">${pct(best.taken)}</span>`); } },
         { id: 'resists', label: 'Resists', cell: (s) => armorSpots(s.creature).slice(0, 2).map((r) => pillEl(r.el, `<span class="num">${pct(r.taken)}</span>`)).join(' ') || '<span class="dim">—</span>' },
         { id: 'deals', label: 'Deals', cell: (s) => s.creature.deals.map((el) => pillEl(el)).join(' ') || '<span class="dim">—</span>' },
@@ -367,6 +371,7 @@ function render() {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = access.grounds?.[g.slug]?.area;
         const creatures = [...(ix?.get(g.slug)?.names || [])].slice(0, 3);
+        const fastestTask = TASK_SPEEDS.find((speed) => ix?.get(g.slug)?.taskSpeeds.has(speed));
         return `
         <a class="panel tile planner-card${g.slug === state.detailSlug ? ' is-selected' : ''}" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
           ${index === 0 ? '<span class="badge badge-info tile-rank">Top XP</span>' : ''}
@@ -382,6 +387,7 @@ function render() {
           </div>
           <div class="tile-tags">
             ${basisPill(g.badgeRow.basis)}
+            ${fastestTask ? `<span class="pill pill-info">${TASK_SPEED_LABEL[fastestTask]} task</span>` : ''}
             ${attackEl ? pillEl(attackEl) : ''}
             ${area ? `<span class="pill">${esc(area)}</span>` : ''}
           </div>
@@ -403,6 +409,7 @@ bind('#f-voc', 'vocation');
 bind('#f-area', 'area');
 bind('#f-element', 'element');
 bind('#f-family', 'family');
+bind('#f-task-speed', 'taskSpeed');
 bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;

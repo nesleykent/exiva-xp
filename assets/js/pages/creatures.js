@@ -3,8 +3,8 @@
 import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note } from '../shell.js';
-import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM } from '../engine/codex.js';
+import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
+import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEED_LABEL } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
 const PAGE_TITLE = 'Creature codex · Exiva XP';
@@ -113,6 +113,7 @@ function renderDetail(creatureSlug) {
         ${c.rarity ? `<span class="pill">${esc(c.rarity)}</span>` : ''}
         ${c.caster ? '<span class="pill">Caster</span>' : ''}
         ${c.seeInvisible ? '<span class="pill">Sees invisible</span>' : ''}
+        ${c.taskSpeed ? `<span class="pill pill-info">${TASK_SPEED_LABEL[c.taskSpeed]} task</span>` : ''}
         ${loggedKills ? `<span class="pill" title="across your saved analyser logs">${nf(loggedKills)} logged kills</span>` : ''}
       </div>
     </div>
@@ -130,6 +131,13 @@ function renderDetail(creatureSlug) {
     <div class="fact"><b class="num">${c.summonMana ? nf(c.summonMana) : 'No'}</b><span class="fine dim">Summon mana</span></div>
     <div class="fact"><b class="num">${c.convinceMana ? nf(c.convinceMana) : 'No'}</b><span class="fine dim">Convince mana</span></div>
   </div>
+
+  ${c.taskRates.length ? `
+  <section class="section">
+    <div class="section-bar"><h2>Task routes</h2><span class="fine dim">${nf(c.taskRates.length)} workbook observation${c.taskRates.length === 1 ? '' : 's'}</span></div>
+    <div id="creature-task-rates"></div>
+    <p class="fine dim" style="margin:10px 0 0">${esc(codex.taskSource?.rateCaveat || '')}${c.taskRates.some((rate) => rate.source.sheet === 'Hard Monsters') ? ` ${esc(codex.taskSource?.hardRateContext || '')}` : ''}</p>
+  </section>` : ''}
 
   <div class="duo">
     <div class="panel panel-pad">
@@ -176,6 +184,18 @@ function renderDetail(creatureSlug) {
   </section>` : ''}`;
 
   $('#detail-back').addEventListener('click', () => closeDetail());
+  if (c.taskRates.length) {
+    dataTable(document.getElementById('creature-task-rates'), {
+      cols: [
+        { id: 'place', label: 'Route', cell: (rate) => esc(rate.place) },
+        { id: 'kills', label: 'Kills', num: true, cell: (rate) => nf(rate.kills) },
+        { id: 'unit', label: 'Measured per', cell: (rate) => rate.unit === 'hour' ? 'Hour' : 'Lap' },
+        { id: 'note', label: 'Notes', cell: (rate) => rate.note ? esc(rate.note) : '<span class="dim">—</span>' },
+        { id: 'source', label: 'Source', cell: (rate) => `<span class="fine dim">${esc(rate.source.sheet)} · row ${nf(rate.source.row)}</span>` },
+      ],
+      rows: c.taskRates,
+    });
+  }
 }
 
 function openDetail(creatureSlug, { push = true } = {}) {

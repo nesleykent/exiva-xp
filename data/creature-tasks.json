@@ -1,0 +1,4215 @@
+{
+  "source": {
+    "kind": "owner-supplied workbook and task-speed curation",
+    "workbook": "Kusnier's Tracker.xlsx",
+    "importedAt": "2026-07-19",
+    "worksheets": [
+      "Easy Monsters",
+      "Medium Monsters",
+      "Hard Monsters"
+    ],
+    "rateCaveat": "Location-specific observations from the workbook; actual kills vary by level, vocation, skill, route, competition and spawn conditions.",
+    "hardRateContext": "Hard Monsters worksheet: results recorded on an approximately level 750 Monk."
+  },
+  "speedOrder": [
+    "very-fast",
+    "fast",
+    "normal",
+    "slow",
+    "very-slow"
+  ],
+  "creatures": {
+    "Afflicted Strider": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 7",
+          "kills": 160,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 172
+          }
+        }
+      ]
+    },
+    "Amazon": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Angry Sugar Fairy": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Dessert Dungeon",
+          "kills": 475,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 61
+          },
+          "note": "Ignoring everything else"
+        }
+      ]
+    },
+    "Arachnophobica": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Venore Rippers",
+          "kills": 600,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 31
+          }
+        },
+        {
+          "place": "Buried Cathedral -6",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 72
+          }
+        },
+        {
+          "place": "Buried Cathedral -8",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 63
+          }
+        }
+      ]
+    },
+    "Armadile": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 1",
+          "kills": 160,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 171
+          }
+        }
+      ]
+    },
+    "Assassin": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Azure Frog": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Bandit": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Barbarian Brutetamer": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Barbarian Headsplitter": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Barbarian Skullhunter": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Bear": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Black Sphinx Acolyte": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Puzzle",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 157
+          }
+        },
+        {
+          "place": "Issavi Sewers",
+          "kills": 120,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 181
+          }
+        }
+      ]
+    },
+    "Blemished Spawn": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 7",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 113
+          }
+        }
+      ]
+    },
+    "Blightwalker": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Undead Dragon Feru Seal -1",
+          "kills": 280,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 129
+          }
+        }
+      ]
+    },
+    "Blood Crab": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Boar": {
+      "taskSpeed": "very-slow",
+      "rates": [
+        {
+          "place": "Outlaw Camp",
+          "kills": 20,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 66
+          }
+        }
+      ]
+    },
+    "Boar Man": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol -5",
+          "kills": 370,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 89
+          }
+        },
+        {
+          "place": "Ingol -3",
+          "kills": 330,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 102
+          }
+        },
+        {
+          "place": "Ingol -4",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 115
+          }
+        }
+      ]
+    },
+    "Bog Raider": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Hydras",
+          "kills": 900,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 2
+          }
+        }
+      ]
+    },
+    "Bonelord": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Liberty Bay West",
+          "kills": 48,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 31
+          }
+        }
+      ]
+    },
+    "Bramble Wyrmling": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chapter II",
+          "kills": 550,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 38
+          }
+        }
+      ]
+    },
+    "Breach Brood": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Otherworld (Svar)",
+          "kills": 610,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 29
+          }
+        },
+        {
+          "place": "Otherworld (Ankh)",
+          "kills": 560,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 35
+          }
+        },
+        {
+          "place": "Otherworld (Zao)",
+          "kills": 560,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 36
+          }
+        }
+      ]
+    },
+    "Bulltaur Alchemist": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bulltaurs -1",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 67
+          }
+        },
+        {
+          "place": "Bulltaurs -2",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 108
+          }
+        }
+      ]
+    },
+    "Bulltaur Brute": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bulltaurs -1",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 54
+          }
+        },
+        {
+          "place": "Bulltaurs -2",
+          "kills": 480,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 59
+          }
+        }
+      ]
+    },
+    "Bulltaur Forgepriest": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bulltaurs -2",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 95
+          }
+        },
+        {
+          "place": "Bulltaurs -1",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 119
+          }
+        }
+      ]
+    },
+    "Burning Gladiator": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Sewers",
+          "kills": 375,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 88
+          }
+        },
+        {
+          "place": "Issavi Puzzle",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 107
+          }
+        }
+      ]
+    },
+    "Burster Spectre": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Buried Cathedral -8",
+          "kills": 470,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 62
+          }
+        }
+      ]
+    },
+    "Candy Floss Elemental": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Dessert Dungeon",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 68
+          },
+          "note": "Ignoring everything else"
+        }
+      ]
+    },
+    "Candy Horror": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chocolate Mines",
+          "kills": 600,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 30
+          }
+        }
+      ]
+    },
+    "Carnivostrich": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol -3",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 141
+          }
+        },
+        {
+          "place": "Ingol -4",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 140
+          }
+        },
+        {
+          "place": "Ingol -5",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 147
+          }
+        }
+      ]
+    },
+    "Carrion Worm": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Liberty Bay Rotworms",
+          "kills": 36,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 37
+          }
+        },
+        {
+          "place": "Darashia North West Cave",
+          "kills": 15,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 71
+          }
+        },
+        {
+          "place": "Darashia North East Cave",
+          "kills": 11,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 76
+          }
+        }
+      ]
+    },
+    "Cave Devourer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 5",
+          "kills": 800,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 16
+          }
+        }
+      ]
+    },
+    "Centipede": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Chakoya Toolshaper": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Chakoya Tribewarden": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Chakoya Windcaller": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Chasm Spawn": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 4",
+          "kills": 950,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 10
+          }
+        }
+      ]
+    },
+    "Choking Fear": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Upper Roshamuul (North)",
+          "kills": 525,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 45
+          },
+          "note": "https://imgur.com/VScADrX"
+        },
+        {
+          "place": "Upper Roshamuul (South)",
+          "kills": 525,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 46
+          }
+        }
+      ]
+    },
+    "Cinder Wyrmling": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crumbling Caverns",
+          "kills": 925,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 12
+          },
+          "note": "Ignoring Shell Drakes"
+        }
+      ]
+    },
+    "Cliff Strider": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 3",
+          "kills": 210,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 156
+          }
+        }
+      ]
+    },
+    "Cobra": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Talahu Surface",
+          "kills": 28,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 47
+          },
+          "note": "Talahu Surface -> Goroma Surface -> Oskayaat -> Ankrahmun Cults Yields 65~"
+        },
+        {
+          "place": "Ankrahmun Cults",
+          "kills": 15,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 69
+          }
+        },
+        {
+          "place": "Oskayaat",
+          "kills": 12,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 72
+          }
+        }
+      ]
+    },
+    "Coral Frog": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Corym Charlatan": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Crab": {
+      "taskSpeed": "slow",
+      "rates": [
+        {
+          "place": "Treasure Island",
+          "kills": 36,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 36
+          },
+          "note": "+10 on surface"
+        }
+      ]
+    },
+    "Crape Man": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol Surface",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 120
+          }
+        }
+      ]
+    },
+    "Crazed Beggar": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Crazed Winter Vanguard": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Dream Labrinth",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 53
+          },
+          "note": "Blue Section: https://imgur.com/TdTwDGB"
+        }
+      ]
+    },
+    "Crimson Frog": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Crocodile": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Port Hope Caves",
+          "kills": 90,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 6
+          }
+        }
+      ]
+    },
+    "Crusader": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chapter IV",
+          "kills": 1000,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 6
+          }
+        }
+      ]
+    },
+    "Crypt Shambler": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Crypt Warden": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crypt Wardens Issavi -2",
+          "kills": 400,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 82
+          }
+        }
+      ]
+    },
+    "Crypt Warrior": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bounac",
+          "kills": 1000,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 7
+          }
+        }
+      ]
+    },
+    "Crystal Spider": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nibelor Ice Cave",
+          "kills": 19,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 40
+          }
+        }
+      ]
+    },
+    "Crystalcrusher": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crystal Grounds",
+          "kills": 42,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 25
+          }
+        }
+      ]
+    },
+    "Cunning Werepanther": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Weretigers -2",
+          "kills": 650,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 25
+          }
+        }
+      ]
+    },
+    "Cursed Prospector": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Edron",
+          "kills": 675,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 22
+          },
+          "note": "Only when Evil Prospectors NOT active, otherwise skip"
+        }
+      ]
+    },
+    "Cyclops": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Mistrock",
+          "kills": 80,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 14
+          }
+        }
+      ]
+    },
+    "Damaged Crystal Golem": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Damaged Worker Golem": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Dark Apprentice": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Dark Carnisylvan": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Dark Carnisylvans Loop (West)",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 93
+          },
+          "note": "https://imgur.com/nD2gdCz"
+        },
+        {
+          "place": "Carnisylvans East Loop",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 149
+          }
+        }
+      ]
+    },
+    "Dark Magician": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Dark Monk": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Dark Torturer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Feru DT Seal -2",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 98
+          },
+          "note": "550/h with Trapped Hellflayers/Grimeleeches"
+        },
+        {
+          "place": "Oramond Catacombs",
+          "kills": 330,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 104
+          }
+        },
+        {
+          "place": "Feru DT Seal -1",
+          "kills": 280,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 128
+          }
+        },
+        {
+          "place": "Prison -3",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 162
+          }
+        }
+      ]
+    },
+    "Dawnfire Asura": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Asura Mirror",
+          "kills": 700,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 20
+          }
+        },
+        {
+          "place": "Asura Palace",
+          "kills": 315,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 116
+          }
+        }
+      ]
+    },
+    "Deathling Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Deathlings Gray Island",
+          "kills": 620,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 28
+          }
+        }
+      ]
+    },
+    "Deathling Spellsinger": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Deathlings Gray Island",
+          "kills": 310,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 117
+          }
+        }
+      ]
+    },
+    "Deepling Worker": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Hive Stage 1",
+          "kills": 30,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 44
+          }
+        }
+      ]
+    },
+    "Deepworm": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 6",
+          "kills": 1000,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 9
+          },
+          "note": "https://imgur.com/qa5Qazj"
+        }
+      ]
+    },
+    "Demon": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Abandoned Sewers",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 110
+          }
+        },
+        {
+          "place": "Feru Way",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 122
+          }
+        }
+      ]
+    },
+    "Demon Outcast": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Prison -3",
+          "kills": 520,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 50
+          }
+        }
+      ]
+    },
+    "Destroyer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Catacombs",
+          "kills": 360,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 13
+          }
+        }
+      ]
+    },
+    "Diremaw": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 6",
+          "kills": 1050,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 5
+          }
+        }
+      ]
+    },
+    "Dragolisk": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nimmersatt's Bottom Floor",
+          "kills": 600,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 33
+          }
+        },
+        {
+          "place": "Nimmersatt's Boss Floor",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 55
+          }
+        }
+      ]
+    },
+    "Dread Intruder": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Otherworld (Zao)",
+          "kills": 520,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 47
+          }
+        },
+        {
+          "place": "Otherworld (Ankh)",
+          "kills": 440,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 74
+          }
+        },
+        {
+          "place": "Otherworld (Svar)",
+          "kills": 420,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 78
+          }
+        }
+      ]
+    },
+    "Drillworm": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 4",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 10
+          }
+        }
+      ]
+    },
+    "Dwarf": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Northern Kazo Mine -1",
+          "kills": 50,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 29
+          },
+          "note": "Both northern mines easily yield 100~ on -1 and -2"
+        },
+        {
+          "place": "Cormaya",
+          "kills": 25,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 53
+          }
+        },
+        {
+          "place": "Port Hope Dwarf Cave",
+          "kills": 19,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 67
+          }
+        }
+      ]
+    },
+    "Dwarf Geomancer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Port Hope Dwarf Cave",
+          "kills": 4,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 50
+          }
+        }
+      ]
+    },
+    "Dwarf Guard": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Port Hope Dwarf Cave",
+          "kills": 22,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 61
+          }
+        }
+      ]
+    },
+    "Dwarf Soldier": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Port Hope Dwarf Cave",
+          "kills": 45,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 32
+          }
+        },
+        {
+          "place": "Cormaya",
+          "kills": 34,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 40
+          }
+        },
+        {
+          "place": "Cormaya",
+          "kills": 21,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 62
+          }
+        }
+      ]
+    },
+    "Dworc Fleshhunter": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Dworc Venomsniper": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Dworc Voodoomaster": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Earth Elemental": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crystal Grounds",
+          "kills": 19,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 41
+          }
+        }
+      ]
+    },
+    "Elder Bonelord": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Liberty Bay West",
+          "kills": 11,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 77
+          }
+        }
+      ]
+    },
+    "Elder Wyrm": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 4",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 70
+          },
+          "note": "Focusing Wyrm spawns only"
+        },
+        {
+          "place": "Drefia",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 123
+          }
+        }
+      ]
+    },
+    "Elephant": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Elf": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Yalahar",
+          "kills": 20,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 63
+          }
+        }
+      ]
+    },
+    "Elf Arcanist": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Elf Scout": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Emerald Damselfly": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Venore Salamander Caves",
+          "kills": 90,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 7
+          }
+        }
+      ]
+    },
+    "Enlightened of the Cult": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Formorgar Mines",
+          "kills": 40,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 26
+          }
+        },
+        {
+          "place": "Yalahar Magician",
+          "kills": 20,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 39
+          }
+        },
+        {
+          "place": "Ankrahmun Cult Cave",
+          "kills": 7,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 48
+          }
+        }
+      ]
+    },
+    "Execowtioner": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Fury Dungeon +1",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 18
+          }
+        }
+      ]
+    },
+    "Eyeless Devourer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 7",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 154
+          }
+        }
+      ]
+    },
+    "Falcon Knight": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Falcon's Eagle",
+          "kills": 550,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 37
+          }
+        }
+      ]
+    },
+    "Falcon Paladin": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Falcon's Eagle",
+          "kills": 330,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 103
+          }
+        }
+      ]
+    },
+    "Feversleep": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Roshamuul Cistern",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 8
+          }
+        }
+      ]
+    },
+    "Fire Devil": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Spike Sword Quest",
+          "kills": 24,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 56
+          }
+        },
+        {
+          "place": "Goroma (Morgaroth Way)",
+          "kills": 23,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 59
+          }
+        },
+        {
+          "place": "Goroma (Volcano)",
+          "kills": 12,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 73
+          }
+        }
+      ]
+    },
+    "Flimsy Lost Soul": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Venore",
+          "kills": 1200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 3
+          },
+          "note": "-1 only, spawn breaks but better for flimsy kill/hr"
+        },
+        {
+          "place": "Port Hope Flimsies",
+          "kills": 700,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 21
+          }
+        }
+      ]
+    },
+    "Floating Savant": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "MoTa -2",
+          "kills": 480,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 58
+          }
+        },
+        {
+          "place": "MoTA -1",
+          "kills": 380,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 85
+          }
+        }
+      ]
+    },
+    "Frazzlemaw": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Roshamuul Valley (West)",
+          "kills": 675,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 24
+          }
+        },
+        {
+          "place": "Upper Roshamuul",
+          "kills": 250,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 137
+          }
+        }
+      ]
+    },
+    "Frost Giant": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Frost Giantess": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Fury": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Fury Oramond Dungeon",
+          "kills": 800,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 15
+          }
+        },
+        {
+          "place": "MoTA -1",
+          "kills": 250,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 138
+          }
+        },
+        {
+          "place": "Feru Mazoran Infernatil Seal",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 163
+          }
+        }
+      ]
+    },
+    "Gang Member": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Gargoyle": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Meriana Gargoyle Cave",
+          "kills": 140,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 2
+          }
+        }
+      ]
+    },
+    "Gazer": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Liberty Bay West",
+          "kills": 22,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 60
+          }
+        }
+      ]
+    },
+    "Gazer Spectre": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Buried Cathedral -6",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 164
+          }
+        }
+      ]
+    },
+    "Ghost": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Peninsula tp -1",
+          "kills": 49,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 30
+          }
+        }
+      ]
+    },
+    "Ghost Wolf": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Ghoul": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Girtablilu Warrior": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Girtas",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 64
+          }
+        }
+      ]
+    },
+    "Gladiator": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Arena Quarter",
+          "kills": 35,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 39
+          }
+        }
+      ]
+    },
+    "Gnarlhound": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Goblin": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Goblin Assassin": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Goblin Scavenger": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Goggle Cake": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Dessert Dungeon",
+          "kills": 750,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 19
+          },
+          "note": "Ignoring everything else"
+        }
+      ]
+    },
+    "Gozzler": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Farmine Mine",
+          "kills": 32,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 43
+          }
+        }
+      ]
+    },
+    "Grave Robber": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Grim Reaper": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Catacombs",
+          "kills": 430,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 76
+          }
+        }
+      ]
+    },
+    "Grimeleech": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Pumin Boss Floor",
+          "kills": 425,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 77
+          }
+        },
+        {
+          "place": "Feru Way",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 150
+          }
+        },
+        {
+          "place": "Feru DT Seal -2",
+          "kills": 60,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 187
+          }
+        },
+        {
+          "place": "Feru DT Seal -1",
+          "kills": 20,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 188
+          }
+        }
+      ]
+    },
+    "Guzzlemaw": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Roshamuul Valley (West)",
+          "kills": 325,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 106
+          }
+        }
+      ]
+    },
+    "Hand of Cursed Fate": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Pumin Boss Floor",
+          "kills": 150,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 176
+          }
+        }
+      ]
+    },
+    "Harpy": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol Surface",
+          "kills": 150,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 175
+          }
+        }
+      ]
+    },
+    "Hawk Hopper": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chapter II",
+          "kills": 620,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 27
+          }
+        }
+      ]
+    },
+    "Headwalker": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chapter IV",
+          "kills": 950,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 11
+          }
+        }
+      ]
+    },
+    "Hellfire Fighter": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Feru Mazoran Infernatil Seal",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 144
+          }
+        }
+      ]
+    },
+    "Hellflayer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Undead Dragon Feru Seal -1",
+          "kills": 180,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 166
+          }
+        },
+        {
+          "place": "Pumin Boss Floor",
+          "kills": 170,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 167
+          }
+        },
+        {
+          "place": "Feru DT Seal -1",
+          "kills": 140,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 178
+          }
+        },
+        {
+          "place": "Feru Mazoran Infernatil Seal",
+          "kills": 140,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 179
+          }
+        },
+        {
+          "place": "Feru DT Seal -2",
+          "kills": 120,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 184
+          }
+        },
+        {
+          "place": "Feru Way",
+          "kills": 60,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 186
+          }
+        }
+      ]
+    },
+    "Hellhound": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Feru Mazoran Infernatil Seal",
+          "kills": 190,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 165
+          }
+        }
+      ]
+    },
+    "Hellhunter Inferniarch": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Azzilon Catacombs -2",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 158
+          }
+        }
+      ]
+    },
+    "Hellspawn": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Catacombs",
+          "kills": 550,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 6
+          }
+        },
+        {
+          "place": "Asura Palace",
+          "kills": 270,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 20
+          }
+        },
+        {
+          "place": "Asura Mirror",
+          "kills": 250,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 21
+          }
+        }
+      ]
+    },
+    "Hideous Fungus": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 1",
+          "kills": 550,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 39
+          },
+          "note": "Make sure to use raid crystal every 20~ min"
+        }
+      ]
+    },
+    "Hulking Carnisylvan": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Carnisylvans East Loop",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 118
+          }
+        },
+        {
+          "place": "Dark Carnisylvans Loop (West)",
+          "kills": 150,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 173
+          }
+        }
+      ]
+    },
+    "Humongous Fungus": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 1",
+          "kills": 650,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 26
+          },
+          "note": "Make sure to use raid crystal every 20~ min"
+        }
+      ]
+    },
+    "Hunter": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Poachers' Cave",
+          "kills": 30,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 45
+          },
+          "note": "Requires mini-world change, do not do otherwise"
+        }
+      ]
+    },
+    "Hyaena": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Giant Spider Tomb",
+          "kills": 20,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 65
+          },
+          "note": "Tomb -> Oasis Surface -> Green Djinn Tower lap yields 37"
+        },
+        {
+          "place": "Green Djinn Tower Entrnace",
+          "kills": 11,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 75
+          }
+        },
+        {
+          "place": "Oasis Surface",
+          "kills": 6,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 78
+          }
+        }
+      ]
+    },
+    "Ice Golem": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nibelor Ice Cave",
+          "kills": 34,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 30
+          }
+        }
+      ]
+    },
+    "Iks Yapunac": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Iksupan Last Stand (Entrance)",
+          "kills": 1100,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 4
+          }
+        },
+        {
+          "place": "Iksupan Occupied Sanctuary",
+          "kills": 120,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 183
+          }
+        }
+      ]
+    },
+    "Insect Swarm": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Insectoid Scout": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Ironblight": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 3",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 114
+          }
+        }
+      ]
+    },
+    "Jellyfish": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Killer Rabbit": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Kongra": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Ladybug": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Larva": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "North West Gate",
+          "kills": 74,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 16
+          }
+        }
+      ]
+    },
+    "Lava Lurker": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 4 Pumps",
+          "kills": 600,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 32
+          }
+        }
+      ]
+    },
+    "Lavafungus": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 8",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 151
+          }
+        }
+      ]
+    },
+    "Lavaworm": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 8",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 152
+          }
+        }
+      ]
+    },
+    "Leaf Golem": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Cormaya",
+          "kills": 68,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 19
+          }
+        }
+      ]
+    },
+    "Liodile": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol -4",
+          "kills": 380,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 87
+          }
+        },
+        {
+          "place": "Ingol -5",
+          "kills": 340,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 101
+          }
+        },
+        {
+          "place": "Ingol -3",
+          "kills": 330,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 105
+          }
+        }
+      ]
+    },
+    "Lion": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Lizard Sentinel": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Chor",
+          "kills": 85,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 11
+          }
+        }
+      ]
+    },
+    "Lizard Templar": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Chor",
+          "kills": 62,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 22
+          }
+        }
+      ]
+    },
+    "Lost Berserker": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 3",
+          "kills": 280,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 130
+          }
+        },
+        {
+          "place": "Warzone 2",
+          "kills": 260,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 136
+          }
+        }
+      ]
+    },
+    "Mad Scientist": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Magma Crawler": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 2",
+          "kills": 340,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 100
+          }
+        }
+      ]
+    },
+    "Makara": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nagas",
+          "kills": 380,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 84
+          }
+        }
+      ]
+    },
+    "Mammoth": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Svargrond West of Town",
+          "kills": 60,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 24
+          }
+        },
+        {
+          "place": "Mammoth Shearing Factory",
+          "kills": 28,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 48
+          }
+        }
+      ]
+    },
+    "Marsh Stalker": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Massive Earth Elemental": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Truffels Garden (Wz 1-3 tasks)",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 15
+          }
+        }
+      ]
+    },
+    "Mean Lost Soul": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Port Hope Flimsies",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 56
+          }
+        }
+      ]
+    },
+    "Medusa": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Banuta -8",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 94
+          }
+        }
+      ]
+    },
+    "Mega Dragon": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nimmersatt's Boss Floor",
+          "kills": 270,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 133
+          }
+        },
+        {
+          "place": "Nimmersatt's Bottom Floor",
+          "kills": 210,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 155
+          }
+        }
+      ]
+    },
+    "Mercury Blob": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Yalahar Alchemist",
+          "kills": 26,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 52
+          }
+        }
+      ]
+    },
+    "Merlkin": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Midnight Asura": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Asura Mirror",
+          "kills": 650,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 5
+          }
+        },
+        {
+          "place": "Asura Palace",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 16
+          }
+        }
+      ]
+    },
+    "Minotaur": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Yalahar",
+          "kills": 20,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 64
+          }
+        }
+      ]
+    },
+    "Minotaur Amazon": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Fury Dungeon +1",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 125
+          }
+        },
+        {
+          "place": "Oramond East Plains",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 146
+          }
+        }
+      ]
+    },
+    "Minotaur Archer": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Minotaur Guard": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Yalahar",
+          "kills": 26,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 51
+          }
+        },
+        {
+          "place": "Darashia",
+          "kills": 23,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 57
+          }
+        }
+      ]
+    },
+    "Minotaur Mage": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Mitmah Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Iksupan Last Stand (Entrance)",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 52
+          }
+        },
+        {
+          "place": "Iksupan Occupied Sanctuary",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 109
+          }
+        }
+      ]
+    },
+    "Mitmah Seer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Iksupan Occupied Sanctuary",
+          "kills": 1000,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 8
+          }
+        },
+        {
+          "place": "Iksupan Last Stand (Entrance)",
+          "kills": 160,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 169
+          }
+        }
+      ]
+    },
+    "Mole": {
+      "taskSpeed": "very-slow",
+      "rates": []
+    },
+    "Monk": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Moohtant": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Fury Dungeon +1",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 19
+          }
+        }
+      ]
+    },
+    "Mummy": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Peninsula Behind TP",
+          "kills": 95,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 5
+          }
+        },
+        {
+          "place": "Shadow Tomb",
+          "kills": 90,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 8
+          }
+        },
+        {
+          "place": "Stone Tomb",
+          "kills": 89,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 9
+          }
+        }
+      ]
+    },
+    "Naga Archer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nagas",
+          "kills": 270,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 131
+          }
+        }
+      ]
+    },
+    "Naga Warrior": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nagas",
+          "kills": 520,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 49
+          }
+        }
+      ]
+    },
+    "Nibblemaw": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Chocolate Mines",
+          "kills": 800,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 14
+          }
+        }
+      ]
+    },
+    "Nightmare": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Cemetery Quarter",
+          "kills": 12,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 44
+          }
+        }
+      ]
+    },
+    "Nightmare Scion": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Krailos",
+          "kills": 800,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 3
+          }
+        }
+      ]
+    },
+    "Nomad": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Norcferatu Heartless": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Norc Fortress",
+          "kills": 400,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 80
+          }
+        }
+      ]
+    },
+    "Norcferatu Nightweaver": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Norc Fortress",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 91
+          }
+        }
+      ]
+    },
+    "Novice of the Cult": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Ogre Rowdy": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Ogre Cave",
+          "kills": 420,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 79
+          }
+        }
+      ]
+    },
+    "Ogre Ruffian": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Ogre Cave",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 66
+          }
+        }
+      ]
+    },
+    "Ogre Sage": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Ogre Cave",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 142
+          },
+          "note": "Focusing Sages only, can push 280/hr by adding issavi west surface area"
+        }
+      ]
+    },
+    "Orc": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Thais Forgotten Temple",
+          "kills": 45,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 33
+          }
+        }
+      ]
+    },
+    "Orc Rider": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Orc Shaman": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Edron Orcs",
+          "kills": 27,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 49
+          }
+        }
+      ]
+    },
+    "Orc Spearman": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Edron Orcs",
+          "kills": 50,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 27
+          }
+        }
+      ]
+    },
+    "Orc Warrior": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Edron Orcs",
+          "kills": 65,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 21
+          }
+        }
+      ]
+    },
+    "Orchid Frog": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Orewalker": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 3",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 124
+          }
+        }
+      ]
+    },
+    "Panda": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Pirat Bombardier": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Rascacoon Mines",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 17
+          }
+        }
+      ]
+    },
+    "Pirat Cutthroat": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Rascacoon Mines",
+          "kills": 750,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 4
+          }
+        }
+      ]
+    },
+    "Pirat Scoundrel": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Rascacoon Mines",
+          "kills": 225,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 23
+          }
+        }
+      ]
+    },
+    "Pirate Ghost": {
+      "taskSpeed": "very-slow",
+      "rates": [
+        {
+          "place": "Nargor Caves",
+          "kills": 15,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 70
+          }
+        },
+        {
+          "place": "Treasure Island Cave",
+          "kills": 4,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 79
+          }
+        }
+      ]
+    },
+    "Pirate Marauder": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Pirate Skeleton": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Nargor Caves",
+          "kills": 27,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 50
+          },
+          "note": "26 more in Cursed Crystal Quest area for a nice 53 kills lap"
+        },
+        {
+          "place": "Treasure Island Cave",
+          "kills": 12,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 74
+          }
+        }
+      ]
+    },
+    "Plaguesmith": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Prison -3",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 24
+          }
+        }
+      ]
+    },
+    "Poacher": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Poisonous Carnisylvan": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Carnisylvans East Loop",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 160
+          }
+        },
+        {
+          "place": "Dark Carnisylvans Loop (West)",
+          "kills": 150,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 174
+          }
+        }
+      ]
+    },
+    "Polar Bear": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Priestess of the Wild Sun": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Issavi Puzzle",
+          "kills": 300,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 121
+          }
+        },
+        {
+          "place": "Issavi Sewers",
+          "kills": 270,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 132
+          }
+        }
+      ]
+    },
+    "Quara Constrictor Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Malada Surface and Undergrounds",
+          "kills": 34,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 29
+          }
+        },
+        {
+          "place": "Talahu Surface and Undergrounds",
+          "kills": 27,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 35
+          }
+        },
+        {
+          "place": "Liberty Bay Quaras -1",
+          "kills": 8,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 47
+          }
+        }
+      ]
+    },
+    "Quara Hydromancer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Calassa",
+          "kills": 30,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 32
+          }
+        }
+      ]
+    },
+    "Quara Hydromancer Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Talahu Surface and Undergrounds",
+          "kills": 33,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 31
+          }
+        },
+        {
+          "place": "Malada Surface and Undergrounds",
+          "kills": 24,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 37
+          }
+        },
+        {
+          "place": "Liberty Bay Quaras -1",
+          "kills": 4,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 49
+          }
+        }
+      ]
+    },
+    "Quara Mantassin Scout": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Talahu Surface and Undergrounds",
+          "kills": 26,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 36
+          }
+        },
+        {
+          "place": "Malada Surface and Undergrounds",
+          "kills": 22,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 38
+          }
+        },
+        {
+          "place": "Liberty Bay Quaras -1",
+          "kills": 13,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 42
+          }
+        }
+      ]
+    },
+    "Quara Pincher Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Malada Surface and Undergrounds",
+          "kills": 30,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 33
+          }
+        },
+        {
+          "place": "Talahu Surface and Undergrounds",
+          "kills": 29,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 34
+          }
+        },
+        {
+          "place": "Liberty Bay Quaras -1",
+          "kills": 11,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 46
+          }
+        }
+      ]
+    },
+    "Quara Predator Scout": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Malada Surface and Undergrounds",
+          "kills": 36,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 27
+          }
+        },
+        {
+          "place": "Talahu Surface and Undergrounds",
+          "kills": 36,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 28
+          }
+        },
+        {
+          "place": "Liberty Bay Quaras -1",
+          "kills": 11,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 45
+          }
+        }
+      ]
+    },
+    "Rabid Wolf": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Ragged Rabid Wolf": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Raubritter Chastener": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bloodfire Gorge",
+          "kills": 170,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 168
+          }
+        },
+        {
+          "place": "Raubritter Castle",
+          "kills": 160,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 170
+          }
+        },
+        {
+          "place": "Ida Outskirts",
+          "kills": 120,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 182
+          }
+        }
+      ]
+    },
+    "Raubritter Marksman": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bloodfire Gorge",
+          "kills": 360,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 90
+          }
+        },
+        {
+          "place": "Ida Outskirts",
+          "kills": 280,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 127
+          }
+        },
+        {
+          "place": "Raubritter Castle",
+          "kills": 260,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 135
+          }
+        }
+      ]
+    },
+    "Raubritter Skirmisher": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Bloodfire Gorge",
+          "kills": 380,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 83
+          }
+        },
+        {
+          "place": "Ida Outskirts",
+          "kills": 340,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 99
+          }
+        },
+        {
+          "place": "Raubritter Castle",
+          "kills": 290,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 126
+          }
+        }
+      ]
+    },
+    "Reality Reaver": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Otherworld (Zao)",
+          "kills": 540,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 40
+          }
+        },
+        {
+          "place": "Otherworld (Svar)",
+          "kills": 520,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 48
+          }
+        },
+        {
+          "place": "Otherworld (Ankh)",
+          "kills": 440,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 75
+          }
+        }
+      ]
+    },
+    "Retching Horror": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Upper Roshamuul (South)",
+          "kills": 580,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 34
+          }
+        },
+        {
+          "place": "Upper Roshamuul (North)",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 69
+          },
+          "note": "https://imgur.com/VScADrX"
+        }
+      ]
+    },
+    "Rhindeer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Ingol Surface",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 96
+          }
+        }
+      ]
+    },
+    "Ripper Spectre": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Buried Cathedral -6",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 73
+          }
+        }
+      ]
+    },
+    "Rorc": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Orc Fortress Surroundings",
+          "kills": 75,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 15
+          }
+        }
+      ]
+    },
+    "Rotworm": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Darashia North West Cave",
+          "kills": 81,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 12
+          }
+        },
+        {
+          "place": "Darashia North East Cave",
+          "kills": 62,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 23
+          }
+        }
+      ]
+    },
+    "Salamander": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Venore Salamander Caves",
+          "kills": 67,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 20
+          },
+          "note": "West section of the cave"
+        }
+      ]
+    },
+    "Scarab": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Scorpion": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Venore West Gate (Dragon Lair Way)",
+          "kills": 50,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 28
+          }
+        },
+        {
+          "place": "Treasure Island Surface",
+          "kills": 29,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 46
+          }
+        }
+      ]
+    },
+    "Sea Serpent": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Birthing Grounds (Oramond)",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 11
+          }
+        }
+      ]
+    },
+    "Seacrest Serpent": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Birthing Grounds",
+          "kills": 760,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 17
+          }
+        }
+      ]
+    },
+    "Shell Drake": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crumbling Caverns",
+          "kills": 750,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 18
+          },
+          "note": "Ignoring Cinder Wyrmlings"
+        }
+      ]
+    },
+    "Sibang": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Silencer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Roshamuul Valley (West)",
+          "kills": 550,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 7
+          }
+        },
+        {
+          "place": "Upper Roshamuul (North)",
+          "kills": 250,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 22
+          }
+        },
+        {
+          "place": "Upper Roshamuul",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 159
+          }
+        }
+      ]
+    },
+    "Skeleton": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Mount Sternum",
+          "kills": 120,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 3
+          }
+        },
+        {
+          "place": "Giant Spider Tomb",
+          "kills": 80,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 13
+          }
+        },
+        {
+          "place": "Forgotten Tomb Edron",
+          "kills": 55,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 26
+          }
+        }
+      ]
+    },
+    "Skeleton Elite Warrior": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Deep Desert",
+          "kills": 530,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 42
+          }
+        }
+      ]
+    },
+    "Skeleton Warrior": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Ghostlands (Banshee Quest Entrance)",
+          "kills": 33,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 42
+          }
+        },
+        {
+          "place": "Edron Vampire Cave",
+          "kills": 17,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 68
+          }
+        }
+      ]
+    },
+    "Slime": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Stone Tomb",
+          "kills": 88,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 10
+          },
+          "note": "behind tp, 45 and 43 per floor"
+        }
+      ]
+    },
+    "Slug": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Smuggler": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Port Hope Cave",
+          "kills": 35,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 38
+          }
+        }
+      ]
+    },
+    "Sparkion": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Otherworld (Ankh)",
+          "kills": 540,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 41
+          }
+        },
+        {
+          "place": "Otherworld (Zao)",
+          "kills": 500,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 51
+          }
+        },
+        {
+          "place": "Otherworld (Svar)",
+          "kills": 480,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 57
+          }
+        }
+      ]
+    },
+    "Spectre": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Pumin Boss Floor",
+          "kills": 400,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 12
+          }
+        }
+      ]
+    },
+    "Spellreaper Inferniarch": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Azzilon Catacombs -2",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 65
+          }
+        }
+      ]
+    },
+    "Sphinx": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crypt Wardens Issavi -2",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 71
+          }
+        }
+      ]
+    },
+    "Spit Nettle": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Stalker": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Peninsula tp -2",
+          "kills": 95,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 4
+          }
+        },
+        {
+          "place": "Peninsula tp -1",
+          "kills": 71,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 17
+          }
+        }
+      ]
+    },
+    "Stone Devourer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 1",
+          "kills": 130,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 180
+          }
+        }
+      ]
+    },
+    "Stone Golem": {
+      "taskSpeed": "fast",
+      "rates": [
+        {
+          "place": "Farmine Mine",
+          "kills": 60,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 25
+          }
+        },
+        {
+          "place": "Goroma Mountain",
+          "kills": 42,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 35
+          }
+        }
+      ]
+    },
+    "Streaked Devourer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 8",
+          "kills": 220,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 153
+          }
+        }
+      ]
+    },
+    "Swamp Troll": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Swampling": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Tarantula": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Terramite": {
+      "taskSpeed": "very-fast",
+      "rates": [
+        {
+          "place": "Darashia West",
+          "kills": 69,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 18
+          }
+        }
+      ]
+    },
+    "Terror Bird": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Terrorsleep": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Roshamuul Cistern",
+          "kills": 200,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 161
+          }
+        }
+      ]
+    },
+    "Thornback Tortoise": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Tiger": {
+      "taskSpeed": "slow",
+      "rates": [
+        {
+          "place": "Port Hope",
+          "kills": 25,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 55
+          },
+          "note": "https://imgur.com/mT67zGm"
+        }
+      ]
+    },
+    "Toad": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Tortoise": {
+      "taskSpeed": "very-fast",
+      "rates": []
+    },
+    "Troll Champion": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Ab Trolls",
+          "kills": 43,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 34
+          }
+        },
+        {
+          "place": "Edron Trolls",
+          "kills": 25,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 54
+          }
+        }
+      ]
+    },
+    "Tunnel Tyrant": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Warzone 5",
+          "kills": 850,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 13
+          },
+          "note": "Ignoring Cave Devourers"
+        }
+      ]
+    },
+    "Undead Dragon": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Undead Dragon Feru Seal -1",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 112
+          }
+        }
+      ]
+    },
+    "Undead Elite Gladiator": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Deep Desert",
+          "kills": 380,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 86
+          }
+        }
+      ]
+    },
+    "Undead Prospector": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Usurper Archer": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Drume Area",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 145
+          }
+        }
+      ]
+    },
+    "Usurper Knight": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Drume Area",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 92
+          }
+        }
+      ]
+    },
+    "Usurper Warlock": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Drume Area",
+          "kills": 140,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 177
+          }
+        }
+      ]
+    },
+    "Valkyrie": {
+      "taskSpeed": "normal",
+      "rates": []
+    },
+    "Varg": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Norc Fortress",
+          "kills": 250,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 139
+          }
+        }
+      ]
+    },
+    "Venerable Girtablilu": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Girtas",
+          "kills": 230,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 148
+          }
+        }
+      ]
+    },
+    "Vexclaw": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Feru DT Seal -1",
+          "kills": 480,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 60
+          }
+        },
+        {
+          "place": "Feru DT Seal -2",
+          "kills": 350,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 97
+          },
+          "note": "480/h with Trapped Hellflayers/Grimeleeches"
+        },
+        {
+          "place": "Feru Mazoran Infernatil Seal",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 111
+          }
+        },
+        {
+          "place": "Feru Way",
+          "kills": 240,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 143
+          }
+        },
+        {
+          "place": "Undead Dragon Feru Seal -1",
+          "kills": 100,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 185
+          }
+        }
+      ]
+    },
+    "Vulcongra": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Lower Spike",
+          "kills": 675,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 23
+          },
+          "note": "Route: https://imgur.com/zFREMF6"
+        }
+      ]
+    },
+    "War Wolf": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "Wardragon": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Nimmersatt's Boss Floor",
+          "kills": 525,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 44
+          }
+        },
+        {
+          "place": "Nimmersatt's Bottom Floor",
+          "kills": 525,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 43
+          }
+        }
+      ]
+    },
+    "Weretiger": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Weretigers -2",
+          "kills": 400,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 81
+          }
+        }
+      ]
+    },
+    "White Shade": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "White Tiger": {
+      "taskSpeed": "slow",
+      "rates": []
+    },
+    "White Weretiger": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Weretigers -2",
+          "kills": 260,
+          "unit": "hour",
+          "source": {
+            "sheet": "Hard Monsters",
+            "row": 134
+          }
+        }
+      ]
+    },
+    "Wiggler": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Truffels Garden (Wz 1-3 tasks)",
+          "kills": 450,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 9
+          }
+        }
+      ]
+    },
+    "Wild Warrior": {
+      "taskSpeed": "fast",
+      "rates": []
+    },
+    "Witch": {
+      "taskSpeed": "normal",
+      "rates": [
+        {
+          "place": "Dark Cathedral",
+          "kills": 33,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 41
+          }
+        },
+        {
+          "place": "Goroma",
+          "kills": 23,
+          "unit": "lap",
+          "source": {
+            "sheet": "Easy Monsters",
+            "row": 58
+          }
+        }
+      ]
+    },
+    "Worm Priestess": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Oramond Fury Dungeon +1",
+          "kills": 320,
+          "unit": "hour",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 14
+          }
+        }
+      ]
+    },
+    "Wyvern": {
+      "taskSpeed": null,
+      "rates": [
+        {
+          "place": "Crystal Grounds",
+          "kills": 13,
+          "unit": "lap",
+          "source": {
+            "sheet": "Medium Monsters",
+            "row": 43
+          }
+        }
+      ]
+    }
+  }
+}
+

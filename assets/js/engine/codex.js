@@ -21,6 +21,12 @@ export const ELEMENT_CHARM = {
   ice: 'Freeze', holy: 'Divine Wrath', death: 'Curse',
 };
 
+export const TASK_SPEEDS = ['very-fast', 'fast', 'normal', 'slow', 'very-slow'];
+
+export const TASK_SPEED_LABEL = {
+  'very-fast': 'Very fast', fast: 'Fast', normal: 'Normal', slow: 'Slow', 'very-slow': 'Very slow',
+};
+
 /** Occurrence → evidence weight when locating hunts (rarer = stronger). */
 export const RARITY = { 'very rare': 3, rare: 2, uncommon: 1.4, common: 1 };
 
@@ -61,13 +67,17 @@ export class Codex {
   /**
    * @param {object} rawJson bestiary export
    * @param {object|null} extraJson data/codex-extra.json (TibiaData enrichment)
+   * @param {object|null} taskJson data/creature-tasks.json (owner-curated task speed and route rates)
    */
-  constructor(rawJson, extraJson = null) {
+  constructor(rawJson, extraJson = null, taskJson = null) {
     const list = Array.isArray(rawJson) ? rawJson : rawJson?.data || [];
     const extras = extraJson?.creatures || {};
+    const tasks = taskJson?.creatures || {};
+    this.taskSource = taskJson?.source || null;
     this.creatures = list.map((raw) => {
       const c = refine(raw);
       const x = extras[c.slug];
+      const task = tasks[c.name] || null;
       if (x) {
         c.art = x.image || null;
         c.lore = x.description || null;
@@ -83,6 +93,8 @@ export class Codex {
         c.summonMana = null; c.convinceMana = null;
         c.paralysable = null; c.seeInvisible = null; c.healedBy = null;
       }
+      c.taskSpeed = task?.taskSpeed || null;
+      c.taskRates = task?.rates || [];
       return c;
     });
     this.byKey = new Map(this.creatures.map((c) => [c.key, c]));

@@ -33,6 +33,7 @@ export const REST = { base: '', key: '', table: 'hunts' };
 const FILES = {
   codex: 'data/bestiary.json',
   codexExtra: 'data/codex-extra.json',
+  creatureTasks: 'data/creature-tasks.json',
   grounds: 'data/grounds.json',
   sharedHunts: 'data/shared-hunts.json',
   charms: 'data/charms.json',
@@ -52,11 +53,12 @@ async function json(url, options) {
 }
 
 export async function loadCodex(prefix = '') {
-  const [raw, extra] = await Promise.all([
+  const [raw, extra, tasks] = await Promise.all([
     json(prefix + FILES.codex),
     json(prefix + FILES.codexExtra).catch(() => null), // enrichment is optional
+    json(prefix + FILES.creatureTasks),
   ]);
-  return new Codex(raw, extra);
+  return new Codex(raw, extra, tasks);
 }
 
 export function normalizeGrounds(raw) {

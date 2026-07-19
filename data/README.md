@@ -24,6 +24,11 @@ These are rebuilt by pipeline scripts and committed:
   world. `observedAt` is the source row's timestamp; `updatedAt` is when the
   pipeline fetched it. Sparse items may use the newest sell observation in a
   30-day window and carry its exact `basis`; missing evidence stays missing.
+- `creature-tasks.json` - one-time curated import from the owner-supplied
+  `Kusnier's Tracker.xlsx`: owner-assigned task-speed tiers plus 313
+  location-specific kills/hour or kills/lap observations. Workbook spelling
+  variants are reconciled to canonical Bestiary names; every rate retains its
+  worksheet and row, and its caveats travel with the dataset.
 
 ## Character State
 

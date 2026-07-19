@@ -8,7 +8,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { isAnalyser, readAnalyser } from '../assets/js/engine/analyser.js';
 import { assessImport, judge } from '../assets/js/engine/rules.js';
-import { armorSpots, Codex, ELEMENT_CHARM } from '../assets/js/engine/codex.js';
+import { armorSpots, Codex, ELEMENT_CHARM, TASK_SPEEDS } from '../assets/js/engine/codex.js';
 import { locateHunt, nameCreatures, population } from '../assets/js/engine/locator.js';
 import { readBattle } from '../assets/js/engine/strategy.js';
 import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
@@ -38,8 +38,17 @@ const tibiaServerSaveDate = (date = new Date()) => {
 
 let extra = null;
 try { extra = data('codex-extra.json'); } catch { /* enrichment is optional */ }
-const codex = new Codex(data('bestiary.json'), extra);
+const taskData = data('creature-tasks.json');
+const codex = new Codex(data('bestiary.json'), extra, taskData);
 assert(codex.size > 500, `codex too small: ${codex.size}`);
+const taskCreatures = codex.creatures.filter((creature) => creature.taskSpeed);
+const taskRates = codex.creatures.flatMap((creature) => creature.taskRates);
+assert(taskCreatures.length === 131 && TASK_SPEEDS.every((speed) => taskCreatures.some((creature) => creature.taskSpeed === speed)),
+  'owner-curated task speeds must cover all five tiers and 131 canonical creatures');
+assert(taskRates.length === 313 && taskRates.every((rate) => rate.kills > 0 && ['hour', 'lap'].includes(rate.unit)),
+  'workbook task routes must preserve 313 positive, explicitly-unitized observations');
+assert(codex.creature('emerald-damselfly').taskRates.some((rate) => rate.source.row === 7),
+  'workbook spelling aliases must reconcile to canonical codex creatures');
 
 const grounds = normalizeGrounds(data('grounds.json'));
 assert(grounds.entries.length > 500, `grounds too small: ${grounds.entries.length}`);
