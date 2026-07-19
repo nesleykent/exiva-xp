@@ -87,7 +87,7 @@
   --c-death: 211, 0, 197;
 
   /* type */
-  --f-ui: "Optimistic", Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --f-ui: "Optimistic", Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "Noto Sans", sans-serif;
   --f-wordmark: "Instagram Sans Headline", "Instagram Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-display: "Instagram Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -95,7 +95,7 @@
   /* spacing / shape / elevation */
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px;
   --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
-  --r-sm: 4px; --r-input: 6px; --r-md: 8px; --r-card: 10px; --r-lg: 12px; --r-xl: 16px;
+  --r-sm: 4px; --r-input: 8px; --r-md: 8px; --r-card: 10px; --r-lg: 12px; --r-xl: 16px;
   --r-pill: 1000px; --r-circle: 50%;
   --shadow-card: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1);
   --shadow-float: 0 4px 12px rgba(0,0,0,.15);
@@ -153,8 +153,8 @@ body {
   background: rgb(var(--surface));
   color: rgb(var(--ink));
   font-family: var(--f-ui);
-  font-size: var(--fs-14);
-  line-height: 18px;
+  font-size: var(--fs-16);
+  line-height: normal;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -175,6 +175,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   position: sticky; top: 0; align-self: flex-start;
   width: var(--rail); height: 100vh; flex-shrink: 0;
   display: flex; flex-direction: column;
+  gap: 4px;
   padding: 8px 12px 20px;
   border-right: 1px solid rgb(var(--line));
   background: rgb(var(--surface));
@@ -185,7 +186,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   display: flex; align-items: center; gap: 10px;
   padding: 25px 12px 20px;
   font-family: var(--f-wordmark);
-  font-weight: 700; font-size: var(--fs-24); letter-spacing: -.5px;
+  font-weight: 700; font-size: var(--fs-26); line-height: normal; letter-spacing: -.5px;
   white-space: nowrap;
 }
 .wordmark img, .wordmark svg { width: 30px; height: 30px; flex-shrink: 0; }
@@ -197,7 +198,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   display: flex; align-items: center; gap: 16px;
   padding: 12px; border: 0; border-radius: var(--r-md);
   background: transparent; color: rgb(var(--ink));
-  font-size: var(--fs-16); line-height: 24px; font-weight: 400;
+  font-size: var(--fs-16); line-height: normal; font-weight: 400;
   cursor: pointer; white-space: nowrap;
   transition: background var(--t-hover) var(--e-standard);
 }
@@ -259,8 +260,10 @@ main.stage {
   flex: 1; min-width: 0;
   padding: var(--s8) var(--s8) var(--s16);
 }
-.stage-inner { max-width: var(--canvas); margin: 0 auto; }
+.stage-inner { max-width: var(--canvas); margin: 0 auto; animation: page-settle 350ms var(--e-settle) both; }
 .stage-inner.narrow { max-width: var(--feed); }
+
+@keyframes page-settle { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: scale(1); } }
 
 /* ---------- primitives ----------
  * Button — three-tier action control (primary/secondary/tertiary), plus an
@@ -270,9 +273,9 @@ main.stage {
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
-  min-height: 32px; padding: 7px var(--s4);
-  border: 0; border-radius: var(--r-input);
-  font-size: var(--fs-14); font-weight: 600; letter-spacing: -0.01em; cursor: pointer;
+  min-height: 28px; padding: 5px var(--s3);
+  border: 1px solid transparent; border-radius: var(--r-input);
+  font-size: var(--fs-12); line-height: 16px; font-weight: 600; letter-spacing: normal; cursor: pointer;
   transition: background var(--t-hover) var(--e-standard);
 }
 .btn-primary { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
@@ -284,7 +287,7 @@ main.stage {
 .btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }
 .btn[disabled] { opacity: .3; cursor: default; }
 .btn-sm { min-height: 28px; padding: 5px var(--s3); font-size: var(--fs-12); }
-.btn-lg { min-height: var(--tap); padding: 11px var(--s6); font-size: var(--fs-15); }
+.btn-lg { min-height: 28px; padding: 5px var(--s3); font-size: var(--fs-12); }
 
 /* Utility card — the standalone design uses the quiet separator tone around
    filled surfaces, while the stronger stroke is reserved for controls. Keep
@@ -294,7 +297,7 @@ main.stage {
   border: 1px solid rgb(var(--line));
   border-radius: var(--r-card);
 }
-.panel-pad { padding: var(--s5); }
+.panel-pad { padding: var(--s6); }
 
 .hairline { border: 0; border-top: 1px solid rgb(var(--line)); margin: var(--s5) 0; }
 

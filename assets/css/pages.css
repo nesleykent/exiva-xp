@@ -674,6 +674,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: var(--s4);
   min-width: 0;
 }
+.hero-identity { min-width: 0; }
 .character-profile .ring { width: 64px; height: 64px; flex: 0 0 64px; }
 .character-profile .ring-core { width: 56px; height: 56px; font-size: var(--fs-18); }
 .hero-identity h1 {
@@ -966,7 +967,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-narrow > input,
   .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
   .character-hero { align-items: stretch; flex-direction: column; padding: 0 0 var(--s4); }
-  .character-profile { padding-right: calc(var(--tap) * 2 + var(--s2)); }
+  .character-profile { padding-right: 0; }
   .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-actions .btn { width: 100%; padding-inline: var(--s2); }
   .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
@@ -1039,7 +1040,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-controls { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); margin-bottom: var(--s3); flex-wrap: wrap; }
 .chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
 /* the metric/range toggles are this page's primary chart controls — HIG minimum tap target */
-.chart-controls .btn { min-height: var(--tap); }
+.chart-controls .btn { min-height: 28px; }
 .chart-button-group { display: flex; gap: 6px; flex-wrap: wrap; }
 .chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
 
