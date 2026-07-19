@@ -12,6 +12,7 @@ import {
   profitSnapshot,
   staminaProjection,
 } from '../engine/planning.js';
+import { experienceForLevel, experienceUntilNextLevel } from '../engine/progression.js';
 import {
   calculateImbuement,
   formatShoppingList,
@@ -34,6 +35,20 @@ const characterName = profile?.name || config.name;
 
 const latest = history.at(-1) || {};
 const characterLevel = profile?.level ?? latest.level ?? 465;
+const characterExperience = latest.experience ?? null;
+
+// Recent daily pace, same gap-aware approach as the character dashboard: a
+// tracker gap (backfill sources drop out for weeks at a time) leaves rows
+// more than a day apart, so that span's gain is excluded instead of being
+// counted as one fabricated spike day.
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const dailyGains = history.slice(1).map((row, i) => {
+  const prev = history[i];
+  const consecutiveDay = (new Date(row.date) - new Date(prev.date)) === ONE_DAY_MS;
+  return consecutiveDay ? Math.max(0, row.experience - prev.experience) : null;
+}).filter((gain) => gain != null);
+const recentGains = dailyGains.slice(-7);
+const avgDailyXp = recentGains.length ? Math.round(recentGains.reduce((a, b) => a + b, 0) / recentGains.length) : null;
 const defaultCreature = codex.identify('Girtablilu Warrior')?.creature ||
   codex.creatures.find((c) => c.hp > 5000) ||
   codex.creatures[0];
@@ -94,6 +109,25 @@ stage.innerHTML = `
       <p class="fine dim">Enter your own damage range (client or analyser numbers); the calculator applies only the target's resistance, mitigation, crit/fatal expectation and the charm proc — elemental charms deal 5% of initial HP with a per-stage trigger chance (5/10/11%, maxed default). It never invents your raw roll.</p>
       <datalist id="creature-list">${creatures.map((c) => `<option value="${esc(c.name)}"></option>`).join('')}</datalist>
       <div class="tool-result" id="damage-out" role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <section class="panel panel-pad tool-card tool-wide" id="level-tool">
+      <div class="tool-head">
+        <h2>Level target</h2>
+        <span class="fine dim">exp needed and days-to-goal at ${esc(characterName)}'s recent pace</span>
+      </div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Current level</span><input id="level-current" type="number" min="1" max="2000" value="${characterLevel}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="level-target" type="number" min="2" max="2001" value="${characterLevel + 10}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Avg daily exp</span><input id="level-pace" type="number" min="0" value="${avgDailyXp ?? ''}" placeholder="${avgDailyXp == null ? 'no pace data' : ''}"></label>
+      </div>
+      <div class="tool-result" id="level-out" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="section-subhead"><h3>Level &amp; experience table</h3><span class="fine dim">total exp and exp to next level, per level</span></div>
+      <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
+      </div>
+      <div class="tool-result" id="level-table-out"></div>
     </section>
 
     <section class="panel panel-pad tool-card tool-wide" id="profit-tool">
@@ -184,6 +218,72 @@ function renderDamage() {
       ${pillEl(element, pct(taken))}
       ${best ? `<span class="pill">Best: ${esc(ELEMENT_NAME[best.el])} ${pct(best.taken)}</span>` : ''}
       <span class="pill">Level ${nf(characterLevel)} base value ${nf(result.base)}</span>
+    </div>`;
+}
+
+function renderLevelTarget() {
+  const current = Math.floor(numberInput('#level-current'));
+  const target = Math.floor(numberInput('#level-target'));
+  const pace = numberInput('#level-pace');
+  if (!Number.isFinite(current) || !Number.isFinite(target) || current < 1 || target <= current) {
+    $('#level-out').innerHTML = '<span class="dim">Pick a target level above the current level.</span>';
+    return;
+  }
+  // Anchor on the character's real tracked XP when the current-level field
+  // matches the tracked level; otherwise fall back to the level formula, so
+  // an edited "what-if" level still gets an honest (if less precise) answer.
+  const startExperience = current === characterLevel && characterExperience != null
+    ? characterExperience
+    : experienceForLevel(current);
+  const needed = experienceForLevel(target) - startExperience;
+  if (needed <= 0) {
+    $('#level-out').innerHTML = '<span class="dim">Already at or above that target.</span>';
+    return;
+  }
+  const hasPace = Number.isFinite(pace) && pace > 0;
+  const days = hasPace ? Math.ceil(needed / pace) : null;
+  const eta = days != null ? new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10) : null;
+  $('#level-out').innerHTML = `
+    <div class="tool-kpis">
+      <span><b>${kk(needed)}</b><small>exp to level ${nf(target)}</small></span>
+      ${days != null ? `<span><b>${nf(days)}</b><small>days at this pace</small></span>` : ''}
+      ${eta != null ? `<span><b>${eta}</b><small>projected date</small></span>` : ''}
+    </div>
+    ${!hasPace ? '<p class="fine dim">No recent daily-pace data to project a date from — enter one, or check back once more days are tracked.</p>' : ''}`;
+}
+
+function renderLevelTable() {
+  const from = Math.floor(numberInput('#level-table-from'));
+  const to = Math.floor(numberInput('#level-table-to'));
+  if (!Number.isFinite(from) || !Number.isFinite(to) || from < 1 || to <= from) {
+    $('#level-table-out').innerHTML = '<span class="dim">Pick a "to" level above the "from" level.</span>';
+    return;
+  }
+  const span = to - from;
+  if (span > 500) {
+    $('#level-table-out').innerHTML = '<span class="dim">Keep the range to 500 levels or fewer.</span>';
+    return;
+  }
+  const rows = [];
+  for (let lvl = from; lvl <= to; lvl++) {
+    rows.push({
+      level: lvl,
+      total: experienceForLevel(lvl),
+      toNext: experienceUntilNextLevel(lvl, experienceForLevel(lvl)),
+    });
+  }
+  $('#level-table-out').innerHTML = `
+    <div class="sheet panel">
+      <table class="grid">
+        <thead><tr><th>Level</th><th class="num">Total exp</th><th class="num">Exp to next level</th></tr></thead>
+        <tbody>
+          ${rows.map((row) => `<tr${row.level === characterLevel ? ' style="background:rgba(var(--overlay), var(--overlay-a))"' : ''}>
+            <td>${row.level === characterLevel ? `<b>${nf(row.level)}</b> <span class="fine dim">(you)</span>` : nf(row.level)}</td>
+            <td class="num">${nf(row.total)}</td>
+            <td class="num">${nf(row.toNext)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
     </div>`;
 }
 
@@ -506,10 +606,18 @@ bindSortMenu('imb-tier', (key) => {
   '#damage-mitigation', '#damage-crit-chance', '#damage-crit-damage',
   '#damage-fatal-chance', '#damage-fatal-damage', '#damage-charm', '#damage-charm-chance',
 ].forEach((id) => $(id).addEventListener('input', renderDamage));
+[
+  '#level-current', '#level-target', '#level-pace',
+].forEach((id) => $(id).addEventListener('input', renderLevelTarget));
+[
+  '#level-table-from', '#level-table-to',
+].forEach((id) => $(id).addEventListener('input', renderLevelTable));
 
 renderStamina();
 renderDamage();
 renderProfit();
 renderImbuementGrid();
+renderLevelTarget();
+renderLevelTable();
 
 export {};

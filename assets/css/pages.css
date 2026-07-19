@@ -253,17 +253,33 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 /* ---------- submit flow ---------- */
 
-.steps { counter-reset: step; display: grid; gap: var(--s5); }
+.steps { display: grid; gap: var(--s5); }
 .step { position: relative; }
 .step > .step-head { display: flex; align-items: center; gap: var(--s3); margin-bottom: var(--s3); }
-.step > .step-head::before {
-  counter-increment: step; content: counter(step);
-  display: grid; place-items: center;
-  width: 26px; height: 26px; border-radius: var(--r-circle);
-  background: rgb(var(--ink)); color: rgb(var(--surface));
-  font-size: var(--fs-13); font-weight: 700;
-}
 .step > .step-head h2 { font-size: var(--fs-18); }
+
+/* step progress indicator — numbered, lined, shows only the active step's content */
+.stepper { margin: 0 0 var(--s5); }
+.stepper-list { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; }
+.stepper-item { display: flex; align-items: center; flex: 1 1 0; }
+.stepper-item:last-child { flex: 0 0 auto; }
+.stepper-item::after { content: ''; flex: 1 1 auto; height: 1px; background: rgb(var(--line-strong)); margin: 0 var(--s2); }
+.stepper-item:last-child::after { display: none; }
+.stepper-item.is-done::after { background: rgb(var(--ink)); }
+.stepper-btn { display: flex; align-items: center; gap: var(--s2); min-height: var(--tap); background: none; border: 0; padding: var(--s1) 0; font: inherit; color: rgb(var(--ink-2)); cursor: pointer; }
+.stepper-btn[disabled] { cursor: default; opacity: .4; }
+.stepper-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--r-circle); background: rgb(var(--surface-2)); color: rgb(var(--ink-2)); font-size: var(--fs-13); font-weight: 700; flex-shrink: 0; }
+.stepper-item.is-done .stepper-num { background: rgb(var(--ink)); color: rgb(var(--surface)); }
+.stepper-item.is-active .stepper-num { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
+.stepper-item.is-active .stepper-btn { color: rgb(var(--ink)); }
+.stepper-label { font-size: var(--fs-13); font-weight: 600; white-space: nowrap; }
+@media (max-width: 520px) { .stepper-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
+/* keeps the last step's circle clear of the floating GitHub/appearance
+   cluster (.rail-foot, fixed top-right) — focusing a later step's heading
+   can scroll a short flow right under it; same reserve as .character-profile. */
+@media (max-width: 700px) { .stepper-list { padding-right: calc(var(--tap) * 2 + var(--s2)); } }
+
+.step-nav { display: flex; justify-content: space-between; gap: var(--s3); margin-top: var(--s4); }
 
 .guess-list { display: grid; gap: var(--s2); }
 .guess {
@@ -901,6 +917,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
     grid-template-columns: 1fr;
     gap: 1px;
   }
+  .donut-board { justify-content: center; }
+  .donut-chart svg { width: 130px; height: 130px; }
+  .donut-legend { min-width: 0; flex-basis: 100%; }
 }
 
 /* ---------- charts ---------- */
@@ -926,6 +945,15 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz .vevent { pointer-events: none; }
 .viz .vevent-level { fill: rgb(var(--surface)); stroke: rgb(var(--green)); stroke-width: 2; }
 .viz .vevent-death { fill: none; stroke: rgb(var(--red)); stroke-width: 2.5; stroke-linecap: round; }
+.viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
+.donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }
+.donut-chart svg { width: 160px; height: 160px; flex-shrink: 0; }
+.donut-legend { display: grid; gap: var(--s2); flex: 1 1 200px; min-width: 200px; list-style: none; margin: 0; padding: 0; }
+.donut-legend li { display: flex; align-items: center; gap: var(--s2); }
+.donut-legend span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.donut-legend b { margin-left: auto; flex-shrink: 0; font-size: var(--fs-13); }
+.donut-legend small { flex-shrink: 0; width: 34px; color: rgb(var(--ink-2)); font-size: var(--fs-11); text-align: right; }
+.donut-swatch { width: 10px; height: 10px; flex-shrink: 0; border-radius: var(--r-circle); }
 
 .chart-controls { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); margin-bottom: var(--s3); flex-wrap: wrap; }
 .chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }

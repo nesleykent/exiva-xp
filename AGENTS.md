@@ -26,8 +26,11 @@ The community hunting database is the planning engine underneath, not the produc
 ### Directory map
 
 ```
-*.html                     one shell per page (index, character, grounds, ground,
-                           creatures, creature, charms, submit, tools, analytics, admin)
+*.html                     one shell per page (index, character, grounds,
+                           creatures, charms, submit, tools, analytics, admin)
+                           — grounds.html and creatures.html each show their
+                           dossier inline (?g=slug / ?c=slug) instead of a
+                           separate page
 manifest.webmanifest       installable-app manifest (standalone display, dark theme)
 assets/img/icon.svg        home-screen icon source; icon-180/512.png generated
                            from it via qlmanage (regenerate when the mark changes)
@@ -188,6 +191,8 @@ Home hierarchy follow-up (2026-07-16): removed the Character and Planner hero bu
 Live-filter keyboard pass (2026-07-16): Planner and Codex search forms now prevent native submission, so pressing Enter preserves the live result set, query and URL instead of reloading the page. The two remaining implicit buttons gained `type="button"`, and smoke rejects any future button without an explicit type.
 
 Highscores consolidation pass (2026-07-17): removed the six-card top-rank strip and achievement summary that repeated values immediately below. The Highscores tab now has one Experience trend and one complete compact list of every other tracked category; the unique Loyalty title moved into Details, and the unused summary code/CSS was deleted.
+
+Design-system sync pass (2026-07-19): synced against the companion Claude Design project's updated `templates/exiva-xp/*.dc.html` page compositions. Grounds and Codex merged their list/detail page pairs into one page each — `grounds.html` (`ground.html` deleted) and `creatures.html` (`creature.html` deleted) now show the selected ground/creature dossier inline via `?g=slug`/`?c=slug`, with a back control, `history.pushState`/`popstate` deep-linking, and the filter bar hidden (not lost) while a dossier is open; every internal link updated accordingly. Tools gained back a "Level target" (days-to-goal) calculator and level/experience table, deliberately rebuilding the feature removed 2026-07-06 per fresh owner approval — pace is derived from the character's own gap-aware daily XP history (`experienceForLevel`/`experienceUntilNextLevel` from `engine/progression.js`), never fabricated, and shows no projection when pace data is missing. Submit hunt gained a numbered/lined step-progress indicator (Paste → Read → Location → Confirm) that shows one step at a time with working back/forward navigation, collapsing to icon-only circles under 520px; all existing parsing/validation/accessibility behavior (labelled fields, announced status regions, `aria-pressed` location candidates, focus-on-parse, in-flight save guard) is preserved. Analytics gained a "Profit share by ground" donut (hand-rolled inline SVG, same convention as `viz/svg.js`'s other charts; a ground only appears with real logged profit, never zero-filled) and a "This week vs last week" comparison band reusing `character.js`'s `pace-band` pattern — the comparison honestly falls back to a "not enough data yet" note when tracked history/logged hunts don't reach back into the prior week, rather than showing a misleading 0-vs-0. Explicitly rejected per owner direction and left unbuilt: Home KPI/hero dashboard (conflicts with the data-light-doorway decision above), a Logbook status/review column, and a Character "Share profile" link or "Online" badge (no such data model exists for any of the three).
 
 ## 10. Active tasks (in priority order)
 

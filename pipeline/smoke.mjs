@@ -322,7 +322,7 @@ assert(recentTradePrice.price === 118 && recentTradePrice.basis === 'daily-lowes
 assert(currentBuyPrice(null) == null && currentBuyPrice([]) == null,
   'missing market history must remain missing instead of inventing a price');
 
-const pageFiles = ['index', 'character', 'grounds', 'ground', 'creatures', 'creature', 'charms', 'submit', 'tools', 'analytics', 'admin'];
+const pageFiles = ['index', 'character', 'grounds', 'creatures', 'charms', 'submit', 'tools', 'analytics', 'admin'];
 for (const page of pageFiles) {
   const html = readFileSync(new URL(`../${page}.html`, import.meta.url), 'utf8');
   assert(!/href\s*=\s*["'][^"']*#/.test(html), `${page}.html reintroduced hash navigation`);

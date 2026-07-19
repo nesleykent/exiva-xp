@@ -12,15 +12,27 @@ import { backend, logbook } from '../data/sources.js';
 
 const { stage, codex, grounds, hunts } = await boot('submit.html', { codex: true, grounds: true, hunts: true });
 
+const STEP_LABELS = { paste: 'Paste', review: 'Read', where: 'Location', confirm: 'Confirm' };
+
+// `displaySteps` is what the stepper shows; `reachedKeys` is what's clickable.
+// Steps 2-4 don't exist until a session has been parsed, so they stay locked
+// (and absent from the DOM) until then — backward navigation among reached
+// steps is always allowed, and switching steps never re-renders their markup,
+// so nothing typed/picked earlier is lost.
+let displaySteps = ['paste', 'review', 'where', 'confirm'];
+let reachedKeys = ['paste'];
+let activeStep = 'paste';
+
 stage.classList.add('narrow');
 stage.innerHTML = `
   <header style="padding: 8px 0 20px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Log a hunt</h1>
     <p class="dim" id="paste-help">Paste the Hunting Analyser exactly as the client copies it. Parsing happens in your browser; the original text is saved untouched in your personal logbook.</p>
   </header>
-  <div class="steps">
-    <section class="step">
-      <div class="step-head"><h2 id="paste-heading">Paste your analyser</h2></div>
+  <nav class="stepper" id="stepper" aria-label="Log a hunt progress"></nav>
+  <div class="steps" id="steps">
+    <section class="step" id="step-paste" data-step="paste">
+      <div class="step-head"><h2 id="paste-heading" tabindex="-1">Paste your analyser</h2></div>
       <textarea id="paste" rows="12" aria-labelledby="paste-heading" aria-describedby="paste-help" placeholder="Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
 Session: 02:30h
 Raw XP Gain: 3,412,500
@@ -42,24 +54,74 @@ Looted Items:
     <div id="flow"></div>
   </div>`;
 
+renderStepper();
+
 $('#go').addEventListener('click', () => {
   const session = readAnalyser($('#paste').value);
   if (!isAnalyser(session)) {
     $('#read-note').innerHTML = note('red', 'No XP, loot or kill data found — that does not look like a hunting analyser.');
     $('#flow').innerHTML = '';
+    displaySteps = ['paste', 'review', 'where', 'confirm'];
+    reachedKeys = ['paste'];
+    goToStep('paste');
     return;
   }
   $('#read-note').innerHTML = '';
   renderFlow(session);
 });
 
+/** Render the numbered/lined step nav; only reached steps are clickable. */
+function renderStepper() {
+  const activeIndex = displaySteps.indexOf(activeStep);
+  $('#stepper').innerHTML = `<ol class="stepper-list">${displaySteps.map((key, i) => {
+    const state = i === activeIndex ? ' is-active' : i < activeIndex ? ' is-done' : '';
+    const reachable = reachedKeys.includes(key);
+    return `
+      <li class="stepper-item${state}">
+        <button type="button" class="stepper-btn" data-goto="${key}" ${key === activeStep ? 'aria-current="step"' : ''} ${reachable ? '' : 'disabled aria-disabled="true"'}>
+          <span class="stepper-num">${i + 1}</span><span class="stepper-label">${STEP_LABELS[key]}</span>
+        </button>
+      </li>`;
+  }).join('')}</ol>`;
+  $('#stepper').querySelectorAll('.stepper-btn:not([disabled])').forEach((btn) => {
+    btn.addEventListener('click', () => goToStep(btn.dataset.goto));
+  });
+}
+
+/** Show one step's section, hide the rest, and move focus to its heading. */
+function goToStep(key) {
+  if (!reachedKeys.includes(key)) return;
+  activeStep = key;
+  document.querySelectorAll('#steps [data-step]').forEach((section) => {
+    section.hidden = section.dataset.step !== key;
+  });
+  renderStepper();
+  const heading = document.querySelector(`#steps [data-step="${key}"] h2[tabindex="-1"]`);
+  if (heading) heading.focus();
+}
+
+/** Back/Continue footer for a step, wired against the current step order. */
+function stepFooter(key) {
+  const i = displaySteps.indexOf(key);
+  const backKey = i > 0 ? displaySteps[i - 1] : null;
+  const nextKey = i < displaySteps.length - 1 ? displaySteps[i + 1] : null;
+  if (!backKey && !nextKey) return '';
+  return `<div class="step-nav">
+    ${backKey ? `<button type="button" class="btn btn-tertiary" data-goto="${backKey}">Back</button>` : '<span></span>'}
+    ${nextKey ? `<button type="button" class="btn btn-secondary" data-goto="${nextKey}">Continue</button>` : ''}
+  </div>`;
+}
+
 function renderFlow(session) {
   const located = locateHunt(session.kills, codex, grounds.directory);
   const battle = readBattle(located.known.map((k) => ({ creature: k.creature, n: k.n })));
   const kills = session.kills.reduce((a, k) => a + k.n, 0);
 
+  displaySteps = located.candidates.length ? ['paste', 'review', 'where', 'confirm'] : ['paste', 'review', 'confirm'];
+  reachedKeys = [...displaySteps];
+
   $('#flow').innerHTML = `
-  <section class="step">
+  <section class="step" id="step-review" data-step="review" hidden>
     <div class="step-head"><h2 id="review-heading" tabindex="-1">What we read</h2></div>
     <div class="panel panel-pad">
       <div class="facts">
@@ -78,11 +140,24 @@ function renderFlow(session) {
       </div>
       ${located.unknown.length ? note('amber', `Not in the codex: ${located.unknown.map((u) => u.name).join(', ')} — kept in your submission, excluded from intelligence.`) : ''}
     </div>
+    ${battle ? `
+    <div class="step-head" style="margin-top:var(--s5)"><h2>Your battle read</h2></div>
+    <div class="duo">
+      <div class="panel panel-pad">
+        <p class="eyebrow" style="margin:0 0 10px">This session's damage profile</p>
+        ${meters(battle.profile)}
+      </div>
+      <div class="panel panel-pad">
+        <p class="eyebrow" style="margin:0 0 10px">Suggestions</p>
+        <ul class="tips">${battle.tips.map((t) => `<li>${t}</li>`).join('')}</ul>
+      </div>
+    </div>` : ''}
+    ${stepFooter('review')}
   </section>
 
   ${located.candidates.length ? `
-  <section class="step">
-    <div class="step-head"><h2>Where were you?</h2></div>
+  <section class="step" id="step-where" data-step="where" hidden>
+    <div class="step-head"><h2 id="where-heading" tabindex="-1">Where were you?</h2></div>
     <div class="guess-list" id="guesses">
       ${located.candidates.map((cand, i) => `
         <button type="button" class="guess ${i === 0 ? 'picked' : ''}" aria-pressed="${i === 0 ? 'true' : 'false'}" data-name="${esc(cand.ground?.name || cand.habitat)}">
@@ -94,25 +169,11 @@ function renderFlow(session) {
         </button>`).join('')}
     </div>
     <p class="fine dim" style="margin:8px 0 0">Scored by creature overlap, kill volume, rarity and coverage. Pick one or type the ground below.</p>
+    ${stepFooter('where')}
   </section>` : ''}
 
-  ${battle ? `
-  <section class="step">
-    <div class="step-head"><h2>Your battle read</h2></div>
-    <div class="duo">
-      <div class="panel panel-pad">
-        <p class="eyebrow" style="margin:0 0 10px">This session's damage profile</p>
-        ${meters(battle.profile)}
-      </div>
-      <div class="panel panel-pad">
-        <p class="eyebrow" style="margin:0 0 10px">Suggestions</p>
-        <ul class="tips">${battle.tips.map((t) => `<li>${t}</li>`).join('')}</ul>
-      </div>
-    </div>
-  </section>` : ''}
-
-  <section class="step">
-    <div class="step-head"><h2>Confirm and save</h2></div>
+  <section class="step" id="step-confirm" data-step="confirm" hidden>
+    <div class="step-head"><h2 id="confirm-heading" tabindex="-1">Confirm and save</h2></div>
     <form class="panel panel-pad" id="hunt-form">
       <div class="form-row">
         <label class="lbl lbl-wide"><span class="eyebrow">Ground *</span><input type="text" id="h-ground" list="ground-names" required></label>
@@ -125,6 +186,7 @@ function renderFlow(session) {
       <div id="verdict" role="status" aria-live="polite"></div>
       <div style="margin-top:14px"><button type="submit" class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
     </form>
+    ${stepFooter('confirm')}
   </section>`;
 
   const guessHost = $('#guesses');
@@ -208,6 +270,11 @@ function renderFlow(session) {
       publishButton.textContent = 'Save hunt';
     }
   });
+
+  $('#flow').querySelectorAll('.step-nav [data-goto]').forEach((btn) => {
+    btn.addEventListener('click', () => goToStep(btn.dataset.goto));
+  });
+  goToStep('review');
   $('#review-heading').focus();
 }
 export {};

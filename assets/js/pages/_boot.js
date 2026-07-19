@@ -37,7 +37,7 @@ export async function boot(page, {
   }
 }
 
-/** Query-string param, e.g. ground.html?g=cobra-bastion */
+/** Query-string param, e.g. grounds.html?g=cobra-bastion */
 export function param(name) {
   return new URLSearchParams(location.search).get(name) || '';
 }

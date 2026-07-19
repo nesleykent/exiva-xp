@@ -563,7 +563,7 @@ function projectionControlsHtml() {
 }
 
 const groundsTable = tableHtml([
-  { label: 'Ground', cell: (row) => `<a href="ground.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
+  { label: 'Ground', cell: (row) => `<a href="grounds.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
   { label: 'Level', className: 'num', cell: (row) => plain(row.levelText || (row.level != null ? `${row.level}+` : null)) },
   { label: 'Vocation', cell: (row) => plain(row.vocation || (row.party ? 'Team' : null)) },
   { label: 'Mode', cell: (row) => row.party ? '<span class="pill">Team</span>' : '<span class="pill">Solo</span>' },
@@ -639,7 +639,7 @@ stage.innerHTML = `
       <div class="section-subhead"><h3>Level-fit hunt targets</h3><a class="fine dim" href="grounds.html">Open full planner</a></div>
       <div class="story-rail">
         ${grounds4me.slice(0, 8).map((row) => `
-          <a class="story" href="ground.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
+          <a class="story" href="grounds.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
             ${ring(row.ground)}
             <span class="cap">${esc(row.ground)}</span>
           </a>`).join('')}
