@@ -57,7 +57,6 @@ const historyRows = history.map((row, i) => {
 });
 
 const gains = historyRows.filter((row) => row.gain != null).map((row) => ({ key: row.date.slice(5), n: row.gain }));
-const bestDay = historyRows.reduce((best, row) => (row.gain > (best?.gain ?? 0) ? row : best), null);
 
 // Level-up log, derived from the daily rows: every day the tracked level rose.
 const levelUpsChronological = historyRows
@@ -177,20 +176,6 @@ function tableHtml(columns, rows, empty) {
   </table></div>`;
 }
 
-function xpGainStreaks(rows) {
-  let current = 0;
-  let best = 0;
-  for (const row of rows) {
-    if (row.gain != null && row.gain > 0) {
-      current += 1;
-      best = Math.max(best, current);
-    } else {
-      current = 0;
-    }
-  }
-  return { current, best };
-}
-
 function levelCadence() {
   if (levelUpsChronological.length < 3) return null;
   const gaps = [];
@@ -207,9 +192,13 @@ function levelCadence() {
   };
 }
 
-function xpRowsForChart(metric, range) {
+const chartYears = [...new Set(historyRows.map((row) => row.date.slice(0, 4)))].sort();
+const monthsInYear = (year) => [...new Set(historyRows.filter((row) => row.date.startsWith(year)).map((row) => row.date.slice(5, 7)))].sort();
+const MONTH_NAME = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' };
+
+function xpRowsForChart(metric, { year, month }) {
   let rows = historyRows;
-  if (range !== 'all') rows = rows.slice(-Number(range));
+  if (year !== 'all') rows = rows.filter((row) => row.date.startsWith(month === 'all' ? year : `${year}-${month}`));
   if (metric === 'daily') {
     return {
       title: 'Daily XP gained',
@@ -472,16 +461,12 @@ function highscoreRowHtml(row) {
     </div>`;
 }
 
-const lastGain = historyRows.at(-1)?.gain ?? null;
-const lastGainIsToday = historyRows.at(-1)?.date === dateKeyInTimezone(new Date(), timezone);
-const lastGainLabel = lastGainIsToday ? "Today's XP" : 'Last daily XP';
 const avg7 = gainAverage(7);
 const avg30 = gainAverage(30);
 const bestProfitHunt = myHunts
   .filter((hunt) => hunt.balance != null && hunt.minutes > 0)
   .map((hunt) => ({ ...hunt, profitRate: (hunt.balance / hunt.minutes) * 60 }))
   .sort((a, b) => b.profitRate - a.profitRate)[0] || null;
-const streaks = xpGainStreaks(historyRows);
 const cadenceTrend = levelCadence();
 const featuredHighscore = highscoreRows.find((row) => row.key === 'experience') || highscoreRows[0] || null;
 const secondaryHighscores = highscoreRows.filter((row) => row !== featuredHighscore);
@@ -513,29 +498,65 @@ const insight = paceInsight();
 const projection = levelProjection();
 const levelProgressPct = trackedLevel != null && experience != null ? progressWithinLevel(trackedLevel, experience) : null;
 
-/** Template-aligned progression summary: four compact, non-duplicated facts. */
+/** XP gained month-to-date. Total experience is cumulative, so the delta
+ * across the window is honest even when the tracker has gaps inside it. */
+function monthToDateGain() {
+  if (!latest || experience == null) return null;
+  const monthPrefix = latest.date.slice(0, 7);
+  const before = [...historyRows].reverse().find((row) => row.date.slice(0, 7) < monthPrefix);
+  if (!before) return null;
+  return experience - before.experience;
+}
+
+/** Overall profit rate across the logbook — only sessions with a real balance and duration. */
+function profitPerHour() {
+  const rated = myHunts.filter((hunt) => hunt.balance != null && hunt.minutes > 0);
+  if (!rated.length) return null;
+  const minutes = rated.reduce((sum, hunt) => sum + hunt.minutes, 0);
+  return { rate: (rated.reduce((sum, hunt) => sum + hunt.balance, 0) / minutes) * 60, n: rated.length };
+}
+
+function deathsInWindow(fromDays, toDays) {
+  const now = Date.now();
+  return deaths.filter((row) => {
+    const t = new Date(row.time).getTime();
+    return t >= now - fromDays * ONE_DAY_MS && t < now - toDays * ONE_DAY_MS;
+  }).length;
+}
+
+const monthGain = monthToDateGain();
+const profitRate = profitPerHour();
+const deathsLast30 = deathsInWindow(30, 0);
+const deathsPrior30 = deathsInWindow(60, 30);
+const deathsDelta = deathsLast30 - deathsPrior30;
+const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: row.date.slice(5), n: row.experience })), 24);
+
+const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delta ${tone}">${text}</em>`);
+
+/** Template-aligned KPI row: value, coloured delta, context line — one card per question. */
 function progressionOverviewHtml() {
   return `
     <div class="dashboard-metrics" aria-label="Progression at a glance">
-      <article class="dashboard-metric">
+      <article class="dashboard-metric dashboard-metric-featured">
         <span>Total experience</span>
         <b class="num">${experience != null ? compact(experience) : '-'}</b>
-        <small>${historyNote}</small>
+        <small>${monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote)}</small>
+        ${totalXpSpark.length >= 2 ? `<div class="metric-spark">${sparkline(totalXpSpark, { fmt: compact })}</div>` : ''}
       </article>
       <article class="dashboard-metric">
-        <span>Avg XP / day</span>
+        <span>XP / day pace</span>
         <b class="num">${avgDailyXp != null ? compact(avgDailyXp) : '-'}</b>
-        <small>${recentGains.length ? `${nf(recentGains.length)} recent recorded days` : 'Not enough pace data yet'}</small>
+        <small>${insight ? `${metricDelta(`${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%`, insight.tone)} vs 30-day average` : (recentGains.length ? `${nf(recentGains.length)} recent recorded days` : 'Not enough pace data yet')}</small>
       </article>
       <article class="dashboard-metric">
-        <span>${esc(lastGainLabel)}</span>
-        <b class="num">${lastGain != null ? `+${compact(lastGain)}` : '-'}</b>
-        <small>${bestDay?.gain ? `Best: +${compact(bestDay.gain)} on ${esc(bestDay.date)}` : historyNote}</small>
+        <span>Profit / hour</span>
+        <b class="num">${profitRate ? `${kk(profitRate.rate)} gp` : '-'}</b>
+        <small>${profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet'}</small>
       </article>
       <article class="dashboard-metric">
-        <span>World XP rank</span>
-        <b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b>
-        <small>${nf(deaths.length)} deaths · ${nf(streaks.current)} day streak</small>
+        <span>Deaths</span>
+        <b class="num">${nf(deathsLast30)}</b>
+        <small>${metricDelta(`${deathsDelta > 0 ? '+' : ''}${nf(deathsDelta)}`, deathsDelta > 0 ? 'down' : deathsDelta < 0 ? 'up' : 'even')} last 30 days</small>
       </article>
     </div>`;
 }
@@ -551,6 +572,57 @@ function projectionControlsHtml() {
       </div>
       <div class="tool-result" id="pred-out"></div>
     </div>`;
+}
+
+/**
+ * GitHub-style intensity grid over the last 26 tracked weeks of daily XP
+ * gain. A day with no gap-free measurement renders as a distinct "unknown"
+ * cell, never as zero — thresholds are quartiles of the real positive gains.
+ */
+function activityHeatmapHtml() {
+  if (!latest || historyRows.length < 14) return '<p class="dim">Not enough tracked days yet.</p>';
+  const gainByDate = new Map(historyRows.map((row) => [row.date, row.gain]));
+  const positives = historyRows.map((row) => row.gain).filter((gain) => gain > 0).sort((a, b) => a - b);
+  const quart = (p) => positives.length ? positives[Math.min(positives.length - 1, Math.floor(p * positives.length))] : Infinity;
+  const t1 = quart(0.25), t2 = quart(0.5), t3 = quart(0.75);
+  const levelOf = (gain) => (gain <= 0 ? 0 : gain <= t1 ? 1 : gain <= t2 ? 2 : gain <= t3 ? 3 : 4);
+  const end = new Date(`${latest.date}T00:00:00Z`);
+  const endWeekday = (end.getUTCDay() + 6) % 7;
+  const start = new Date(end.getTime() - (25 * 7 + endWeekday) * ONE_DAY_MS);
+  const weeks = [];
+  for (let w = 0; w < 26; w++) {
+    const first = new Date(start.getTime() + w * 7 * ONE_DAY_MS);
+    const prev = new Date(first.getTime() - 7 * ONE_DAY_MS);
+    const label = w === 0 || first.getUTCMonth() !== prev.getUTCMonth()
+      ? first.toLocaleDateString('en', { month: 'short', timeZone: 'UTC' }) : '';
+    const cells = [];
+    for (let d = 0; d < 7; d++) {
+      const dayDate = new Date(start.getTime() + (w * 7 + d) * ONE_DAY_MS);
+      if (dayDate > end) { cells.push('<i class="hm hm-void"></i>'); continue; }
+      const key = dayDate.toISOString().slice(0, 10);
+      const gain = gainByDate.get(key);
+      cells.push(gain == null
+        ? `<i class="hm hm-null" title="${key} · no tracked measurement"></i>`
+        : `<i class="hm hm-${levelOf(gain)}" title="${key} · +${compact(gain)} XP"></i>`);
+    }
+    weeks.push(`<div class="hm-week"><span class="hm-month">${label}</span>${cells.join('')}</div>`);
+  }
+  return `
+    <div class="heatmap" role="img" aria-label="Daily XP gain intensity over the last 26 tracked weeks">${weeks.join('')}</div>
+    <div class="hm-legend fine dim"><span>Less</span><i class="hm hm-0"></i><i class="hm hm-1"></i><i class="hm hm-2"></i><i class="hm hm-3"></i><i class="hm hm-4"></i><span>More</span><i class="hm hm-null" style="margin-left:10px"></i><span>not tracked</span></div>`;
+}
+
+/** The three latest recorded deaths; the complete table stays in Details. */
+function recentDeathsHtml() {
+  if (!deaths.length) return '<p class="dim">No deaths on record.</p>';
+  return `<ul class="death-list">${deaths.slice(0, 3).map((row) => `
+    <li>
+      <i class="death-dot" aria-hidden="true"></i>
+      <div>
+        <p>${esc(row.reason || 'Death')}</p>
+        <p class="fine dim">${esc(fmtDateOnly(row.time) || day(row.time))} · level ${nf(row.level)}</p>
+      </div>
+    </li>`).join('')}</ul>`;
 }
 
 const groundsTable = tableHtml([
@@ -614,11 +686,11 @@ stage.innerHTML = `
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
             <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
           </div>
-          <div class="chart-button-group" aria-label="XP chart range">
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="7" aria-pressed="false">7d</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="30" aria-pressed="true">30d</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-range="all" aria-pressed="false">All</button>
+          <div class="chart-button-group" aria-label="XP chart year">
+            <button type="button" class="btn btn-tertiary btn-sm" data-xp-year="all" aria-pressed="false">All</button>
+            ${chartYears.map((year) => `<button type="button" class="btn btn-tertiary btn-sm" data-xp-year="${year}" aria-pressed="false">${year}</button>`).join('')}
           </div>
+          <div class="chart-button-group" aria-label="XP chart month" id="xp-month-row"></div>
         </div>
       </div>
       <div class="chart-shell">
@@ -626,6 +698,17 @@ stage.innerHTML = `
         <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
       </div>
       <div class="chart-foot"><a class="fine dim" href="analytics.html">Explore full progression</a></div>
+    </div>
+  </section>
+
+  <section class="activity-duo" aria-label="Hunting activity and recent deaths">
+    <div class="panel panel-pad">
+      <p class="eyebrow" style="margin:0 0 12px">Daily XP activity</p>
+      ${activityHeatmapHtml()}
+    </div>
+    <div class="panel panel-pad">
+      <p class="eyebrow" style="margin:0 0 12px">Recent deaths</p>
+      ${recentDeathsHtml()}
     </div>
   </section>
 
@@ -693,13 +776,31 @@ stage.innerHTML = `
 
 bindCharacterTabs();
 
-// ---- chart controls ----
-const xpState = { metric: 'daily', range: '30' };
+// ---- chart controls: metric × year × month, months only for tracked data ----
+const xpState = { metric: 'daily', year: chartYears.at(-1) || 'all', month: 'all' };
+
+function renderXpMonthRow() {
+  const host = $('#xp-month-row');
+  if (!host) return;
+  if (xpState.year === 'all') { host.innerHTML = ''; host.hidden = true; return; }
+  host.hidden = false;
+  const months = monthsInYear(xpState.year);
+  host.innerHTML = [
+    `<button type="button" class="btn btn-tertiary btn-sm" data-xp-month="all" aria-pressed="${String(xpState.month === 'all')}">All</button>`,
+    ...months.map((month) => `<button type="button" class="btn btn-tertiary btn-sm" data-xp-month="${month}" aria-pressed="${String(month === xpState.month)}">${MONTH_NAME[month]}</button>`),
+  ].join('');
+  host.querySelectorAll('[data-xp-month]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      xpState.month = btn.dataset.xpMonth;
+      renderXpChart();
+    });
+  });
+}
 
 function renderXpChart() {
   const chart = $('#xp-chart');
   if (!chart) return;
-  const selected = xpRowsForChart(xpState.metric, xpState.range);
+  const selected = xpRowsForChart(xpState.metric, xpState);
   $('#xp-chart-title').textContent = selected.title;
   $('#xp-chart-note').textContent = selected.note;
   chart.innerHTML = selected.data.length
@@ -709,9 +810,10 @@ function renderXpChart() {
   document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
     btn.setAttribute('aria-pressed', String(btn.dataset.xpMetric === xpState.metric));
   });
-  document.querySelectorAll('[data-xp-range]').forEach((btn) => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.xpRange === xpState.range));
+  document.querySelectorAll('[data-xp-year]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.xpYear === xpState.year));
   });
+  renderXpMonthRow();
 }
 
 function showXpDetail(date) {
@@ -728,9 +830,10 @@ document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
     renderXpChart();
   });
 });
-document.querySelectorAll('[data-xp-range]').forEach((btn) => {
+document.querySelectorAll('[data-xp-year]').forEach((btn) => {
   btn.addEventListener('click', () => {
-    xpState.range = btn.dataset.xpRange;
+    xpState.year = btn.dataset.xpYear;
+    xpState.month = 'all';
     renderXpChart();
   });
 });
