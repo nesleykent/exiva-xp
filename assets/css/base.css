@@ -381,23 +381,20 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   -webkit-text-fill-color: transparent; color: transparent;
 }
 
-/* initials avatar (grounds/creatures) — a quiet disc, deliberately not the
-   Instagram stories ring: a gradient ring implies "new content inside" and
-   that social metaphor means nothing for a hunting ground or creature. */
+/* Initials avatar ring for grounds, creatures and compact hunt links. */
 .ring {
   display: inline-grid; place-items: center;
   width: 64px; height: 64px; border-radius: var(--r-circle);
-  background: rgb(var(--wash));
-  border: 1px solid rgb(var(--line-strong));
+  background: var(--grad-story);
   flex-shrink: 0; box-sizing: border-box;
 }
 .ring > .ring-core {
   display: grid; place-items: center;
-  width: 100%; height: 100%; border-radius: var(--r-circle);
-  background: transparent;
+  width: 56px; height: 56px; border-radius: var(--r-circle);
+  background: rgb(var(--surface));
   font-weight: 700; font-size: var(--fs-18);
 }
-.ring.ring-quiet { border-style: dashed; }
+.ring.ring-quiet { background: rgb(var(--line)); }
 
 .toast {
   position: fixed; left: 50%; bottom: var(--s6); transform: translateX(-50%);
