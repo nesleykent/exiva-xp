@@ -43,9 +43,8 @@ stage.innerHTML = `
       <div class="filter-segment"><span class="eyebrow">Difficulty</span>${segmentedControl('c-tier', 'Difficulty', TIER_OPTIONS, state.tier)}</div>
       <div class="filter-segment"><span class="eyebrow">Class</span>${segmentedControl('c-family', 'Creature class', FAMILY_OPTIONS, state.family)}</div>
       <div class="filter-segment"><span class="eyebrow">Sort</span>${segmentedControl('c-sort', 'Sort creatures', SORT_OPTIONS, state.sort)}</div>
-      <button type="button" class="advanced-toggle" id="c-toggle" aria-expanded="false" aria-controls="c-more">All classes</button>
     </div>
-    <div class="advanced-filters" id="c-more" hidden>
+    <div class="advanced-filters" id="c-more">
       <div class="filter-segment"><span class="eyebrow">Every class</span>${segmentedControl('c-family-all', 'Every creature class', FAMILY_FILTER_OPTIONS, state.family)}</div>
       <div class="filter-segment"><span class="eyebrow">Task speed</span>${segmentedControl('c-task-speed', 'Task speed', TASK_FILTER_OPTIONS, state.taskSpeed)}</div>
     </div>
@@ -288,12 +287,6 @@ bindSegmented('c-family', (value) => {
 bindSegmented('c-task-speed', (value) => { state.taskSpeed = value; state.shown = 8; render(); });
 bindSegmented('c-sort', (value) => { state.sort = value; state.shown = 8; render(); });
 $('#more').addEventListener('click', () => { state.shown += 24; render(); });
-$('#c-toggle').addEventListener('click', () => {
-  const open = $('#c-more').hidden;
-  $('#c-more').hidden = !open;
-  $('#c-toggle').setAttribute('aria-expanded', String(open));
-  $('#c-toggle').textContent = open ? 'Hide classes' : 'All classes';
-});
 $('#out').addEventListener('click', (e) => {
   const tile = e.target.closest('[data-creature-slug]');
   if (!tile || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;

@@ -76,8 +76,6 @@
 .filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
 .filter-compact-groups { display: flex; align-items: end; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
 .filter-segment { display: grid; gap: var(--s2); min-width: 0; }
-.advanced-toggle { align-self: end; min-height: 30px; margin-left: auto; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
-.advanced-filters[hidden] { display: none; }
 .advanced-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
 .advanced-filters .filter-segment { min-width: 0; }
 .advanced-filters .filter-segment .segmented { width: 100%; }
@@ -118,7 +116,6 @@
   .filter-toggle .chevron { transition: transform var(--t-hover) var(--e-standard); }
   .filter-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
   .filter-compact-head { align-items: stretch; flex-direction: column; }
-  .advanced-toggle { min-height: var(--tap); }
   .advanced-filters { grid-template-columns: minmax(0, 1fr); }
   .filter-more { display: none; grid-template-columns: 1fr 1fr; gap: var(--s2); }
   .filter-more.open { display: grid; }
