@@ -18,18 +18,6 @@ const dailyWorkspaces = [
     text: `${characterName} profile, XP history, highscores, deaths and personal progression context.`,
   },
   {
-    href: 'grounds.html',
-    icon: ICONS.compass,
-    title: 'Hunt planner',
-    text: 'Level-fit hunting places, creature overlap, XP, profit and element advice.',
-  },
-  {
-    href: 'submit.html',
-    icon: ICONS.plus,
-    title: 'Save analyser',
-    text: 'Paste a Hunting Analyser session into the private logbook.',
-  },
-  {
     href: 'tools.html',
     icon: ICONS.tools,
     title: 'Tools',
@@ -86,6 +74,17 @@ stage.innerHTML = `
 
   <section class="section home-workspace-group" style="margin-top:0">
     <div class="section-bar"><h2>Daily loop</h2><span class="fine dim">Plan, hunt, save, review</span></div>
+    <div class="panel home-primary-action">
+      <span class="home-workspace-icon">${ICONS.compass}</span>
+      <div class="home-primary-copy">
+        <h3>Plan your next hunt</h3>
+        <p class="fine dim">Find level-fit places, compare evidence and choose an element before you leave the depot.</p>
+      </div>
+      <div class="home-primary-actions">
+        <a class="btn btn-primary" href="grounds.html">Open planner</a>
+        <a class="btn btn-tertiary" href="submit.html">Log a hunt</a>
+      </div>
+    </div>
     <div class="tiles home-workspaces">
       ${workspaceTiles(dailyWorkspaces)}
     </div>

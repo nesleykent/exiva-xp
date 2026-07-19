@@ -1,4 +1,4 @@
-/** Logbook tools — local hunt review, duplicate sweep, import/export. */
+/** Logbook — local hunt review, rules filters, duplicate sweep, import/export. */
 
 import { boot } from './_boot.js';
 import { esc, fingerprint } from '../lib/text.js';
@@ -14,12 +14,13 @@ const FIELDS = ['id', 'loggedAt', 'ground', 'vocation', 'level', 'party', 'world
 
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Logbook tools</h1>
+    <h1 style="font-size:26px; letter-spacing:-.4px">Logbook</h1>
     <p class="dim" style="max-width:64ch">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
   </header>
   <section class="section" style="margin-top:var(--s5)">
     <div class="section-bar"><h2>Local logbook</h2><span class="fine dim" id="k-count"></span></div>
     <div id="k-undo" aria-live="polite"></div>
+    <div id="k-rule-filters"></div>
     <div id="k-book"></div>
   </section>
   <section class="section">
@@ -40,6 +41,14 @@ stage.innerHTML = `
   </section>`;
 
 let undoSnapshot = null;
+let ruleFilter = 'all';
+
+function ruleStatus(hunt, book) {
+  const verdict = judge(hunt, book);
+  if (!verdict.ok) return { key: 'faulted', verdict };
+  if (verdict.flags.length) return { key: 'flagged', verdict };
+  return { key: 'clean', verdict };
+}
 
 function clearUndo() {
   undoSnapshot = null;
@@ -66,27 +75,74 @@ $('#k-undo').addEventListener('click', (e) => {
 
 function refresh() {
   const book = logbook();
+  const statuses = new Map(book.map((hunt) => [String(hunt.id), ruleStatus(hunt, book)]));
+  const visible = ruleFilter === 'all'
+    ? book
+    : book.filter((hunt) => statuses.get(String(hunt.id))?.key === ruleFilter);
   $('#k-count').textContent = `${book.length} hunt${book.length === 1 ? '' : 's'} in this browser`;
 
-  dataTable($('#k-book'), {
-    cols: [
-      { id: 'loggedAt', label: 'Date', cell: (h) => day(h.loggedAt) },
-      { id: 'ground', label: 'Ground', cell: (h) => esc(h.ground || '—') },
-      { id: 'vocation', label: 'Vocation', cell: (h) => esc(h.vocation || (h.party ? 'Party' : '—')) },
-      { id: 'level', label: 'Level', num: true, cell: (h) => nf(h.level) },
-      { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (h) => kk(h.xpRawRate) },
-      { id: 'check', label: 'Rules', cell: (h) => {
-        const v = judge(h, book);
-        if (!v.ok) return `<span class="badge badge-error" title="${esc(v.faults.join(' '))}">Faulted</span>`;
-        if (v.flags.length) return `<span class="badge badge-warning" title="${esc(v.flags.join(' '))}">Flagged</span>`;
-        return '<span class="badge badge-success">Clean</span>';
-      } },
-      { id: 'x', label: '', cell: (h) => `<button type="button" class="btn btn-destructive btn-sm admin-delete" data-drop="${esc(h.id)}">Delete</button>` },
-    ],
-    rows: book,
-  });
+  for (const id of ['#k-json', '#k-csv', '#k-xls']) $(id).disabled = !book.length;
+
+  if (!book.length) {
+    ruleFilter = 'all';
+    $('#k-rule-filters').innerHTML = '';
+    $('#k-book').innerHTML = `
+      <div class="panel empty-action admin-empty">
+        <div>
+          <h3>No hunts logged yet</h3>
+          <p class="fine dim">Paste a Hunting Analyser session to start building private evidence for your planner and progress views.</p>
+        </div>
+        <a class="btn btn-primary" href="submit.html">Log a hunt</a>
+      </div>`;
+  } else {
+    const filters = [
+      ['all', 'All'],
+      ['clean', 'Clean'],
+      ['flagged', 'Flagged'],
+      ['faulted', 'Faulted'],
+    ];
+    $('#k-rule-filters').innerHTML = `
+      <div class="admin-rule-filters" role="group" aria-label="Filter hunts by rules check">
+        ${filters.map(([key, label]) => `<button type="button" class="admin-rule-filter" data-rule-filter="${key}" aria-pressed="${ruleFilter === key}">${label}</button>`).join('')}
+      </div>`;
+
+    if (!visible.length) {
+      $('#k-book').innerHTML = `
+        <div class="panel empty-action admin-empty">
+          <div>
+            <h3>No ${esc(ruleFilter)} hunts</h3>
+            <p class="fine dim">None of the hunts in this browser currently have that rules status.</p>
+          </div>
+          <button type="button" class="btn btn-secondary" data-rule-filter="all">Show all hunts</button>
+        </div>`;
+    } else {
+      dataTable($('#k-book'), {
+        cols: [
+          { id: 'loggedAt', label: 'Date', cell: (h) => day(h.loggedAt) },
+          { id: 'ground', label: 'Ground', cell: (h) => esc(h.ground || '—') },
+          { id: 'vocation', label: 'Vocation', cell: (h) => esc(h.vocation || (h.party ? 'Party' : '—')) },
+          { id: 'level', label: 'Level', num: true, cell: (h) => nf(h.level) },
+          { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (h) => kk(h.xpRawRate) },
+          { id: 'check', label: 'Rules', cell: (h) => {
+            const { key, verdict } = statuses.get(String(h.id));
+            if (key === 'faulted') return `<span class="badge badge-error" title="${esc(verdict.faults.join(' '))}">Faulted</span>`;
+            if (key === 'flagged') return `<span class="badge badge-warning" title="${esc(verdict.flags.join(' '))}">Flagged</span>`;
+            return '<span class="badge badge-success">Clean</span>';
+          } },
+          { id: 'x', label: '', cell: (h) => `<button type="button" class="btn btn-destructive btn-sm admin-delete" data-drop="${esc(h.id)}">Delete</button>` },
+        ],
+        rows: visible,
+      });
+    }
+  }
 
   $('#k-book').onclick = (e) => {
+    const nextFilter = e.target.dataset?.ruleFilter;
+    if (nextFilter) {
+      ruleFilter = nextFilter;
+      refresh();
+      return;
+    }
     const id = e.target.dataset?.drop;
     if (!id) return;
     const before = logbook();
@@ -125,6 +181,13 @@ function refresh() {
     };
   }
 }
+
+$('#k-rule-filters').addEventListener('click', (e) => {
+  const nextFilter = e.target.dataset?.ruleFilter;
+  if (!nextFilter || nextFilter === ruleFilter) return;
+  ruleFilter = nextFilter;
+  refresh();
+});
 
 function download(filename, mime, content) {
   const a = document.createElement('a');

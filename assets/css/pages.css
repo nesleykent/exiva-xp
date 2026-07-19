@@ -27,6 +27,12 @@
   width: 28px;
   height: 28px;
 }
+.home-primary-action { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s5); padding: var(--s5); margin-bottom: var(--s4); }
+.home-primary-action .home-workspace-icon { width: 64px; height: 64px; border-radius: var(--r-lg); background: rgb(var(--surface-2)); }
+.home-primary-copy h3, .home-primary-copy p { margin: 0; }
+.home-primary-copy h3 { font-size: var(--fs-18); line-height: 24px; letter-spacing: -.2px; }
+.home-primary-copy p { margin-top: var(--s2); max-width: 58ch; }
+.home-primary-actions { display: flex; align-items: center; gap: var(--s2); }
 
 /* stories rail of grounds */
 .story-rail {
@@ -223,6 +229,11 @@ table.grid .num { text-align: right; }
 table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .admin-transfer-actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .admin-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); }
+.admin-rule-filters { display: flex; gap: var(--s5); overflow-x: auto; margin-bottom: var(--s4); border-bottom: 1px solid rgb(var(--line)); scrollbar-width: none; }
+.admin-rule-filters::-webkit-scrollbar { display: none; }
+.admin-rule-filter { min-height: 40px; padding: 0 0 var(--s2); border: 0; border-bottom: 2px solid transparent; background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-14); font-weight: 600; cursor: pointer; white-space: nowrap; }
+.admin-rule-filter[aria-pressed="true"] { color: rgb(var(--ink)); border-bottom-color: rgb(var(--blue)); }
+.admin-empty { margin-top: var(--s2); }
 .ok { color: rgb(var(--green)); font-weight: 600; }
 .bad { color: rgb(var(--red)); font-weight: 600; }
 
@@ -879,6 +890,11 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .hs-row-value b { font-size: var(--fs-15); }
 
 @media (max-width: 700px) {
+  .home-primary-action { grid-template-columns: auto minmax(0, 1fr); gap: var(--s4); }
+  .home-primary-action .home-workspace-icon { width: 48px; height: 48px; }
+  .home-primary-actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-primary-actions .btn { width: 100%; }
+  .admin-rule-filter { min-height: var(--tap); }
   #imb-tier-cards { grid-template-columns: 1fr; }
   .tool-grid { grid-template-columns: minmax(0, 1fr); }
   .tool-fields .lbl,
