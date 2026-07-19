@@ -163,11 +163,11 @@ stage.innerHTML = `
     </div>
     <div class="filter-compact-groups">
       <div class="filter-segment"><span class="eyebrow">Party</span>${segmentedControl('f-party', 'Party size', PARTY_OPTIONS, state.mode)}</div>
-      <div class="filter-segment"><span class="eyebrow">Level</span>${segmentedControl('f-level-band', 'Level range', LEVEL_OPTIONS, state.levelBand)}</div>
+      <div class="filter-segment"><span class="eyebrow">Level range</span>${segmentedControl('f-level-band', 'Level range', LEVEL_OPTIONS, state.levelBand)}</div>
       <button type="button" class="advanced-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more">More filters</button>
     </div>
     <div class="advanced-filters" id="f-more" hidden>
-      <label class="lbl lbl-narrow"><span class="eyebrow">Level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
+      <label class="lbl"><span class="eyebrow">Exact level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
       <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value=""${characterVocation ? '' : ' selected'}>All</option>${[...VOCATIONS].sort().map((v) => `<option${v === characterVocation ? ' selected' : ''}>${v}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>

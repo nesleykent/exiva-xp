@@ -74,11 +74,17 @@
 .segmented button[aria-pressed="true"] { background: rgb(var(--surface-raised)); color: rgb(var(--ink)); box-shadow: 0 1px 3px rgba(var(--shadow), .12); }
 .filter-compact { display: grid; gap: var(--s4); }
 .filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
-.filter-compact-groups { display: flex; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.filter-compact-groups { display: flex; align-items: end; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
 .filter-segment { display: grid; gap: var(--s2); min-width: 0; }
-.advanced-toggle { min-height: 30px; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
+.advanced-toggle { align-self: end; min-height: 30px; margin-left: auto; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .advanced-filters[hidden] { display: none; }
-.advanced-filters { display: flex; flex-wrap: wrap; gap: var(--s3); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.advanced-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.advanced-filters .lbl { min-width: 0; gap: var(--s2); }
+.advanced-filters .lbl > input, .advanced-filters .lbl > select, .advanced-filters .lbl > .sort-menu { min-width: 0; width: 100%; }
+
+@media (max-width: 1000px) {
+  .advanced-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .tile.is-selected { border-color: rgb(var(--blue)); box-shadow: 0 0 0 1px rgb(var(--blue)); }
 .tile-rank { position: absolute; top: -9px; right: var(--s3); }
 .planner-card { position: relative; display: grid; gap: var(--s3); }
@@ -109,6 +115,9 @@
   .filter-toggle:hover { background: rgb(var(--surface-btn2-hover)); }
   .filter-toggle .chevron { transition: transform var(--t-hover) var(--e-standard); }
   .filter-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .filter-compact-head { align-items: stretch; flex-direction: column; }
+  .advanced-toggle { min-height: var(--tap); }
+  .advanced-filters { grid-template-columns: minmax(0, 1fr); }
   .filter-more { display: none; grid-template-columns: 1fr 1fr; gap: var(--s2); }
   .filter-more.open { display: grid; }
   .filter-more .lbl, .filter-more .lbl-narrow { min-width: 0; width: auto; }
