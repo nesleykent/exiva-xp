@@ -2,10 +2,10 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, nf, kk, hm, day } from '../lib/fmt.js';
+import { compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
-import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
+import { bars, flow, sparkline, attachVizHover, categorical, donut } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
@@ -27,7 +27,7 @@ const isConsecutiveDay = (a, b) => (new Date(b.date) - new Date(a.date)) === ONE
 const dailyXp = [];
 for (let i = 1; i < history.length; i++) {
   if (!isConsecutiveDay(history[i - 1], history[i])) continue;
-  dailyXp.push({ key: history[i].date.slice(5), n: Math.max(0, history[i].experience - history[i - 1].experience) });
+  dailyXp.push({ key: md(history[i].date), label: history[i].date, n: Math.max(0, history[i].experience - history[i - 1].experience) });
 }
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
@@ -50,7 +50,7 @@ function signed(value, fmt = nf) {
 const highscoreTrends = HIGHSCORE_CATEGORIES.map((s) => {
   const series = history
     .filter((row) => row[s.valueField] != null)
-    .map((row) => ({ key: row.date.slice(5), n: row[s.valueField] }));
+    .map((row) => ({ key: md(row.date), n: row[s.valueField] }));
   const values = new Set(series.map((row) => row.n));
   const latestPoint = series.at(-1);
   const previousPoint = series.length > 1 ? series.at(-2) : null;
@@ -80,7 +80,7 @@ function highscoreTrendCard(s) {
         <span><b class="num">${signed(s.trackedDelta)}</b><small>Tracked delta</small></span>
       </div>
       <div class="sparkline">
-        ${s.moving ? sparkline(s.series, { fmt: nf }) : '<span class="fine dim">No trend drawn until this metric has at least two distinct values.</span>'}
+        ${s.moving ? sparkline(s.series, { fmt: nf }) : '<p class="viz-empty">No trend drawn until this metric has at least two distinct values.</p>'}
       </div>
     </article>`;
 }
@@ -96,7 +96,8 @@ const topProfit = table.filter((r) => r.profitRate != null)
 const busiest = tally(hunts, (h) => h.ground).slice(0, 10);
 
 const perMonth = tally(hunts, (h) => String(h.loggedAt || '').slice(0, 7))
-  .sort((a, b) => a.key.localeCompare(b.key));
+  .sort((a, b) => a.key.localeCompare(b.key))
+  .map(({ key, n }) => ({ key: ym(key), n }));
 
 const topKills = tally(
   hunts.flatMap((h) => h.kills || []),
@@ -133,44 +134,23 @@ const board = (title, data, svg) => (data.length ? `
 // ---------------------------------------------------------------- profit share by ground
 
 // A ground only appears here if it has at least one hunt with a real
-// (non-null) profit balance — never zero-filled for grounds that were only
-// ever logged without a balance.
+// (non-null) positive profit balance — never zero-filled for grounds that
+// were only logged without a balance, and a loss-making ground has no
+// meaningful "share" of positive profit so it stays out of the donut too.
 const profitByGround = tally(
   hunts.filter((h) => h.balance != null),
   (h) => h.ground,
   (h) => h.balance,
-).slice(0, 10);
-
-// Element colours (--c-*) are this project's only categorical data palette
-// (AGENTS.md §5); cycling them for donut segments matches their sanctioned
-// "meter" use rather than inventing a new chart accent set.
-const DONUT_COLORS = ['--c-ice', '--c-fire', '--c-earth', '--c-energy', '--c-holy', '--c-death', '--c-physical'];
-
-/** Hand-rolled donut (stacked stroke-dasharray arcs on one circle) — no
- * chart library, same inline-SVG convention as viz/svg.js's bars()/flow(). */
-function profitShareDonut(data, total) {
-  const size = 200;
-  const r = 74;
-  const cx = size / 2;
-  const cy = size / 2;
-  const sw = 30;
-  const circumference = 2 * Math.PI * r;
-  let offset = 0;
-  const arcs = data.map((d, i) => {
-    const frac = d.n / total;
-    const dash = Math.max(0.5, frac * circumference);
-    const seg = `<circle class="vdonut-seg" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgb(var(${DONUT_COLORS[i % DONUT_COLORS.length]}))" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(1)} ${(circumference - dash).toFixed(1)}" stroke-dashoffset="${(-offset).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"><title>${esc(d.key)}: ${kk(d.n)} (${Math.round(frac * 100)}%)</title></circle>`;
-    offset += dash;
-    return seg;
-  }).join('');
-  return `<svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Profit share by ground" xmlns="http://www.w3.org/2000/svg">${arcs}<text class="vdonut-total" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central">${kk(total)}</text></svg>`;
-}
+).filter((d) => d.n > 0).slice(0, 10);
 
 function profitShareBoard(data) {
   if (!data.length) return '';
-  const total = data.reduce((sum, d) => sum + d.n, 0);
-  const legend = data.map((d, i) => `
-    <li><i class="donut-swatch" style="background:rgb(var(${DONUT_COLORS[i % DONUT_COLORS.length]}))"></i>
+  // fixed-order categorical assignment from viz/svg.js — never cycled; the
+  // tail past six grounds folds into one grey "Other" row
+  const rows = categorical(data);
+  const total = rows.reduce((sum, d) => sum + d.n, 0);
+  const legend = rows.map((d) => `
+    <li><i class="donut-swatch" style="background:rgb(var(${d.color}))"></i>
       <span>${esc(d.key)}</span>
       <b class="num">${kk(d.n)}</b>
       <small>${Math.round((d.n / total) * 100)}%</small>
@@ -179,7 +159,7 @@ function profitShareBoard(data) {
     <section class="section">
       <div class="section-bar"><h2>Profit share by ground</h2><span class="fine dim">${nf(data.length)} ground${data.length === 1 ? '' : 's'} with logged profit</span></div>
       <div class="panel panel-pad viz donut-board">
-        <div class="donut-chart">${profitShareDonut(data, total)}</div>
+        <div class="donut-chart">${donut(rows, { fmt: kk, label: 'Profit share by ground' })}</div>
         <ul class="donut-legend">${legend}</ul>
       </div>
     </section>`;
@@ -256,7 +236,8 @@ function weekHeadline() {
   const cur = usingProfit ? thisWeek.profit : thisWeek.xp;
   const pri = usingProfit ? lastWeek.profit : lastWeek.xp;
   const metric = usingProfit ? 'profit' : 'XP';
-  const fmt = kk;
+  // formatting semantics: gold wears Tibia-style kk, XP wears compact M/B
+  const fmt = usingProfit ? kk : compact;
   if (leadTone.tone === 'even') return `about even with last week — ${fmt(cur)} vs ${fmt(pri)} ${metric}`;
   return `${Math.abs(leadTone.pct)}% ${leadTone.tone === 'up' ? 'ahead of' : 'behind'} last week — ${fmt(cur)} vs ${fmt(pri)} ${metric}`;
 }
@@ -279,7 +260,7 @@ function weekComparisonBoard() {
           <span class="fine dim">${esc(rangeLabel)}</span>
         </div>
         <div class="pace-support">
-          <span><b class="num">${signed(thisWeek.xp != null && lastWeek.xp != null ? thisWeek.xp - lastWeek.xp : null, kk)}</b><small>XP</small></span>
+          <span><b class="num">${signed(thisWeek.xp != null && lastWeek.xp != null ? thisWeek.xp - lastWeek.xp : null, compact)}</b><small>XP</small></span>
           <span><b class="num">${signed(thisWeek.profit != null && lastWeek.profit != null ? thisWeek.profit - lastWeek.profit : null, kk)}</b><small>Profit</small></span>
           <span><b class="num">${signed(thisWeek.huntsCount - lastWeek.huntsCount)}</b><small>Hunts logged</small></span>
         </div>
@@ -300,7 +281,7 @@ stage.innerHTML = `
   </div>
   ${board('Daily XP gain', dailyXp, flow(dailyXp, { fmt: compact }))}
   <div class="analytics-duo">
-    ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
+    ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp, { fmt: compact }))}
     ${profitShareBoard(profitByGround)}
   </div>
   ${weekComparisonBoard()}
@@ -308,14 +289,14 @@ stage.innerHTML = `
     <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>
     <div class="skill-grid">${highscoreTrends.map(highscoreTrendCard).join('')}</div>
   </section>` : ''}
-  ${board('Best XP targets', topXp, bars(topXp))}
+  ${board('Best XP targets', topXp, bars(topXp, { fmt: compact }))}
   ${board('Best profit targets', topProfit, bars(topProfit))}
   ${board('Busiest grounds', busiest, bars(busiest, { fmt: nf }))}
-  ${board('Hunts logged over time', perMonth, flow(perMonth))}
+  ${board('Hunts logged over time', perMonth, flow(perMonth, { fmt: nf }))}
   ${board('Most killed creatures', topKills, bars(topKills, { fmt: nf }))}
   ${board('Most looted items', topDrops, bars(topDrops, { fmt: nf }))}
   ${board('Hunts by vocation', byVocation, bars(byVocation, { fmt: nf }))}
   ${hunts.length ? '' : '<div class="note note-amber" style="margin-top:24px">Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.</div>'}`;
-document.querySelectorAll('.viz').forEach((panel) => { if (panel.querySelector('.vdot')) attachFlowHover(panel); });
+document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 export {};

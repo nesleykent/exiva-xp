@@ -5,7 +5,7 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, kk, nf, day, hm } from '../lib/fmt.js';
+import { compact, kk, nf, day, hm, md } from '../lib/fmt.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
@@ -14,7 +14,7 @@ import {
   formatDateTimeInTimezone,
 } from '../lib/timezones.js';
 import { $, ring } from '../shell.js';
-import { flow, sparkline, attachFlowHover } from '../viz/svg.js';
+import { flow, sparkline, attachVizHover } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
@@ -78,7 +78,7 @@ function firstKnown(field) {
 function highscoreSeries(field) {
   return history
     .filter((row) => row[field] != null)
-    .map((row) => ({ id: row.date, key: row.date.slice(5), n: row[field] }));
+    .map((row) => ({ id: row.date, key: md(row.date), n: row[field] }));
 }
 
 const deaths = [...(profile?.deaths || [])].reverse();
@@ -390,7 +390,8 @@ function chartEvents(date) {
 }
 
 function chartPoint(row, n) {
-  return { id: row.date, key: row.date.slice(5), n, events: chartEvents(row.date) };
+  // short axis label; the canonical ISO date rides along for the tooltip
+  return { id: row.date, key: md(row.date), label: row.date, n, events: chartEvents(row.date) };
 }
 
 function xpDetailHtml(row = historyRows.at(-1)) {
@@ -442,7 +443,7 @@ function highscoreFeatureHtml(row) {
         <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
       </div>
       <div class="sparkline sparkline-lg">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<span class="fine dim">Trend appears after the next update for this skill.</span>'}
+        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<p class="viz-empty">Trend appears after the next update for this skill.</p>'}
       </div>
     </article>`;
 }
@@ -522,7 +523,7 @@ const charmPoints = latest?.charmPoints ?? null;
 const charmFirst = firstKnown('charmPoints');
 const charmDelta = charmPoints != null && charmFirst != null && charmFirst.value !== charmPoints
   ? charmPoints - charmFirst.value : null;
-const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: row.date.slice(5), n: row.experience })), 24);
+const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: md(row.date), n: row.experience })), 24);
 
 const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delta ${tone}">${text}</em>`);
 
@@ -575,7 +576,7 @@ function projectionControlsHtml() {
  * cell, never as zero — thresholds are quartiles of the real positive gains.
  */
 function activityHeatmapHtml() {
-  if (!latest || historyRows.length < 14) return '<p class="dim">Not enough tracked days yet.</p>';
+  if (!latest || historyRows.length < 14) return '<p class="viz-empty">Not enough tracked days yet.</p>';
   const gainByDate = new Map(historyRows.map((row) => [row.date, row.gain]));
   const positives = historyRows.map((row) => row.gain).filter((gain) => gain > 0).sort((a, b) => a - b);
   const quart = (p) => positives.length ? positives[Math.min(positives.length - 1, Math.floor(p * positives.length))] : Infinity;
@@ -596,9 +597,10 @@ function activityHeatmapHtml() {
       if (dayDate > end) { cells.push('<i class="hm hm-void"></i>'); continue; }
       const key = dayDate.toISOString().slice(0, 10);
       const gain = gainByDate.get(key);
+      // data-v/data-l feed the shared viz tooltip (value leads, date follows)
       cells.push(gain == null
-        ? `<i class="hm hm-null" title="${key} · no tracked measurement"></i>`
-        : `<i class="hm hm-${levelOf(gain)}" title="${key} · +${compact(gain)} XP"></i>`);
+        ? `<i class="hm hm-null" data-v="No measurement" data-l="${key}"></i>`
+        : `<i class="hm hm-${levelOf(gain)}" data-v="+${compact(gain)} XP" data-l="${key}"></i>`);
     }
     weeks.push(`<div class="hm-week"><span class="hm-month">${label}</span>${cells.join('')}</div>`);
   }
@@ -686,7 +688,7 @@ stage.innerHTML = `
   </section>
 
   <section class="activity-duo" aria-label="Hunting activity and recent deaths">
-    <div class="panel panel-pad">
+    <div class="panel panel-pad viz">
       <p class="eyebrow" style="margin:0 0 12px">Daily XP activity</p>
       ${activityHeatmapHtml()}
     </div>
@@ -759,6 +761,7 @@ stage.innerHTML = `
   </section>`;
 
 bindCharacterTabs();
+document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 // ---- chart controls: metric × year × month, months only for tracked data ----
 const xpState = { metric: 'daily', year: chartYears.at(-1) || 'all', month: 'all' };
@@ -787,10 +790,8 @@ function renderXpChart() {
   const selected = xpRowsForChart(xpState.metric, xpState);
   $('#xp-chart-title').textContent = selected.title;
   $('#xp-chart-note').textContent = selected.note;
-  chart.innerHTML = selected.data.length
-    ? flow(selected.data, { baseline: selected.baseline, fmt: selected.fmt })
-    : '<p class="dim">Not enough rows for this chart yet.</p>';
-  attachFlowHover(chart.closest('.viz'));
+  chart.innerHTML = flow(selected.data, { baseline: selected.baseline, fmt: selected.fmt, empty: 'Not enough rows for this chart yet.' });
+  attachVizHover(chart.closest('.viz'));
   document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
     btn.setAttribute('aria-pressed', String(btn.dataset.xpMetric === xpState.metric));
   });

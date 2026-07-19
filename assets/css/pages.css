@@ -775,7 +775,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-event-legend { display: flex; gap: var(--s3); margin-top: var(--s2); color: rgb(var(--ink-2)); font-size: var(--fs-11); }
 .chart-event-legend span { display: inline-flex; align-items: center; gap: 5px; }
 .chart-event-legend i { width: 10px; height: 10px; display: inline-block; }
-.chart-event-legend .event-level { border: 2px solid rgb(var(--green)); border-radius: var(--r-circle); background: rgb(var(--surface)); }
+.chart-event-legend .event-level { border: 2px solid rgb(var(--green)); border-radius: var(--r-circle); background: rgb(var(--surface-raised)); }
 .chart-event-legend .event-death { position: relative; }
 .chart-event-legend .event-death::before, .chart-event-legend .event-death::after { content: ''; position: absolute; left: 4px; top: 0; width: 2px; height: 11px; background: rgb(var(--red)); }
 .chart-event-legend .event-death::before { transform: rotate(45deg); }
@@ -911,6 +911,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: grid;
   align-items: center;
 }
+/* inside a compact sparkline slot the standard empty state stays small and left-aligned */
+.sparkline .viz-empty { min-height: 0; padding: 0; font-size: var(--fs-12); text-align: left; justify-items: start; }
 .sparkline-svg {
   width: 100%;
   height: auto;
@@ -918,8 +920,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .sparkline .vline { fill: none; stroke: rgb(var(--blue)); stroke-width: 2; stroke-linecap: round; }
 .sparkline .varea { fill: rgba(var(--blue), .1); }
-.sparkline .vdot { fill: rgb(var(--blue)); }
-.sparkline .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); }
+.sparkline .vdot { fill: rgb(var(--blue)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
+.sparkline .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 
 /* one featured metric (full trend card) beside a compact list for the rest —
    the old equal-weight card grid made the one card with a real trend look
@@ -1016,24 +1018,37 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 .viz { position: relative; }
 .viz svg { display: block; width: 100%; height: auto; }
-/* hover readout for flow() charts (attachFlowHover) */
+/* shared hover readout (attachVizHover): value leads, label follows */
 .viz-tip {
   position: absolute; transform: translate(-50%, -130%);
-  padding: 3px 8px; font-size: var(--fs-12); white-space: nowrap; pointer-events: none; z-index: 5;
+  display: grid; gap: 1px; text-align: center;
+  padding: 4px 10px; white-space: nowrap; pointer-events: none; z-index: 5;
   background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--stroke));
   border-radius: var(--r-input); box-shadow: var(--shadow-float);
+}
+.viz-tip b { font-size: var(--fs-13); font-variant-numeric: tabular-nums; }
+.viz-tip span { color: rgb(var(--ink-2)); font-size: var(--fs-11); }
+.viz-tip span:empty { display: none; }
+/* crosshair snapped to the nearest point on flow() charts */
+.viz-cross { position: absolute; width: 1px; background: rgb(var(--line-strong)); pointer-events: none; z-index: 4; }
+/* standard chart empty state — one look wherever a chart has no rows yet */
+.viz-empty {
+  display: grid; place-items: center; min-height: 140px;
+  padding: var(--s5); margin: 0;
+  color: rgb(var(--ink-2)); font-size: var(--fs-13); text-align: center;
 }
 .viz .vbar { fill: rgb(var(--blue)); }
 .viz .vbar:hover { fill: rgb(var(--blue-press)); }
 .viz .vlabel { fill: rgb(var(--ink)); font-size: var(--fs-12); font-family: var(--f-ui); }
-.viz .vvalue { fill: rgb(var(--ink-2)); font-size: var(--fs-12); font-family: var(--f-ui); }
+.viz .vvalue { fill: rgb(var(--ink-2)); font-size: var(--fs-12); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 .viz .vaxis { stroke: rgb(var(--line)); }
-.viz .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); }
+.viz .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 .viz .vline { fill: none; stroke: rgb(var(--blue)); stroke-width: 2; stroke-linecap: round; }
 .viz .varea { fill: rgba(var(--blue), .1); }
-.viz .vdot { fill: rgb(var(--blue)); }
+/* dots wear a 2px surface ring so they stay legible crossing the line */
+.viz .vdot { fill: rgb(var(--blue)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .viz .vevent { pointer-events: none; }
-.viz .vevent-level { fill: rgb(var(--surface)); stroke: rgb(var(--green)); stroke-width: 2; }
+.viz .vevent-level { fill: rgb(var(--surface-raised)); stroke: rgb(var(--green)); stroke-width: 2; }
 .viz .vevent-death { fill: none; stroke: rgb(var(--red)); stroke-width: 2.5; stroke-linecap: round; }
 .viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
 .donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }

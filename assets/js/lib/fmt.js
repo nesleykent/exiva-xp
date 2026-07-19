@@ -76,3 +76,24 @@ export function day(iso) {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? '—' : d.toISOString().slice(0, 10);
 }
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * Chart-axis date labels. Tooltips, tables and the inspector keep the site's
+ * canonical ISO form; axes use these short human labels (same style as the
+ * month filter buttons and the heatmap's month markers). String-parsed, so
+ * no timezone can shift the day.
+ */
+
+/** "2026-07-19" → "Jul 19" */
+export function md(iso) {
+  const m = String(iso ?? '').match(/^\d{4}-(\d{2})-(\d{2})/);
+  return m ? `${MONTHS[+m[1] - 1]} ${+m[2]}` : '—';
+}
+
+/** "2026-07" (or any longer ISO date) → "Jul 2026" */
+export function ym(iso) {
+  const m = String(iso ?? '').match(/^(\d{4})-(\d{2})/);
+  return m ? `${MONTHS[+m[2] - 1]} ${m[1]}` : '—';
+}
