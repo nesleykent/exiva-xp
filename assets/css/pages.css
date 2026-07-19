@@ -79,6 +79,8 @@
 .advanced-toggle { align-self: end; min-height: 30px; margin-left: auto; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .advanced-filters[hidden] { display: none; }
 .advanced-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.advanced-filters .filter-segment { min-width: 0; }
+.advanced-filters .filter-segment .segmented { width: 100%; }
 .advanced-filters .lbl { min-width: 0; gap: var(--s2); }
 .advanced-filters .lbl > input, .advanced-filters .lbl > select, .advanced-filters .lbl > .sort-menu { min-width: 0; width: 100%; }
 

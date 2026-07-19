@@ -3,7 +3,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, segmentedControl, bindSegmented, sortMenu, bindSortMenu, meters, note, dataTable } from '../shell.js';
+import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
 import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEEDS, TASK_SPEED_LABEL } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
@@ -26,8 +26,8 @@ const SORTS = {
 const TIER_OPTIONS = [['', 'Any'], ...tiers.map((tier) => [tier, tier])];
 const FAMILY_OPTIONS = [['', 'Any'], ...commonFamilies.map((family) => [family, family])];
 const SORT_OPTIONS = [['name', 'Name'], ['hp', 'Hitpoints'], ['xp', 'Experience']];
-const FAMILY_FILTERS = Object.fromEntries([['', 'Any'], ...families.map((family) => [family, family])].map(([key, label]) => [key, [label]]));
-const TASK_FILTERS = Object.fromEntries([['', 'Any'], ...TASK_SPEEDS.map((speed) => [speed, TASK_SPEED_LABEL[speed]])].map(([key, label]) => [key, [label]]));
+const FAMILY_FILTER_OPTIONS = [['', 'Any'], ...families.map((family) => [family, family])];
+const TASK_FILTER_OPTIONS = [['', 'Any'], ...TASK_SPEEDS.map((speed) => [speed, TASK_SPEED_LABEL[speed]])];
 
 stage.innerHTML = `
   <header id="codex-head" style="padding: 8px 0 4px">
@@ -46,8 +46,8 @@ stage.innerHTML = `
       <button type="button" class="advanced-toggle" id="c-toggle" aria-expanded="false" aria-controls="c-more">All classes</button>
     </div>
     <div class="advanced-filters" id="c-more" hidden>
-      <label class="lbl"><span class="eyebrow">Every class</span>${sortMenu('c-family-all', FAMILY_FILTERS, state.family)}</label>
-      <label class="lbl"><span class="eyebrow">Task speed</span>${sortMenu('c-task-speed', TASK_FILTERS, state.taskSpeed)}</label>
+      <div class="filter-segment"><span class="eyebrow">Every class</span>${segmentedControl('c-family-all', 'Every creature class', FAMILY_FILTER_OPTIONS, state.family)}</div>
+      <div class="filter-segment"><span class="eyebrow">Task speed</span>${segmentedControl('c-task-speed', 'Task speed', TASK_FILTER_OPTIONS, state.taskSpeed)}</div>
     </div>
   </form>
   <div id="out"></div>
@@ -271,7 +271,7 @@ function render() {
 }
 
 $('#c-q').addEventListener('input', (e) => { state.q = e.target.value; state.shown = 8; render(); });
-bindSortMenu('c-family-all', (value) => {
+bindSegmented('c-family-all', (value) => {
   state.family = value;
   state.shown = 8;
   $('#c-family').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.value === state.family)));
@@ -281,12 +281,11 @@ $('#c-filter').addEventListener('submit', (e) => e.preventDefault());
 bindSegmented('c-tier', (value) => { state.tier = value; state.shown = 8; render(); });
 bindSegmented('c-family', (value) => {
   state.family = value;
-  $('#c-family-all .value').textContent = FAMILY_FILTERS[value][0];
-  $('#c-family-all').querySelectorAll('.sort-menu-item').forEach((item) => item.setAttribute('aria-checked', String(item.dataset.value === value)));
+  $('#c-family-all').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.value === value)));
   state.shown = 8;
   render();
 });
-bindSortMenu('c-task-speed', (value) => { state.taskSpeed = value; state.shown = 8; render(); });
+bindSegmented('c-task-speed', (value) => { state.taskSpeed = value; state.shown = 8; render(); });
 bindSegmented('c-sort', (value) => { state.sort = value; state.shown = 8; render(); });
 $('#more').addEventListener('click', () => { state.shown += 24; render(); });
 $('#c-toggle').addEventListener('click', () => {
