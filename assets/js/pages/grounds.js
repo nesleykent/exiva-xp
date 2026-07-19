@@ -37,7 +37,7 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', taskSpeed: '', sort: 'xpRawRate', dir: 'desc',
+  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'xpRawRate', dir: 'desc',
   levelBand: 'tracked', detailSlug: param('g') || null, shown: 6,
 };
 
@@ -86,7 +86,7 @@ const questText = (groundSlug) => {
 
 function filteredRows() {
   const tokens = fold(state.q).split(/\s+/).filter(Boolean);
-  const ix = (tokens.length || state.element || state.family || state.taskSpeed) ? intel() : null;
+  const ix = (tokens.length || state.element || state.family) ? intel() : null;
 
   return table.filter((r) => {
     if (state.levelBand === 'tracked' && state.level != null && (r.level == null || r.level > state.level)) return false;
@@ -102,7 +102,6 @@ function filteredRows() {
     if (state.area && areaBySlug.get(r.groundSlug) !== fold(state.area)) return false;
     if (state.element && ix.get(r.groundSlug)?.attackOrder?.[0]?.el !== state.element) return false;
     if (state.family && !ix.get(r.groundSlug)?.families.has(state.family)) return false;
-    if (state.taskSpeed && !ix.get(r.groundSlug)?.taskSpeeds.has(state.taskSpeed)) return false;
     if (tokens.length) {
       const i = ix.get(r.groundSlug);
       const searchSets = [
@@ -172,7 +171,6 @@ stage.innerHTML = `
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Creature type</span><select id="f-family"><option value="">All</option>${familyOptions().map((family) => `<option>${esc(family)}</option>`).join('')}</select></label>
-      <label class="lbl"><span class="eyebrow">Task speed</span><select id="f-task-speed"><option value="">All</option>${TASK_SPEEDS.map((speed) => `<option value="${speed}">${TASK_SPEED_LABEL[speed]}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Playstyle</span><input type="search" id="f-playstyle" placeholder="e.g. forked, arrows"></label>
       <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('f-sort', SORTS, state.sort)}</label>
     </div>
@@ -411,7 +409,6 @@ bind('#f-voc', 'vocation');
 bind('#f-area', 'area');
 bind('#f-element', 'element');
 bind('#f-family', 'family');
-bind('#f-task-speed', 'taskSpeed');
 bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;

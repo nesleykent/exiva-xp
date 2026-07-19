@@ -4,7 +4,7 @@ import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
 import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
-import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEED_LABEL } from '../engine/codex.js';
+import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEEDS, TASK_SPEED_LABEL } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
 const PAGE_TITLE = 'Creature codex · Exiva XP';
@@ -15,7 +15,7 @@ const tiers = [...new Set(codex.creatures.map((c) => c.tier).filter(Boolean))].s
 const familyCounts = codex.creatures.reduce((counts, creature) => counts.set(creature.family, (counts.get(creature.family) || 0) + 1), new Map());
 const commonFamilies = [...families].sort((a, b) => familyCounts.get(b) - familyCounts.get(a)).slice(0, 3);
 
-const state = { q: '', tier: '', family: '', sort: 'name', shown: 8, detailSlug: param('c') || null };
+const state = { q: '', tier: '', family: '', taskSpeed: '', sort: 'name', shown: 8, detailSlug: param('c') || null };
 
 const SORTS = {
   name: ['Name', (c) => c.name, 'asc'],
@@ -45,6 +45,7 @@ stage.innerHTML = `
     </div>
     <div class="advanced-filters" id="c-more" hidden>
       <label class="lbl"><span class="eyebrow">Every class</span><select id="c-family-all"><option value="">Any</option>${families.map((f) => `<option>${esc(f)}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Task speed</span><select id="c-task-speed"><option value="">Any</option>${TASK_SPEEDS.map((speed) => `<option value="${speed}">${TASK_SPEED_LABEL[speed]}</option>`).join('')}</select></label>
     </div>
   </form>
   <div id="out"></div>
@@ -227,6 +228,7 @@ function render() {
       if (q && !c.key.includes(q)) return false;
       if (state.tier && c.tier !== state.tier) return false;
       if (state.family && c.family !== state.family) return false;
+      if (state.taskSpeed && c.taskSpeed !== state.taskSpeed) return false;
       return true;
     })
     .sort((a, b) => {
@@ -276,6 +278,7 @@ $('#c-family-all').addEventListener('input', (e) => {
 $('#c-filter').addEventListener('submit', (e) => e.preventDefault());
 bindSegmented('c-tier', (value) => { state.tier = value; state.shown = 8; render(); });
 bindSegmented('c-family', (value) => { state.family = value; $('#c-family-all').value = value; state.shown = 8; render(); });
+$('#c-task-speed').addEventListener('input', (e) => { state.taskSpeed = e.target.value; state.shown = 8; render(); });
 bindSegmented('c-sort', (value) => { state.sort = value; state.shown = 8; render(); });
 $('#more').addEventListener('click', () => { state.shown += 24; render(); });
 $('#c-toggle').addEventListener('click', () => {
