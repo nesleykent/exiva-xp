@@ -616,7 +616,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .imb-price-input-market input {
   border-color: rgb(var(--blue));
-  background: rgba(var(--blue), 0.08);
+  background: rgba(var(--blue), 0.14);
+  box-shadow: 0 0 0 1px rgb(var(--blue)) inset;
 }
 .imb-card:focus-visible {
   outline: none;

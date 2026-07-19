@@ -361,7 +361,7 @@ function imbCardHtml(imb, prices) {
           ${imbIcon(imb)}
           <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
         </div>
-        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${COIN_ICON} ${imbCompact(cheapest.total)} gp`}</span>
+        <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${imbCompact(cheapest.total)} gp`}</span>
       </div>
     </button>`;
 }
@@ -412,7 +412,6 @@ const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const TIER_TEXT = { basic: 'imb-tier-text-basic', intricate: 'imb-tier-text-intricate', powerful: 'imb-tier-text-powerful' };
 
 const INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.25" fill="currentColor" stroke-width="1.5"/></svg>';
-const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-label="Gold pieces" role="img"><title>Gold pieces</title><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/></svg>';
 const RESET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';
 const MARKET_ICON = '<svg class="imb-icon imb-icon-sm imb-method-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16l-2 10H6L4 9Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/><path d="M9 13h6"/></svg>';
 
@@ -434,7 +433,7 @@ function compareRowHtml(label, icon, option, cheapest) {
   return `
     <div class="imb-compare-row">
       <span>${icon}<b>${esc(label)}</b></span>
-      <strong>${COIN_ICON} ${nf(option.total)} gp</strong>
+      <strong>${nf(option.total)} gp</strong>
       ${diff > 0 ? `<em>(+${nf(diff)}gp)</em>` : '<em>Best</em>'}
     </div>`;
 }
@@ -464,7 +463,7 @@ function tierCardHtml(imb, tierId, calc) {
       <span class="imb-item-row-label">${itemIcon(it.itemId, 'imb-icon-sm')}${nf(it.quantity)}x ${esc(it.name)}</span>
       <span class="imb-row-actions">
         ${acquisitionIcon(imb, cheapest, it.itemId)}
-        <button type="button" class="imb-copy-btn" data-copy-text="${esc(`${it.quantity}x ${it.name}`)}" title="Copy" aria-label="Copy ${esc(`${it.quantity}x ${it.name}`)}">${COPY_ICON}</button>
+        <button type="button" class="imb-copy-btn" data-copy-text="${esc(it.name.trim())}" title="Copy item name" aria-label="Copy item name: ${esc(it.name.trim())}">${COPY_ICON}</button>
       </span>
     </span>`);
   return `
@@ -484,7 +483,7 @@ function tierCardHtml(imb, tierId, calc) {
     ? `<button type="button" class="imb-total-info" data-tier-info="${tierId}" aria-controls="imb-tier-pop-${tierId}" aria-expanded="false">Total ${INFO_ICON}</button>`
     : '<span class="imb-total-label">Total</span>'}
       <span class="imb-tier-total-right">
-        ${!cheapest ? '<b class="dim">—</b>' : `<b>${COIN_ICON} ${nf(cheapest.total)} gp</b>`}
+        ${!cheapest ? '<b class="dim">—</b>' : `<b>${nf(cheapest.total)} gp</b>`}
         ${cheapest ? `<button type="button" class="imb-copy-btn" data-copy-tier="${tierId}" title="Copy shopping list" aria-label="Copy shopping list">${COPY_ICON}</button>` : ''}
       </span>
     </div>
@@ -560,20 +559,54 @@ function openImbuementModal(id) {
       </div>
     </div>`;
   renderModalTiers(imb, world);
+  /**
+   * Refresh one price row in place after an edit/reset — never regenerate
+   * the whole #imb-price-inputs block, or a keystroke in a still-focused
+   * input would blow away that input (and the user's cursor position).
+   */
+  function refreshPriceRow(itemId) {
+    const label = modal.querySelector(`[data-price-item="${itemId}"]`)?.closest('.imb-price-input');
+    if (!label) return;
+    const entry = imbPrices(world)[itemId];
+    const fromMarket = entry?.source === 'tibiamarket';
+    const hasMarketFallback = marketForWorld?.[itemId] != null;
+    const canReset = entry?.source === 'manual' && hasMarketFallback;
+    label.classList.toggle('imb-price-input-market', fromMarket);
+    let resetButton = label.querySelector('[data-reset-item]');
+    if (canReset && !resetButton) {
+      label.insertAdjacentHTML('beforeend', `<button type="button" class="imb-copy-btn" data-reset-item="${esc(itemId)}" title="Reset to TibiaMarket price" aria-label="Reset ${esc(itemId)} to TibiaMarket price">${RESET_ICON}</button>`);
+      resetButton = label.querySelector('[data-reset-item]');
+      resetButton.addEventListener('click', () => {
+        saveItemPrice(world, itemId, null);
+        const input = label.querySelector('[data-price-item]');
+        input.value = imbPrices(world)[itemId]?.price ?? '';
+        refreshPriceRow(itemId);
+        renderModalTiers(imb, world);
+        renderImbuementGrid();
+        say('Reset to TibiaMarket price');
+      });
+    } else if (!canReset && resetButton) {
+      resetButton.remove();
+    }
+  }
   modal.querySelectorAll('[data-price-item]').forEach((input) => {
     input.addEventListener('input', () => {
       const value = input.value === '' ? null : Number(input.value);
       saveItemPrice(world, input.dataset.priceItem, value);
+      refreshPriceRow(input.dataset.priceItem);
       renderModalTiers(imb, world);
       renderImbuementGrid();
     });
   });
   modal.querySelectorAll('[data-reset-item]').forEach((button) => {
     button.addEventListener('click', () => {
-      saveItemPrice(world, button.dataset.resetItem, null);
+      const itemId = button.dataset.resetItem;
+      saveItemPrice(world, itemId, null);
+      const input = modal.querySelector(`[data-price-item="${itemId}"]`);
+      if (input) input.value = imbPrices(world)[itemId]?.price ?? '';
+      refreshPriceRow(itemId);
       renderModalTiers(imb, world);
       renderImbuementGrid();
-      openImbuementModal(id);
       say('Reset to TibiaMarket price');
     });
   });
