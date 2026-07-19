@@ -10,7 +10,7 @@
  */
 
 import { RARITY } from './codex.js';
-import { fold, closeness, depluralize } from '../lib/text.js';
+import { fold, closeness, depluralize, slug } from '../lib/text.js';
 
 /**
  * @param {Array<{name, n}>} kills
@@ -115,8 +115,10 @@ export function nameCreatures(groundName, codex) {
  * labels contain many unrelated spawns and produced false matchups.
  */
 export function population(ground, codex, huntsAtGround = []) {
+  const groundSlug = ground.slug || slug(ground.name);
   const killTotals = new Map();
   for (const hunt of huntsAtGround) {
+    if (slug(hunt.ground) !== groundSlug) continue;
     for (const k of hunt.kills || []) {
       killTotals.set(k.name, (killTotals.get(k.name) || 0) + (k.n || 0));
     }
