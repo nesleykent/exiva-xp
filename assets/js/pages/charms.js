@@ -86,14 +86,16 @@ function card(c) {
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Charms</h1>
-    <p class="dim" style="max-width:64ch">Charms are unlocked with Charm Points, earned by completing a creature's Bestiary entry, then assigned free of charge to that creature — one charm per creature. Free accounts can have 2 charms assigned at once; Premium accounts can have 6. Detaching an assigned charm costs gold (your level × 100). Major charms cost more points and hit harder; Minor charms are cheaper utility/defensive effects. Neither tier has a character-level requirement. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
+    <p class="dim" style="max-width:64ch">Plan charm spending from tracked earned points, then match elemental charms to the creatures you actually hunt. Spending and assignments remain private in the Cyclopedia. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
   </header>
 
-  ${trackedCharmPoints ? `<div class="pulse-row">
-    <div class="panel pulse"><div class="big num">${nf(trackedCharmPoints.points)}</div><div class="eyebrow">tracked charm points</div></div>
-    <div class="panel pulse"><div class="big num">${esc(trackedCharmPoints.date)}</div><div class="eyebrow">tracked date</div></div>
+  <div class="pulse-row">
+    <div class="panel pulse"><div class="eyebrow">Earned points</div><div class="big num">${trackedCharmPoints ? nf(trackedCharmPoints.points) : '—'}</div><div class="fine dim">${trackedCharmPoints ? `tracked ${esc(trackedCharmPoints.date)}` : 'no highscore value yet'}</div></div>
+    <div class="panel pulse"><div class="eyebrow">Major charms</div><div class="big num">${nf(charms.filter((charm) => charm.tier === 'Major').length)}</div><div class="fine dim">catalogued upgrades</div></div>
+    <div class="panel pulse"><div class="eyebrow">Elemental charms</div><div class="big num">${nf(charms.filter((charm) => charm.element).length)}</div><div class="fine dim">damage options</div></div>
+    <div class="panel pulse"><div class="eyebrow">Hunt evidence</div><div class="big num">${nf(hunts.length)}</div><div class="fine dim">private analyser sessions</div></div>
   </div>
-  <p class="fine dim" style="margin:8px 0 0">earned points from the daily highscore tracker; spent points are not visible — check the Cyclopedia in game.</p>` : ''}
+  <p class="fine dim" style="margin:8px 0 0">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
 
   ${selectedCharm ? `<section class="section" style="margin-top:0">
     <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>

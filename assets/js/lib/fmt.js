@@ -48,6 +48,18 @@ export function kk(n) {
   return sign + String(Math.round(abs));
 }
 
+/** Dashboard compact notation: 1,200,000 → "1.2M", 8,410,000,000 → "8.41B". */
+export function compact(n) {
+  if (n == null || !Number.isFinite(n)) return '—';
+  const sign = n < 0 ? '-' : '';
+  const abs = Math.abs(n);
+  const trim = (value) => value.replace(/\.0+$|(?<=\.[0-9])0+$/, '');
+  if (abs >= 1e9) return `${sign}${trim((abs / 1e9).toFixed(2))}B`;
+  if (abs >= 1e6) return `${sign}${trim((abs / 1e6).toFixed(2))}M`;
+  if (abs >= 1e3) return `${sign}${trim((abs / 1e3).toFixed(1))}k`;
+  return `${sign}${Math.round(abs)}`;
+}
+
 export function gp(n) { return n == null || !Number.isFinite(n) ? '—' : `${kk(n)} gp`; }
 
 export function pct(n) { return n == null || !Number.isFinite(n) ? '—' : `${Math.round(n)}%`; }

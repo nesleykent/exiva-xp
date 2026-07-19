@@ -43,11 +43,6 @@ stage.innerHTML = `
 /** Creature dossier — artwork, lore, stats, resistances, strategy, loot, habitats — inline in the codex. */
 function renderDetail(creatureSlug) {
   document.title = PAGE_TITLE;
-  $('#c-filter').style.display = 'none';
-  $('#codex-head').style.display = 'none';
-  $('#out').innerHTML = '';
-  $('#more').hidden = true;
-  $('#more').style.display = 'none';
   const detail = $('#detail');
 
   const c = codex.creature(creatureSlug);
@@ -175,7 +170,7 @@ function renderDetail(creatureSlug) {
 function openDetail(creatureSlug, { push = true } = {}) {
   state.detailSlug = creatureSlug;
   if (push) history.pushState({ c: creatureSlug }, '', `creatures.html?c=${encodeURIComponent(creatureSlug)}`);
-  renderDetail(creatureSlug);
+  render();
   $('#detail').scrollIntoView({ block: 'start' });
 }
 
@@ -184,20 +179,16 @@ function closeDetail({ push = true } = {}) {
   document.title = PAGE_TITLE;
   if (push) history.pushState({}, '', 'creatures.html');
   $('#detail').innerHTML = '';
-  $('#c-filter').style.display = '';
-  $('#codex-head').style.display = '';
-  $('#more').style.display = '';
   render();
 }
 
 window.addEventListener('popstate', () => {
   const creatureSlug = param('c') || null;
-  if (creatureSlug) { state.detailSlug = creatureSlug; renderDetail(creatureSlug); }
+  if (creatureSlug) { state.detailSlug = creatureSlug; render(); }
   else closeDetail({ push: false });
 });
 
 function render() {
-  if (state.detailSlug) { renderDetail(state.detailSlug); return; }
   const q = fold(state.q);
   const [, val, dir] = SORTS[state.sort];
   const all = codex.creatures
@@ -214,8 +205,8 @@ function render() {
 
   $('#out').innerHTML = `
     <p class="fine dim count-line">${nf(all.length)} creatures</p>
-    <div class="tiles">
-      ${all.slice(0, state.shown).map((c) => {
+    <div class="tiles codex-grid">
+      ${all.slice(0, state.detailSlug ? 8 : state.shown).map((c) => {
         const weak = weakSpots(c).slice(0, 3);
         return `
         <a class="panel tile" href="creatures.html?c=${esc(c.slug)}" data-creature-slug="${esc(c.slug)}">
@@ -236,8 +227,10 @@ function render() {
     </div>`;
 
   const more = $('#more');
-  more.hidden = all.length <= state.shown;
+  more.hidden = !!state.detailSlug || all.length <= state.shown;
   if (!more.hidden) more.textContent = `Show more (${nf(all.length - state.shown)} left)`;
+  if (state.detailSlug) renderDetail(state.detailSlug);
+  else $('#detail').innerHTML = '';
 }
 
 for (const [sel, prop] of [['#c-q', 'q'], ['#c-tier', 'tier'], ['#c-family', 'family']]) {

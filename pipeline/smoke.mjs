@@ -353,14 +353,14 @@ assert(characterController.includes('role="tablist"') && characterController.inc
 assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
   characterController.includes('Other tracked categories') && characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
   'Highscores must remain one featured trend plus one non-duplicated list without losing Loyalty title');
-assert(homeController.includes("boot('index.html', { config: true })") &&
-  !/loadCharacter|loadCharacterHistory|loadCodex|loadGrounds/.test(homeController),
-  'Home must remain a data-light doorway instead of duplicating dashboard or directory metrics');
-assert(!homeController.includes('class="actions"') &&
-  !homeController.includes('Open character dashboard') && !homeController.includes('Plan next hunt'),
-  'Home routes must appear once in the workspace map instead of repeating as hero actions');
+assert(homeController.includes("boot('index.html', { ledger: true, config: true })") &&
+  homeController.includes('loadCharacterHistory') && homeController.includes('home-metric-grid') &&
+  homeController.includes('Next hunt · from your evidence') && homeController.includes('Needs attention'),
+  'Home must remain the owner-directed, evidence-backed daily dashboard from the standalone reference');
+assert(!homeController.includes('loadCodex') && !homeController.includes('loadCharms'),
+  'Home dashboard must not pull the multi-megabyte codex or charm catalogue');
 for (const route of ['analytics.html', 'creatures.html', 'charms.html', 'admin.html']) {
-  assert(homeController.includes(`href: '${route}'`), `${route} must remain reachable from the mobile Home doorway`);
+  assert(homeController.includes(`'${route}'`), `${route} must remain reachable from the mobile Home dashboard`);
 }
 assert(groundsController.includes('id="f" role="search"') &&
   groundsController.includes("$('#f').addEventListener('submit', (e) => e.preventDefault())"),

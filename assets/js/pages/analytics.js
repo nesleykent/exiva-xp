@@ -2,7 +2,7 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { nf, kk, hm, day } from '../lib/fmt.js';
+import { compact, nf, kk, hm, day } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
 import { bars, flow, sparkline, attachFlowHover } from '../viz/svg.js';
@@ -113,7 +113,14 @@ const topDrops = tally(
 const byVocation = tally(hunts, (h) => h.vocation || (h.party ? 'Team' : 'Unknown'));
 
 const meanMinutes = average(hunts.map((h) => h.minutes).filter((m) => m > 0));
+const meanXp = average(hunts.map((h) => hourly(h).xpRawRate).filter((value) => value != null));
 const meanProfit = average(hunts.map((h) => hourly(h).profitRate).filter((p) => p != null));
+const totalProfit = hunts.some((hunt) => hunt.balance != null)
+  ? hunts.reduce((sum, hunt) => sum + (hunt.balance || 0), 0)
+  : null;
+const totalHuntXp = hunts.some((hunt) => hunt.xpRaw != null)
+  ? hunts.reduce((sum, hunt) => sum + (hunt.xpRaw || 0), 0)
+  : null;
 const lastGain = latest && previous && isConsecutiveDay(previous, latest)
   ? Math.max(0, latest.experience - previous.experience) : null;
 
@@ -282,18 +289,17 @@ function weekComparisonBoard() {
 
 stage.innerHTML = `
   <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Progression analytics</h1>
-    <p class="dim">XP and highscores come from ${esc(characterName)}'s tracker; hunt boards use ${nf(hunts.length)} saved analyser log${hunts.length === 1 ? '' : 's'} plus ${nf(table.length)} planner rows.</p>
+    <h1 style="font-size:26px; letter-spacing:-.4px">Analytics</h1>
+    <p class="dim">Progression and hunt performance, with ${esc(characterName)}'s tracker and ${nf(hunts.length)} saved analyser session${hunts.length === 1 ? '' : 's'} kept distinct.</p>
   </header>
   <div class="pulse-row">
-    <div class="panel pulse"><div class="big num">${nf(history.length)}</div><div class="eyebrow">Tracked days</div></div>
-    <div class="panel pulse"><div class="big num">${lastGain != null ? kk(lastGain) : '—'}</div><div class="eyebrow">Last daily XP</div></div>
-    <div class="panel pulse"><div class="big num">${nf(hunts.length)}</div><div class="eyebrow">Saved hunts</div></div>
-    <div class="panel pulse"><div class="big num">${meanMinutes != null ? hm(meanMinutes) : '—'}</div><div class="eyebrow">Avg session</div></div>
-    <div class="panel pulse"><div class="big num">${meanProfit != null ? kk(meanProfit) : '—'}</div><div class="eyebrow">Avg profit/h</div></div>
+    <div class="panel pulse"><div class="eyebrow">Sessions</div><div class="big num">${nf(hunts.length)}</div><div class="fine dim">${meanMinutes != null ? `${hm(meanMinutes)} average` : `${nf(history.length)} tracked days`}</div></div>
+    <div class="panel pulse"><div class="eyebrow">Avg XP / hour</div><div class="big num">${meanXp != null ? compact(meanXp) : '—'}</div><div class="fine dim">from saved analysers</div></div>
+    <div class="panel pulse"><div class="eyebrow">Total profit</div><div class="big num">${totalProfit != null ? compact(totalProfit) : '—'}</div><div class="fine dim">${meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet'}</div></div>
+    <div class="panel pulse"><div class="eyebrow">Total hunt XP</div><div class="big num">${totalHuntXp != null ? compact(totalHuntXp) : '—'}</div><div class="fine dim">${lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only'}</div></div>
   </div>
   ${weekComparisonBoard()}
-  ${board('Daily XP gain', dailyXp, flow(dailyXp))}
+  ${board('Daily XP gain', dailyXp, flow(dailyXp, { fmt: compact }))}
   ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
   ${highscoreTrends.length ? `<section class="section">
     <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>

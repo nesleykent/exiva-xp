@@ -5,7 +5,7 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { kk, nf, day, hm } from '../lib/fmt.js';
+import { compact, kk, nf, day, hm } from '../lib/fmt.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
@@ -89,7 +89,6 @@ const compatibleRows = level == null ? [] : table.filter((r) =>
   r.xpRawRate != null
   && r.level != null
   && r.level <= level
-  && r.level >= level - 250
   && isVocationCompatible(r.vocation, characterVocation));
 const grounds4me = [...new Map(
   compatibleRows
@@ -216,7 +215,7 @@ function xpRowsForChart(metric, range) {
       title: 'Daily XP gained',
       note: `${rows.filter((row) => row.gain != null).length} days with a recorded gain`,
       baseline: 'zero',
-      fmt: kk,
+      fmt: compact,
       data: rows.filter((row) => row.gain != null).map((row) => chartPoint(row, row.gain)),
     };
   }
@@ -243,7 +242,7 @@ function xpRowsForChart(metric, range) {
     title: 'Total experience',
     note: `${rows.length} days recorded`,
     baseline: 'min',
-    fmt: kk,
+    fmt: compact,
     data: rows.map((row) => chartPoint(row, row.experience)),
   };
 }
@@ -418,7 +417,7 @@ function xpDetailHtml(row = historyRows.at(-1)) {
     <div class="mini-metrics">
       <span><b class="num">${nf(row.level)}</b><small>Level</small></span>
       <span><b class="num">${gained}</b><small>XP gain</small></span>
-      <span><b class="num">${kk(row.xpToNext)}</b><small>XP to next</small></span>
+      <span><b class="num">${compact(row.xpToNext)}</b><small>XP to next</small></span>
       <span><b class="num">${row.progress.toFixed(1)}%</b><small>Level progress</small></span>
       <span><b class="num">${row.rank ? `#${nf(row.rank)}` : '-'}</b><small>Rank</small></span>
       <span><b class="num">${prev ? signed(row.level - prev.level) : '<span class="dim">-</span>'}</b><small>Level change</small></span>
@@ -514,38 +513,30 @@ const insight = paceInsight();
 const projection = levelProjection();
 const levelProgressPct = trackedLevel != null && experience != null ? progressWithinLevel(trackedLevel, experience) : null;
 
-/** One progression zone: current state, target and ETA are distinct values,
- * while pace, recent gain and rank share one comparison band. */
+/** Template-aligned progression summary: four compact, non-duplicated facts. */
 function progressionOverviewHtml() {
-  const needed = projection ? experienceForLevel(projection.target) - experience : null;
   return `
     <div class="dashboard-metrics" aria-label="Progression at a glance">
       <article class="dashboard-metric">
-        <span>Current level</span>
-        <b class="num">${level != null ? nf(level) : '-'}</b>
-        <small>${levelProgressPct != null ? `${levelProgressPct.toFixed(0)}% to the next level` : historyNote}</small>
+        <span>Total experience</span>
+        <b class="num">${experience != null ? compact(experience) : '-'}</b>
+        <small>${historyNote}</small>
       </article>
       <article class="dashboard-metric">
-        <span>Target level</span>
-        <b class="num">${projection ? nf(projection.target) : '-'}</b>
-        <small>${needed != null ? `${kk(needed)} XP remaining` : 'Not enough pace data yet'}</small>
+        <span>Avg XP / day</span>
+        <b class="num">${avgDailyXp != null ? compact(avgDailyXp) : '-'}</b>
+        <small>${recentGains.length ? `${nf(recentGains.length)} recent recorded days` : 'Not enough pace data yet'}</small>
       </article>
       <article class="dashboard-metric">
-        <span>Projected date</span>
-        <b class="num dashboard-date">${projection ? esc(projection.eta) : '-'}</b>
-        <small>${projection ? `${nf(projection.days)} days at the recent pace` : 'Check back after more updates'}</small>
+        <span>${esc(lastGainLabel)}</span>
+        <b class="num">${lastGain != null ? `+${compact(lastGain)}` : '-'}</b>
+        <small>${bestDay?.gain ? `Best: +${compact(bestDay.gain)} on ${esc(bestDay.date)}` : historyNote}</small>
       </article>
-    </div>
-    <div class="pace-band pace-${esc(insight?.tone || 'even')}">
-      <div class="pace-message">
-        <b>${insight ? esc(insight.text) : 'Not enough history yet to compare recent pace.'}</b>
-        <span class="fine dim">${bestDay?.gain ? `Best recorded day: +${kk(bestDay.gain)} on ${esc(bestDay.date)}` : historyNote}</span>
-      </div>
-      <div class="pace-support">
-        <span><b class="num">${lastGain != null ? `+${kk(lastGain)}` : '-'}</b><small>${esc(lastGainLabel)}</small></span>
-        <span><b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b><small>XP rank</small></span>
-        <span><b class="num">${nf(streaks.current)}</b><small>Day streak</small></span>
-      </div>
+      <article class="dashboard-metric">
+        <span>World XP rank</span>
+        <b class="num">${latest?.rank ? `#${nf(latest.rank)}` : '-'}</b>
+        <small>${nf(deaths.length)} deaths · ${nf(streaks.current)} day streak</small>
+      </article>
     </div>`;
 }
 
@@ -578,7 +569,13 @@ stage.innerHTML = `
       ${ring(profile?.name || config.name)}
       <div class="hero-identity">
         <h1>${esc(profile?.name || config.name)}</h1>
-        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}</p>
+        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${level != null ? ` · Level ${nf(level)}` : ''}</p>
+        ${trackedLevel != null && experience != null ? `
+        <div class="character-level-progress">
+          <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${levelProgressPct.toFixed(0)}%</b></div>
+          <span class="track"><i style="width:${levelProgressPct.toFixed(2)}%"></i></span>
+          <small>${compact(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
+        </div>` : ''}
       </div>
     </div>
     <div class="hero-actions actions">
@@ -587,9 +584,19 @@ stage.innerHTML = `
     </div>
   </header>
 
-  <section class="progression-overview" aria-labelledby="progression-title">
-    <div class="section-bar"><h2 id="progression-title">Progression</h2><span class="fine dim">current state, target and pace</span></div>
+  <section class="progression-overview" aria-label="Progression">
     ${progressionOverviewHtml()}
+    ${grounds4me.length ? `
+    <div class="character-next-strip">
+      <div class="section-subhead first"><h3>Next hunts</h3><a class="fine dim" href="grounds.html">Open planner</a></div>
+      <div class="story-rail">
+        ${grounds4me.slice(0, 8).map((row) => `
+          <a class="story" href="grounds.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
+            ${ring(row.ground)}
+            <span class="cap">${esc(row.ground)}</span>
+          </a>`).join('')}
+      </div>
+    </div>` : ''}
     <div class="panel panel-pad viz progression-chart">
       <div class="chart-controls">
         <div>
@@ -636,14 +643,6 @@ stage.innerHTML = `
     <div class="character-tab-panel" role="tabpanel" id="panel-next" aria-labelledby="tab-next" tabindex="0">
       ${projectionControlsHtml()}
       ${grounds4me.length ? `
-      <div class="section-subhead"><h3>Level-fit hunt targets</h3><a class="fine dim" href="grounds.html">Open full planner</a></div>
-      <div class="story-rail">
-        ${grounds4me.slice(0, 8).map((row) => `
-          <a class="story" href="grounds.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
-            ${ring(row.ground)}
-            <span class="cap">${esc(row.ground)}</span>
-          </a>`).join('')}
-      </div>
       <div class="section-subhead"><h3>Planner rows</h3><span class="fine dim">${esc(characterVocation || 'character')} rows around level ${nf(level)}</span></div>
       ${groundsTable}` : `
       <div class="empty-action">

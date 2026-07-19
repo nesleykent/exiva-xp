@@ -38,7 +38,7 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
 
 const state = {
   q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'level', dir: 'asc',
-  detailSlug: param('g') || null,
+  detailSlug: param('g') || null, shown: 3,
 };
 
 /** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
@@ -167,10 +167,7 @@ stage.innerHTML = `
 /** Ground detail — stats, requirements, population and battle plan, inline in the planner. */
 function renderDetail(slug) {
   document.title = PAGE_TITLE;
-  $('#f').style.display = 'none';
-  $('#planner-head').style.display = 'none';
   const detail = $('#detail');
-  $('#out').innerHTML = '';
 
   const ground = grounds.directory.find((g) => g.slug === slug)
     || (table.find((r) => r.groundSlug === slug)
@@ -311,7 +308,7 @@ function renderDetail(slug) {
 function openDetail(slug, { push = true } = {}) {
   state.detailSlug = slug;
   if (push) history.pushState({ g: slug }, '', `grounds.html?g=${encodeURIComponent(slug)}`);
-  renderDetail(slug);
+  render();
   $('#detail').scrollIntoView({ block: 'start' });
 }
 
@@ -320,19 +317,16 @@ function closeDetail({ push = true } = {}) {
   document.title = PAGE_TITLE;
   if (push) history.pushState({}, '', 'grounds.html');
   $('#detail').innerHTML = '';
-  $('#f').style.display = '';
-  $('#planner-head').style.display = '';
   render();
 }
 
 window.addEventListener('popstate', () => {
   const slug = param('g') || null;
-  if (slug) { state.detailSlug = slug; renderDetail(slug); }
+  if (slug) { state.detailSlug = slug; render(); }
   else closeDetail({ push: false });
 });
 
 function render() {
-  if (state.detailSlug) { renderDetail(state.detailSlug); return; }
   const rows = filteredRows();
   const cards = groundCards(rows);
   const ix = intel();
@@ -343,11 +337,15 @@ function render() {
     const va = val(a); const vb = val(b);
     return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * dir;
   });
+  const selectedCard = state.detailSlug ? cards.find((card) => card.slug === state.detailSlug) : null;
+  const visibleCards = state.detailSlug
+    ? [selectedCard, ...cards.filter((card) => card !== selectedCard)].filter(Boolean).slice(0, 3)
+    : cards.slice(0, state.shown);
 
   $('#out').innerHTML = `
-    <p class="fine dim count-line">${nf(cards.length)} grounds · ${nf(rows.length)} matching rows</p>
-    <div class="tiles">
-      ${cards.map((g) => {
+    <p class="fine dim count-line">${nf(cards.length)} grounds · ${nf(rows.length)} matching rows${cards.length > visibleCards.length ? ` · showing ${nf(visibleCards.length)}` : ''}</p>
+    <div class="tiles planner-grid">
+      ${visibleCards.map((g) => {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = access.grounds?.[g.slug]?.area;
         return `
@@ -372,11 +370,14 @@ function render() {
           </div>
         </a>`;
       }).join('') || '<p class="dim">Nothing matches those filters.</p>'}
-    </div>`;
+    </div>
+    ${!state.detailSlug && cards.length > state.shown ? `<div style="text-align:center;margin-top:var(--s5)"><button type="button" class="btn btn-secondary" data-show-more>Show more (${nf(cards.length - state.shown)} left)</button></div>` : ''}`;
+  if (state.detailSlug) renderDetail(state.detailSlug);
+  else $('#detail').innerHTML = '';
 }
 
 const bind = (id, prop, map = (v) => v) => {
-  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); render(); });
+  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); state.shown = 3; render(); });
 };
 $('#f').addEventListener('submit', (e) => e.preventDefault());
 bind('#f-q', 'q');
@@ -390,6 +391,7 @@ bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;
   state.dir = SORTS[key]?.[2] || 'desc';
+  state.shown = 3;
   render();
 });
 $('#f-toggle').addEventListener('click', () => {
@@ -397,6 +399,11 @@ $('#f-toggle').addEventListener('click', () => {
   $('#f-toggle').setAttribute('aria-expanded', String(open));
 });
 $('#out').addEventListener('click', (e) => {
+  if (e.target.closest('[data-show-more]')) {
+    state.shown += 18;
+    render();
+    return;
+  }
   const tile = e.target.closest('[data-ground-slug]');
   if (!tile || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
   e.preventDefault();
