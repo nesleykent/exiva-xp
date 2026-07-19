@@ -85,7 +85,31 @@
 .filter-toggle { display: none; }
 .filter-more { display: contents; }
 
+.segmented { display: inline-flex; max-width: 100%; padding: 2px; overflow-x: auto; background: rgb(var(--surface-2)); border-radius: var(--r-input); scrollbar-width: none; }
+.segmented::-webkit-scrollbar { display: none; }
+.segmented button { min-height: 30px; padding: 0 var(--s3); border: 0; border-radius: calc(var(--r-input) - 2px); background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-12); font-weight: 600; white-space: nowrap; cursor: pointer; }
+.segmented button[aria-pressed="true"] { background: rgb(var(--surface-raised)); color: rgb(var(--ink)); box-shadow: 0 1px 3px rgba(var(--shadow), .12); }
+.filter-compact { display: grid; gap: var(--s4); }
+.filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
+.filter-compact-groups { display: flex; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.filter-segment { display: grid; gap: var(--s2); min-width: 0; }
+.advanced-toggle { min-height: 30px; padding: 0; border: 0; background: transparent; color: rgb(var(--blue)); font: inherit; font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
+.advanced-filters[hidden] { display: none; }
+.advanced-filters { display: flex; flex-wrap: wrap; gap: var(--s3); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
+.hot-strip { display: flex; gap: var(--s4); overflow-x: auto; padding: 0 0 var(--s2); scrollbar-width: none; }
+.hot-strip::-webkit-scrollbar { display: none; }
+.hot-ground { display: grid; justify-items: center; gap: var(--s2); width: 76px; flex: 0 0 76px; border: 0; background: transparent; color: rgb(var(--ink)); font: inherit; cursor: pointer; }
+.hot-ground .ring { width: 64px; height: 64px; }
+.hot-ground .ring > .ring-core { width: 56px; height: 56px; }
+.hot-ground span:last-child { max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-11); }
+.tile.is-selected { border-color: rgb(var(--blue)); box-shadow: 0 0 0 1px rgb(var(--blue)); }
+.tile-rank { position: absolute; top: -9px; right: var(--s3); }
+.planner-card { position: relative; display: grid; gap: var(--s3); }
+.planner-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
+.planner-card-creatures { min-height: 34px; }
+
 @media (max-width: 700px) {
+  #stage > header { padding-right: calc(var(--tap) * 2 + var(--s2)) !important; }
   /* iOS Safari has a known compositing bug where a `position: sticky` element
      combined with `backdrop-filter` gets left behind as a stretched "ghost"
      copy mid-scroll, overlapping content below it. Drop both on mobile —
@@ -315,6 +339,16 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 [data-appearance="dark"] .note-green { color: rgb(var(--green)); }
 
 .form-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.paste-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--s3); margin-top: var(--s3); }
+.analytics-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+.analytics-duo .section { min-width: 0; }
+.charm-empty { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
+.charm-empty p { margin: var(--s1) 0 0; }
+
+@media (max-width: 879px) {
+  .analytics-duo { grid-template-columns: 1fr; }
+  .charm-empty { align-items: flex-start; flex-direction: column; }
+}
 
 /* ---------- character tools ---------- */
 
@@ -331,6 +365,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .tool-wide {
   grid-column: 1 / -1;
 }
+.tool-disclosure { border-top: 1px solid rgb(var(--line)); padding-top: var(--s3); }
+.tool-disclosure summary { color: rgb(var(--blue)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
+.tool-disclosure .tool-fields { margin-top: var(--s3); }
+#level-tool { order: 3; }
+#imbuement-tool { order: 4; }
+#profit-tool { order: 5; }
+#imb-filter-bar { position: static; z-index: auto; margin: 0; padding: 0; border: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .tool-head {
   display: flex;
   align-items: baseline;

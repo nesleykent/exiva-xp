@@ -119,6 +119,23 @@ export function pillEl(el, extra = '') {
   return `<span class="pill el-${esc(el)}">${ELEMENT_NAME[el] || esc(el)}${extra ? ` ${extra}` : ''}</span>`;
 }
 
+/** Compact mutually-exclusive filter buttons, shared by planner and codex. */
+export function segmentedControl(id, label, options, selected) {
+  return `<div class="segmented" id="${esc(id)}" role="group" aria-label="${esc(label)}">
+    ${options.map(([value, text]) => `<button type="button" data-value="${esc(value)}" aria-pressed="${value === selected}">${esc(text)}</button>`).join('')}
+  </div>`;
+}
+
+export function bindSegmented(id, onSelect) {
+  const root = document.getElementById(id);
+  root.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-value]');
+    if (!button) return;
+    root.querySelectorAll('button').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    onSelect(button.dataset.value);
+  });
+}
+
 const CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
 const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
 

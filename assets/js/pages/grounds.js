@@ -10,7 +10,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
+import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
 import { ELEMENTS, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
@@ -37,9 +37,12 @@ const areaOptions = [...new Set(Object.values(access.grounds || {})
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
-  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'level', dir: 'asc',
-  detailSlug: param('g') || null, shown: 3,
+  q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'xpRawRate', dir: 'desc',
+  levelBand: 'tracked', detailSlug: param('g') || null, shown: 6,
 };
+
+const PARTY_OPTIONS = [['', 'All'], ['solo', 'Solo'], ['party', 'Team']];
+const LEVEL_OPTIONS = [['tracked', 'My level'], ['any', 'Any'], ['under-250', '<250'], ['250-400', '250–400'], ['400-plus', '400+']];
 
 /** Card-level sorts — computed after grouping, never on raw per-vocation rows. */
 const SORTS = {
@@ -85,7 +88,11 @@ function filteredRows() {
   const ix = (tokens.length || state.element || state.family) ? intel() : null;
 
   return table.filter((r) => {
-    if (state.level != null && (r.level == null || r.level > state.level)) return false;
+    if (state.levelBand === 'tracked' && state.level != null && (r.level == null || r.level > state.level)) return false;
+    if (state.levelBand === 'under-250' && (r.level == null || r.level >= 250)) return false;
+    if (state.levelBand === '250-400' && (r.level == null || r.level < 250 || r.level > 400)) return false;
+    if (state.levelBand === '400-plus' && (r.level == null || r.level < 400)) return false;
+    if (state.levelBand === 'custom' && state.level != null && (r.level == null || r.level > state.level)) return false;
     // a row with no vocation is a party/any-vocation row — never exclude those
     if (state.vocation && r.vocation && r.vocation !== state.vocation) return false;
     if (state.mode === 'solo' && r.party) return false;
@@ -145,15 +152,22 @@ function bestAttackElement(attackOrder, vocation) {
 stage.innerHTML = `
   <header id="planner-head" style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
-    <p class="dim" style="max-width:60ch">${nf(table.length)} recommendations across ${nf(grounds.directory.length)} grounds. The planner opens around ${esc(characterName)}'s tracked level${characterLevel ? ` (${nf(characterLevel)})` : ''}${characterVocation ? ` and vocation (${esc(characterVocation)})` : ''}; curated values seed the list and your analyser logs sharpen it over time.</p>
+    <p class="dim" style="max-width:60ch">Pick a ground matched to ${esc(characterName)}'s level, vocation and party size. Curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
-  <form class="filter-bar" id="f" role="search">
-    <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
-    <button type="button" class="filter-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more"><span>Filters</span><span class="chevron">⌄</span></button>
-    <div class="filter-more" id="f-more">
+  <section class="section" aria-labelledby="hot-title"><p class="eyebrow" id="hot-title">Hot right now</p><div class="hot-strip" id="hot-grounds"></div></section>
+  <form class="filter-bar filter-compact" id="f" role="search">
+    <div class="filter-compact-head">
+      <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
+      <span class="fine dim" id="filter-count"></span>
+    </div>
+    <div class="filter-compact-groups">
+      <div class="filter-segment"><span class="eyebrow">Party</span>${segmentedControl('f-party', 'Party size', PARTY_OPTIONS, state.mode)}</div>
+      <div class="filter-segment"><span class="eyebrow">Level</span>${segmentedControl('f-level-band', 'Level range', LEVEL_OPTIONS, state.levelBand)}</div>
+      <button type="button" class="advanced-toggle" id="f-toggle" aria-expanded="false" aria-controls="f-more">More filters</button>
+    </div>
+    <div class="advanced-filters" id="f-more" hidden>
       <label class="lbl lbl-narrow"><span class="eyebrow">Level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
       <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value=""${characterVocation ? '' : ' selected'}>All</option>${[...VOCATIONS].sort().map((v) => `<option${v === characterVocation ? ' selected' : ''}>${v}</option>`).join('')}</select></label>
-      <label class="lbl"><span class="eyebrow">Hunt type</span><select id="f-mode"><option value="">All</option><option value="solo">Solo</option><option value="party">Team hunt</option></select></label>
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Creature type</span><select id="f-family"><option value="">All</option>${familyOptions().map((family) => `<option>${esc(family)}</option>`).join('')}</select></label>
@@ -342,31 +356,34 @@ function render() {
     ? [selectedCard, ...cards.filter((card) => card !== selectedCard)].filter(Boolean).slice(0, 3)
     : cards.slice(0, state.shown);
 
+  $('#filter-count').textContent = `${nf(cards.length)} grounds · ${nf(rows.length)} rows`;
+  const hottest = [...groundCards(table)].sort((a, b) => (b.bestXp ?? -1) - (a.bestXp ?? -1)).slice(0, 6);
+  $('#hot-grounds').innerHTML = hottest.map((ground) => `<button type="button" class="hot-ground" data-hot-slug="${esc(ground.slug)}" title="Open ${esc(ground.name)}">${ring(ground.name)}<span>${esc(ground.name)}</span></button>`).join('');
+
   $('#out').innerHTML = `
-    <p class="fine dim count-line">${nf(cards.length)} grounds · ${nf(rows.length)} matching rows${cards.length > visibleCards.length ? ` · showing ${nf(visibleCards.length)}` : ''}</p>
+    <p class="fine dim count-line">Showing ${nf(visibleCards.length)} of ${nf(cards.length)} matching grounds</p>
     <div class="tiles planner-grid">
-      ${visibleCards.map((g) => {
+      ${visibleCards.map((g, index) => {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = access.grounds?.[g.slug]?.area;
+        const creatures = [...(ix?.get(g.slug)?.names || [])].slice(0, 3);
         return `
-        <a class="panel tile" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
-          <div class="tile-top">
-            ${ring(g.name, { quiet: !g.n })}
-            <div>
-              <div class="name">${esc(g.name)}</div>
-              <div class="fine dim">${area ? `${esc(area)} · ` : ''}from level ${nf(g.minLevel)}${g.party ? ' · team hunt' : ''}</div>
-              ${g.badgeRow.gear ? `<div class="fine dim" title="${esc(g.badgeRow.gearLabel || '')}">${esc(g.badgeRow.gear)}</div>` : ''}
-            </div>
+        <a class="panel tile planner-card${g.slug === state.detailSlug ? ' is-selected' : ''}" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
+          ${index === 0 ? '<span class="badge badge-info tile-rank">Top XP</span>' : ''}
+          <div class="planner-card-head">
+            <div class="name">${esc(g.name)}</div>
+            <span class="fine dim">Level ${nf(g.minLevel)}+</span>
           </div>
+          <div class="fine dim planner-card-creatures">${creatures.length ? creatures.map(esc).join(' · ') : (area ? esc(area) : 'Creature list unavailable')}</div>
           <div class="tile-stats">
             <span class="stat"><b class="num">${kk(g.bestXp)}</b><span class="fine dim">raw XP/h</span></span>
-            <span class="stat"><b class="num">${kk(g.bestLoot)}</b><span class="fine dim">loot/h</span></span>
-            <span class="stat"><b class="num">${nf(g.n)}</b><span class="fine dim">logged</span></span>
+            <span class="stat"><b class="num">${kk(g.bestProfit)}</b><span class="fine dim">profit/h</span></span>
+            <span class="stat"><b class="num">${g.party ? 'Team' : 'Solo'}</b><span class="fine dim">hunt</span></span>
           </div>
           <div class="tile-tags">
             ${basisPill(g.badgeRow.basis)}
             ${attackEl ? pillEl(attackEl) : ''}
-            ${[...g.vocations].sort().slice(0, 3).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
+            ${area ? `<span class="pill">${esc(area)}</span>` : ''}
           </div>
         </a>`;
       }).join('') || '<p class="dim">Nothing matches those filters.</p>'}
@@ -377,13 +394,12 @@ function render() {
 }
 
 const bind = (id, prop, map = (v) => v) => {
-  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); state.shown = 3; render(); });
+  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); state.shown = 6; render(); });
 };
 $('#f').addEventListener('submit', (e) => e.preventDefault());
 bind('#f-q', 'q');
-bind('#f-level', 'level', (v) => (v ? +v : null));
+$('#f-level').addEventListener('input', (e) => { state.level = e.target.value ? +e.target.value : null; state.levelBand = 'custom'; state.shown = 6; $('#f-level-band').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', 'false')); render(); });
 bind('#f-voc', 'vocation');
-bind('#f-mode', 'mode');
 bind('#f-area', 'area');
 bind('#f-element', 'element');
 bind('#f-family', 'family');
@@ -391,13 +407,18 @@ bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;
   state.dir = SORTS[key]?.[2] || 'desc';
-  state.shown = 3;
+  state.shown = 6;
   render();
 });
+bindSegmented('f-party', (value) => { state.mode = value; state.shown = 6; render(); });
+bindSegmented('f-level-band', (value) => { state.levelBand = value; state.shown = 6; render(); });
 $('#f-toggle').addEventListener('click', () => {
-  const open = $('#f-more').classList.toggle('open');
+  const open = $('#f-more').hidden;
+  $('#f-more').hidden = !open;
   $('#f-toggle').setAttribute('aria-expanded', String(open));
+  $('#f-toggle').textContent = open ? 'Fewer filters' : 'More filters';
 });
+$('#hot-grounds').addEventListener('click', (e) => { const item = e.target.closest('[data-hot-slug]'); if (item) openDetail(item.dataset.hotSlug); });
 $('#out').addEventListener('click', (e) => {
   if (e.target.closest('[data-show-more]')) {
     state.shown += 18;

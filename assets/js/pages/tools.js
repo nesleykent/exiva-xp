@@ -98,39 +98,46 @@ stage.innerHTML = `
         <label class="lbl"><span class="eyebrow">Element</span><select id="damage-element">${ELEMENTS.map((el) => `<option value="${el}">${ELEMENT_NAME[el]}</option>`).join('')}</select></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Min hit</span><input id="damage-min" type="number" min="0" value="307"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Max hit</span><input id="damage-max" type="number" min="0" value="692"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Mitigation</span><input id="damage-mitigation" type="number" min="0" max="100" step="0.1" value="0"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Crit %</span><input id="damage-crit-chance" type="number" min="0" max="100" value="0"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Crit dmg</span><input id="damage-crit-damage" type="number" min="0" value="50"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Fatal %</span><input id="damage-fatal-chance" type="number" min="0" max="100" value="0"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Fatal dmg</span><input id="damage-fatal-damage" type="number" min="0" value="60"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Charm dmg %</span><input id="damage-charm" type="number" min="0" max="100" value="5"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Charm proc %</span><input id="damage-charm-chance" type="number" min="0" max="100" value="11"></label>
       </div>
-      <p class="fine dim">Enter your own damage range (client or analyser numbers); the calculator applies only the target's resistance, mitigation, crit/fatal expectation and the charm proc — elemental charms deal 5% of initial HP with a per-stage trigger chance (5/10/11%, maxed default). It never invents your raw roll.</p>
+      <details class="tool-disclosure">
+        <summary>Advanced combat options</summary>
+        <div class="tool-fields">
+          <label class="lbl lbl-narrow"><span class="eyebrow">Mitigation</span><input id="damage-mitigation" type="number" min="0" max="100" step="0.1" value="0"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Crit %</span><input id="damage-crit-chance" type="number" min="0" max="100" value="0"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Crit dmg</span><input id="damage-crit-damage" type="number" min="0" value="50"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Fatal %</span><input id="damage-fatal-chance" type="number" min="0" max="100" value="0"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Fatal dmg</span><input id="damage-fatal-damage" type="number" min="0" value="60"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Charm dmg %</span><input id="damage-charm" type="number" min="0" max="100" value="5"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">Charm proc %</span><input id="damage-charm-chance" type="number" min="0" max="100" value="11"></label>
+        </div>
+        <p class="fine dim">Applies target resistance, mitigation and expected crit, fatal and charm effects to your own entered damage range.</p>
+      </details>
       <datalist id="creature-list">${creatures.map((c) => `<option value="${esc(c.name)}"></option>`).join('')}</datalist>
       <div class="tool-result" id="damage-out" role="status" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <section class="panel panel-pad tool-card tool-wide" id="level-tool">
+    <section class="panel panel-pad tool-card" id="level-tool">
       <div class="tool-head">
         <h2>Level target</h2>
         <span class="fine dim">exp needed and days-to-goal at ${esc(characterName)}'s recent pace</span>
       </div>
       <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Current level</span><input id="level-current" type="number" min="1" max="2000" value="${characterLevel}"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="level-target" type="number" min="2" max="2001" value="${characterLevel + 10}"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Avg daily exp</span><input id="level-pace" type="number" min="0" value="${avgDailyXp ?? ''}" placeholder="${avgDailyXp == null ? 'no pace data' : ''}"></label>
       </div>
       <div class="tool-result" id="level-out" role="status" aria-live="polite" aria-atomic="true"></div>
-      <div class="section-subhead"><h3>Level &amp; experience table</h3><span class="fine dim">total exp and exp to next level, per level</span></div>
-      <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
-      </div>
-      <div class="tool-result" id="level-table-out"></div>
+      <details class="tool-disclosure">
+        <summary>Level &amp; experience table</summary>
+        <div class="tool-fields">
+          <label class="lbl lbl-narrow"><span class="eyebrow">Current level</span><input id="level-current" type="number" min="1" max="2000" value="${characterLevel}"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
+        </div>
+        <div class="tool-result" id="level-table-out"></div>
+      </details>
     </section>
 
-    <section class="panel panel-pad tool-card tool-wide" id="profit-tool">
+    <section class="panel panel-pad tool-card" id="profit-tool">
       <div class="tool-head">
         <h2>Profit tracker</h2>
         <span class="fine dim">from saved analyser sessions</span>
@@ -138,7 +145,7 @@ stage.innerHTML = `
       <div class="tool-result" id="profit-out"></div>
     </section>
 
-    <section class="panel panel-pad tool-card tool-wide" id="imbuement-tool">
+    <section class="panel panel-pad tool-card" id="imbuement-tool">
       <div class="tool-head">
         <h2>Imbuement price calculator</h2>
         <span class="fine dim">Gold Token packages and resource prices — World: ${esc(IMB_WORLD)}</span>

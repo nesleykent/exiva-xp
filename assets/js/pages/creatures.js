@@ -3,7 +3,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, sortMenu, bindSortMenu, meters, note } from '../shell.js';
+import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note } from '../shell.js';
 import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
@@ -12,8 +12,10 @@ const { stage, codex, grounds, hunts } = await boot('creatures.html', { codex: t
 
 const families = [...new Set(codex.creatures.map((c) => c.family).filter(Boolean))].sort();
 const tiers = [...new Set(codex.creatures.map((c) => c.tier).filter(Boolean))].sort();
+const familyCounts = codex.creatures.reduce((counts, creature) => counts.set(creature.family, (counts.get(creature.family) || 0) + 1), new Map());
+const commonFamilies = [...families].sort((a, b) => familyCounts.get(b) - familyCounts.get(a)).slice(0, 3);
 
-const state = { q: '', tier: '', family: '', sort: 'name', shown: 72, detailSlug: param('c') || null };
+const state = { q: '', tier: '', family: '', sort: 'name', shown: 8, detailSlug: param('c') || null };
 
 const SORTS = {
   name: ['Name', (c) => c.name, 'asc'],
@@ -21,19 +23,28 @@ const SORTS = {
   xp: ['Experience', (c) => c.xp ?? -1, 'desc'],
   charm: ['Charm points', (c) => c.charm?.points ?? -1, 'desc'],
 };
+const TIER_OPTIONS = [['', 'Any'], ...tiers.map((tier) => [tier, tier])];
+const FAMILY_OPTIONS = [['', 'Any'], ...commonFamilies.map((family) => [family, family])];
+const SORT_OPTIONS = [['name', 'Name'], ['hp', 'Hitpoints'], ['xp', 'Experience']];
 
 stage.innerHTML = `
   <header id="codex-head" style="padding: 8px 0 4px">
     <h1 style="font-size:26px; letter-spacing:-.4px">Creature codex</h1>
     <p class="dim">${nf(codex.size)} creatures with resistances, weaknesses, damage types, charm data and habitats.</p>
   </header>
-  <form class="filter-bar" id="c-filter" role="search">
-    <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="c-q" placeholder="Creature name"></label>
-    <button type="button" class="filter-toggle" id="c-toggle" aria-expanded="false" aria-controls="c-more"><span>Filters</span><span class="chevron">⌄</span></button>
-    <div class="filter-more" id="c-more">
-      <label class="lbl"><span class="eyebrow">Difficulty</span><select id="c-tier"><option value="">Any</option>${tiers.map((t) => `<option>${esc(t)}</option>`).join('')}</select></label>
-      <label class="lbl"><span class="eyebrow">Class</span><select id="c-family"><option value="">Any</option>${families.map((f) => `<option>${esc(f)}</option>`).join('')}</select></label>
-      <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('c-sort', SORTS, state.sort)}</label>
+  <form class="filter-bar filter-compact" id="c-filter" role="search">
+    <div class="filter-compact-head">
+      <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="c-q" placeholder="Creature name"></label>
+      <span class="fine dim" id="codex-count"></span>
+    </div>
+    <div class="filter-compact-groups">
+      <div class="filter-segment"><span class="eyebrow">Difficulty</span>${segmentedControl('c-tier', 'Difficulty', TIER_OPTIONS, state.tier)}</div>
+      <div class="filter-segment"><span class="eyebrow">Class</span>${segmentedControl('c-family', 'Creature class', FAMILY_OPTIONS, state.family)}</div>
+      <div class="filter-segment"><span class="eyebrow">Sort</span>${segmentedControl('c-sort', 'Sort creatures', SORT_OPTIONS, state.sort)}</div>
+      <button type="button" class="advanced-toggle" id="c-toggle" aria-expanded="false" aria-controls="c-more">All classes</button>
+    </div>
+    <div class="advanced-filters" id="c-more" hidden>
+      <label class="lbl"><span class="eyebrow">Every class</span><select id="c-family-all"><option value="">Any</option>${families.map((f) => `<option>${esc(f)}</option>`).join('')}</select></label>
     </div>
   </form>
   <div id="out"></div>
@@ -204,12 +215,12 @@ function render() {
     });
 
   $('#out').innerHTML = `
-    <p class="fine dim count-line">${nf(all.length)} creatures</p>
+    <p class="fine dim count-line">Showing ${nf(Math.min(all.length, state.detailSlug ? 8 : state.shown))} of ${nf(all.length)} creatures</p>
     <div class="tiles codex-grid">
       ${all.slice(0, state.detailSlug ? 8 : state.shown).map((c) => {
         const weak = weakSpots(c).slice(0, 3);
         return `
-        <a class="panel tile" href="creatures.html?c=${esc(c.slug)}" data-creature-slug="${esc(c.slug)}">
+        <a class="panel tile${c.slug === state.detailSlug ? ' is-selected' : ''}" href="creatures.html?c=${esc(c.slug)}" data-creature-slug="${esc(c.slug)}">
           <div class="tile-top">
             ${c.art
               ? `<span class="art-disc"><img class="critter" src="${esc(c.art)}" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>`
@@ -226,6 +237,8 @@ function render() {
       }).join('') || '<p class="dim">No creatures match.</p>'}
     </div>`;
 
+  $('#codex-count').textContent = `${nf(all.length)} creatures`;
+
   const more = $('#more');
   more.hidden = !!state.detailSlug || all.length <= state.shown;
   if (!more.hidden) more.textContent = `Show more (${nf(all.length - state.shown)} left)`;
@@ -233,15 +246,23 @@ function render() {
   else $('#detail').innerHTML = '';
 }
 
-for (const [sel, prop] of [['#c-q', 'q'], ['#c-tier', 'tier'], ['#c-family', 'family']]) {
-  $(sel).addEventListener('input', (e) => { state[prop] = e.target.value; state.shown = 72; render(); });
-}
+$('#c-q').addEventListener('input', (e) => { state.q = e.target.value; state.shown = 8; render(); });
+$('#c-family-all').addEventListener('input', (e) => {
+  state.family = e.target.value;
+  state.shown = 8;
+  $('#c-family').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.value === state.family)));
+  render();
+});
 $('#c-filter').addEventListener('submit', (e) => e.preventDefault());
-bindSortMenu('c-sort', (key) => { state.sort = key; state.shown = 72; render(); });
-$('#more').addEventListener('click', () => { state.shown += 144; render(); });
+bindSegmented('c-tier', (value) => { state.tier = value; state.shown = 8; render(); });
+bindSegmented('c-family', (value) => { state.family = value; $('#c-family-all').value = value; state.shown = 8; render(); });
+bindSegmented('c-sort', (value) => { state.sort = value; state.shown = 8; render(); });
+$('#more').addEventListener('click', () => { state.shown += 24; render(); });
 $('#c-toggle').addEventListener('click', () => {
-  const open = $('#c-more').classList.toggle('open');
+  const open = $('#c-more').hidden;
+  $('#c-more').hidden = !open;
   $('#c-toggle').setAttribute('aria-expanded', String(open));
+  $('#c-toggle').textContent = open ? 'Hide classes' : 'All classes';
 });
 $('#out').addEventListener('click', (e) => {
   const tile = e.target.closest('[data-creature-slug]');

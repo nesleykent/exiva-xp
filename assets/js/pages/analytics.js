@@ -298,16 +298,18 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="eyebrow">Total profit</div><div class="big num">${totalProfit != null ? compact(totalProfit) : '—'}</div><div class="fine dim">${meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet'}</div></div>
     <div class="panel pulse"><div class="eyebrow">Total hunt XP</div><div class="big num">${totalHuntXp != null ? compact(totalHuntXp) : '—'}</div><div class="fine dim">${lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only'}</div></div>
   </div>
-  ${weekComparisonBoard()}
   ${board('Daily XP gain', dailyXp, flow(dailyXp, { fmt: compact }))}
-  ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
+  <div class="analytics-duo">
+    ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp))}
+    ${profitShareBoard(profitByGround)}
+  </div>
+  ${weekComparisonBoard()}
   ${highscoreTrends.length ? `<section class="section">
     <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>
     <div class="skill-grid">${highscoreTrends.map(highscoreTrendCard).join('')}</div>
   </section>` : ''}
   ${board('Best XP targets', topXp, bars(topXp))}
   ${board('Best profit targets', topProfit, bars(topProfit))}
-  ${profitShareBoard(profitByGround)}
   ${board('Busiest grounds', busiest, bars(busiest, { fmt: nf }))}
   ${board('Hunts logged over time', perMonth, flow(perMonth))}
   ${board('Most killed creatures', topKills, bars(topKills, { fmt: nf }))}

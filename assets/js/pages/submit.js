@@ -31,7 +31,7 @@ stage.innerHTML = `
   </header>
   <nav class="stepper" id="stepper" aria-label="Log a hunt progress"></nav>
   <div class="steps" id="steps">
-    <section class="step" id="step-paste" data-step="paste">
+    <section class="step panel panel-pad" id="step-paste" data-step="paste">
       <div class="step-head"><h2 id="paste-heading" tabindex="-1">Paste your analyser</h2></div>
       <textarea id="paste" rows="12" aria-labelledby="paste-heading" aria-describedby="paste-help" placeholder="Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
 Session: 02:30h
@@ -45,7 +45,7 @@ Killed Monsters:
   96x dragon lord
 Looted Items:
   1024x gold coin"></textarea>
-      <div style="margin-top:12px; display:flex; gap:12px; align-items:center">
+      <div class="paste-actions">
         <button type="button" class="btn btn-primary" id="go">Read analyser</button>
         <span class="fine dim">Backend: ${esc(backend().label)}</span>
       </div>
