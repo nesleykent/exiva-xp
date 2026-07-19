@@ -516,19 +516,12 @@ function profitPerHour() {
   return { rate: (rated.reduce((sum, hunt) => sum + hunt.balance, 0) / minutes) * 60, n: rated.length };
 }
 
-function deathsInWindow(fromDays, toDays) {
-  const now = Date.now();
-  return deaths.filter((row) => {
-    const t = new Date(row.time).getTime();
-    return t >= now - fromDays * ONE_DAY_MS && t < now - toDays * ONE_DAY_MS;
-  }).length;
-}
-
 const monthGain = monthToDateGain();
 const profitRate = profitPerHour();
-const deathsLast30 = deathsInWindow(30, 0);
-const deathsPrior30 = deathsInWindow(60, 30);
-const deathsDelta = deathsLast30 - deathsPrior30;
+const charmPoints = latest?.charmPoints ?? null;
+const charmFirst = firstKnown('charmPoints');
+const charmDelta = charmPoints != null && charmFirst != null && charmFirst.value !== charmPoints
+  ? charmPoints - charmFirst.value : null;
 const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: row.date.slice(5), n: row.experience })), 24);
 
 const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delta ${tone}">${text}</em>`);
@@ -554,9 +547,11 @@ function progressionOverviewHtml() {
         <small>${profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet'}</small>
       </article>
       <article class="dashboard-metric">
-        <span>Deaths</span>
-        <b class="num">${nf(deathsLast30)}</b>
-        <small>${metricDelta(`${deathsDelta > 0 ? '+' : ''}${nf(deathsDelta)}`, deathsDelta > 0 ? 'down' : deathsDelta < 0 ? 'up' : 'even')} last 30 days</small>
+        <span>Charm points</span>
+        <b class="num">${charmPoints != null ? nf(charmPoints) : '-'}</b>
+        <small>${charmPoints == null ? 'Not tracked yet'
+    : charmDelta != null ? `${metricDelta(`+${nf(charmDelta)}`, 'up')} since ${esc(charmFirst.date)}`
+      : 'earned points · tracked highscore'}</small>
       </article>
     </div>`;
 }
