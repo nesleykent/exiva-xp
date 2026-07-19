@@ -215,13 +215,11 @@ function renderDetail(slug) {
         ${req?.area ? `<span class="pill pill-info">${esc(req.area)}</span>` : ''}
         ${trustMeter(trust, dossier.n)}
         ${(ground.vocations || []).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
-        ${pop ? (pop.evidence === 'logged-wiki'
-          ? '<span class="badge badge-success">Log-weighted + Wiki roster</span>'
-          : pop.evidence === 'logged'
+        ${pop ? (pop.evidence === 'logged-wiki' || pop.evidence === 'logged'
           ? '<span class="badge badge-success">Log-weighted evidence</span>'
-          : pop.evidence === 'wiki'
-            ? '<span class="badge badge-info">TibiaWiki roster</span>'
-            : '<span class="badge badge-warning">Name-only match</span>') : ''}
+          : pop.evidence === 'name'
+            ? '<span class="badge badge-warning">Name-only match</span>'
+            : '') : ''}
       </div>
     </div>
   </header>
@@ -289,8 +287,8 @@ function renderDetail(slug) {
     battleHost.innerHTML = `
     <section class="section">
       <div class="section-bar"><h2>Battle plan</h2></div>
-      ${pop.evidence === 'logged-wiki' ? `<p class="fine dim" style="margin:-8px 0 16px">Battle advice is weighted by your saved analyser kills. The matchup table keeps the full roster from <a href="${esc(pop.source.wikiUrl)}" target="_blank" rel="noopener">${esc(pop.source.wikiTitle)}</a> on TibiaWiki; creatures absent from the loaded hunts show no logged kill share.</p>` : ''}
-      ${pop.evidence === 'wiki' ? `<p class="fine dim" style="margin:-8px 0 16px">Equal-weight planning profile from <a href="${esc(pop.source.wikiUrl)}" target="_blank" rel="noopener">${esc(pop.source.wikiTitle)}</a> on TibiaWiki.</p>` : ''}
+      ${pop.evidence === 'logged-wiki' ? '<p class="fine dim" style="margin:-8px 0 16px">Battle advice is weighted by your saved analyser kills. Creatures absent from the loaded hunts remain in the matchup table with no logged kill share.</p>' : ''}
+      ${pop.evidence === 'wiki' ? '<p class="fine dim" style="margin:-8px 0 16px">Equal-weight planning profile for this ground.</p>' : ''}
       ${pop.evidence === 'name' ? '<p class="fine dim" style="margin:-8px 0 16px">Only creatures explicitly named by this ground label are included; no broader regional spawn is inferred.</p>' : ''}
       <div class="duo">
         <div class="panel panel-pad">

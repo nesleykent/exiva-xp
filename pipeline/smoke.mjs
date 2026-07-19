@@ -90,6 +90,8 @@ const warzoneTwo = population(grounds.directory.find((ground) => ground.slug ===
 assert(warzoneTwo?.set.some((row) => row.creature.name === 'Magma Crawler')
   && !warzoneTwo.set.some((row) => row.creature.name === 'Humongous Fungus'),
 'numbered Warzones must not inherit Warzone 1 creatures');
+assert(warzoneTwo.source?.wikiTitle === 'Warzone 2' && warzoneTwo.source?.wikiUrl,
+  'ground roster audit lineage must remain in the generated database');
 const upperRoshamuul = population(grounds.directory.find((ground) => ground.slug === 'upper-roshamuul'), codex);
 assert(upperRoshamuul?.set.some((row) => row.creature.name === 'Guzzlemaw')
   && !upperRoshamuul.set.some((row) => row.creature.name === 'Shock Head'),
