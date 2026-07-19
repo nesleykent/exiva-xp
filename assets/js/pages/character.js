@@ -14,7 +14,7 @@ import {
   formatDateTimeInTimezone,
 } from '../lib/timezones.js';
 import { $, ring } from '../shell.js';
-import { flow, sparkline, attachVizHover } from '../viz/svg.js';
+import { flow, sparkline, attachVizHover, chartInto, refreshCharts } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
@@ -353,6 +353,7 @@ function bindCharacterTabs() {
       candidate.tabIndex = active ? 0 : -1;
     });
     panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+    refreshCharts(); // a just-revealed panel's charts now have a real width to render at
     if (focus) tab.focus();
   };
   tabs.forEach((tab, index) => {
@@ -427,7 +428,6 @@ function sampledSeries(series, maxPoints = 40) {
 /** The one metric worth a full trend card — the rest read faster as a compact list. */
 function highscoreFeatureHtml(row) {
   const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
-  const trend = sampledSeries(row.series);
   return `
     <article class="panel skill-feature">
       <div class="skill-card-head">
@@ -442,8 +442,8 @@ function highscoreFeatureHtml(row) {
         <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
         <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
       </div>
-      <div class="sparkline sparkline-lg">
-        ${hasTrend ? sparkline(trend, { fmt: nf }) : '<p class="viz-empty">Trend appears after the next update for this skill.</p>'}
+      <div class="sparkline sparkline-lg"${hasTrend ? ' id="hs-feature-spark"' : ''}>
+        ${hasTrend ? '' : '<p class="viz-empty">Trend appears after the next update for this skill.</p>'}
       </div>
     </article>`;
 }
@@ -535,7 +535,7 @@ function progressionOverviewHtml() {
         <span>Total experience</span>
         <b class="num">${experience != null ? compact(experience) : '-'}</b>
         <small>${monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote)}</small>
-        ${totalXpSpark.length >= 2 ? `<div class="metric-spark">${sparkline(totalXpSpark, { fmt: compact })}</div>` : ''}
+        ${totalXpSpark.length >= 2 ? '<div class="metric-spark" id="xp-total-spark"></div>' : ''}
       </article>
       <article class="dashboard-metric">
         <span>XP / day pace</span>
@@ -606,7 +606,7 @@ function activityHeatmapHtml() {
   }
   return `
     <div class="heatmap" role="img" aria-label="Daily XP gain intensity over the last 26 tracked weeks">${weeks.join('')}</div>
-    <div class="hm-legend fine dim"><span>Less</span><i class="hm hm-0"></i><i class="hm hm-1"></i><i class="hm hm-2"></i><i class="hm hm-3"></i><i class="hm hm-4"></i><span>More</span><i class="hm hm-null" style="margin-left:10px"></i><span>not tracked</span></div>`;
+    <div class="hm-legend fine dim"><span>Less</span><i class="hm hm-0"></i><i class="hm hm-1"></i><i class="hm hm-2"></i><i class="hm hm-3"></i><i class="hm hm-4"></i><span>More</span><i class="hm hm-null"></i><span>not tracked</span></div>`;
 }
 
 /** The three latest recorded deaths; the complete table stays in Details. */
@@ -658,8 +658,8 @@ stage.innerHTML = `
     <div class="panel panel-pad viz progression-chart">
       <div class="chart-controls">
         <div>
-          <p class="eyebrow" id="xp-chart-title" style="margin:0 0 4px">Daily XP gained</p>
-          <p class="fine dim" id="xp-chart-note" style="margin:0">${esc(historyNote)}</p>
+          <p class="eyebrow chart-title" id="xp-chart-title">Daily XP gained</p>
+          <p class="fine dim chart-note" id="xp-chart-note">${esc(historyNote)}</p>
           <div class="chart-event-legend" aria-label="Chart event markers">
             <span><i class="event-level"></i>Level-up</span>
             <span><i class="event-death"></i>Death</span>
@@ -689,11 +689,11 @@ stage.innerHTML = `
 
   <section class="activity-duo" aria-label="Hunting activity and recent deaths">
     <div class="panel panel-pad viz">
-      <p class="eyebrow" style="margin:0 0 12px">Daily XP activity</p>
+      <p class="eyebrow panel-eyebrow">Daily XP activity</p>
       ${activityHeatmapHtml()}
     </div>
     <div class="panel panel-pad">
-      <p class="eyebrow" style="margin:0 0 12px">Recent deaths</p>
+      <p class="eyebrow panel-eyebrow">Recent deaths</p>
       ${recentDeathsHtml()}
     </div>
   </section>
@@ -763,6 +763,12 @@ stage.innerHTML = `
 bindCharacterTabs();
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
+// sparklines mount at their container's true pixel width (token-size text)
+chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 34, fmt: compact }));
+if (featuredHighscore) {
+  chartInto($('#hs-feature-spark'), (width) => sparkline(sampledSeries(featuredHighscore.series), { width, height: 84, fmt: nf }));
+}
+
 // ---- chart controls: metric × year × month, months only for tracked data ----
 const xpState = { metric: 'daily', year: chartYears.at(-1) || 'all', month: 'all' };
 
@@ -790,7 +796,7 @@ function renderXpChart() {
   const selected = xpRowsForChart(xpState.metric, xpState);
   $('#xp-chart-title').textContent = selected.title;
   $('#xp-chart-note').textContent = selected.note;
-  chart.innerHTML = flow(selected.data, { baseline: selected.baseline, fmt: selected.fmt, empty: 'Not enough rows for this chart yet.' });
+  chartInto(chart, (width) => flow(selected.data, { width, baseline: selected.baseline, fmt: selected.fmt, empty: 'Not enough rows for this chart yet.' }));
   attachVizHover(chart.closest('.viz'));
   document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
     btn.setAttribute('aria-pressed', String(btn.dataset.xpMetric === xpState.metric));

@@ -5,7 +5,7 @@ import { esc } from '../lib/text.js';
 import { compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
-import { bars, flow, sparkline, attachVizHover, categorical, donut } from '../viz/svg.js';
+import { bars, flow, sparkline, attachVizHover, categorical, donut, chartInto } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
@@ -80,7 +80,7 @@ function highscoreTrendCard(s) {
         <span><b class="num">${signed(s.trackedDelta)}</b><small>Tracked delta</small></span>
       </div>
       <div class="sparkline">
-        ${s.moving ? sparkline(s.series, { fmt: nf }) : '<p class="viz-empty">No trend drawn until this metric has at least two distinct values.</p>'}
+        ${s.moving ? mount(`hs-${s.valueField}`, (width) => sparkline(s.series, { width, fmt: nf })) : '<p class="viz-empty">No trend drawn until this metric has at least two distinct values.</p>'}
       </div>
     </article>`;
 }
@@ -125,10 +125,18 @@ const totalHuntXp = hunts.some((hunt) => hunt.xpRaw != null)
 const lastGain = latest && previous && isConsecutiveDay(previous, latest)
   ? Math.max(0, latest.experience - previous.experience) : null;
 
-const board = (title, data, svg) => (data.length ? `
+/**
+ * Charts mount into placeholder divs after the page renders (chartInto), so
+ * each draws at its container's true pixel width and its text sits exactly
+ * on the design-system type scale.
+ */
+const MOUNTS = new Map();
+const mount = (id, build) => { MOUNTS.set(id, build); return `<div class="chart-mount" data-mount="${id}"></div>`; };
+
+const board = (title, data, body) => (data.length ? `
   <section class="section">
     <div class="section-bar"><h2>${title}</h2></div>
-    <div class="panel panel-pad viz">${svg}</div>
+    <div class="panel panel-pad viz">${body}</div>
   </section>` : '');
 
 // ---------------------------------------------------------------- profit share by ground
@@ -269,8 +277,8 @@ function weekComparisonBoard() {
 }
 
 stage.innerHTML = `
-  <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Analytics</h1>
+  <header class="page-head">
+    <h1>Analytics</h1>
     <p class="dim">Progression and hunt performance, with ${esc(characterName)}'s tracker and ${nf(hunts.length)} saved analyser session${hunts.length === 1 ? '' : 's'} kept distinct.</p>
   </header>
   <div class="pulse-row">
@@ -279,9 +287,9 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="eyebrow">Total profit</div><div class="big num">${totalProfit != null ? compact(totalProfit) : '—'}</div><div class="fine dim">${meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet'}</div></div>
     <div class="panel pulse"><div class="eyebrow">Total hunt XP</div><div class="big num">${totalHuntXp != null ? compact(totalHuntXp) : '—'}</div><div class="fine dim">${lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only'}</div></div>
   </div>
-  ${board('Daily XP gain', dailyXp, flow(dailyXp, { fmt: compact }))}
+  ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { width, fmt: compact })))}
   <div class="analytics-duo">
-    ${board('Avg XP gain by weekday', weekdayXp, bars(weekdayXp, { fmt: compact }))}
+    ${board('Avg XP gain by weekday', weekdayXp, mount('weekday-xp', (width) => bars(weekdayXp, { width, fmt: compact })))}
     ${profitShareBoard(profitByGround)}
   </div>
   ${weekComparisonBoard()}
@@ -289,14 +297,15 @@ stage.innerHTML = `
     <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>
     <div class="skill-grid">${highscoreTrends.map(highscoreTrendCard).join('')}</div>
   </section>` : ''}
-  ${board('Best XP targets', topXp, bars(topXp, { fmt: compact }))}
-  ${board('Best profit targets', topProfit, bars(topProfit))}
-  ${board('Busiest grounds', busiest, bars(busiest, { fmt: nf }))}
-  ${board('Hunts logged over time', perMonth, flow(perMonth, { fmt: nf }))}
-  ${board('Most killed creatures', topKills, bars(topKills, { fmt: nf }))}
-  ${board('Most looted items', topDrops, bars(topDrops, { fmt: nf }))}
-  ${board('Hunts by vocation', byVocation, bars(byVocation, { fmt: nf }))}
-  ${hunts.length ? '' : '<div class="note note-amber" style="margin-top:24px">Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.</div>'}`;
+  ${board('Best XP targets', topXp, mount('top-xp', (width) => bars(topXp, { width, fmt: compact })))}
+  ${board('Best profit targets', topProfit, mount('top-profit', (width) => bars(topProfit, { width })))}
+  ${board('Busiest grounds', busiest, mount('busiest', (width) => bars(busiest, { width, fmt: nf })))}
+  ${board('Hunts logged over time', perMonth, mount('per-month', (width) => flow(perMonth, { width, fmt: nf })))}
+  ${board('Most killed creatures', topKills, mount('top-kills', (width) => bars(topKills, { width, fmt: nf })))}
+  ${board('Most looted items', topDrops, mount('top-drops', (width) => bars(topDrops, { width, fmt: nf })))}
+  ${board('Hunts by vocation', byVocation, mount('by-vocation', (width) => bars(byVocation, { width, fmt: nf })))}
+  ${hunts.length ? '' : '<section class="section"><div class="note note-amber">Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.</div></section>'}`;
+document.querySelectorAll('[data-mount]').forEach((el) => chartInto(el, MOUNTS.get(el.dataset.mount)));
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 export {};

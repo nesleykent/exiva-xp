@@ -20,6 +20,10 @@
  *   no-JS fallback on SVG marks.
  * - Empty states: chart bodies render vizEmpty(...) so missing data is
  *   stated, never a blank plot.
+ * - Sizing: charts render at their container's true pixel width via
+ *   chartInto(), so one SVG unit is one CSS pixel — text, strokes and
+ *   markers land exactly on the design-system tokens at every viewport
+ *   instead of scaling with the viewBox.
  */
 
 import { esc } from '../lib/text.js';
@@ -30,6 +34,45 @@ const clip = (s, n) => (String(s).length > n ? `${String(s).slice(0, n - 1)}…`
 /** Standard in-panel empty state — one look for every chart with no rows. */
 export function vizEmpty(message = 'No data for this range yet.') {
   return `<p class="viz-empty">${esc(message)}</p>`;
+}
+
+/**
+ * Mount a chart into a container at the container's true pixel width, and
+ * re-render whenever that width changes (resize, rotation, tab reveal).
+ * `build(width)` returns the chart's HTML. A hidden container (width 0)
+ * renders on the first refresh after it gains a size. ResizeObserver drives
+ * refreshes where available, with a window-resize fallback — some embedded
+ * browsers deliver resize events but not observer callbacks; refreshCharts()
+ * also lets tab reveals refresh explicitly.
+ */
+const vizMounts = new Set();
+let vizObserver = null;
+let vizResizeTimer = 0;
+function renderMount(el) {
+  if (!el.isConnected) { vizMounts.delete(el); vizObserver?.unobserve(el); return; }
+  const w = Math.round(el.getBoundingClientRect().width);
+  if (!w || w === el.__vizW) return;
+  el.__vizW = w;
+  el.innerHTML = el.__vizBuild(w);
+}
+export function refreshCharts() {
+  vizMounts.forEach(renderMount);
+}
+export function chartInto(el, build) {
+  if (!el || !build) return;
+  el.__vizBuild = build;
+  el.__vizW = 0; // force a rebuild even at an unchanged width — the data may have changed
+  if (!vizMounts.size) {
+    if (typeof ResizeObserver !== 'undefined') {
+      vizObserver = new ResizeObserver((entries) => entries.forEach((entry) => renderMount(entry.target)));
+    }
+    window.addEventListener('resize', () => {
+      clearTimeout(vizResizeTimer);
+      vizResizeTimer = setTimeout(refreshCharts, 120);
+    });
+  }
+  if (!vizMounts.has(el)) { vizMounts.add(el); vizObserver?.observe(el); }
+  renderMount(el);
 }
 
 /**
@@ -54,8 +97,12 @@ function niceTicks(min, max, n = 4) {
 }
 
 /** Horizontal bars: data = [{key, n}]. Direct-labelled, so no grid. */
-export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 290, fmt = kk, empty } = {}) {
+export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk, empty } = {}) {
   if (!data.length) return vizEmpty(empty);
+  // the label column keeps its share of a narrow chart instead of a fixed
+  // 290px that would swallow the whole lane on a phone
+  labelW ??= Math.max(120, Math.min(290, Math.round(width * 0.4)));
+  const labelChars = Math.max(14, Math.floor(labelW / 6.5));
   const height = data.length * (rowH + gap) + gap;
   const top = Math.max(...data.map((d) => d.n), 1);
   const laneW = width - labelW - 86;
@@ -66,7 +113,7 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 290, fmt
     // rounded at the data end only; square where the bar meets its label
     const bar = `M${labelW},${y} h${(w - r).toFixed(1)} a${r},${r} 0 0 1 ${r},${r} v${rowH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${(w - r).toFixed(1)} Z`;
     return `<g>
-      <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, 42))}</text>
+      <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, labelChars))}</text>
       <path class="vbar" d="${bar}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.key)}"><title>${esc(d.key)}: ${fmt(d.n)}</title></path>
       <text class="vvalue" x="${labelW + w + 8}" y="${y + rowH / 2}" dominant-baseline="central">${fmt(d.n)}</text>
     </g>`;
@@ -83,7 +130,7 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW = 290, fmt
  */
 export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty } = {}) {
   if (!data.length) return vizEmpty(empty);
-  const pad = { t: 14, r: 14, b: 26, l: 46 };
+  const pad = { t: 16, r: 16, b: 26, l: 46 }; // t/r on the spacing scale; b = axis band, l = tick gutter
   const max = Math.max(...data.map((d) => d.n), baseline === 'min' ? -Infinity : 1);
   const min = baseline === 'min' ? Math.min(...data.map((d) => d.n)) : 0;
   const { lo, hi, ticks } = niceTicks(min, max);
@@ -113,7 +160,8 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
       <text class="vtick" x="${pad.l - 6}" y="${y(v).toFixed(1)}" text-anchor="end" dominant-baseline="central">${axisFmt(v)}</text>`).join('');
   const last = data.length - 1;
-  const xIdx = [...new Set(data.length >= 8
+  // a narrow chart carries three date labels, a wide one four
+  const xIdx = [...new Set(data.length >= 8 && width >= 520
     ? [0, Math.round(last / 3), Math.round((2 * last) / 3), last]
     : [0, last >> 1, last])];
   // edge labels anchor inward so they never clip at the viewBox
@@ -178,13 +226,13 @@ export function categorical(data, max = 6) {
  * on one circle). Segments keep a 2px surface gap — the gap separates them,
  * never a stroke. Center carries the formatted total.
  */
-export function donut(rows, { size = 200, fmt = kk, label = '' } = {}) {
+export function donut(rows, { size = 160, fmt = kk, label = '' } = {}) {
   const total = rows.reduce((sum, d) => sum + d.n, 0);
   if (!total) return vizEmpty();
-  const r = 74;
+  const r = Math.round(size * 0.37);
   const cx = size / 2;
   const cy = size / 2;
-  const sw = 30;
+  const sw = Math.round(size * 0.15);
   const circumference = 2 * Math.PI * r;
   const gap = rows.length > 1 ? 2 : 0;
   let offset = 0;

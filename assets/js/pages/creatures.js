@@ -30,8 +30,8 @@ const FAMILY_FILTER_OPTIONS = [['', 'Any'], ...families.map((family) => [family,
 const TASK_FILTER_OPTIONS = [['', 'Any'], ...TASK_SPEEDS.map((speed) => [speed, TASK_SPEED_LABEL[speed]])];
 
 stage.innerHTML = `
-  <header id="codex-head" style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Creature codex</h1>
+  <header id="codex-head" class="page-head">
+    <h1>Creature codex</h1>
     <p class="dim">${nf(codex.size)} creatures with resistances, weaknesses, damage types, charm data and habitats.</p>
   </header>
   <form class="filter-bar filter-compact" id="c-filter" role="search">

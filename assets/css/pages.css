@@ -721,23 +721,25 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .metric-delta.down { color: rgb(var(--red)); }
 .metric-delta.even { color: rgb(var(--ink-2)); }
 .metric-spark { margin-top: 2px; }
-.metric-spark svg { display: block; width: 100%; height: 34px; }
+.metric-spark svg { display: block; width: 100%; height: auto; }
 
 /* ---------- activity heatmap + recent deaths ---------- */
 
 .activity-duo { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--s5); margin-top: var(--s6); }
 .activity-duo > .panel { min-width: 0; }
-.heatmap { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 4px; }
-.hm-week { display: flex; flex-direction: column; gap: 3px; position: relative; padding-top: 16px; }
+.heatmap { display: flex; gap: var(--s1); overflow-x: auto; padding-bottom: var(--s1); }
+.hm-week { display: flex; flex-direction: column; gap: var(--s1); position: relative; padding-top: var(--s4); }
 .hm-month { position: absolute; top: 0; left: 0; height: 14px; font-size: var(--fs-11); line-height: 14px; color: rgb(var(--ink-2)); white-space: nowrap; }
-.hm { width: 11px; height: 11px; border-radius: 3px; background: rgb(var(--wash)); flex-shrink: 0; }
+/* 11px data cells — sized so 26 tracked weeks fit a panel, not a spacing token */
+.hm { width: 11px; height: 11px; border-radius: var(--r-sm); background: rgb(var(--wash)); flex-shrink: 0; }
 .hm-void { background: transparent; }
 .hm-null { background: transparent; border: 1px dashed rgb(var(--line-strong)); box-sizing: border-box; }
 .hm-1 { background: rgba(var(--blue), .3); }
 .hm-2 { background: rgba(var(--blue), .55); }
 .hm-3 { background: rgba(var(--blue), .8); }
 .hm-4 { background: rgb(var(--blue)); }
-.hm-legend { display: flex; align-items: center; gap: 4px; margin-top: var(--s3); }
+.hm-legend { display: flex; align-items: center; gap: var(--s1); margin-top: var(--s3); }
+.hm-legend .hm-null { margin-left: var(--s3); }
 .death-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s4); }
 .death-list li { display: flex; gap: var(--s3); align-items: flex-start; }
 .death-list p { margin: 0; font-size: var(--fs-14); line-height: 18px; }
@@ -773,7 +775,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-foot { display: flex; justify-content: flex-end; margin-top: var(--s3); }
 .chart-foot a { display: inline-flex; align-items: center; min-height: var(--tap); margin: -14px 0; }
 .chart-event-legend { display: flex; gap: var(--s3); margin-top: var(--s2); color: rgb(var(--ink-2)); font-size: var(--fs-11); }
-.chart-event-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.chart-event-legend span { display: inline-flex; align-items: center; gap: var(--s1); }
 .chart-event-legend i { width: 10px; height: 10px; display: inline-block; }
 .chart-event-legend .event-level { border: 2px solid rgb(var(--green)); border-radius: var(--r-circle); background: rgb(var(--surface-raised)); }
 .chart-event-legend .event-death { position: relative; }
@@ -1010,7 +1012,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
     gap: 1px;
   }
   .donut-board { justify-content: center; }
-  .donut-chart svg { width: 130px; height: 130px; }
   .donut-legend { min-width: 0; flex-basis: 100%; }
 }
 
@@ -1022,7 +1023,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz-tip {
   position: absolute; transform: translate(-50%, -130%);
   display: grid; gap: 1px; text-align: center;
-  padding: 4px 10px; white-space: nowrap; pointer-events: none; z-index: 5;
+  padding: var(--s1) var(--s3); white-space: nowrap; pointer-events: none; z-index: 5;
   background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--stroke));
   border-radius: var(--r-input); box-shadow: var(--shadow-float);
 }
@@ -1052,6 +1053,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz .vevent-death { fill: none; stroke: rgb(var(--red)); stroke-width: 2.5; stroke-linecap: round; }
 .viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
 .donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }
+/* fixed 160px — matches the svg's own viewBox, so donut text renders at token size */
 .donut-chart svg { width: 160px; height: 160px; flex-shrink: 0; }
 .donut-legend { display: grid; gap: var(--s2); flex: 1 1 200px; min-width: 200px; list-style: none; margin: 0; padding: 0; }
 .donut-legend li { display: flex; align-items: center; gap: var(--s2); }
@@ -1064,8 +1066,19 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
 /* the metric/range toggles are this page's primary chart controls — HIG minimum tap target */
 .chart-controls .btn { min-height: 28px; }
-.chart-button-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.chart-button-group { display: flex; gap: var(--s2); flex-wrap: wrap; }
 .chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
+
+/* one page-header pattern — the h1 previously carried per-page inline styles */
+.page-head { padding: var(--s2) 0 var(--s1); }
+.page-head h1 { font-size: var(--fs-26); letter-spacing: -.4px; }
+.page-head-roomy { padding-bottom: var(--s5); }
+
+/* chartInto() placeholder — fills its slot so the chart measures a true width */
+.chart-mount { width: 100%; min-width: 0; }
+.chart-title { margin: 0 0 var(--s1); }
+.chart-note { margin: 0; }
+.panel-eyebrow { margin: 0 0 var(--s3); }
 
 .section { margin-top: var(--s8); }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }

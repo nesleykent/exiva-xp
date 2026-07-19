@@ -84,8 +84,8 @@ function card(c) {
 }
 
 stage.innerHTML = `
-  <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Charms</h1>
+  <header class="page-head">
+    <h1>Charms</h1>
     <p class="dim" style="max-width:64ch">Plan charm spending from tracked earned points, then match elemental charms to the creatures you actually hunt. Spending and assignments remain private in the Cyclopedia. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
   </header>
 

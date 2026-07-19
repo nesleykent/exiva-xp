@@ -25,8 +25,8 @@ let activeStep = 'paste';
 
 stage.classList.add('narrow');
 stage.innerHTML = `
-  <header style="padding: 8px 0 20px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Log a hunt</h1>
+  <header class="page-head page-head-roomy">
+    <h1>Log a hunt</h1>
     <p class="dim" id="paste-help">Paste the Hunting Analyser exactly as the client copies it. Parsing happens in your browser; the original text is saved untouched in your personal logbook.</p>
   </header>
   <nav class="stepper" id="stepper" aria-label="Log a hunt progress"></nav>

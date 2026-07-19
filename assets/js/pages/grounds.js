@@ -151,8 +151,8 @@ function bestAttackElement(attackOrder, vocation) {
 }
 
 stage.innerHTML = `
-  <header id="planner-head" style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Hunt planner</h1>
+  <header id="planner-head" class="page-head">
+    <h1>Hunt planner</h1>
     <p class="dim" style="max-width:60ch">Pick a ground matched to ${esc(characterName)}'s level, vocation and party size. Curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
   <form class="filter-bar filter-compact" id="f" role="search">

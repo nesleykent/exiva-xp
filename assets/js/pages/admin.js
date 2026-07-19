@@ -13,8 +13,8 @@ const FIELDS = ['id', 'loggedAt', 'ground', 'vocation', 'level', 'party', 'world
   'minutes', 'xpRaw', 'xpRawRate', 'xpRate', 'loot', 'supplies', 'balance'];
 
 stage.innerHTML = `
-  <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Logbook</h1>
+  <header class="page-head">
+    <h1>Logbook</h1>
     <p class="dim" style="max-width:64ch">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
   </header>
   <section class="section" style="margin-top:var(--s5)">

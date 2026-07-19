@@ -68,8 +68,8 @@ const imbState = { tier: 'powerful' };
 const IMB_WORLD = profile?.world || config.world;
 
 stage.innerHTML = `
-  <header style="padding: 8px 0 4px">
-    <h1 style="font-size:26px; letter-spacing:-.4px">Character tools</h1>
+  <header class="page-head">
+    <h1>Character tools</h1>
     <p class="dim" style="max-width:66ch">Practical ${esc(characterName)} tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
   </header>
 
