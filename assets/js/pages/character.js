@@ -653,17 +653,6 @@ stage.innerHTML = `
 
   <section class="progression-overview" aria-label="Progression">
     ${progressionOverviewHtml()}
-    ${grounds4me.length ? `
-    <div class="character-next-strip">
-      <div class="section-subhead first"><h3>Next hunts</h3><a class="fine dim" href="grounds.html">Open planner</a></div>
-      <div class="hunt-rail">
-        ${grounds4me.slice(0, 8).map((row) => `
-          <a class="hunt-card" href="grounds.html?g=${esc(row.groundSlug)}" title="${esc(row.ground)} - ${kk(row.xpRawRate)} raw XP/h from level ${nf(row.level)}">
-            ${ring(row.ground)}
-            <span class="cap">${esc(row.ground)}</span>
-          </a>`).join('')}
-      </div>
-    </div>` : ''}
     <div class="panel panel-pad viz progression-chart">
       <div class="chart-controls">
         <div>
