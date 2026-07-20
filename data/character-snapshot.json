@@ -217,8 +217,8 @@
     "name": "David Mithrandir",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1426,
-    "value": 48218165753
+    "level": 1427,
+    "value": 48235715753
    },
    {
     "rank": 28,
@@ -342,6 +342,14 @@
    },
    {
     "rank": 43,
+    "name": "Trefor Das Sombras",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1239,
+    "value": 31609101535
+   },
+   {
+    "rank": 44,
     "name": "Saiudinho",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -349,20 +357,12 @@
     "value": 31593104589
    },
    {
-    "rank": 44,
+    "rank": 45,
     "name": "Akkao",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1239,
     "value": 31590499487
-   },
-   {
-    "rank": 45,
-    "name": "Trefor Das Sombras",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1239,
-    "value": 31574083090
    },
    {
     "rank": 46,
