@@ -49,10 +49,9 @@ function flowGradientDefs() {
         <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
         <stop offset="100%" style="stop-color:var(--grad-purple)"/>
       </linearGradient>
-      <linearGradient id="${area}" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" style="stop-color:var(--grad-rose)"/>
-        <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
-        <stop offset="100%" style="stop-color:var(--grad-purple)"/>
+      <linearGradient id="${area}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:var(--grad-rose);stop-opacity:.2"/>
+        <stop offset="100%" style="stop-color:var(--grad-rose);stop-opacity:0"/>
       </linearGradient>
     </defs>`,
   };
@@ -178,10 +177,8 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
     const cx = x(i) + (eventIndex * 8);
     const cy = y(d.n) - 9;
-    if (event.type === 'death') {
-      return `<g class="vevent vevent-death"><path d="M${(cx - 4).toFixed(1)} ${(cy - 4).toFixed(1)}L${(cx + 4).toFixed(1)} ${(cy + 4).toFixed(1)}M${(cx + 4).toFixed(1)} ${(cy - 4).toFixed(1)}L${(cx - 4).toFixed(1)} ${(cy + 4).toFixed(1)}"/><title>${esc(event.label)}</title></g>`;
-    }
-    return `<circle class="vevent vevent-level" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"><title>${esc(event.label)}</title></circle>`;
+    const cls = event.type === 'death' ? 'vevent-death' : 'vevent-level';
+    return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"><title>${esc(event.label)}</title></circle>`;
   })).join('');
   const grid = ticks.map((v) =>
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
