@@ -8,7 +8,10 @@
 .home-dashboard-head .eyebrow { letter-spacing: 1px; }
 .home-metric-grid, .pulse-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s6); margin-top: var(--s6); }
 .home-metric, .pulse { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; padding: var(--s4); }
-.home-metric > b, .pulse .big { font-size: var(--fs-28); line-height: 1; letter-spacing: -.3px; }
+/* explicit weight — .home-metric's <b> and .dashboard-metric's <b> inherit
+   bold from the tag itself, but .pulse .big is a plain <div> (analytics.js/
+   charms.js), so it rendered at regular weight until this was explicit */
+.home-metric > b, .pulse .big { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; }
 .home-metric > b em { margin-left: 2px; color: rgb(var(--ink-2)); font-size: var(--fs-14); font-style: normal; font-weight: 600; }
 .home-metric > small { font-size: var(--fs-12); line-height: 16px; }
 .home-next-hunt, .home-attention { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s6); padding: var(--s6); }
@@ -725,7 +728,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
    this component's own layout, so a .panel change (hover shadow, dark-mode
    surface) reaches every KPI card the same way */
 .dashboard-metric { display: grid; gap: var(--s2); padding: var(--s4); min-width: 0; }
-.dashboard-metric > b { font-size: var(--fs-28); line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.dashboard-metric > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
 .dashboard-metric > b.dashboard-date { font-size: clamp(23px, 3vw, 34px); }
 .dashboard-metric > small { color: rgb(var(--ink-2)); font-size: var(--fs-12); line-height: 16px; }
 .metric-delta { font-style: normal; font-weight: 700; font-size: var(--fs-12); }
@@ -815,6 +818,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .character-tab-panel[hidden] { display: none; }
 .empty-action { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 132px; padding: var(--s5); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
 .empty-action h3, .empty-action p { margin: 0; }
+.empty-action h3 { font-size: var(--fs-18); } /* was the browser's UA default (18.72px), not a token */
 .empty-action p { margin-top: var(--s2); max-width: 58ch; }
 .hunt-summary, .event-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); margin-bottom: var(--s4); }
 .hunt-summary > span, .event-summary > span { display: grid; gap: 2px; padding: var(--s4); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
