@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2575,
-    "value": 283997049354
+    "value": 283999138105
    },
    {
     "rank": 3,
@@ -49,8 +49,8 @@
     "name": "Tchaaa",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2117,
-    "value": 157842523763
+    "level": 2118,
+    "value": 158002720326
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2100,
-    "value": 154066423877
+    "value": 154072706114
    },
    {
     "rank": 8,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1757,
-    "value": 90144679443
+    "value": 90146434402
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1708,
-    "value": 82778035103
+    "value": 82829166788
    },
    {
     "rank": 13,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1576,
-    "value": 65042767235
+    "value": 65045246511
    },
    {
     "rank": 18,
@@ -153,8 +153,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1555,
-    "value": 62457270063
+    "level": 1556,
+    "value": 62546738126
    },
    {
     "rank": 20,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1547,
-    "value": 61501483891
+    "value": 61513187960
    },
    {
     "rank": 21,
@@ -186,7 +186,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1475,
-    "value": 53323436455
+    "value": 53344119875
    },
    {
     "rank": 24,
@@ -194,15 +194,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1466,
-    "value": 52339138861
+    "value": 52349313621
    },
    {
     "rank": 25,
     "name": "Fa llen",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1453,
-    "value": 50982126876
+    "level": 1454,
+    "value": 51026078283
    },
    {
     "rank": 26,
@@ -218,7 +218,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1427,
-    "value": 48235715753
+    "value": 48251972169
    },
    {
     "rank": 28,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1418,
-    "value": 47350110319
+    "value": 47367666427
    },
    {
     "rank": 29,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1405,
-    "value": 46076079515
+    "value": 46076458025
    },
    {
     "rank": 30,
@@ -242,23 +242,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1379,
-    "value": 43530768485
+    "value": 43561128613
    },
    {
     "rank": 31,
     "name": "Flandy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1359,
-    "value": 41674993461
+    "level": 1360,
+    "value": 41769859939
    },
    {
     "rank": 32,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1358,
-    "value": 41559589985
+    "level": 1359,
+    "value": 41650536012
    },
    {
     "rank": 33,
@@ -290,7 +290,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1309,
-    "value": 37275053068
+    "value": 37292603680
    },
    {
     "rank": 37,
@@ -321,8 +321,8 @@
     "name": "Arianwen",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1248,
-    "value": 32302926941
+    "level": 1249,
+    "value": 32333401739
    },
    {
     "rank": 41,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1243,
-    "value": 31908070691
+    "value": 31923483931
    },
    {
     "rank": 43,
@@ -350,19 +350,19 @@
    },
    {
     "rank": 44,
-    "name": "Saiudinho",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1239,
-    "value": 31593104589
-   },
-   {
-    "rank": 45,
     "name": "Akkao",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1239,
-    "value": 31590499487
+    "value": 31606400498
+   },
+   {
+    "rank": 45,
+    "name": "Saiudinho",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1239,
+    "value": 31603279349
    },
    {
     "rank": 46,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1231,
-    "value": 30975729524
+    "value": 30991587311
    },
    {
     "rank": 47,
@@ -386,7 +386,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1203,
-    "value": 28931896658
+    "value": 28935030078
    },
    {
     "rank": 49,
