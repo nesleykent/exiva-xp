@@ -134,7 +134,7 @@
 }
 
 [data-appearance="dark"] {
-  --surface: 0, 0, 0;
+  --surface: 12, 16, 20; /* the source's --ig-primary-background — not pure black */
   --surface-2: 37, 41, 46;
   --surface-raised: 33, 35, 40;
   --ink: 245, 245, 245;
