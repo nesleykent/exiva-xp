@@ -937,7 +937,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   height: auto;
   display: block;
 }
-.sparkline .vline { fill: none; stroke-width: 2; stroke-linecap: round; }
+.sparkline .vline { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.sparkline .varea { fill-opacity: .3; }
 .sparkline .vdot { fill: var(--grad-purple); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .sparkline .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 
@@ -1063,7 +1064,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz .vaxis { stroke: rgb(var(--line)); }
 .viz .vtick { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 /* line + area colour comes from the flowGradientDefs() url(#...) fill/stroke set on the path itself */
-.viz .vline { fill: none; stroke-width: 2; stroke-linecap: round; }
+.viz .vline { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.viz .varea { fill-opacity: .3; }
 /* dots wear a 2px surface ring so they stay legible crossing the line */
 .viz .vdot { fill: var(--grad-purple); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .viz .vevent { pointer-events: none; }
@@ -1074,7 +1076,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz-legend li { display: flex; align-items: center; gap: var(--s1); }
 .viz-legend b { color: rgb(var(--ink)); font-weight: 700; }
 .viz-legend-swatch { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.viz-legend-line { background: var(--grad-hero); }
+.viz-legend-line { width: 16px; height: 3px; border-radius: var(--r-pill); background: var(--grad-hero); }
 .viz-legend-level { background: rgb(var(--surface-raised)); border: 2px solid rgb(var(--green)); box-sizing: border-box; }
 .viz-legend-death { background: none; border: 2px solid rgb(var(--red)); box-sizing: border-box; }
 .donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }

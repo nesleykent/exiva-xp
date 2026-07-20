@@ -49,9 +49,10 @@ function flowGradientDefs() {
         <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
         <stop offset="100%" style="stop-color:var(--grad-purple)"/>
       </linearGradient>
-      <linearGradient id="${area}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" style="stop-color:var(--grad-magenta);stop-opacity:.22"/>
-        <stop offset="100%" style="stop-color:var(--grad-magenta);stop-opacity:0"/>
+      <linearGradient id="${area}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" style="stop-color:var(--grad-rose)"/>
+        <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
+        <stop offset="100%" style="stop-color:var(--grad-purple)"/>
       </linearGradient>
     </defs>`,
   };
