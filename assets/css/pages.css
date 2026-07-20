@@ -343,12 +343,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .paste-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--s3); margin-top: var(--s3); }
 .analytics-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
 .analytics-duo .section { min-width: 0; }
-.charm-empty { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
-.charm-empty p { margin: var(--s1) 0 0; }
 
 @media (max-width: 879px) {
   .analytics-duo { grid-template-columns: 1fr; }
-  .charm-empty { align-items: flex-start; flex-direction: column; }
 }
 
 /* ---------- character tools ---------- */

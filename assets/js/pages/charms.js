@@ -104,7 +104,7 @@ stage.innerHTML = `
 
   <section class="section">
     <div class="section-bar"><h2>Charms for your hunts</h2><span class="fine dim">elemental Major charms · per-attack expectation (maxed trigger chance × 5% of initial HP) weighted by your logged kills</span></div>
-    ${advice.length ? `<div class="tiles">${advice.map(adviceCard).join('')}</div>` : `<div class="panel panel-pad charm-empty"><div><b>Log a hunt to personalize this row</b><p class="fine dim">Recommendations need your actual creature kills, so no charm is guessed before evidence exists.</p></div><a class="btn btn-primary" href="submit.html">Log a hunt</a></div>`}
+    ${advice.length ? `<div class="tiles">${advice.map(adviceCard).join('')}</div>` : `<div class="empty-action"><div><h3>Log a hunt to personalize this row</h3><p class="dim">Recommendations need your actual creature kills, so no charm is guessed before evidence exists.</p></div><a class="btn btn-primary" href="submit.html">Log a hunt</a></div>`}
   </section>
 
   <section class="section">
