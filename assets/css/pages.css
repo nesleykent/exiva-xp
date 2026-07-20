@@ -790,14 +790,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .character-next-strip { margin-top: var(--s6); }
 .chart-foot { display: flex; justify-content: flex-end; margin-top: var(--s3); }
 .chart-foot a { display: inline-flex; align-items: center; min-height: var(--tap); margin: -14px 0; }
-.chart-event-legend { display: flex; gap: var(--s3); margin-top: var(--s2); color: rgb(var(--ink-2)); font-size: var(--fs-11); }
-.chart-event-legend span { display: inline-flex; align-items: center; gap: var(--s1); }
-.chart-event-legend i { width: 10px; height: 10px; display: inline-block; }
-.chart-event-legend .event-level { border: 2px solid rgb(var(--green)); border-radius: var(--r-circle); background: rgb(var(--surface-raised)); }
-.chart-event-legend .event-death { position: relative; }
-.chart-event-legend .event-death::before, .chart-event-legend .event-death::after { content: ''; position: absolute; left: 4px; top: 0; width: 2px; height: 11px; background: rgb(var(--red)); }
-.chart-event-legend .event-death::before { transform: rotate(45deg); }
-.chart-event-legend .event-death::after { transform: rotate(-45deg); }
 .character-deep-dive { margin-top: var(--s6); }
 .character-tabs-wrap { overflow-x: auto; border: 1px solid rgb(var(--line)); border-radius: var(--r-input) var(--r-input) 0 0; scrollbar-width: none; }
 .character-tabs-wrap::-webkit-scrollbar { display: none; }

@@ -14,7 +14,7 @@ import {
   formatDateTimeInTimezone,
 } from '../lib/timezones.js';
 import { $, ring } from '../shell.js';
-import { flow, sparkline, attachVizHover, chartInto, refreshCharts } from '../viz/svg.js';
+import { flow, flowLegend, sparkline, attachVizHover, chartInto, refreshCharts } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
@@ -660,10 +660,7 @@ stage.innerHTML = `
         <div>
           <p class="eyebrow chart-title" id="xp-chart-title">Daily XP gained</p>
           <p class="fine dim chart-note" id="xp-chart-note">${esc(historyNote)}</p>
-          <div class="chart-event-legend" aria-label="Chart event markers">
-            <span><i class="event-level"></i>Level-up</span>
-            <span><i class="event-death"></i>Death</span>
-          </div>
+          <div id="xp-chart-legend"></div>
         </div>
         <div class="chart-control-groups">
           <div class="chart-button-group" aria-label="XP chart metric">
@@ -797,6 +794,7 @@ function renderXpChart() {
   $('#xp-chart-title').textContent = selected.title;
   $('#xp-chart-note').textContent = selected.note;
   chartInto(chart, (width) => flow(selected.data, { width, baseline: selected.baseline, fmt: selected.fmt, empty: 'Not enough rows for this chart yet.' }));
+  $('#xp-chart-legend').innerHTML = flowLegend(selected.data, selected.title, selected.fmt);
   attachVizHover(chart.closest('.viz'));
   document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
     btn.setAttribute('aria-pressed', String(btn.dataset.xpMetric === xpState.metric));
