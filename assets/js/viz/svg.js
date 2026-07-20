@@ -234,12 +234,18 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf } = {}) {
   const start = data[0];
   const end = data.at(-1);
   const grad = flowGradientDefs();
+  // fs-11 tabular numerals average ~6.5px/char (same estimate clip() uses);
+  // a narrow card (e.g. a 4-up KPI grid at in-between viewports, ~90-130px)
+  // has too little room for both edge labels — drop the start label rather
+  // than let them collide into unreadable overlapping text.
+  const labelW = (s) => s.length * 6.5;
+  const roomForBoth = labelW(start.key) + labelW(end.key) + 12 <= w;
   return `<svg class="sparkline-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(`${start.key} ${fmt(start.n)} to ${end.key} ${fmt(end.n)}`)}" xmlns="http://www.w3.org/2000/svg">
     ${grad.defs}
     <path class="varea" fill="url(#${grad.area})" d="${area}"/>
     <path class="vline" stroke="url(#${grad.line})" d="${line}"/>
     <circle class="vdot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(end.n).toFixed(1)}" r="3.5"><title>${esc(end.key)}: ${fmt(end.n)}</title></circle>
-    <text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>
+    ${roomForBoth ? `<text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>` : ''}
     <text class="vtick" x="${width - pad.r}" y="${height - 3}" text-anchor="end">${esc(end.key)}</text>
   </svg>`;
 }
