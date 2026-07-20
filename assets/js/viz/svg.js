@@ -10,10 +10,13 @@
  * - Labels: short "Jul 19"-style dates on axes; the canonical ISO date stays
  *   in tooltips, tables and the inspector. Text wears text tokens, never the
  *   series colour.
- * - Colour: blue is the single primary series; green/red are reserved for
- *   level-up/death markers and signed deltas; the element palette is the only
- *   categorical set, assigned in fixed order and never cycled — overflow
- *   folds into a grey "Other".
+ * - Colour: the primary time-series line (flow/sparkline) wears the brand
+ *   hero gradient (rose → magenta → purple, --grad-* tokens) as the site's
+ *   one whole-word-style accent moment; every other series (bars, donut
+ *   segments outside the fixed element palette) stays blue. green/red are
+ *   reserved for level-up/death markers and signed deltas; the element
+ *   palette is the only categorical set, assigned in fixed order and never
+ *   cycled — overflow folds into a grey "Other".
  * - Tooltips: one shared hover layer (attachVizHover) — value leads, label
  *   follows; a crosshair snaps to the nearest point on line charts, and every
  *   bar/segment/cell is its own hit target. Native <title> stays as the
@@ -30,6 +33,29 @@ import { esc } from '../lib/text.js';
 import { kk, nf } from '../lib/fmt.js';
 
 const clip = (s, n) => (String(s).length > n ? `${String(s).slice(0, n - 1)}…` : String(s));
+
+// Unique per-chart gradient ids — url(#id) references resolve document-wide,
+// so two charts sharing an id would silently repaint each other on redraw.
+let gradSeq = 0;
+function flowGradientDefs() {
+  const id = gradSeq++;
+  const line = `viz-grad-line-${id}`;
+  const area = `viz-grad-area-${id}`;
+  return {
+    line, area,
+    defs: `<defs>
+      <linearGradient id="${line}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" style="stop-color:var(--grad-rose)"/>
+        <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
+        <stop offset="100%" style="stop-color:var(--grad-purple)"/>
+      </linearGradient>
+      <linearGradient id="${area}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:var(--grad-magenta);stop-opacity:.22"/>
+        <stop offset="100%" style="stop-color:var(--grad-magenta);stop-opacity:0"/>
+      </linearGradient>
+    </defs>`,
+  };
+}
 
 /** Standard in-panel empty state — one look for every chart with no rows. */
 export function vizEmpty(message = 'No data for this range yet.') {
@@ -168,8 +194,26 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const anchor = (i) => (i === 0 ? 'start' : i === last ? 'end' : 'middle');
   const marks = xIdx.map((i) =>
     `<text class="vtick" x="${x(i).toFixed(1)}" y="${height - 6}" text-anchor="${anchor(i)}">${esc(data[i].key)}</text>`).join('');
+  const grad = flowGradientDefs();
 
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grid}<path class="varea" d="${area}"/><path class="vline" d="${line}"/>${dots}${events}${marks}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
+}
+
+/**
+ * Legend row for a flow() chart: series swatch + value, plus level-up/death
+ * keys only when the series actually carries those event types — an unused
+ * key would promise markers the data never shows.
+ */
+export function flowLegend(data, seriesLabel, fmt = kk) {
+  if (!data.length) return '';
+  const last = data.at(-1);
+  const hasLevel = data.some((d) => (d.events || []).some((e) => e.type === 'level'));
+  const hasDeath = data.some((d) => (d.events || []).some((e) => e.type === 'death'));
+  return `<ul class="viz-legend">
+    <li><i class="viz-legend-swatch viz-legend-line"></i>${esc(seriesLabel)} <b class="num">${fmt(last.n)}</b></li>
+    ${hasLevel ? '<li><i class="viz-legend-swatch viz-legend-level"></i>Level-up</li>' : ''}
+    ${hasDeath ? '<li><i class="viz-legend-swatch viz-legend-death"></i>Death</li>' : ''}
+  </ul>`;
 }
 
 /** Compact independently-scaled trend, for table/card rows where a full axis would overstate precision. */
@@ -188,9 +232,11 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf } = {}) {
   const area = `${line} L${x(data.length - 1).toFixed(1)},${pad.t + h} L${x(0).toFixed(1)},${pad.t + h} Z`;
   const start = data[0];
   const end = data.at(-1);
+  const grad = flowGradientDefs();
   return `<svg class="sparkline-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(`${start.key} ${fmt(start.n)} to ${end.key} ${fmt(end.n)}`)}" xmlns="http://www.w3.org/2000/svg">
-    <path class="varea" d="${area}"/>
-    <path class="vline" d="${line}"/>
+    ${grad.defs}
+    <path class="varea" fill="url(#${grad.area})" d="${area}"/>
+    <path class="vline" stroke="url(#${grad.line})" d="${line}"/>
     <circle class="vdot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(end.n).toFixed(1)}" r="3.5"><title>${esc(end.key)}: ${fmt(end.n)}</title></circle>
     <text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>
     <text class="vtick" x="${width - pad.r}" y="${height - 3}" text-anchor="end">${esc(end.key)}</text>

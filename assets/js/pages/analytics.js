@@ -5,7 +5,7 @@ import { esc } from '../lib/text.js';
 import { compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
-import { bars, flow, sparkline, attachVizHover, categorical, donut, chartInto } from '../viz/svg.js';
+import { bars, flow, flowLegend, sparkline, attachVizHover, categorical, donut, chartInto } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
@@ -24,10 +24,21 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 // attributing that whole span's XP delta to a single day would fabricate a
 // spike out of weeks of real progress, so gaps are skipped entirely here.
 const isConsecutiveDay = (a, b) => (new Date(b.date) - new Date(a.date)) === ONE_DAY_MS;
+const deaths = profile?.deaths || [];
+const chartEvents = (date) => {
+  const events = [];
+  const row = history.find((r) => r.date === date);
+  const prevRow = history[history.findIndex((r) => r.date === date) - 1];
+  if (row && prevRow && row.level > prevRow.level) events.push({ type: 'level', label: `Reached level ${nf(row.level)}` });
+  deaths.filter((d) => String(d.time || '').slice(0, 10) === date).forEach((d) => {
+    events.push({ type: 'death', label: d.reason || `Died at level ${nf(d.level)}` });
+  });
+  return events;
+};
 const dailyXp = [];
 for (let i = 1; i < history.length; i++) {
   if (!isConsecutiveDay(history[i - 1], history[i])) continue;
-  dailyXp.push({ key: md(history[i].date), label: history[i].date, n: Math.max(0, history[i].experience - history[i - 1].experience) });
+  dailyXp.push({ key: md(history[i].date), label: history[i].date, n: Math.max(0, history[i].experience - history[i - 1].experience), events: chartEvents(history[i].date) });
 }
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
@@ -287,7 +298,7 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="eyebrow">Total profit</div><div class="big num">${totalProfit != null ? compact(totalProfit) : '—'}</div><div class="fine dim">${meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet'}</div></div>
     <div class="panel pulse"><div class="eyebrow">Total hunt XP</div><div class="big num">${totalHuntXp != null ? compact(totalHuntXp) : '—'}</div><div class="fine dim">${lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only'}</div></div>
   </div>
-  ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { width, fmt: compact })))}
+  ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { width, fmt: compact })) + flowLegend(dailyXp, 'XP/day', compact))}
   <div class="analytics-duo">
     ${board('Avg XP gain by weekday', weekdayXp, mount('weekday-xp', (width) => bars(weekdayXp, { width, fmt: compact })))}
     ${profitShareBoard(profitByGround)}
