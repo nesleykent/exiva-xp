@@ -1104,7 +1104,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
    smaller top gap even when it's also a .section (source order otherwise
    lets the plain .section rule above win) */
 .section.show-more, .section.section-tight { margin-top: var(--s5); }
-.section.section-flush { margin-top: 0; }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
 .section > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
 .section-subhead { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin: var(--s5) 0 var(--s2); flex-wrap: wrap; }

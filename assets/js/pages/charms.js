@@ -97,17 +97,17 @@ stage.innerHTML = `
   </div>
   <p class="fine dim dossier-note">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
 
-  ${selectedCharm ? `<section class="section section-flush">
+  ${selectedCharm ? `<section class="section">
     <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>
     <div class="tiles">${card(selectedCharm)}</div>
   </section>` : ''}
 
-  <section class="section section-flush">
+  <section class="section">
     <div class="section-bar"><h2>Charms for your hunts</h2><span class="fine dim">elemental Major charms · per-attack expectation (maxed trigger chance × 5% of initial HP) weighted by your logged kills</span></div>
     ${advice.length ? `<div class="tiles">${advice.map(adviceCard).join('')}</div>` : `<div class="panel panel-pad charm-empty"><div><b>Log a hunt to personalize this row</b><p class="fine dim">Recommendations need your actual creature kills, so no charm is guessed before evidence exists.</p></div><a class="btn btn-primary" href="submit.html">Log a hunt</a></div>`}
   </section>
 
-  <section class="section section-flush">
+  <section class="section">
     <div class="section-bar"><h2>Elemental damage charms</h2><span class="fine dim">one per element — the Codex and Ground pages recommend these by name</span></div>
     <div class="tiles">${elemental.map(card).join('')}</div>
   </section>
