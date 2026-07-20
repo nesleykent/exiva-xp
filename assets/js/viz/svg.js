@@ -188,15 +188,21 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const h = height - pad.t - pad.b;
   const x = (i) => pad.l + (data.length === 1 ? w / 2 : (i / (data.length - 1)) * w);
   const y = (v) => pad.t + h - ((v - lo) / span) * h;
+  const last = data.length - 1;
 
   const pts = data.map((d, i) => `${x(i).toFixed(1)},${y(d.n).toFixed(1)}`);
   const line = `M${pts.join(' L')}`;
-  const area = `${line} L${x(data.length - 1).toFixed(1)},${pad.t + h} L${x(0).toFixed(1)},${pad.t + h} Z`;
+  const area = `${line} L${x(last).toFixed(1)},${pad.t + h} L${x(0).toFixed(1)},${pad.t + h} Z`;
   // past 48 points the dot row reads as noise — hide the marks and let the
-  // hover layer surface the nearest one (data-r is each dot's resting size)
+  // hover layer surface the nearest one (data-r is each dot's resting size).
+  // The current/last point stays visible regardless — the reference mockup
+  // always marks "you are here" with a small solid dot at the line's end.
   const dotR = data.length > 48 ? 0 : 3;
-  const dots = data.map((d, i) =>
-    `<circle class="vdot" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${dotR}" data-r="${dotR}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`).join('');
+  const dots = data.map((d, i) => {
+    const r = i === last ? Math.max(dotR, 3) : dotR;
+    const cls = i === last ? 'vdot vdot-current' : 'vdot';
+    return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${dotR}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`;
+  }).join('');
   const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
     const cx = x(i) + (eventIndex * 8);
     const cy = y(d.n) - 9;
@@ -206,7 +212,6 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const grid = ticks.map((v) =>
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
       <text class="vtick" x="${pad.l - 6}" y="${y(v).toFixed(1)}" text-anchor="end" dominant-baseline="central">${axisFmt(v)}</text>`).join('');
-  const last = data.length - 1;
   // a narrow chart carries three date labels, a wide one four
   const xIdx = [...new Set(data.length >= 8 && width >= 520
     ? [0, Math.round(last / 3), Math.round((2 * last) / 3), last]
