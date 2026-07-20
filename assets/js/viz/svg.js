@@ -10,13 +10,18 @@
  * - Labels: short "Jul 19"-style dates on axes; the canonical ISO date stays
  *   in tooltips, tables and the inspector. Text wears text tokens, never the
  *   series colour.
- * - Colour: the primary time-series line (flow/sparkline) wears the brand
- *   hero gradient (rose → magenta → purple, --grad-* tokens) as the site's
- *   one whole-word-style accent moment; every other series (bars, donut
- *   segments outside the fixed element palette) stays blue. green/red are
- *   reserved for level-up/death markers and signed deltas; the element
- *   palette is the only categorical set, assigned in fixed order and never
- *   cycled — overflow folds into a grey "Other".
+ * - Colour: three deliberate gradient-as-data-colour exceptions (see
+ *   AGENTS.md §5), everything else stays blue. (1) The primary time-series
+ *   line/area in flow()/sparkline() wears the brand hero gradient (rose →
+ *   magenta → purple). (2) bars(): the row holding the actual max value
+ *   (by value, not row order) wears the gradient; every other row is a flat
+ *   de-emphasis grey, never blue — the gradient marks the answer in a
+ *   ranking, not just the longest bar. (3) .badge-highlight (pages.css) for
+ *   a single top-ranked list item. green/red are reserved for level-up/death
+ *   markers and signed deltas. categorical()/donut() use a fixed brand-hue
+ *   set (--brand-*) for non-elemental groupings only — assigned in fixed
+ *   order, never cycled, overflow folds into a grey "Other". Real elemental
+ *   data keeps the --c-* element palette so fire and ice stay distinguishable.
  * - Tooltips: one shared hover layer (attachVizHover) — value leads, label
  *   follows; a crosshair snaps to the nearest point on line charts, and every
  *   bar/segment/cell is its own hit target. Native <title> stays as the
@@ -122,7 +127,14 @@ function niceTicks(min, max, n = 4) {
   return { lo, hi: ticks.at(-1), ticks };
 }
 
-/** Horizontal bars: data = [{key, n}]. Direct-labelled, so no grid. */
+/**
+ * Horizontal bars: data = [{key, n}]. Whichever row holds the max value wears
+ * the brand hero gradient (found by value, not row 0 — weekday-style callers
+ * list rows chronologically, not ranked), matching the reference mockup's
+ * ranked-bar treatment (creature damage sources, XP/h by ground, ground
+ * population); every other row is a muted de-emphasis grey so the leader
+ * reads as the answer, not just the longest bar. Direct-labelled, so no grid.
+ */
 export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk, empty } = {}) {
   if (!data.length) return vizEmpty(empty);
   // the label column keeps its share of a narrow chart instead of a fixed
@@ -131,20 +143,31 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
   const labelChars = Math.max(14, Math.floor(labelW / 6.5));
   const height = data.length * (rowH + gap) + gap;
   const top = Math.max(...data.map((d) => d.n), 1);
+  // the leader is whichever row actually holds the max value, not row 0 —
+  // some callers (weekday averages) list rows chronologically, not ranked
+  const topIdx = data.findIndex((d) => d.n === top);
   const laneW = width - labelW - 86;
+  const gradId = `viz-grad-bar-${gradSeq++}`;
+  const defs = `<defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" style="stop-color:var(--grad-rose)"/>
+    <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
+    <stop offset="100%" style="stop-color:var(--grad-purple)"/>
+  </linearGradient></defs>`;
   const body = data.map((d, i) => {
     const y = gap + i * (rowH + gap);
     const w = Math.max(2, (d.n / top) * laneW);
     const r = Math.min(4, w / 2);
     // rounded at the data end only; square where the bar meets its label
     const bar = `M${labelW},${y} h${(w - r).toFixed(1)} a${r},${r} 0 0 1 ${r},${r} v${rowH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${(w - r).toFixed(1)} Z`;
+    const isLead = i === topIdx;
+    const fill = isLead ? ` fill="url(#${gradId})"` : '';
     return `<g>
       <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, labelChars))}</text>
-      <path class="vbar" d="${bar}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.key)}"><title>${esc(d.key)}: ${fmt(d.n)}</title></path>
+      <path class="vbar${isLead ? '' : ' vbar-rest'}" d="${bar}"${fill} data-v="${esc(fmt(d.n))}" data-l="${esc(d.key)}"><title>${esc(d.key)}: ${fmt(d.n)}</title></path>
       <text class="vvalue" x="${labelW + w + 8}" y="${y + rowH / 2}" dominant-baseline="central">${fmt(d.n)}</text>
     </g>`;
   }).join('');
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" xmlns="http://www.w3.org/2000/svg">${defs}${body}</svg>`;
 }
 
 /**
@@ -248,11 +271,14 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf } = {}) {
 }
 
 /**
- * The element palette is this project's only categorical set (AGENTS.md §5 —
- * data colours, never chrome). Fixed assignment order; grey (physical) is
- * reserved for the "Other" fold so a real category never wears it.
+ * Brand-family categorical set for non-elemental groupings (grounds, sources
+ * — never real element data, which stays on the --c-* palette so a reader
+ * can still tell fire from ice). Matches the reference mockup's donut/ranked
+ * charts, which use the brand hue family rather than the element palette for
+ * these breakdowns. Fixed assignment order; grey is reserved for the "Other"
+ * fold so a real category never wears it.
  */
-export const CATEGORICAL = ['--c-ice', '--c-fire', '--c-earth', '--c-energy', '--c-death', '--c-holy'];
+export const CATEGORICAL = ['--brand-rose', '--brand-magenta', '--brand-purple', '--brand-orange', '--brand-yellow'];
 const OTHER_COLOR = '--c-physical';
 
 /**

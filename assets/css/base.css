@@ -45,6 +45,17 @@
   --grad-spectrum: linear-gradient(125deg, var(--grad-yellow) 15%, var(--grad-orange) 30%, var(--grad-rose), var(--grad-magenta) 70%, var(--grad-purple) 85%);
   --grad-story: conic-gradient(from 220deg, var(--grad-yellow), var(--grad-orange), var(--grad-rose), var(--grad-magenta), var(--grad-purple), var(--grad-yellow));
 
+  /* RGB-triple twins of the --grad-* hex stops, for contexts that need
+     rgb(var(--x)) composability (donut segments, chart legend swatches) —
+     the site's second gradient-as-data-colour exception (AGENTS.md §5),
+     for non-elemental categorical groupings (grounds, sources), never
+     elemental data (--c-* stays reserved for that). */
+  --brand-rose: 255, 1, 105;
+  --brand-magenta: 211, 0, 197;
+  --brand-purple: 118, 56, 250;
+  --brand-orange: 255, 122, 0;
+  --brand-yellow: 255, 214, 0;
+
   /* semantic surfaces — light default */
   --surface: 255, 255, 255;
   --surface-2: 243, 245, 247;

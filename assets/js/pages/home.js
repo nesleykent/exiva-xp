@@ -5,11 +5,12 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, kk, nf } from '../lib/fmt.js';
+import { compact, kk, nf, md } from '../lib/fmt.js';
 import { experienceUntilNextLevel, progressWithinLevel } from '../engine/progression.js';
 import { judge } from '../engine/rules.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { ICONS, basisPill } from '../shell.js';
+import { sparkline, chartInto } from '../viz/svg.js';
 
 const { stage, table, config } = await boot('index.html', { ledger: true, config: true });
 const [profile, history] = await Promise.all([
@@ -26,15 +27,25 @@ const book = logbook();
 const consecutiveLatest = latest && previous
   && (new Date(latest.date) - new Date(previous.date)) === 86_400_000;
 const latestGain = consecutiveLatest ? Math.max(0, latest.experience - previous.experience) : null;
-const recentGains = history.slice(1).map((row, index) => {
+// gap-free daily gains, dated — the same series backs both the pace figure
+// and its sparkline, so the trend line never shows a number the average
+// didn't also use
+const gainSeries = history.slice(1).map((row, index) => {
   const prior = history[index];
   return (new Date(row.date) - new Date(prior.date)) === 86_400_000
-    ? Math.max(0, row.experience - prior.experience)
+    ? { key: md(row.date), n: Math.max(0, row.experience - prior.experience) }
     : null;
-}).filter((gain) => gain != null).slice(-7);
+}).filter((g) => g != null).slice(-14);
+const recentGains = gainSeries.slice(-7).map((g) => g.n);
 const avgDailyXp = recentGains.length
   ? Math.round(recentGains.reduce((sum, gain) => sum + gain, 0) / recentGains.length)
   : null;
+// a trailing 3-day rolling average of the same real gains — genuinely
+// distinct from the raw daily series above, not just the same shape twice
+const paceSeries = gainSeries.map((g, i, arr) => {
+  const window = arr.slice(Math.max(0, i - 2), i + 1);
+  return { key: g.key, n: Math.round(window.reduce((sum, w) => sum + w.n, 0) / window.length) };
+});
 const xpToNext = latest ? experienceUntilNextLevel(latest.level, latest.experience) : null;
 const levelProgress = latest ? progressWithinLevel(latest.level, latest.experience) : null;
 
@@ -95,12 +106,13 @@ const shortcuts = [
   ['admin.html', 'Logbook', ICONS.shield],
 ];
 
-function metric(label, value, detail, extra = '') {
+function metric(label, value, detail, { extra = '', sparkId } = {}) {
   return `
     <article class="panel home-metric">
       <span class="eyebrow">${esc(label)}</span>
       <b class="num">${value}</b>
       <small class="dim">${detail}${extra}</small>
+      ${sparkId ? `<div class="metric-spark" id="${sparkId}"></div>` : ''}
     </article>`;
 }
 
@@ -119,8 +131,8 @@ stage.innerHTML = `
 
   <section class="home-metric-grid" aria-label="Character at a glance">
     ${metric('Current level', level != null ? nf(level) : '—', levelProgress != null ? `${levelProgress.toFixed(0)}% through this level` : 'Waiting for exact experience')}
-    ${metric('Latest daily XP', latestGain != null ? `+${compact(latestGain)}` : '—', consecutiveLatest ? `tracked on ${esc(latest.date)}` : 'No consecutive-day reading')}
-    ${metric('XP pace', avgDailyXp != null ? `${compact(avgDailyXp)}<em>/day</em>` : '—', recentGains.length ? `average of ${nf(recentGains.length)} recorded days` : 'Not enough consecutive days')}
+    ${metric('Latest daily XP', latestGain != null ? `+${compact(latestGain)}` : '—', consecutiveLatest ? `tracked on ${esc(latest.date)}` : 'No consecutive-day reading', { sparkId: gainSeries.length >= 2 ? 'home-gain-spark' : null })}
+    ${metric('XP pace', avgDailyXp != null ? `${compact(avgDailyXp)}<em>/day</em>` : '—', recentGains.length ? `average of ${nf(recentGains.length)} recorded days` : 'Not enough consecutive days', { sparkId: gainSeries.length >= 2 ? 'home-pace-spark' : null })}
     ${metric(`Level ${level != null ? nf(level + 1) : ''}`, xpToNext != null ? compact(xpToNext) : '—', 'XP remaining')}
     ${metric('Charm points', charmPoints != null ? nf(charmPoints) : '—', charmPoints != null ? 'earned points; spending is private' : 'No tracked highscore value')}
   </section>
@@ -161,5 +173,10 @@ stage.innerHTML = `
       ${shortcuts.map(([href, label, icon]) => `<a href="${href}">${icon}<span>${esc(label)}</span></a>`).join('')}
     </div>
   </section>`;
+
+if (gainSeries.length >= 2) {
+  chartInto(document.getElementById('home-gain-spark'), (width) => sparkline(gainSeries, { width, height: 34, fmt: compact }));
+  chartInto(document.getElementById('home-pace-spark'), (width) => sparkline(paceSeries, { width, height: 34, fmt: compact }));
+}
 
 export {};

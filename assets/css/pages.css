@@ -163,6 +163,9 @@
 /* the source Badge has no caution tone — the brand gradient's orange stop
    is the sanctioned extension (it is already the fire data colour) */
 .badge-warning { background: rgb(var(--c-fire)); }
+/* second gradient-as-data-colour exception (see AGENTS.md §5, matching the
+   reference mockup): the single top-ranked item in a list, never a status */
+.badge-highlight { background: var(--grad-hero); }
 
 /* Pill — Exiva's quiet data/label chip (not a source component): soft wash
    fill, ink text. Categorical metadata (vocations, family/tier/rarity,
@@ -1048,8 +1051,11 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   padding: var(--s5); margin: 0;
   color: rgb(var(--ink-2)); font-size: var(--fs-13); text-align: center;
 }
-.viz .vbar { fill: rgb(var(--blue)); }
-.viz .vbar:hover { fill: rgb(var(--blue-press)); }
+/* the leader bar's fill comes from the url(#...) gradient set on the path
+   itself (bars() in viz/svg.js) — this rule must not set a competing fill */
+.viz .vbar:hover { opacity: .85; }
+.viz .vbar-rest { fill: rgba(var(--ink-2), .35); }
+.viz .vbar-rest:hover { fill: rgba(var(--ink-2), .55); }
 .viz .vlabel { fill: rgb(var(--ink)); font-size: var(--fs-12); font-family: var(--f-ui); }
 .viz .vvalue { fill: rgb(var(--ink-2)); font-size: var(--fs-12); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 .viz .vaxis { stroke: rgb(var(--line)); }

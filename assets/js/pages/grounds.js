@@ -373,7 +373,7 @@ function render() {
         const fastestTask = TASK_SPEEDS.find((speed) => ix?.get(g.slug)?.taskSpeeds.has(speed));
         return `
         <a class="panel tile planner-card${g.slug === state.detailSlug ? ' is-selected' : ''}" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
-          ${index === 0 ? '<span class="badge badge-info tile-rank">Top XP</span>' : ''}
+          ${index === 0 ? '<span class="badge badge-highlight tile-rank">Top XP</span>' : ''}
           <div class="planner-card-head">
             <div class="name">${esc(g.name)}</div>
             <span class="fine dim">Level ${nf(g.minLevel)}+</span>
