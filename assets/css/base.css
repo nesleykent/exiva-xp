@@ -80,6 +80,12 @@
   --line-strong: 168, 168, 168;
   --overlay: 0, 0, 0;
   --overlay-a: .05;
+  /* --ig-tertiary-button-border/-hover — distinct from --stroke/--wash: the
+     source's tertiary button border is darker than its general --ig-stroke
+     in dark mode (54 vs 85), and its hover wash doesn't match --wash exactly
+     in light mode (245 vs 239) */
+  --tertiary-border: 219, 219, 219;
+  --tertiary-hover: 245, 245, 245;
 
   /* fixed semantics — never theme-swap, matching the source's --web-always-* */
   --blue: 0, 149, 246;
@@ -148,6 +154,8 @@
   --line-strong: 85, 85, 85;
   --overlay: 255, 255, 255;
   --overlay-a: .1;
+  --tertiary-border: 54, 54, 54;
+  --tertiary-hover: 38, 38, 38;
   color-scheme: dark;
 }
 
@@ -293,8 +301,12 @@ main.stage {
 .btn-primary:hover { background: rgb(var(--blue-press)); }
 .btn-secondary { background: rgb(var(--surface-btn2)); color: rgb(var(--ink)); }
 .btn-secondary:hover { background: rgb(var(--surface-btn2-hover)); }
-.btn-tertiary { background: transparent; color: rgb(var(--ink)); border: 1px solid rgb(var(--stroke)); }
-.btn-tertiary:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+/* solid elevated fill (--ig-tertiary-button-background), not transparent —
+   on the page background (not inside a panel) transparent let the raw page
+   colour show through instead of reading as a raised button; --icon matches
+   --ig-tertiary-button-text exactly in both appearances (38/light, 245/dark) */
+.btn-tertiary { background: rgb(var(--surface-raised)); color: rgb(var(--icon)); border: 1px solid rgb(var(--tertiary-border)); }
+.btn-tertiary:hover { background: rgb(var(--tertiary-hover)); }
 .btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }
 .btn[disabled] { opacity: .3; cursor: default; }
 /* .btn-sm/.btn-lg previously repeated the base .btn spec verbatim — both
