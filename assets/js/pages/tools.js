@@ -73,7 +73,7 @@ stage.innerHTML = `
     <p class="dim" style="max-width:66ch">Practical ${esc(characterName)} tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
   </header>
 
-  <div class="tool-grid" style="margin-top:20px">
+  <div class="tool-grid" style="margin-top:var(--s5)">
     <section class="panel panel-pad tool-card" id="stamina-tool">
       <div class="tool-head">
         <h2>Stamina calculator</h2>

@@ -48,14 +48,14 @@ function adviceCard(row) {
   const creatures = row.topCreatures.map((c) => `${esc(c.name)} (${nf(c.n)} kills)`).join(', ');
   return `
   <div class="panel panel-pad">
-    <div class="tile-top" style="margin-bottom:10px">
+    <div class="tile-top tile-top-gap">
       <div>
         <div class="name">${esc(row.charm.name)}</div>
         <div class="tile-tags" style="margin-top:6px">${pillEl(row.charm.element)}</div>
       </div>
     </div>
     <div class="fact"><b class="num">${kk(row.total)}</b><span class="fine dim">expected proc damage</span></div>
-    <p class="fine dim" style="margin:10px 0 0">${creatures}</p>
+    <p class="fine dim dossier-note">${creatures}</p>
   </div>`;
 }
 
@@ -67,7 +67,7 @@ function card(c) {
     </div>`).join('');
   return `
   <div class="panel panel-pad">
-    <div class="tile-top" style="margin-bottom:10px">
+    <div class="tile-top tile-top-gap">
       ${c.image ? `<span class="art-disc"><img class="critter" src="${esc(c.image)}" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>` : ''}
       <div>
         <div class="name">${esc(c.name)}</div>
@@ -77,9 +77,9 @@ function card(c) {
         </div>
       </div>
     </div>
-    <p class="fine" style="margin:0 0 10px">${esc(c.effect)}</p>
+    <p class="fine eyebrow-lede">${esc(c.effect)}</p>
     <div class="facts" style="grid-template-columns:repeat(3,1fr)">${stages}</div>
-    <p class="fine dim" style="margin:10px 0 0">Cost in charm points, per upgrade stage. Total to max: ${nf(total)} points · <a href="${esc(c.wikiUrl)}" rel="noopener" target="_blank">TibiaWiki ↗</a></p>
+    <p class="fine dim dossier-note">Cost in charm points, per upgrade stage. Total to max: ${nf(total)} points · <a href="${esc(c.wikiUrl)}" rel="noopener" target="_blank">TibiaWiki ↗</a></p>
   </div>`;
 }
 
@@ -95,19 +95,19 @@ stage.innerHTML = `
     <div class="panel pulse"><div class="eyebrow">Elemental charms</div><div class="big num">${nf(charms.filter((charm) => charm.element).length)}</div><div class="fine dim">damage options</div></div>
     <div class="panel pulse"><div class="eyebrow">Hunt evidence</div><div class="big num">${nf(hunts.length)}</div><div class="fine dim">private analyser sessions</div></div>
   </div>
-  <p class="fine dim" style="margin:8px 0 0">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
+  <p class="fine dim dossier-note">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
 
-  ${selectedCharm ? `<section class="section" style="margin-top:0">
+  ${selectedCharm ? `<section class="section section-flush">
     <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>
     <div class="tiles">${card(selectedCharm)}</div>
   </section>` : ''}
 
-  <section class="section" style="margin-top:0">
+  <section class="section section-flush">
     <div class="section-bar"><h2>Charms for your hunts</h2><span class="fine dim">elemental Major charms · per-attack expectation (maxed trigger chance × 5% of initial HP) weighted by your logged kills</span></div>
     ${advice.length ? `<div class="tiles">${advice.map(adviceCard).join('')}</div>` : `<div class="panel panel-pad charm-empty"><div><b>Log a hunt to personalize this row</b><p class="fine dim">Recommendations need your actual creature kills, so no charm is guessed before evidence exists.</p></div><a class="btn btn-primary" href="submit.html">Log a hunt</a></div>`}
   </section>
 
-  <section class="section" style="margin-top:0">
+  <section class="section section-flush">
     <div class="section-bar"><h2>Elemental damage charms</h2><span class="fine dim">one per element — the Codex and Ground pages recommend these by name</span></div>
     <div class="tiles">${elemental.map(card).join('')}</div>
   </section>

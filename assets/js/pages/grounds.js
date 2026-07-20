@@ -233,13 +233,13 @@ function renderDetail(slug) {
     <div class="section-bar"><h2>Requirements</h2></div>
     ${req ? `
     <div class="panel panel-pad">
-      ${(req.area || req.level || req.quest || req.premium) ? `<div class="facts" style="margin-bottom:10px">
+      ${(req.area || req.level || req.quest || req.premium) ? `<div class="facts" style="margin-bottom:var(--s3)">
         ${req.area ? `<div class="fact"><b>${esc(req.area)}</b><span class="fine dim">Area</span></div>` : ''}
         ${req.level ? `<div class="fact"><b class="num">${nf(req.level)}+</b><span class="fine dim">Minimum level</span></div>` : ''}
         ${req.quest ? `<div class="fact"><b>${esc(req.quest)}</b><span class="fine dim">Quest</span></div>` : ''}
         ${req.premium ? `<div class="fact"><b>Yes</b><span class="fine dim">Premium account</span></div>` : ''}
       </div>` : ''}
-      ${req.note ? `<p class="fine" style="margin:0 0 8px">${esc(req.note)}</p>` : ''}
+      ${req.note ? `<p class="fine" style="margin:0 0 var(--s2)">${esc(req.note)}</p>` : ''}
       <p class="fine dim" style="margin:0">Auto-extracted from <a href="${esc(req.wikiUrl)}" target="_blank" rel="noopener">${esc(req.wikiTitle)}</a> on TibiaWiki — unverified, always confirm in-game.</p>
     </div>` : `
     <div class="panel panel-pad fine dim">No area or access requirement found for this ground — likely open access, but this is a best-effort lookup, so double-check in-game.</div>`}
@@ -252,7 +252,7 @@ function renderDetail(slug) {
 
   <div id="ground-battle"></div>
 
-  <section class="section" style="text-align:center">
+  <section class="section show-more">
     <a class="btn btn-primary btn-lg" href="submit.html">Hunted here? Save your analyser</a>
   </section>`;
 
@@ -284,34 +284,34 @@ function renderDetail(slug) {
     battleHost.innerHTML = `
     <section class="section">
       <div class="section-bar"><h2>Battle plan</h2></div>
-      ${pop.evidence === 'logged-wiki' ? '<p class="fine dim" style="margin:-8px 0 16px">Battle advice is weighted by your saved analyser kills. Creatures absent from the loaded hunts remain in the matchup table with no logged kill share.</p>' : ''}
-      ${pop.evidence === 'wiki' ? '<p class="fine dim" style="margin:-8px 0 16px">Equal-weight planning profile for this ground.</p>' : ''}
-      ${pop.evidence === 'name' ? '<p class="fine dim" style="margin:-8px 0 16px">Only creatures explicitly named by this ground label are included; no broader regional spawn is inferred.</p>' : ''}
+      ${pop.evidence === 'logged-wiki' ? '<p class="fine dim battle-note">Battle advice is weighted by your saved analyser kills. Creatures absent from the loaded hunts remain in the matchup table with no logged kill share.</p>' : ''}
+      ${pop.evidence === 'wiki' ? '<p class="fine dim battle-note">Equal-weight planning profile for this ground.</p>' : ''}
+      ${pop.evidence === 'name' ? '<p class="fine dim battle-note">Only creatures explicitly named by this ground label are included; no broader regional spawn is inferred.</p>' : ''}
       <div class="duo">
         <div class="panel panel-pad">
-          <p class="eyebrow" style="margin:0 0 10px">Damage profile — % taken per element</p>
+          <p class="eyebrow eyebrow-lede">Damage profile — % taken per element</p>
           ${meters(battle.profile)}
-          <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+          <div class="pill-row-top">
             ${pillEl(battle.attack.el, `<b class="num">${pct(battle.attack.taken)}</b> use`)}
             ${pillEl(battle.avoid.el, `<b class="num">${pct(battle.avoid.taken)}</b> skip`)}
           </div>
         </div>
         <div class="panel panel-pad">
-          <p class="eyebrow" style="margin:0 0 10px">How to fight it</p>
+          <p class="eyebrow eyebrow-lede">How to fight it</p>
           <ul class="tips">${battle.tips.map((t) => `<li>${t}</li>`).join('')}</ul>
-          ${battle.threats.length ? `<p class="eyebrow" style="margin:16px 0 8px">Incoming damage</p>
-            <div style="display:flex; gap:6px; flex-wrap:wrap">${battle.threats.slice(0, 4).map((t) => pillEl(t.el, `<span class="num">${pct(t.share * 100)}</span>`)).join('')}</div>` : ''}
+          ${battle.threats.length ? `<p class="eyebrow eyebrow-lede-sub">Incoming damage</p>
+            <div class="pill-row-tight">${battle.threats.slice(0, 4).map((t) => pillEl(t.el, `<span class="num">${pct(t.share * 100)}</span>`)).join('')}</div>` : ''}
         </div>
       </div>
-      <div class="section" style="margin-top:var(--s5)">
-        <div class="section-bar"><h3 style="font-size:16px">Creature matchups</h3><span class="fine dim">${nf(pop.set.length)} creatures</span></div>
+      <div class="section section-tight">
+        <div class="section-bar"><h3 style="font-size:var(--fs-16)">Creature matchups</h3><span class="fine dim">${nf(pop.set.length)} creatures</span></div>
         <div id="ground-matchups"></div>
       </div>
     </section>`;
 
     dataTable(document.getElementById('ground-matchups'), {
       cols: [
-        { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:8px">${s.creature.art ? `<img class="critter" src="${esc(s.creature.art)}" alt="" loading="lazy" style="width:28px;height:28px" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
+        { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:var(--s2)">${s.creature.art ? `<img class="critter" src="${esc(s.creature.art)}" alt="" loading="lazy" style="width:28px;height:28px" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
         { id: 'share', label: pop.evidence === 'logged' || pop.evidence === 'logged-wiki' ? 'Logged kill share' : 'Planning weight', num: true, cell: (s) => pop.evidence === 'logged-wiki' && !s.logged ? '<span class="dim">—</span>' : pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },

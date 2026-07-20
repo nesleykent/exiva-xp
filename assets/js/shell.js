@@ -257,7 +257,7 @@ export function dataTable(host, { cols, rows, sortId, sortDir = 'desc', onSort, 
   host.innerHTML = `<div class="panel sheet"><table class="grid">
     <thead><tr>${cols.map((c) => `<th class="${c.num ? 'num ' : ''}${sortId === c.id ? 'on' : ''}" data-col="${esc(c.id)}" scope="col">${esc(c.label)}${sortId === c.id ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}</th>`).join('')}</tr></thead>
     <tbody></tbody></table></div>
-    <p class="fine dim count-line" style="margin-top:8px">${rows.length.toLocaleString('en-US')} rows</p>`;
+    <p class="fine dim count-line" style="margin-top:var(--s2)">${rows.length.toLocaleString('en-US')} rows</p>`;
 
   const tbody = host.querySelector('tbody');
   let at = 0;

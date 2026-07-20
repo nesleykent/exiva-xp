@@ -17,7 +17,7 @@ stage.innerHTML = `
     <h1>Logbook</h1>
     <p class="dim" style="max-width:64ch">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
   </header>
-  <section class="section" style="margin-top:var(--s5)">
+  <section class="section section-tight">
     <div class="section-bar"><h2>Local logbook</h2><span class="fine dim" id="k-count"></span></div>
     <div id="k-undo" aria-live="polite"></div>
     <div id="k-rule-filters"></div>
@@ -25,7 +25,7 @@ stage.innerHTML = `
   </section>
   <section class="section">
     <div class="section-bar"><h2>Duplicate sweep</h2></div>
-    <p class="fine dim" style="margin-top:-8px">Identical analyser text (whitespace-insensitive). Sweeping keeps the earliest copy.</p>
+    <p class="fine dim" style="margin-top:calc(var(--s2) * -1)">Identical analyser text (whitespace-insensitive). Sweeping keeps the earliest copy.</p>
     <div id="k-dupes"></div>
   </section>
   <section class="section">
@@ -165,7 +165,7 @@ function refresh() {
     host.innerHTML = '<p class="fine dim">No duplicates.</p>';
   } else {
     host.innerHTML = dupes.map((p, i) => `
-      <div class="panel panel-pad" style="display:flex; align-items:center; gap:12px; margin-bottom:8px">
+      <div class="panel panel-pad" style="display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s2)">
         <span><b>${esc(p[0].ground || 'Unknown ground')}</b> — ${p.length} identical logs (${p.map((h) => day(h.loggedAt)).join(', ')})</span>
         <button type="button" class="btn btn-secondary" style="margin-left:auto" data-sweep="${i}">Sweep</button>
       </div>`).join('');

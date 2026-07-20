@@ -144,11 +144,11 @@ function renderFlow(session) {
     <div class="step-head" style="margin-top:var(--s5)"><h2>Your battle read</h2></div>
     <div class="duo">
       <div class="panel panel-pad">
-        <p class="eyebrow" style="margin:0 0 10px">This session's damage profile</p>
+        <p class="eyebrow eyebrow-lede">This session's damage profile</p>
         ${meters(battle.profile)}
       </div>
       <div class="panel panel-pad">
-        <p class="eyebrow" style="margin:0 0 10px">Suggestions</p>
+        <p class="eyebrow eyebrow-lede">Suggestions</p>
         <ul class="tips">${battle.tips.map((t) => `<li>${t}</li>`).join('')}</ul>
       </div>
     </div>` : ''}
@@ -168,7 +168,7 @@ function renderFlow(session) {
           <span class="pct num">${cand.certainty}</span>
         </button>`).join('')}
     </div>
-    <p class="fine dim" style="margin:8px 0 0">Scored by creature overlap, kill volume, rarity and coverage. Pick one or type the ground below.</p>
+    <p class="fine dim" style="margin:var(--s2) 0 0">Scored by creature overlap, kill volume, rarity and coverage. Pick one or type the ground below.</p>
     ${stepFooter('where')}
   </section>` : ''}
 
@@ -184,7 +184,7 @@ function renderFlow(session) {
         <label class="lbl"><span class="eyebrow">World</span><input type="text" id="h-world" placeholder="Optional"></label>
       </div>
       <div id="verdict" role="status" aria-live="polite"></div>
-      <div style="margin-top:14px"><button type="submit" class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
+      <div style="margin-top:var(--s4)"><button type="submit" class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
     </form>
     ${stepFooter('confirm')}
   </section>`;

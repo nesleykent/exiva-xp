@@ -50,7 +50,7 @@ stage.innerHTML = `
     </div>
   </form>
   <div id="out"></div>
-  <div style="text-align:center; margin-top:var(--s5)"><button type="button" class="btn btn-secondary" id="more" hidden>Show more</button></div>
+  <div class="show-more"><button type="button" class="btn btn-secondary" id="more" hidden>Show more</button></div>
   <div id="detail"></div>`;
 
 /** Creature dossier — artwork, lore, stats, resistances, strategy, loot, habitats — inline in the codex. */
@@ -121,7 +121,7 @@ function renderDetail(creatureSlug) {
     </div>
   </header>
 
-  ${c.lore ? `<p style="max-width:72ch; font-size:15px; line-height:22px; margin:0 0 var(--s5)">${esc(c.lore)}</p>` : ''}
+  ${c.lore ? `<p style="max-width:72ch; font-size:var(--fs-15); line-height:22px; margin:0 0 var(--s5)">${esc(c.lore)}</p>` : ''}
 
   <div class="facts" style="margin-bottom:var(--s4)">
     <div class="fact"><b class="num">${nf(c.hp)}</b><span class="fine dim">Hitpoints</span></div>
@@ -138,23 +138,23 @@ function renderDetail(creatureSlug) {
   <section class="section">
     <div class="section-bar"><h2>Task routes</h2><span class="fine dim">${nf(c.taskRates.length)} workbook observation${c.taskRates.length === 1 ? '' : 's'}</span></div>
     <div id="creature-task-rates"></div>
-    <p class="fine dim" style="margin:10px 0 0">${esc(codex.taskSource?.rateCaveat || '')}${c.taskRates.some((rate) => rate.source.sheet === 'Hard Monsters') ? ` ${esc(codex.taskSource?.hardRateContext || '')}` : ''}</p>
+    <p class="fine dim dossier-note">${esc(codex.taskSource?.rateCaveat || '')}${c.taskRates.some((rate) => rate.source.sheet === 'Hard Monsters') ? ` ${esc(codex.taskSource?.hardRateContext || '')}` : ''}</p>
   </section>` : ''}
 
   <div class="duo">
     <div class="panel panel-pad">
-      <p class="eyebrow" style="margin:0 0 10px">Elemental resistances — % taken</p>
+      <p class="eyebrow eyebrow-lede">Elemental resistances — % taken</p>
       ${meters(c.taken)}
-      <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+      <div class="pill-row-top">
         ${pillEl(best.el, `<b class="num">${pct(best.taken)}</b> best`)}
         ${pillEl(worst.el, `<b class="num">${pct(worst.taken)}</b> worst`)}
       </div>
     </div>
     <div class="panel panel-pad">
-      <p class="eyebrow" style="margin:0 0 10px">Battle plan</p>
+      <p class="eyebrow eyebrow-lede">Battle plan</p>
       <ul class="tips">${plan.map((t) => `<li>${t}</li>`).join('')}</ul>
-      <p class="eyebrow" style="margin:16px 0 8px">Damage ranking</p>
-      <div style="display:flex; gap:6px; flex-wrap:wrap">${order.map((r) => pillEl(r.el, `<span class="num">${pct(r.taken)}</span>`)).join('')}</div>
+      <p class="eyebrow eyebrow-lede-sub">Damage ranking</p>
+      <div class="pill-row-tight">${order.map((r) => pillEl(r.el, `<span class="num">${pct(r.taken)}</span>`)).join('')}</div>
     </div>
   </div>
 
@@ -167,12 +167,12 @@ function renderDetail(creatureSlug) {
   ${lootPills.length ? `
   <section class="section">
     <div class="section-bar"><h2>Loot</h2><span class="fine dim">${nf(lootPills.length)} known drops</span></div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap">${lootPills.join('')}</div>
+    <div class="pill-row">${lootPills.join('')}</div>
   </section>` : ''}
 
   <section class="section">
     <div class="section-bar"><h2>Habitats</h2><span class="fine dim">linked pills open the matching ground</span></div>
-    ${habitatLinks.length ? `<div style="display:flex; gap:8px; flex-wrap:wrap">${habitatLinks.join('')}</div>` : '<p class="dim">No recorded habitats.</p>'}
+    ${habitatLinks.length ? `<div class="pill-row">${habitatLinks.join('')}</div>` : '<p class="dim">No recorded habitats.</p>'}
   </section>
 
   ${c.charm ? `
@@ -182,7 +182,7 @@ function renderDetail(creatureSlug) {
       ${c.charm.stages.map((s, i) => `<div class="fact"><b class="num">${nf(s)}</b><span class="fine dim">Stage ${i + 1} kills</span></div>`).join('')}
       <div class="fact"><b class="num">${nf(c.charm.points)}</b><span class="fine dim">Charm points</span></div>
     </div>
-    ${loggedKills ? `<p class="fine dim" style="margin:10px 0 0">Your saved analyser logs record ${nf(loggedKills)} kills — the in-game Bestiary counts every kill ever, so treat this as a floor.</p>` : ''}
+    ${loggedKills ? `<p class="fine dim dossier-note">Your saved analyser logs record ${nf(loggedKills)} kills — the in-game Bestiary counts every kill ever, so treat this as a floor.</p>` : ''}
   </section>` : ''}`;
 
   $('#detail-back').addEventListener('click', () => closeDetail());

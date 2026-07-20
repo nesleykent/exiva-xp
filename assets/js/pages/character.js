@@ -531,24 +531,24 @@ const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delt
 function progressionOverviewHtml() {
   return `
     <div class="dashboard-metrics" aria-label="Progression at a glance">
-      <article class="dashboard-metric dashboard-metric-featured">
-        <span>Total experience</span>
+      <article class="panel dashboard-metric dashboard-metric-featured">
+        <span class="eyebrow">Total experience</span>
         <b class="num">${experience != null ? compact(experience) : '-'}</b>
         <small>${monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote)}</small>
         ${totalXpSpark.length >= 2 ? '<div class="metric-spark" id="xp-total-spark"></div>' : ''}
       </article>
-      <article class="dashboard-metric">
-        <span>XP / day pace</span>
+      <article class="panel dashboard-metric">
+        <span class="eyebrow">XP / day pace</span>
         <b class="num">${avgDailyXp != null ? compact(avgDailyXp) : '-'}</b>
         <small>${insight ? `${metricDelta(`${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%`, insight.tone)} vs 30-day average` : (recentGains.length ? `${nf(recentGains.length)} recent recorded days` : 'Not enough pace data yet')}</small>
       </article>
-      <article class="dashboard-metric">
-        <span>Profit / hour</span>
+      <article class="panel dashboard-metric">
+        <span class="eyebrow">Profit / hour</span>
         <b class="num">${profitRate ? `${kk(profitRate.rate)} gp` : '-'}</b>
         <small>${profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet'}</small>
       </article>
-      <article class="dashboard-metric">
-        <span>Charm points</span>
+      <article class="panel dashboard-metric">
+        <span class="eyebrow">Charm points</span>
         <b class="num">${charmPoints != null ? nf(charmPoints) : '-'}</b>
         <small>${charmPoints == null ? 'Not tracked yet'
     : charmDelta != null ? `${metricDelta(`+${nf(charmDelta)}`, 'up')} since ${esc(charmFirst.date)}`
