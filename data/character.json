@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-07-20T20:31:53.619Z",
+ "updatedAt": "2026-07-20T22:14:47.987Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
@@ -23,12 +23,12 @@
   "achievements": 79,
   "axefighting": 189,
   "bosspoints": 286,
-  "bountypoints": 48,
-  "charmpoints": 170,
+  "bountypoints": 52,
+  "charmpoints": 171,
   "clubfighting": 496,
   "distancefighting": null,
   "dromescore": 242,
-  "experience": 311,
+  "experience": 313,
   "fishing": 3,
   "fistfighting": 4,
   "goshnarstaint": null,
@@ -36,14 +36,14 @@
   "magiclevel": 229,
   "shielding": 329,
   "swordfighting": 66,
-  "weeklytasks": 3
+  "weeklytasks": 2
  },
  "skillRanks": {
   "achievements": 79,
   "axefighting": 189,
   "bosspoints": 286,
-  "bountypoints": 48,
-  "charmpoints": 170,
+  "bountypoints": 52,
+  "charmpoints": 171,
   "clubfighting": 496,
   "distancefighting": null,
   "dromescore": 242,
@@ -54,7 +54,7 @@
   "magiclevel": 229,
   "shielding": 329,
   "swordfighting": 66,
-  "weeklytasks": 3
+  "weeklytasks": 2
  },
  "deaths": [
   {
