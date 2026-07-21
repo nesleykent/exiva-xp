@@ -679,7 +679,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   box-shadow: 0 0 0 1px rgb(var(--blue)) inset;
 }
 .imb-card:focus-visible {
-  outline: none;
   border-color: rgb(var(--line-strong));
 }
 
