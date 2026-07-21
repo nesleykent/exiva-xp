@@ -684,34 +684,28 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 /* ---------- character dashboard ---------- */
 
-/* Slim identity header: stable profile facts and the two daily actions. The
-   progression values live once, immediately below, instead of repeating in
-   both a profile hero and dashboard cards. */
+/* Identity header — matches the reference: a large gradient-ring avatar, then
+   the name row (name + online badge + share), the vocation line, and the level
+   meter. */
 .character-hero {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--s4);
-  padding: 0 0 var(--s5);
+  gap: var(--s6);
+  flex-wrap: wrap;
+  padding: 0;
   background: transparent;
   border-color: transparent;
 }
-.character-profile {
-  display: flex;
-  align-items: center;
-  gap: var(--s4);
-  min-width: 0;
-}
-.hero-identity { min-width: 0; }
-.character-profile .ring { width: 64px; height: 64px; flex: 0 0 64px; }
-.character-profile .ring-core { width: 56px; height: 56px; font-size: var(--fs-18); }
+.hero-identity { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: var(--s2); }
+.character-hero .ring { width: 96px; height: 96px; flex: 0 0 96px; }
+.character-hero .ring-core { width: 90px; height: 90px; font-size: var(--fs-32); }
+.hero-name-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
 .character-profile-line {
-  margin: var(--s1) 0 0;
+  margin: 0;
   color: rgb(var(--ink-2));
   font-size: var(--fs-14);
   line-height: 18px;
 }
-.hero-actions { display: flex; gap: var(--s3); flex-wrap: wrap; }
 .progression-overview { margin-top: var(--s3); }
 .progression-overview > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); flex-wrap: wrap; }
 .progression-overview > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
@@ -779,7 +773,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .pace-support b { font-size: var(--fs-17); line-height: 21px; }
 .pace-support small { color: rgb(var(--ink-2)); font-size: var(--fs-11); line-height: 13px; }
 .progression-chart { margin-top: var(--s3); }
-.character-level-progress { display: grid; gap: var(--s2); width: min(420px, 100%); margin-top: var(--s3); }
+.character-level-progress { display: grid; gap: var(--s2); width: min(360px, 100%); margin-top: var(--s1); }
 .character-level-progress > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); font-size: var(--fs-12); font-weight: 600; }
 .character-level-progress .track { height: 6px; overflow: hidden; border-radius: var(--r-pill); background: rgb(var(--wash)); }
 .character-level-progress .track i { display: block; height: 100%; border-radius: inherit; background: var(--grad-hero); }
@@ -926,6 +920,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .stat-card { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
 .stat-card > b { font-size: var(--fs-18); line-height: 24px; font-variant-numeric: tabular-nums; }
 
+/* Experience panel — title + year segmented on one row, month segmented full
+   width below, then the single XP-gained area chart and its legend. */
+.exp-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s4); }
+.exp-title { margin: 0; }
+.exp-month { display: flex; margin-bottom: var(--s4); max-width: 100%; }
+.exp-legend { margin-top: var(--s3); }
+
 /* "Next hunts" story-tray — a horizontally scrolling row of ground shortcuts,
    each a gradient-ringed avatar with the ground's initials, matching the
    source's conic-gradient ring treatment used for its own story tray. */
@@ -1014,10 +1015,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-wide > input,
   .tool-fields .lbl.lbl-narrow > input,
   .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
-  .character-hero { align-items: stretch; flex-direction: column; padding: 0 0 var(--s4); }
-  .character-profile { padding-right: 0; }
-  .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hero-actions .btn { width: 100%; padding-inline: var(--s2); }
   .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
   /* padding and value size now match every other KPI card's mobile step
      (.home-metric/.pulse below) instead of their own separate values */

@@ -43,7 +43,7 @@
   --grad-purple: #7638FA;
   --grad-hero: linear-gradient(72.44deg, var(--grad-rose) 4.69%, var(--grad-magenta) 48.96%, var(--grad-purple) 92.19%);
   --grad-spectrum: linear-gradient(125deg, var(--grad-yellow) 15%, var(--grad-orange) 30%, var(--grad-rose), var(--grad-magenta) 70%, var(--grad-purple) 85%);
-  --grad-story: conic-gradient(from 220deg, var(--grad-yellow), var(--grad-orange), var(--grad-rose), var(--grad-magenta), var(--grad-purple), var(--grad-yellow));
+  --grad-story: conic-gradient(from 210deg, var(--grad-yellow), var(--grad-orange), var(--grad-rose), var(--grad-magenta), var(--grad-purple), var(--grad-yellow));
 
   /* RGB-triple twins of the --grad-* hex stops, for contexts that need
      rgb(var(--x)) composability (donut segments, chart legend swatches) —
@@ -124,7 +124,7 @@
   /* type scale — sizes actually in use across the app, named after the source's paired system-N tokens */
   --fs-10: 10px; --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px;
   --fs-15: 15px; --fs-16: 16px; --fs-17: 17px; --fs-18: 18px; --fs-20: 20px;
-  --fs-22: 22px; --fs-24: 24px; --fs-26: 26px; --fs-28: 28px;
+  --fs-22: 22px; --fs-24: 24px; --fs-26: 26px; --fs-28: 28px; --fs-32: 32px;
 
   /* motion — curves match the source's --ig-ease-standard/--ig-ease-confident/--ig-ease-settle exactly */
   --e-standard: cubic-bezier(.33, 0, .67, 1);

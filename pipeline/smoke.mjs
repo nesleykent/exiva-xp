@@ -423,12 +423,17 @@ const creaturesController = readFileSync(new URL('../assets/js/pages/creatures.j
 const submitController = readFileSync(new URL('../assets/js/pages/submit.js', import.meta.url), 'utf8');
 const bootController = readFileSync(new URL('../assets/js/pages/_boot.js', import.meta.url), 'utf8');
 const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', import.meta.url), 'utf8');
-assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
-  'character deep dives must remain accessible task tabs');
-assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
+// The character page mirrors the standalone reference's section order and set:
+// header (avatar + name + share) → KPIs → next hunts → Experience chart →
+// Skills → point-stat cards → hunting activity + deaths. The reference has no
+// deep-dive tabs, planner table, or projection tool, so those must stay gone.
+assert(characterController.includes('character-hero') && characterController.includes('id="share-profile"') &&
   characterController.includes('skill-grid') && characterController.includes('stat-cards') &&
-  characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
-  'Skills and tracked-highscore stat cards must stay inline on the page (matching the standalone reference), not hidden behind a tab, and must not lose Loyalty title');
+  characterController.includes('experienceChartData') && characterController.includes('id="xp-year"'),
+  'character page must keep the reference sections: hero + share, skills grid, stat cards, and the single Experience chart with year/month controls');
+assert(!characterController.includes('character-deep-dive') && !characterController.includes('projection-tools') &&
+  !characterController.includes('data-xp-metric') && !characterController.includes('chart-inspector'),
+  'character page must not reintroduce the tabbed deep-dive, projection tool, metric toggle, or chart inspector the reference does not have');
 assert(homeController.includes("boot('index.html', { ledger: true, config: true })") &&
   homeController.includes('loadCharacterHistory') && homeController.includes('home-metric-grid') &&
   homeController.includes('Next hunt · from your evidence') && homeController.includes('Needs attention'),

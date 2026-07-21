@@ -5,18 +5,16 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, kk, nf, day, hm, md } from '../lib/fmt.js';
+import { compact, kk, nf, day, md } from '../lib/fmt.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
-  dateKeyInTimezone,
   formatDateInTimezone,
-  formatDateTimeInTimezone,
 } from '../lib/timezones.js';
 import { $, ring } from '../shell.js';
-import { flow, flowLegend, sparkline, attachVizHover, chartInto, refreshCharts } from '../viz/svg.js';
+import { flow, flowLegend, sparkline, attachVizHover, chartInto } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
-import { experienceForLevel, experienceUntilNextLevel, progressWithinLevel, nextMilestoneLevel } from '../engine/progression.js';
+import { experienceUntilNextLevel, progressWithinLevel } from '../engine/progression.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const { stage, table, config } = await boot('character.html', { ledger: true, config: true });
@@ -62,7 +60,6 @@ const gains = historyRows.filter((row) => row.gain != null).map((row) => ({ key:
 const levelUpsChronological = historyRows
   .filter((row) => row.levelDelta > 0)
   .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta }));
-const levelUps = [...levelUpsChronological].reverse();
 
 // Default prediction pace: mean of the last 7 recorded daily gains (zeros
 // count because rest days are part of the real pace).
@@ -119,9 +116,6 @@ const highscoreRows = latest ? HIGHSCORE_CATEGORIES
     };
   }) : [];
 
-const recentHunts = [...myHunts]
-  .sort((a, b) => String(b.loggedAt || '').localeCompare(String(a.loggedAt || '')))
-  .slice(0, 8);
 
 function loadTimezone() {
   try {
@@ -129,20 +123,6 @@ function loadTimezone() {
   } catch {
     return DEFAULT_TIMEZONE;
   }
-}
-
-function plain(value) {
-  return value == null || value === '' ? '<span class="dim">-</span>' : esc(String(value));
-}
-
-function signed(value, fmt = nf) {
-  if (value == null || !Number.isFinite(value)) return '<span class="dim">-</span>';
-  if (value === 0) return `<span class="dim">${fmt(value)}</span>`;
-  return `<span class="${value > 0 ? 'ok' : 'bad'}">${value > 0 ? '+' : ''}${fmt(value)}</span>`;
-}
-
-function fmtDateTime(iso) {
-  return iso ? formatDateTimeInTimezone(iso, timezone) : null;
 }
 
 function fmtDateOnly(iso) {
@@ -166,209 +146,43 @@ function isVocationCompatible(rowVocation, profileVocation) {
   return row === character;
 }
 
-function tableHtml(columns, rows, empty) {
-  if (!rows.length) return `<div class="panel panel-pad dim">${esc(empty || 'No rows yet.')}</div>`;
-  return `<div class="sheet panel"><table class="grid">
-    <thead><tr>${columns.map((col) => `<th${col.className ? ` class="${esc(col.className)}"` : ''}>${esc(col.label)}</th>`).join('')}</tr></thead>
-    <tbody>
-      ${rows.map((row) => `<tr>${columns.map((col) => `<td${col.className ? ` class="${esc(col.className)}"` : ''}>${col.cell(row)}</td>`).join('')}</tr>`).join('')}
-    </tbody>
-  </table></div>`;
-}
-
-function levelCadence() {
-  if (levelUpsChronological.length < 3) return null;
-  const gaps = [];
-  for (let i = 1; i < levelUpsChronological.length; i++) {
-    const previous = new Date(`${levelUpsChronological[i - 1].date}T00:00:00Z`);
-    const next = new Date(`${levelUpsChronological[i].date}T00:00:00Z`);
-    const days = Math.round((next - previous) / 86_400_000);
-    if (Number.isFinite(days) && days >= 0) gaps.push(days);
-  }
-  if (gaps.length < 2) return null;
-  return {
-    recent: avg(gaps.slice(-5)),
-    all: avg(gaps),
-  };
-}
-
 const chartYears = [...new Set(historyRows.map((row) => row.date.slice(0, 4)))].sort();
 const monthsInYear = (year) => [...new Set(historyRows.filter((row) => row.date.startsWith(year)).map((row) => row.date.slice(5, 7)))].sort();
 const MONTH_NAME = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' };
 
-function xpRowsForChart(metric, { year, month }) {
-  let rows = historyRows;
-  if (year !== 'all') rows = rows.filter((row) => row.date.startsWith(month === 'all' ? year : `${year}-${month}`));
-  if (metric === 'daily') {
+/**
+ * Experience chart data — one "XP gained" series, matching the reference.
+ * A whole year aggregates to monthly totals (a smooth ~12-point area); a
+ * single month shows its daily gains. Level-up and death markers ride along.
+ */
+function experienceChartData(year, month) {
+  const inYear = historyRows.filter((row) => row.date.startsWith(year));
+  if (month === 'all') {
+    const byMonth = new Map();
+    for (const row of inYear) {
+      const key = row.date.slice(5, 7);
+      byMonth.set(key, (byMonth.get(key) || 0) + (row.gain || 0));
+    }
+    const months = [...byMonth.keys()].sort();
     return {
-      title: 'Daily XP gained',
-      note: `${rows.filter((row) => row.gain != null).length} days with a recorded gain`,
-      baseline: 'zero',
-      fmt: compact,
-      data: rows.filter((row) => row.gain != null).map((row) => chartPoint(row, row.gain)),
+      note: `Monthly XP gained across ${year}`,
+      data: months.map((monthKey) => {
+        const events = [];
+        if (inYear.some((row) => row.date.slice(5, 7) === monthKey && row.levelDelta > 0)) {
+          events.push({ type: 'level', label: 'Levelled up' });
+        }
+        if (deaths.some((death) => String(death.time || '').slice(0, 7) === `${year}-${monthKey}`)) {
+          events.push({ type: 'death', label: 'Death' });
+        }
+        return { id: `${year}-${monthKey}`, key: MONTH_NAME[monthKey], label: `${MONTH_NAME[monthKey]} ${year}`, n: byMonth.get(monthKey), events };
+      }),
     };
   }
-  if (metric === 'level') {
-    return {
-      title: 'Character level',
-      note: `${rows.length} days recorded`,
-      baseline: 'min',
-      fmt: nf,
-      data: rows.map((row) => chartPoint(row, row.level)),
-    };
-  }
-  if (metric === 'rank') {
-    const rankRows = rows.filter((row) => row.rank != null);
-    return {
-      title: 'World XP rank',
-      note: `${rankRows.length} days with a recorded rank; lower number is better`,
-      baseline: 'min',
-      fmt: (value) => `#${nf(value)}`,
-      data: rankRows.map((row) => chartPoint(row, row.rank)),
-    };
-  }
+  const inMonth = inYear.filter((row) => row.date.slice(5, 7) === month && row.gain != null);
   return {
-    title: 'Total experience',
-    note: `${rows.length} days recorded`,
-    baseline: 'min',
-    fmt: compact,
-    data: rows.map((row) => chartPoint(row, row.experience)),
+    note: `Daily XP gained in ${MONTH_NAME[month]} ${year}`,
+    data: inMonth.map((row) => chartPoint(row, row.gain)),
   };
-}
-
-function profileGroupHtml(title, rows) {
-  const clean = rows.filter(([, value]) => value != null && value !== '');
-  if (!clean.length) return '';
-  return `
-    <article class="profile-group">
-      <h3>${esc(title)}</h3>
-      <dl>
-        ${clean.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${plain(value)}</dd></div>`).join('')}
-      </dl>
-    </article>`;
-}
-
-/** Stable, rarely-changing facts — kept out of the primary view since
- * nothing here answers "what should I do now". */
-function characterDetailsHtml() {
-  const houses = profile?.houses?.length ? profile.houses.map((h) => `${h.name} (${h.town})`).join(', ') : null;
-  return `
-    <div class="profile-groups">
-      ${profileGroupHtml('Identity', [
-        ['Name', profile?.name],
-        ['Sex', profile?.sex],
-        ['Vocation', profile?.vocation],
-        ['World', profile?.world],
-        ['Loyalty title', profile?.loyaltyTitle],
-      ])}
-      ${profileGroupHtml('Place', [
-        ['Residence', profile?.residence],
-        ['House', houses],
-      ])}
-      ${profileGroupHtml('Dates', [
-        ['Last login', fmtDateTime(profile?.lastLogin)],
-        ['Account created', fmtDateOnly(profile?.accountCreated)],
-        ['Profile updated', fmtDateTime(profile?.updatedAt)],
-      ])}
-    </div>`;
-}
-
-function deltaSpan(delta) {
-  if (!delta) return '';
-  return ` <span class="fine dim">(${delta > 0 ? '+' : ''}${nf(delta)})</span>`;
-}
-
-/** GuildStats-style daily history: date, exp gained, rank/level with their
- * day-over-day delta, and running total experience — most recent day first.
- * Time online / avg exp per hour aren't in TibiaData highscores, so unlike
- * a scraped guildstats.eu table this doesn't fabricate those two columns. */
-function dailyHistoryTableHtml() {
-  const rows = [...historyRows].reverse();
-  const totalGain = historyRows.reduce((sum, row) => sum + (row.gain || 0), 0);
-  const totalLevelChange = historyRows.length > 1 ? historyRows.at(-1).level - historyRows[0].level : 0;
-  return `
-    <div class="sheet panel"><table class="grid">
-      <thead><tr>
-        <th>When</th>
-        <th class="num">Exp change</th>
-        <th class="num">Rank</th>
-        <th class="num">Level</th>
-        <th class="num">Experience</th>
-      </tr></thead>
-      <tbody>
-        ${rows.map((row) => `<tr>
-          <td>${esc(row.date)}</td>
-          <td class="num">${row.gain != null ? `+${nf(row.gain)}` : '<span class="dim">-</span>'}</td>
-          <td class="num">${row.rank != null ? nf(row.rank) : '<span class="dim">-</span>'}${deltaSpan(row.rankDelta)}</td>
-          <td class="num">${nf(row.level)}${deltaSpan(row.levelDelta)}</td>
-          <td class="num">${nf(row.experience)}</td>
-        </tr>`).join('')}
-      </tbody>
-      <tfoot><tr>
-        <td>Total</td>
-        <td class="num">+${nf(totalGain)}</td>
-        <td class="num"></td>
-        <td class="num">${totalLevelChange > 0 ? '+' : ''}${nf(totalLevelChange)}</td>
-        <td class="num"></td>
-      </tr></tfoot>
-    </table></div>`;
-}
-
-function deathsTableHtml() {
-  return tableHtml([
-    { label: 'When', cell: (row) => esc(fmtDateTime(row.time) || day(row.time)) },
-    { label: 'Level', className: 'num', cell: (row) => nf(row.level) },
-    { label: 'Details', cell: (row) => esc(row.reason || '') },
-  ], deaths, 'No deaths on record.');
-}
-
-function huntColumns() {
-  return [
-    { label: 'When', cell: (row) => esc(fmtDateOnly(row.loggedAt) || day(row.loggedAt)) },
-    { label: 'Ground', cell: (row) => esc(row.ground || '-') },
-    { label: 'Minutes', className: 'num', cell: (row) => row.minutes != null ? hm(row.minutes) : '<span class="dim">-</span>' },
-    { label: 'Raw XP/h', className: 'num', cell: (row) => row.xpRawRate != null ? kk(row.xpRawRate) : '<span class="dim">-</span>' },
-    { label: 'Profit/h', className: 'num', cell: (row) => row.balance != null && row.minutes ? kk((row.balance / row.minutes) * 60) : '<span class="dim">-</span>' },
-    { label: 'Balance', className: 'num', cell: (row) => row.balance != null ? kk(row.balance) : '<span class="dim">-</span>' },
-    { label: 'Kills', className: 'num', cell: (row) => nf((row.kills || []).reduce((sum, kill) => sum + (kill.n || 0), 0)) },
-  ];
-}
-
-function huntTableHtml() {
-  return tableHtml(huntColumns(), recentHunts, 'No saved analyser sessions in this browser yet.');
-}
-
-/** Task tabs replace the old hash-link section rail. They preserve browser
- * history, keep one deep-dive workflow visible at a time, and support the
- * WAI-ARIA tab keyboard model without changing the URL. */
-function bindCharacterTabs() {
-  const list = $('[role="tablist"]');
-  if (!list) return;
-  const tabs = [...list.querySelectorAll('[role="tab"]')];
-  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls'))).filter(Boolean);
-  const select = (tab, focus = false) => {
-    tabs.forEach((candidate) => {
-      const active = candidate === tab;
-      candidate.setAttribute('aria-selected', String(active));
-      candidate.tabIndex = active ? 0 : -1;
-    });
-    panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
-    refreshCharts(); // a just-revealed panel's charts now have a real width to render at
-    if (focus) tab.focus();
-  };
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => select(tab));
-    tab.addEventListener('keydown', (event) => {
-      let next = null;
-      if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
-      if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
-      if (event.key === 'Home') next = tabs[0];
-      if (event.key === 'End') next = tabs.at(-1);
-      if (!next) return;
-      event.preventDefault();
-      select(next, true);
-    });
-  });
 }
 
 function avg(values) {
@@ -393,26 +207,6 @@ function chartEvents(date) {
 function chartPoint(row, n) {
   // short axis label; the canonical ISO date rides along for the tooltip
   return { id: row.date, key: md(row.date), label: row.date, n, events: chartEvents(row.date) };
-}
-
-function xpDetailHtml(row = historyRows.at(-1)) {
-  if (!row) return '<p class="dim">No day selected yet.</p>';
-  const prev = historyRows[historyRows.findIndex((r) => r.date === row.date) - 1] || null;
-  const gained = row.gain == null ? '<span class="dim">-</span>' : `+${nf(row.gain)}`;
-  const isToday = row.date === dateKeyInTimezone(new Date(), timezone);
-  return `
-    <div class="inspector-head">
-      <b>${esc(row.date)}</b>
-      ${isToday ? '<span class="badge badge-success">Today</span>' : ''}
-    </div>
-    <div class="mini-metrics">
-      <span><b class="num">${nf(row.level)}</b><small>Level</small></span>
-      <span><b class="num">${gained}</b><small>XP gain</small></span>
-      <span><b class="num">${compact(row.xpToNext)}</b><small>XP to next</small></span>
-      <span><b class="num">${row.progress.toFixed(1)}%</b><small>Level progress</small></span>
-      <span><b class="num">${row.rank ? `#${nf(row.rank)}` : '-'}</b><small>Rank</small></span>
-      <span><b class="num">${prev ? signed(row.level - prev.level) : '<span class="dim">-</span>'}</b><small>Level change</small></span>
-    </div>`;
 }
 
 function sampledSeries(series, maxPoints = 40) {
@@ -442,9 +236,9 @@ function skillCardHtml(row) {
 function statCardHtml(row) {
   return `
     <article class="panel stat-card">
-      <span class="eyebrow">${esc(row.label)}</span>
+      <span class="eyebrow">${esc(STAT_LABEL[row.key] || row.label)}</span>
       <b class="num">${nf(row.value)}</b>
-      <small class="dim">${row.rank != null ? `top rank #${nf(row.rank)}` : row.lastDelta ? `${signed(row.lastDelta)} recent` : esc(row.kind)}</small>
+      <small class="dim">${row.rank != null ? `#${nf(row.rank)} worldwide` : esc(row.kind)}</small>
     </article>`;
 }
 
@@ -474,7 +268,14 @@ const skillRows = highscoreRows
     const ai = SKILL_ORDER.indexOf(a.key), bi = SKILL_ORDER.indexOf(b.key);
     return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
   });
-const statRows = highscoreRows.filter((row) => row.key !== 'experience' && row.kind !== SKILL_KIND);
+// the reference's six point-stat cards, in its exact order (Loyalty Points is
+// tracked but the reference doesn't surface it here)
+const STAT_ORDER = ['achievements', 'bountyPoints', 'weeklyTasks', 'bossPoints', 'dromeScore', 'charmPoints'];
+const STAT_LABEL = {
+  achievements: 'Achievements', bountyPoints: 'Bounty points', weeklyTasks: 'Weekly tasks',
+  bossPoints: 'Boss points', dromeScore: 'Drome score', charmPoints: 'Charm points',
+};
+const statRows = STAT_ORDER.map((key) => highscoreRows.find((row) => row.key === key)).filter(Boolean);
 
 const deathCutoff = latest ? new Date(`${latest.date}T00:00:00Z`) : new Date();
 const deaths30 = deaths.filter((row) => deathCutoff - new Date(row.time) < 30 * ONE_DAY_MS).length;
@@ -486,11 +287,6 @@ const deathsDelta = deaths.length ? deaths30 - deathsPrev30 : null;
 
 const avg7 = gainAverage(7);
 const avg30 = gainAverage(30);
-const bestProfitHunt = myHunts
-  .filter((hunt) => hunt.balance != null && hunt.minutes > 0)
-  .map((hunt) => ({ ...hunt, profitRate: (hunt.balance / hunt.minutes) * 60 }))
-  .sort((a, b) => b.profitRate - a.profitRate)[0] || null;
-const cadenceTrend = levelCadence();
 
 /** This week's pace vs the 30-day average, as a conclusion rather than two
  * raw numbers — the one line the page should say before anything else. */
@@ -504,19 +300,7 @@ function paceInsight() {
   return { tone, deltaPct, text };
 }
 
-/** Straight arithmetic to the next 50-level milestone at the recent pace. */
-function levelProjection() {
-  if (trackedLevel == null || experience == null || !avgDailyXp) return null;
-  const target = nextMilestoneLevel(trackedLevel);
-  const needed = experienceForLevel(target) - experience;
-  if (needed <= 0) return null;
-  const days = Math.ceil(needed / avgDailyXp);
-  const eta = new Date(Date.now() + days * 86_400_000);
-  return { target, days, eta: eta.toISOString().slice(0, 10) };
-}
-
 const insight = paceInsight();
-const projection = levelProjection();
 const levelProgressPct = trackedLevel != null && experience != null ? progressWithinLevel(trackedLevel, experience) : null;
 
 /** XP gained month-to-date. Total experience is cumulative, so the delta
@@ -573,19 +357,6 @@ function progressionOverviewHtml() {
     </div>`;
 }
 
-function projectionControlsHtml() {
-  if (trackedLevel == null || experience == null || avgDailyXp == null) return '';
-  return `
-    <div class="projection-tools">
-      <div class="section-subhead first"><h3>Adjust target and pace</h3><span class="fine dim">defaults to the last ${nf(recentGains.length)} days</span></div>
-      <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="pred-level" type="number" min="${trackedLevel + 1}" max="2000" value="${nextMilestoneLevel(trackedLevel)}"></label>
-        <label class="lbl"><span class="eyebrow">Avg daily exp</span><input id="pred-pace" type="number" min="1" value="${avgDailyXp}"></label>
-      </div>
-      <div class="tool-result" id="pred-out"></div>
-    </div>`;
-}
-
 /**
  * GitHub-style intensity grid over the last 26 tracked weeks of daily XP
  * gain. A day with no gap-free measurement renders as a distinct "unknown"
@@ -638,34 +409,22 @@ function recentDeathsHtml() {
     </li>`).join('')}</ul>`;
 }
 
-const groundsTable = tableHtml([
-  { label: 'Ground', cell: (row) => `<a href="grounds.html?g=${esc(row.groundSlug)}">${esc(row.ground)}</a>` },
-  { label: 'Level', className: 'num', cell: (row) => plain(row.levelText || (row.level != null ? `${row.level}+` : null)) },
-  { label: 'Vocation', cell: (row) => plain(row.vocation || (row.party ? 'Team' : null)) },
-  { label: 'Mode', cell: (row) => row.party ? '<span class="pill">Team</span>' : '<span class="pill">Solo</span>' },
-  { label: 'Raw XP/h', className: 'num', cell: (row) => kk(row.xpRawRate) },
-  { label: 'Profit/h', className: 'num', cell: (row) => row.profitRate != null ? kk(row.profitRate) : '<span class="dim">-</span>' },
-  { label: 'Basis', cell: (row) => `<span class="badge ${row.basis === 'logged' ? 'badge-success' : row.basis === 'blended' ? 'badge-info' : ''}">${esc(row.basis || 'curated')}</span>` },
-], grounds4me, 'No level-fit grounds found in the planner.');
-
 stage.innerHTML = `
-  <header class="character-hero panel">
-    <div class="character-profile">
-      ${ring(profile?.name || config.name)}
-      <div class="hero-identity">
+  <header class="character-hero">
+    ${ring(profile?.name || config.name, { cls: 'character-avatar' })}
+    <div class="hero-identity">
+      <div class="hero-name-row">
         <h1>${esc(profile?.name || config.name)}</h1>
-        <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${level != null ? ` · Level ${nf(level)}` : ''}</p>
-        ${trackedLevel != null && experience != null ? `
-        <div class="character-level-progress">
-          <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${levelProgressPct.toFixed(0)}%</b></div>
-          <span class="track"><i style="width:${levelProgressPct.toFixed(2)}%"></i></span>
-          <small>${compact(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
-        </div>` : ''}
+        ${profile?.online ? '<span class="badge badge-success">Online</span>' : ''}
+        <button type="button" class="btn btn-secondary btn-sm" id="share-profile">Share profile</button>
       </div>
-    </div>
-    <div class="hero-actions actions">
-      <a class="btn btn-primary btn-lg" href="submit.html">Log a hunt</a>
-      <a class="btn btn-tertiary btn-lg" href="grounds.html">Plan hunt</a>
+      <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${level != null ? ` · Level ${nf(level)}` : ''}</p>
+      ${trackedLevel != null && experience != null ? `
+      <div class="character-level-progress">
+        <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${levelProgressPct.toFixed(0)}%</b></div>
+        <span class="track"><i style="width:${levelProgressPct.toFixed(2)}%"></i></span>
+        <small>${compact(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
+      </div>` : ''}
     </div>
   </header>
 
@@ -679,35 +438,18 @@ stage.innerHTML = `
     ${nextHuntsHtml()}
   </section>` : ''}
 
-  <section aria-label="Experience">
-    <div class="panel panel-pad viz progression-chart">
-      <div class="chart-controls">
-        <div>
-          <p class="eyebrow chart-title" id="xp-chart-title">Daily XP gained</p>
-          <p class="fine dim chart-note" id="xp-chart-note">${esc(historyNote)}</p>
-          <div id="xp-chart-legend"></div>
-        </div>
-        <div class="chart-control-groups">
-          <div class="chart-button-group" aria-label="XP chart metric">
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="daily" aria-pressed="true">Daily gain</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="total" aria-pressed="false">Total XP</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="level" aria-pressed="false">Level</button>
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-metric="rank" aria-pressed="false">Rank</button>
-          </div>
-          <div class="chart-button-group" aria-label="XP chart year">
-            <button type="button" class="btn btn-tertiary btn-sm" data-xp-year="all" aria-pressed="false">All</button>
-            ${chartYears.map((year) => `<button type="button" class="btn btn-tertiary btn-sm" data-xp-year="${year}" aria-pressed="false">${year}</button>`).join('')}
-          </div>
-          <div class="chart-button-group" aria-label="XP chart month" id="xp-month-row"></div>
-        </div>
+  ${historyRows.length ? `
+  <section class="panel panel-pad viz" aria-label="Experience">
+    <div class="exp-head">
+      <p class="eyebrow panel-eyebrow exp-title">Experience</p>
+      <div class="segmented" id="xp-year" role="group" aria-label="Year">
+        ${chartYears.map((year) => `<button type="button" data-year="${year}" aria-pressed="${String(year === (chartYears.at(-1)))}">${year}</button>`).join('')}
       </div>
-      <div class="chart-shell">
-        <div id="xp-chart"></div>
-        <aside class="chart-inspector" id="xp-detail" aria-live="polite">${xpDetailHtml()}</aside>
-      </div>
-      <div class="chart-foot"><a class="fine dim" href="analytics.html">Explore full progression</a></div>
     </div>
-  </section>
+    <div class="segmented exp-month" id="xp-month" role="group" aria-label="Month"></div>
+    <div id="xp-chart"></div>
+    <div id="xp-chart-legend" class="exp-legend"></div>
+  </section>` : ''}
 
   ${skillRows.length ? `
   <section class="panel panel-pad" aria-label="Skills">
@@ -731,145 +473,71 @@ stage.innerHTML = `
     </div>
   </section>
 
-  <section class="character-deep-dive" aria-labelledby="deep-dive-title">
-    <h2 class="visually-hidden" id="deep-dive-title">Character deep dives</h2>
-    <div class="character-tabs-wrap">
-      <div class="character-tabs" role="tablist" aria-label="Character deep dives">
-        <button type="button" role="tab" id="tab-next" aria-controls="panel-next" aria-selected="true">Next hunt</button>
-        <button type="button" role="tab" id="tab-hunts" aria-controls="panel-hunts" aria-selected="false" tabindex="-1">Hunt log</button>
-        <button type="button" role="tab" id="tab-details" aria-controls="panel-details" aria-selected="false" tabindex="-1">Details</button>
-      </div>
-    </div>
+  `;
 
-    <div class="character-tab-panel" role="tabpanel" id="panel-next" aria-labelledby="tab-next" tabindex="0">
-      ${projectionControlsHtml()}
-      ${grounds4me.length ? `
-      <div class="section-subhead"><h3>Planner rows</h3><span class="fine dim">${esc(characterVocation || 'character')} rows around level ${nf(level)}</span></div>
-      ${groundsTable}` : `
-      <div class="empty-action">
-        <div><h3>No rated ${esc(characterVocation || 'character')} hunts in this band</h3><p class="dim">The full planner still includes unrated grounds and lets you inspect a wider level range.</p></div>
-        <a class="btn btn-primary" href="grounds.html">Adjust planner filters</a>
-      </div>`}
-    </div>
-
-    <div class="character-tab-panel" role="tabpanel" id="panel-hunts" aria-labelledby="tab-hunts" tabindex="0" hidden>
-      ${myHunts.length ? `
-      <div class="section-subhead first"><h3>Recent analyser sessions</h3><a class="fine dim" href="analytics.html">Progress</a></div>
-      <div class="hunt-summary">
-        <span><b class="num">${nf(myHunts.length)}</b><small>Logged hunts</small></span>
-        <span><b>${bestProfitHunt ? esc(bestProfitHunt.ground || '-') : '-'}</b><small>${bestProfitHunt ? `${kk(bestProfitHunt.profitRate)} profit/h best log` : 'No profitable hunt yet'}</small></span>
-      </div>
-      <div id="hunt-table">${huntTableHtml()}</div>` : `
-      <div class="empty-action">
-        <div><h3>Build your first personal hunt baseline</h3><p class="dim">Paste a Hunting Analyser to start comparing raw XP, profit and creature kills.</p></div>
-        <a class="btn btn-primary" href="submit.html">Log your first hunt</a>
-      </div>`}
-    </div>
-
-    <div class="character-tab-panel" role="tabpanel" id="panel-details" aria-labelledby="tab-details" tabindex="0" hidden>
-      <div class="section-subhead first"><h3>Character details</h3><span class="fine dim">stable profile facts and recorded events</span></div>
-      <div class="panel panel-pad profile-panel"><div id="profile-summary">${characterDetailsHtml()}</div></div>
-      <div class="event-summary">
-        <span><b class="num">${nf(levelUps.length)}</b><small>Level-ups recorded</small></span>
-        <span><b class="num">${levelUps[0] ? `Lv ${nf(levelUps[0].level)}` : '-'}</b><small>${levelUps[0] ? `Most recent · ${esc(levelUps[0].date)}` : 'No level-up yet'}</small></span>
-        <span><b class="num">${cadenceTrend ? cadenceTrend.recent.toFixed(1) : '-'}</b><small>Recent days per level</small></span>
-        <span><b class="num">${nf(deaths.length)}</b><small>Deaths on record</small></span>
-      </div>
-      ${historyRows.length ? `<div class="section-subhead"><h3>Daily history</h3><span class="fine dim">${nf(historyRows.length)} tracked days, most recent first</span></div><div id="daily-history-table">${dailyHistoryTableHtml()}</div>` : ''}
-      ${deaths.length ? `<div class="section-subhead"><h3>Deaths</h3><span class="fine dim">also marked on the XP chart when dates overlap</span></div><div id="deaths-table">${deathsTableHtml()}</div>` : ''}
-    </div>
-  </section>`;
-
-bindCharacterTabs();
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 // sparklines mount at their container's true pixel width (token-size text)
 chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 34, fmt: compact }));
 
-// ---- chart controls: metric × year × month, months only for tracked data ----
-const xpState = { metric: 'daily', year: chartYears.at(-1) || 'all', month: 'all' };
+// ---- share profile: copy the character URL; no server, so just the link ----
+const shareBtn = $('#share-profile');
+if (shareBtn) {
+  shareBtn.addEventListener('click', async () => {
+    const url = location.href.split('#')[0];
+    try {
+      if (navigator.share) { await navigator.share({ title: `${profile?.name || config.name} · Exiva XP`, url }); return; }
+      await navigator.clipboard.writeText(url);
+    } catch { /* user dismissed the share sheet, or clipboard denied — nothing to do */ }
+    const original = shareBtn.textContent;
+    shareBtn.textContent = 'Link copied';
+    setTimeout(() => { shareBtn.textContent = original; }, 1600);
+  });
+}
 
-function renderXpMonthRow() {
-  const host = $('#xp-month-row');
+// ---- Experience chart: one XP-gained series, year + month segmented ----
+const xpState = { year: chartYears.at(-1) || String(new Date().getFullYear()), month: 'all' };
+
+function renderMonthSeg() {
+  const host = $('#xp-month');
   if (!host) return;
-  if (xpState.year === 'all') { host.innerHTML = ''; host.hidden = true; return; }
-  host.hidden = false;
   const months = monthsInYear(xpState.year);
   host.innerHTML = [
-    `<button type="button" class="btn btn-tertiary btn-sm" data-xp-month="all" aria-pressed="${String(xpState.month === 'all')}">All</button>`,
-    ...months.map((month) => `<button type="button" class="btn btn-tertiary btn-sm" data-xp-month="${month}" aria-pressed="${String(month === xpState.month)}">${MONTH_NAME[month]}</button>`),
+    `<button type="button" data-month="all" aria-pressed="${String(xpState.month === 'all')}">All</button>`,
+    ...months.map((month) => `<button type="button" data-month="${month}" aria-pressed="${String(month === xpState.month)}">${MONTH_NAME[month]}</button>`),
   ].join('');
-  host.querySelectorAll('[data-xp-month]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      xpState.month = btn.dataset.xpMonth;
-      renderXpChart();
-    });
-  });
 }
 
 function renderXpChart() {
   const chart = $('#xp-chart');
   if (!chart) return;
-  const selected = xpRowsForChart(xpState.metric, xpState);
-  $('#xp-chart-title').textContent = selected.title;
-  $('#xp-chart-note').textContent = selected.note;
-  chartInto(chart, (width) => flow(selected.data, { width, baseline: selected.baseline, fmt: selected.fmt, empty: 'Not enough rows for this chart yet.' }));
-  $('#xp-chart-legend').innerHTML = flowLegend(selected.data, selected.title, selected.fmt);
+  const selected = experienceChartData(xpState.year, xpState.month);
+  chartInto(chart, (width) => flow(selected.data, { width, baseline: 'zero', fmt: compact, empty: 'Not enough rows for this chart yet.' }));
+  $('#xp-chart-legend').innerHTML = flowLegend(selected.data, 'XP gained', compact);
   attachVizHover(chart.closest('.viz'));
-  document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.xpMetric === xpState.metric));
+  $('#xp-year')?.querySelectorAll('[data-year]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.year === xpState.year));
   });
-  document.querySelectorAll('[data-xp-year]').forEach((btn) => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.xpYear === xpState.year));
-  });
-  renderXpMonthRow();
 }
 
-function showXpDetail(date) {
-  const target = $('#xp-detail');
-  if (!target) return;
-  target.innerHTML = xpDetailHtml(historyRows.find((row) => row.date === date) || historyRows.at(-1));
-}
-
-$('#xp-chart')?.closest('.viz')?.addEventListener('viz:pick', (event) => showXpDetail(event.detail.id));
-
-document.querySelectorAll('[data-xp-metric]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    xpState.metric = btn.dataset.xpMetric;
-    renderXpChart();
-  });
+$('#xp-year')?.addEventListener('click', (event) => {
+  const btn = event.target.closest('[data-year]');
+  if (!btn) return;
+  xpState.year = btn.dataset.year;
+  xpState.month = 'all';
+  renderMonthSeg();
+  renderXpChart();
 });
-document.querySelectorAll('[data-xp-year]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    xpState.year = btn.dataset.xpYear;
-    xpState.month = 'all';
-    renderXpChart();
-  });
+$('#xp-month')?.addEventListener('click', (event) => {
+  const btn = event.target.closest('[data-month]');
+  if (!btn) return;
+  xpState.month = btn.dataset.month;
+  $('#xp-month').querySelectorAll('[data-month]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  renderXpChart();
 });
-renderXpChart();
 
-// ---- level prediction wiring (pure arithmetic over tracked data) ----
-function renderPrediction() {
-  const out = $('#pred-out');
-  if (!out) return;
-  const target = Math.floor(Number($('#pred-level').value));
-  const pace = Number($('#pred-pace').value);
-  if (!Number.isFinite(target) || target <= trackedLevel || !Number.isFinite(pace) || pace <= 0) {
-    out.innerHTML = '<span class="dim">Pick a target above the current level and a positive daily pace.</span>';
-    return;
-  }
-  const needed = experienceForLevel(target) - experience;
-  const days = Math.ceil(needed / pace);
-  const eta = new Date(Date.now() + days * 86_400_000);
-  out.innerHTML = `
-    <div class="tool-kpis">
-      <span><b>${kk(needed)}</b><small>exp to level ${nf(target)}</small></span>
-      <span><b>${nf(days)}</b><small>days at this pace</small></span>
-      <span><b>${eta.toISOString().slice(0, 10)}</b><small>projected date</small></span>
-    </div>`;
-}
-if ($('#pred-out')) {
-  ['#pred-level', '#pred-pace'].forEach((id) => $(id).addEventListener('input', renderPrediction));
-  renderPrediction();
+if ($('#xp-chart')) {
+  renderMonthSeg();
+  renderXpChart();
 }
 export {};
