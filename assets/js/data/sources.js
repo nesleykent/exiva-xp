@@ -208,6 +208,7 @@ export async function loadCharacterHistory(prefix = '') {
     rank: observation.rank,
     level: observation.level,
     source: observation.source,
+    capturedAt: observation.capturedAt ?? null,
   }]));
   for (const [descriptor, observations] of series) {
     if (descriptor.primary) continue;

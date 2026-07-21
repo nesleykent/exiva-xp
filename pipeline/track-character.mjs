@@ -132,12 +132,16 @@ const c = profileData?.character?.character;
 if (!c || c.name !== NAME) throw new Error('character endpoint returned no matching profile');
 
 // ---- persist ----
+// Stamped once per day: reused across same-day reruns so an unchanged
+// reading doesn't get a fresh timestamp (and false-trigger the diff below).
+const capturedAt = experienceHistory[today]?.capturedAt || new Date().toISOString();
 const observations = {
   experience: {
     value: xp.value,
     rank: xp.rank,
     level: xp.level,
     source: 'TibiaData highscores',
+    capturedAt,
   },
 };
 for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {

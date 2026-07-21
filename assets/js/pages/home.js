@@ -23,6 +23,16 @@ const level = profile?.level ?? history.at(-1)?.level ?? null;
 const vocation = profile?.vocation || '';
 const latest = history.at(-1) || null;
 const previous = history.at(-2) || null;
+const capturedAtLabel = latest?.capturedAt
+  ? new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).formatToParts(new Date(latest.capturedAt)).reduce((parts, p) => ({ ...parts, [p.type]: p.value }), {})
+  : null;
+const capturedAtText = capturedAtLabel
+  ? `as of ${capturedAtLabel.year}-${capturedAtLabel.month}-${capturedAtLabel.day} at ${capturedAtLabel.hour}:${capturedAtLabel.minute} BRT`
+  : null;
 const book = logbook();
 const consecutiveLatest = latest && previous
   && (new Date(latest.date) - new Date(previous.date)) === 86_400_000;
@@ -131,7 +141,7 @@ stage.innerHTML = `
 
   <section class="home-metric-grid" aria-label="Character at a glance">
     ${metric('Current level', level != null ? nf(level) : '—', levelProgress != null ? `${levelProgress.toFixed(0)}% through this level` : 'Waiting for exact experience')}
-    ${metric('Latest daily XP', latestGain != null ? `+${compact(latestGain)}` : '—', consecutiveLatest ? `tracked on ${esc(latest.date)}` : 'No consecutive-day reading', { sparkId: gainSeries.length >= 2 ? 'home-gain-spark' : null })}
+    ${metric("Today's XP", latestGain != null ? `+${compact(latestGain)}` : '—', consecutiveLatest ? esc(capturedAtText || `tracked on ${latest.date}`) : 'No consecutive-day reading', { sparkId: gainSeries.length >= 2 ? 'home-gain-spark' : null })}
     ${metric('XP pace', avgDailyXp != null ? `${compact(avgDailyXp)}<em>/day</em>` : '—', recentGains.length ? `average of ${nf(recentGains.length)} recorded days` : 'Not enough consecutive days', { sparkId: gainSeries.length >= 2 ? 'home-pace-spark' : null })}
     ${metric(`Level ${level != null ? nf(level + 1) : ''}`, xpToNext != null ? compact(xpToNext) : '—', 'XP remaining')}
     ${metric('Charm points', charmPoints != null ? nf(charmPoints) : '—', charmPoints != null ? 'earned points; spending is private' : 'No tracked highscore value')}
