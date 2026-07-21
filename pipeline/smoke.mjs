@@ -426,8 +426,9 @@ const toolsController = readFileSync(new URL('../assets/js/pages/tools.js', impo
 assert(characterController.includes('role="tablist"') && characterController.includes('bindCharacterTabs()'),
   'character deep dives must remain accessible task tabs');
 assert(!characterController.includes('narrative-strip') && !characterController.includes('standingHighlightsHtml') &&
-  characterController.includes('Other tracked categories') && characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
-  'Highscores must remain one featured trend plus one non-duplicated list without losing Loyalty title');
+  characterController.includes('skill-grid') && characterController.includes('stat-cards') &&
+  characterController.includes("['Loyalty title', profile?.loyaltyTitle]"),
+  'Skills and tracked-highscore stat cards must stay inline on the page (matching the standalone reference), not hidden behind a tab, and must not lose Loyalty title');
 assert(homeController.includes("boot('index.html', { ledger: true, config: true })") &&
   homeController.includes('loadCharacterHistory') && homeController.includes('home-metric-grid') &&
   homeController.includes('Next hunt · from your evidence') && homeController.includes('Needs attention'),

@@ -425,42 +425,52 @@ function sampledSeries(series, maxPoints = 40) {
   return out;
 }
 
-/** The one metric worth a full trend card — the rest read faster as a compact list. */
-function highscoreFeatureHtml(row) {
-  const hasTrend = row.series.length >= 2 && new Set(row.series.map((point) => point.n)).size >= 2;
+/** A tracked fighting/skill level — no percent-to-next-level bar, TibiaData's
+ * highscores endpoint returns the skill level only, never skill experience,
+ * so a progress fraction would have to be invented. */
+function skillCardHtml(row) {
   return `
-    <article class="panel skill-feature">
+    <article class="panel skill-card">
       <div class="skill-card-head">
-        <div>
-          <h3>${esc(row.label)}</h3>
-          <p class="fine dim">${esc(row.kind)} · ${row.firstDate ? `history since ${esc(row.firstDate)}` : 'new this update'}</p>
-        </div>
+        <h3>${esc(row.label.replace(' Fighting', ''))}</h3>
         <b class="num">${nf(row.value)}</b>
       </div>
-      <div class="mini-metrics">
-        <span><b class="num">${row.rank != null ? `#${nf(row.rank)}` : '-'}</b><small>Current rank</small></span>
-        <span><b class="num">${signed(row.lastDelta)}</b><small>Last change</small></span>
-        <span><b class="num">${signed(row.delta)}</b><small>All-time change</small></span>
-      </div>
-      <div class="sparkline sparkline-lg"${hasTrend ? ' id="hs-feature-spark"' : ''}>
-        ${hasTrend ? '' : '<p class="viz-empty">Trend appears after the next update for this skill.</p>'}
-      </div>
+      <small class="dim">${row.rank != null ? `#${nf(row.rank)} rank` : 'unranked'}${row.lastDelta ? ` · ${signed(row.lastDelta)} recent` : ''}</small>
     </article>`;
 }
 
-function highscoreRowHtml(row) {
+function statCardHtml(row) {
   return `
-    <div class="hs-row">
-      <div class="hs-row-label">
-        <b>${esc(row.label)}</b>
-        <span class="fine dim">${esc(row.kind)}</span>
-      </div>
-      <div class="hs-row-value">
-        <b class="num">${nf(row.value)}</b>
-        <span class="fine dim">${row.rank != null ? `#${nf(row.rank)}` : '-'} · ${signed(row.delta)}</span>
-      </div>
+    <article class="panel stat-card">
+      <span class="eyebrow">${esc(row.label)}</span>
+      <b class="num">${nf(row.value)}</b>
+      <small class="dim">${row.rank != null ? `top rank #${nf(row.rank)}` : row.lastDelta ? `${signed(row.lastDelta)} recent` : esc(row.kind)}</small>
+    </article>`;
+}
+
+function nextHuntsHtml() {
+  if (!grounds4me.length) return '';
+  return `
+    <div class="next-hunts" role="list">
+      ${grounds4me.slice(0, 8).map((row) => `
+        <a class="next-hunts-item" role="listitem" href="grounds.html?g=${esc(row.groundSlug)}">
+          <span class="next-hunts-ring"><span>${esc((row.ground || '').slice(0, 2).toUpperCase())}</span></span>
+          <small>${esc(row.ground)}</small>
+        </a>`).join('')}
     </div>`;
 }
+
+const SKILL_KIND = 'skill level';
+const skillRows = highscoreRows.filter((row) => row.kind === SKILL_KIND);
+const statRows = highscoreRows.filter((row) => row.key !== 'experience' && row.kind !== SKILL_KIND);
+
+const deathCutoff = latest ? new Date(`${latest.date}T00:00:00Z`) : new Date();
+const deaths30 = deaths.filter((row) => deathCutoff - new Date(row.time) < 30 * ONE_DAY_MS).length;
+const deathsPrev30 = deaths.filter((row) => {
+  const age = deathCutoff - new Date(row.time);
+  return age >= 30 * ONE_DAY_MS && age < 60 * ONE_DAY_MS;
+}).length;
+const deathsDelta = deaths.length ? deaths30 - deathsPrev30 : null;
 
 const avg7 = gainAverage(7);
 const avg30 = gainAverage(30);
@@ -469,8 +479,6 @@ const bestProfitHunt = myHunts
   .map((hunt) => ({ ...hunt, profitRate: (hunt.balance / hunt.minutes) * 60 }))
   .sort((a, b) => b.profitRate - a.profitRate)[0] || null;
 const cadenceTrend = levelCadence();
-const featuredHighscore = highscoreRows.find((row) => row.key === 'experience') || highscoreRows[0] || null;
-const secondaryHighscores = highscoreRows.filter((row) => row !== featuredHighscore);
 
 /** This week's pace vs the 30-day average, as a conclusion rather than two
  * raw numbers — the one line the page should say before anything else. */
@@ -519,10 +527,6 @@ function profitPerHour() {
 
 const monthGain = monthToDateGain();
 const profitRate = profitPerHour();
-const charmPoints = latest?.charmPoints ?? null;
-const charmFirst = firstKnown('charmPoints');
-const charmDelta = charmPoints != null && charmFirst != null && charmFirst.value !== charmPoints
-  ? charmPoints - charmFirst.value : null;
 const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: md(row.date), n: row.experience })), 24);
 
 const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delta ${tone}">${text}</em>`);
@@ -548,11 +552,11 @@ function progressionOverviewHtml() {
         <small>${profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet'}</small>
       </article>
       <article class="panel dashboard-metric">
-        <span class="eyebrow">Charm points</span>
-        <b class="num">${charmPoints != null ? nf(charmPoints) : '-'}</b>
-        <small>${charmPoints == null ? 'Not tracked yet'
-    : charmDelta != null ? `${metricDelta(`+${nf(charmDelta)}`, 'up')} since ${esc(charmFirst.date)}`
-      : 'earned points · tracked highscore'}</small>
+        <span class="eyebrow">Deaths</span>
+        <b class="num">${nf(deaths30)}</b>
+        <small>${deathsDelta == null ? 'No deaths on record'
+    : deathsDelta === 0 ? 'even with the prior 30 days'
+      : `${metricDelta(`${deathsDelta > 0 ? '+' : ''}${nf(deathsDelta)}`, deathsDelta > 0 ? 'down' : 'up')} last 30 days`}</small>
       </article>
     </div>`;
 }
@@ -655,6 +659,15 @@ stage.innerHTML = `
 
   <section class="progression-overview" aria-label="Progression">
     ${progressionOverviewHtml()}
+  </section>
+
+  ${grounds4me.length ? `
+  <section aria-label="Next hunts">
+    <p class="eyebrow panel-eyebrow">Next hunts</p>
+    ${nextHuntsHtml()}
+  </section>` : ''}
+
+  <section aria-label="Experience">
     <div class="panel panel-pad viz progression-chart">
       <div class="chart-controls">
         <div>
@@ -684,6 +697,17 @@ stage.innerHTML = `
     </div>
   </section>
 
+  ${skillRows.length ? `
+  <section aria-label="Skills">
+    <p class="eyebrow panel-eyebrow">Skills</p>
+    <div class="skill-grid">${skillRows.map(skillCardHtml).join('')}</div>
+  </section>` : ''}
+
+  ${statRows.length ? `
+  <section aria-label="Tracked highscores">
+    <div class="stat-cards">${statRows.map(statCardHtml).join('')}</div>
+  </section>` : ''}
+
   <section class="activity-duo" aria-label="Hunting activity and recent deaths">
     <div class="panel panel-pad viz">
       <p class="eyebrow panel-eyebrow">Daily XP activity</p>
@@ -700,7 +724,6 @@ stage.innerHTML = `
     <div class="character-tabs-wrap">
       <div class="character-tabs" role="tablist" aria-label="Character deep dives">
         <button type="button" role="tab" id="tab-next" aria-controls="panel-next" aria-selected="true">Next hunt</button>
-        <button type="button" role="tab" id="tab-highscores" aria-controls="panel-highscores" aria-selected="false" tabindex="-1">Highscores</button>
         <button type="button" role="tab" id="tab-hunts" aria-controls="panel-hunts" aria-selected="false" tabindex="-1">Hunt log</button>
         <button type="button" role="tab" id="tab-details" aria-controls="panel-details" aria-selected="false" tabindex="-1">Details</button>
       </div>
@@ -715,18 +738,6 @@ stage.innerHTML = `
         <div><h3>No rated ${esc(characterVocation || 'character')} hunts in this band</h3><p class="dim">The full planner still includes unrated grounds and lets you inspect a wider level range.</p></div>
         <a class="btn btn-primary" href="grounds.html">Adjust planner filters</a>
       </div>`}
-    </div>
-
-    <div class="character-tab-panel" role="tabpanel" id="panel-highscores" aria-labelledby="tab-highscores" tabindex="0" hidden>
-      ${latest ? `
-      <div class="section-subhead first"><h3>Highscores</h3><span class="fine dim">${nf(highscoreRows.length)} tracked categories</span></div>
-      <div class="skill-feature-row">
-        ${featuredHighscore ? highscoreFeatureHtml(featuredHighscore) : ''}
-        <section class="hs-list-wrap" aria-labelledby="other-highscores-title">
-          <h3 class="eyebrow" id="other-highscores-title">Other tracked categories</h3>
-          <div class="hs-list panel">${secondaryHighscores.map(highscoreRowHtml).join('')}</div>
-        </section>
-      </div>` : '<div class="empty-action"><div><h3>No highscore snapshot yet</h3><p class="dim">The scheduled tracker will populate this view after a successful crawl.</p></div></div>'}
     </div>
 
     <div class="character-tab-panel" role="tabpanel" id="panel-hunts" aria-labelledby="tab-hunts" tabindex="0" hidden>
@@ -762,9 +773,6 @@ document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 // sparklines mount at their container's true pixel width (token-size text)
 chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 34, fmt: compact }));
-if (featuredHighscore) {
-  chartInto($('#hs-feature-spark'), (width) => sparkline(sampledSeries(featuredHighscore.series), { width, height: 84, fmt: nf }));
-}
 
 // ---- chart controls: metric × year × month, months only for tracked data ----
 const xpState = { metric: 'daily', year: chartYears.at(-1) || 'all', month: 'all' };

@@ -914,6 +914,30 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   overflow-wrap: anywhere;
   text-align: right;
 }
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s6); }
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--s4); }
+.stat-card { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
+.stat-card > b { font-size: var(--fs-18); line-height: 24px; font-variant-numeric: tabular-nums; }
+
+/* "Next hunts" story-tray — a horizontally scrolling row of ground shortcuts,
+   each a gradient-ringed avatar with the ground's initials, matching the
+   source's conic-gradient ring treatment used for its own story tray. */
+.next-hunts { display: flex; gap: var(--s5); overflow-x: auto; padding-bottom: var(--s1); }
+.next-hunts-item { display: flex; flex-direction: column; align-items: center; gap: var(--s2); width: 76px; flex-shrink: 0; text-align: center; }
+.next-hunts-ring {
+  width: 64px; height: 64px; border-radius: var(--r-circle); padding: 2.5px; box-sizing: border-box;
+  background: conic-gradient(from 210deg, rgb(var(--brand-yellow)), rgb(var(--brand-orange)), rgb(var(--brand-rose)), rgb(var(--brand-magenta)), rgb(var(--brand-purple)), rgb(var(--brand-yellow)));
+}
+.next-hunts-ring > span {
+  width: 100%; height: 100%; box-sizing: border-box; border-radius: var(--r-circle);
+  background: rgb(var(--surface-2)); border: 2.5px solid rgb(var(--surface-raised));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: var(--fs-14); color: rgb(var(--ink));
+}
+.next-hunts-item small {
+  font-size: var(--fs-11); color: rgb(var(--ink-2)); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; max-width: 76px;
+}
 .sparkline {
   min-height: 58px;
   display: grid;
