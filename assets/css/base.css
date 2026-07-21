@@ -131,6 +131,7 @@
   --e-confident: cubic-bezier(.7, 0, .3, 1);
   --e-settle: cubic-bezier(0, .61, .28, .92);
   --t-hover: 150ms;
+  --t-reveal: 666ms; /* matches the source's --ig-duration-reveal */
 
   /* shell geometry */
   --rail: 245px;
@@ -283,10 +284,10 @@ main.stage {
   flex: 1; min-width: 0;
   padding: var(--s8) var(--s8) var(--s16);
 }
-.stage-inner { max-width: var(--canvas); margin: 0 auto; animation: page-settle 350ms var(--e-settle) both; }
+.stage-inner { max-width: var(--canvas); margin: 0 auto; animation: page-settle var(--t-reveal) var(--e-settle) both; }
 .stage-inner.narrow { max-width: var(--feed); }
 
-@keyframes page-settle { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: scale(1); } }
+@keyframes page-settle { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
 
 /* ---------- primitives ----------
  * Button — three-tier action control (primary/secondary/tertiary), plus an
