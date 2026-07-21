@@ -243,9 +243,9 @@ export function flowLegend(data, seriesLabel, fmt = kk) {
 }
 
 /** Compact independently-scaled trend, for table/card rows where a full axis would overstate precision. */
-export function sparkline(data, { width = 220, height = 58, fmt = nf } = {}) {
+export function sparkline(data, { width = 220, height = 58, fmt = nf, ticks = true } = {}) {
   if (!data.length) return '';
-  const pad = { t: 6, r: 8, b: 16, l: 8 };
+  const pad = { t: 6, r: 8, b: ticks ? 16 : 6, l: 8 };
   const top = Math.max(...data.map((d) => d.n), 1);
   const lo = Math.min(...data.map((d) => d.n));
   const span = Math.max(top - lo, 1);
@@ -270,8 +270,8 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf } = {}) {
     <path class="varea" fill="url(#${grad.area})" d="${area}"/>
     <path class="vline" stroke="url(#${grad.line})" d="${line}"/>
     <circle class="vdot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(end.n).toFixed(1)}" r="3.5"><title>${esc(end.key)}: ${fmt(end.n)}</title></circle>
-    ${roomForBoth ? `<text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>` : ''}
-    <text class="vtick" x="${width - pad.r}" y="${height - 3}" text-anchor="end">${esc(end.key)}</text>
+    ${ticks && roomForBoth ? `<text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>` : ''}
+    ${ticks ? `<text class="vtick" x="${width - pad.r}" y="${height - 3}" text-anchor="end">${esc(end.key)}</text>` : ''}
   </svg>`;
 }
 

@@ -719,9 +719,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
    this component's own layout, so a .panel change (hover shadow, dark-mode
    surface) reaches every KPI card the same way */
 .dashboard-metric { display: grid; gap: var(--s2); padding: var(--s4); min-width: 0; }
-.dashboard-metric > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.dashboard-metric > b, .dashboard-metric .metric-value-row > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
 .dashboard-metric > b.dashboard-date { font-size: clamp(23px, 3vw, 34px); }
 .dashboard-metric > small { color: rgb(var(--ink-2)); font-size: var(--fs-12); line-height: 16px; }
+/* featured KPI card — value and its sparkline share one baseline-aligned row,
+   matching the reference (spark sits top-right of the number, no axis labels) */
+.metric-value-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s3); }
+.metric-value-row .metric-spark { margin: 0; width: 96px; flex: 0 0 96px; }
 .metric-delta { font-style: normal; font-weight: 700; font-size: var(--fs-12); }
 .metric-delta.up { color: rgb(0, 130, 20); }
 [data-appearance="dark"] .metric-delta.up { color: rgb(var(--green)); }

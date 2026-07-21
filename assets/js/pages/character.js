@@ -333,9 +333,11 @@ function progressionOverviewHtml() {
     <div class="dashboard-metrics" aria-label="Progression at a glance">
       <article class="panel dashboard-metric dashboard-metric-featured">
         <span class="eyebrow">Total experience</span>
-        <b class="num">${experience != null ? compact(experience) : '-'}</b>
+        <div class="metric-value-row">
+          <b class="num">${experience != null ? compact(experience) : '-'}</b>
+          ${totalXpSpark.length >= 2 ? '<div class="metric-spark" id="xp-total-spark"></div>' : ''}
+        </div>
         <small>${monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote)}</small>
-        ${totalXpSpark.length >= 2 ? '<div class="metric-spark" id="xp-total-spark"></div>' : ''}
       </article>
       <article class="panel dashboard-metric">
         <span class="eyebrow">XP / day pace</span>
@@ -478,7 +480,7 @@ stage.innerHTML = `
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 // sparklines mount at their container's true pixel width (token-size text)
-chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 34, fmt: compact }));
+chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 28, fmt: compact, ticks: false }));
 
 // ---- share profile: copy the character URL; no server, so just the link ----
 const shareBtn = $('#share-profile');
