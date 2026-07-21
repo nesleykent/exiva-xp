@@ -112,11 +112,14 @@
   /* spacing / shape / elevation */
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px;
   --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
-  --r-sm: 4px; --r-input: 8px; --r-md: 8px; --r-card: 10px; --r-lg: 12px; --r-xl: 16px;
+  --r-xs: 2px; --r-sm: 4px; --r-input: 8px; --r-md: 8px; --r-card: 10px; --r-lg: 12px; --r-xl: 16px;
   --r-pill: 1000px; --r-circle: 50%;
-  --shadow-card: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1);
-  --shadow-float: 0 4px 12px rgba(0,0,0,.15);
-  --shadow-dropdown: 0 3px 8px rgba(0,0,0,.3);
+  /* the source defines one shadow value for all three contexts
+     (--ig-shadow-card/-dropdown/-float all equal "0 0 10px rgba(0,0,0,.2)") —
+     kept as three named tokens for call-site clarity, but identical */
+  --shadow-card: 0 0 10px rgba(0,0,0,.2);
+  --shadow-float: 0 0 10px rgba(0,0,0,.2);
+  --shadow-dropdown: 0 0 10px rgba(0,0,0,.2);
 
   /* type scale — sizes actually in use across the app, named after the source's paired system-N tokens */
   --fs-10: 10px; --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px;
@@ -180,6 +183,7 @@ body {
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; }
+h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px; letter-spacing: -.26px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .skip-link { position: fixed; left: -9999px; min-height: var(--tap); z-index: 200; background: rgb(var(--surface-raised)); color: rgb(var(--ink)); padding: var(--s3) var(--s4); border: 0; border-radius: var(--r-md); box-shadow: var(--shadow-float); font: inherit; cursor: pointer; }
@@ -313,7 +317,7 @@ main.stage {
    size tiers were dead. .chart-controls .btn's own min-height:28px override
    (below) now does real work: it keeps that dense control row at the base
    size instead of inheriting .btn-sm's smaller one. */
-.btn-sm { min-height: 24px; padding: 4px var(--s2); font-size: var(--fs-11); line-height: 14px; }
+.btn-sm { min-height: 24px; padding: 4px var(--s2); font-size: var(--fs-11); line-height: 13px; }
 .btn-lg { min-height: var(--tap); padding: var(--s3) var(--s5); font-size: var(--fs-14); line-height: 18px; }
 
 /* Utility card — the standalone design uses the quiet separator tone around
