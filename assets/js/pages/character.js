@@ -430,13 +430,13 @@ function sampledSeries(series, maxPoints = 40) {
  * so a progress fraction would have to be invented. */
 function skillCardHtml(row) {
   return `
-    <article class="panel skill-card">
-      <div class="skill-card-head">
-        <h3>${esc(row.label.replace(' Fighting', ''))}</h3>
+    <div class="skill-item">
+      <div class="skill-item-head">
+        <span class="skill-item-name">${esc(SKILL_SHORT[row.key] || row.label)}</span>
         <b class="num">${nf(row.value)}</b>
       </div>
-      <small class="dim">${row.rank != null ? `#${nf(row.rank)} rank` : 'unranked'}${row.lastDelta ? ` · ${signed(row.lastDelta)} recent` : ''}</small>
-    </article>`;
+      <small class="dim">${row.rank != null ? `#${nf(row.rank)} world rank` : 'unranked'}</small>
+    </div>`;
 }
 
 function statCardHtml(row) {
@@ -461,7 +461,19 @@ function nextHuntsHtml() {
 }
 
 const SKILL_KIND = 'skill level';
-const skillRows = highscoreRows.filter((row) => row.kind === SKILL_KIND);
+// reference order + short labels for the Skills grid (weapon skills first,
+// then magic/distance, then the rest) — matches the standalone template
+const SKILL_ORDER = ['swordFighting', 'shielding', 'magicLevel', 'distanceFighting', 'axeFighting', 'clubFighting', 'fistFighting', 'fishing'];
+const SKILL_SHORT = {
+  swordFighting: 'Sword', shielding: 'Shielding', magicLevel: 'Magic', distanceFighting: 'Distance',
+  axeFighting: 'Axe', clubFighting: 'Club', fistFighting: 'Fist', fishing: 'Fishing',
+};
+const skillRows = highscoreRows
+  .filter((row) => row.kind === SKILL_KIND)
+  .sort((a, b) => {
+    const ai = SKILL_ORDER.indexOf(a.key), bi = SKILL_ORDER.indexOf(b.key);
+    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
+  });
 const statRows = highscoreRows.filter((row) => row.key !== 'experience' && row.kind !== SKILL_KIND);
 
 const deathCutoff = latest ? new Date(`${latest.date}T00:00:00Z`) : new Date();
@@ -698,7 +710,7 @@ stage.innerHTML = `
   </section>
 
   ${skillRows.length ? `
-  <section aria-label="Skills">
+  <section class="panel panel-pad" aria-label="Skills">
     <p class="eyebrow panel-eyebrow">Skills</p>
     <div class="skill-grid">${skillRows.map(skillCardHtml).join('')}</div>
   </section>` : ''}

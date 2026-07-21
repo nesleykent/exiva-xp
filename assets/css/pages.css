@@ -914,7 +914,14 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   overflow-wrap: anywhere;
   text-align: right;
 }
-.skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s6); }
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s6); margin-top: var(--s3); }
+/* bare skill item inside the one SKILLS panel — no per-item border (matches
+   the reference, which lays these out flat in a single card) */
+.skill-item { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; }
+.skill-item-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
+.skill-item-name { font-size: var(--fs-13); font-weight: 600; }
+.skill-item-head > b { font-size: var(--fs-13); font-weight: 700; font-variant-numeric: tabular-nums; }
+.skill-item small { font-size: var(--fs-12); }
 .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--s4); }
 .stat-card { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
 .stat-card > b { font-size: var(--fs-18); line-height: 24px; font-variant-numeric: tabular-nums; }
