@@ -425,7 +425,7 @@ stage.innerHTML = `
       <div class="character-level-progress">
         <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${levelProgressPct.toFixed(0)}%</b></div>
         <span class="track"><i style="width:${levelProgressPct.toFixed(2)}%"></i></span>
-        <small>${compact(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
+        <small>${nf(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
       </div>` : ''}
     </div>
   </header>
