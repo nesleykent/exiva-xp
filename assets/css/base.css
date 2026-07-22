@@ -94,14 +94,18 @@
   --green: 88, 195, 34;
   --white-fixed: 255, 255, 255;
 
-  /* element accents (data colour only) */
+  /* element accents (data colour only) — aliased to the fixed/brand tokens
+     above wherever the design system already reused that hue (fire=orange,
+     energy=purple, ice=blue, holy=yellow, death=magenta, earth=green); only
+     physical has no other home. Aliasing instead of repeating the literal
+     stops the two systems from silently drifting apart if either is retuned. */
   --c-physical: 142, 142, 142;
-  --c-earth: 88, 195, 34;
-  --c-fire: 255, 122, 0;
-  --c-energy: 118, 56, 250;
-  --c-ice: 0, 149, 246;
-  --c-holy: 255, 214, 0;
-  --c-death: 211, 0, 197;
+  --c-earth: var(--green);
+  --c-fire: var(--brand-orange);
+  --c-energy: var(--brand-purple);
+  --c-ice: var(--blue);
+  --c-holy: var(--brand-yellow);
+  --c-death: var(--brand-magenta);
 
   /* type */
   --f-ui: "Optimistic", Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "Noto Sans", sans-serif;

@@ -42,6 +42,14 @@ const clip = (s, n) => (String(s).length > n ? `${String(s).slice(0, n - 1)}…`
 // Unique per-chart gradient ids — url(#id) references resolve document-wide,
 // so two charts sharing an id would silently repaint each other on redraw.
 let gradSeq = 0;
+// The one hero-gradient recipe (rose → magenta → purple, left to right) every
+// gradient-as-data-colour exception draws from — flow()/sparkline()'s line,
+// bars()'s leader fill. Defined once so the three stops can't drift apart
+// across call sites the way hand-duplicated <stop> blocks eventually do.
+const heroStops = () => `
+    <stop offset="0%" style="stop-color:var(--grad-rose)"/>
+    <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
+    <stop offset="100%" style="stop-color:var(--grad-purple)"/>`;
 function flowGradientDefs() {
   const id = gradSeq++;
   const line = `viz-grad-line-${id}`;
@@ -49,11 +57,7 @@ function flowGradientDefs() {
   return {
     line, area,
     defs: `<defs>
-      <linearGradient id="${line}" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" style="stop-color:var(--grad-rose)"/>
-        <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
-        <stop offset="100%" style="stop-color:var(--grad-purple)"/>
-      </linearGradient>
+      <linearGradient id="${line}" x1="0" y1="0" x2="1" y2="0">${heroStops()}</linearGradient>
       <linearGradient id="${area}" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" style="stop-color:var(--grad-rose);stop-opacity:.2"/>
         <stop offset="100%" style="stop-color:var(--grad-rose);stop-opacity:0"/>
@@ -148,11 +152,7 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
   const topIdx = data.findIndex((d) => d.n === top);
   const laneW = width - labelW - 86;
   const gradId = `viz-grad-bar-${gradSeq++}`;
-  const defs = `<defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0%" style="stop-color:var(--grad-rose)"/>
-    <stop offset="50%" style="stop-color:var(--grad-magenta)"/>
-    <stop offset="100%" style="stop-color:var(--grad-purple)"/>
-  </linearGradient></defs>`;
+  const defs = `<defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="0">${heroStops()}</linearGradient></defs>`;
   const body = data.map((d, i) => {
     const y = gap + i * (rowH + gap);
     const w = Math.max(2, (d.n / top) * laneW);
@@ -290,6 +290,10 @@ const OTHER_COLOR = '--c-physical';
  * Assign categorical colours in fixed order, capped at `max` slots — the tail
  * folds into one grey "Other" row instead of cycling hues (a reused hue would
  * make two categories indistinguishable). Returns [{key, n, color, other?}].
+ * Expects `data` already sorted descending by `n` (e.g. via lib/stats.js's
+ * `tally()`) — this takes the first `max - 1` rows as-is, so an unsorted
+ * caller would fold a larger value into "Other" while a smaller one keeps
+ * a colour slot.
  */
 export function categorical(data, max = 6) {
   const rows = data.length > max
