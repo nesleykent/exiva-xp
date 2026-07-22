@@ -412,6 +412,7 @@ function recentDeathsHtml() {
 }
 
 stage.innerHTML = `
+  <div class="character-page">
   <header class="character-hero">
     ${ring(profile?.name || config.name, { cls: 'character-avatar' })}
     <div class="hero-identity">
@@ -474,7 +475,7 @@ stage.innerHTML = `
       ${recentDeathsHtml()}
     </div>
   </section>
-
+  </div>
   `;
 
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));

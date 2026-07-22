@@ -684,6 +684,12 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 /* ---------- character dashboard ---------- */
 
+/* The whole character page is one flex column with a uniform 24px gap between
+   sections (matches the reference's top-level gap:var(--ig-space-6)); the gap
+   is the single source of vertical spacing, so sections carry no own margins. */
+.character-page { display: flex; flex-direction: column; gap: var(--s6); }
+.character-page > * { margin: 0; }
+
 /* Identity header — matches the reference: a large gradient-ring avatar, then
    the name row (name + online badge + share), the vocation line, and the level
    meter. */
@@ -706,7 +712,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: var(--fs-14);
   line-height: 18px;
 }
-.progression-overview { margin-top: var(--s3); }
+/* spacing between sections comes from .character-page's flex gap, not here */
 .progression-overview > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); flex-wrap: wrap; }
 .progression-overview > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
 .dashboard-metrics {
@@ -736,7 +742,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 
 /* ---------- activity heatmap + recent deaths ---------- */
 
-.activity-duo { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--s5); margin-top: var(--s6); }
+.activity-duo { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--s6); }
 .activity-duo > .panel { min-width: 0; }
 .heatmap { display: flex; gap: var(--s1); overflow-x: auto; padding-bottom: var(--s1); }
 .hm-week { display: flex; flex-direction: column; gap: var(--s1); position: relative; padding-top: var(--s4); }
