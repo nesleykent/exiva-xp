@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-25T20:45:44.609Z",
+ "builtAt": "2026-07-25T20:51:16.317Z",
  "grounds": {
   "rotworms-liberty-bay-darashia": {
    "creatures": [
@@ -310,25 +310,6 @@
     "named:Crystal Spider",
     "level",
     "cyclopedia:2"
-   ]
-  },
-  "vengoth-haunted-treelings": {
-   "creatures": [
-    "Gargoyle",
-    "Demon Skeleton",
-    "Elder Bonelord",
-    "Vampire",
-    "Energy Elemental"
-   ],
-   "city": "Yalahar",
-   "wikiTitle": "Vengoth",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
-   "match": "access-cache",
-   "evidence": [
-    "title:Vengoth",
-    "level",
-    "cyclopedia:5",
-    "corroborated"
    ]
   },
   "old-fortress-1-bonebeasts": {
@@ -1720,19 +1701,6 @@
     "corroborated"
    ]
   },
-  "floating-savants-mota": {
-   "creatures": [
-    "Goldhanded Cultist",
-    "Goldhanded Cultist Bride"
-   ],
-   "city": "Thais",
-   "wikiTitle": "Museum of Tibian Arts",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Museum_of_Tibian_Arts",
-   "match": "curated-alias",
-   "evidence": [
-    "title:Museum of Tibian Arts"
-   ]
-  },
   "warzone-1": {
    "creatures": [
     "Humongous Fungus",
@@ -2477,37 +2445,6 @@
     "level"
    ]
   },
-  "putrid-mummy": {
-   "creatures": [
-    "Hyaena",
-    "Ghoulish Hyaena",
-    "Tomb Servant",
-    "Sacred Spider",
-    "Clay Guardian",
-    "Elder Mummy",
-    "Grave Guard",
-    "Sandstone Scorpion",
-    "Death Priest",
-    "Skeleton",
-    "Insect Swarm",
-    "Larva",
-    "Scorpion",
-    "Grave Robber",
-    "Honour Guard",
-    "Crypt Defiler",
-    "Dark Apprentice",
-    "Squidgy Slime",
-    "Stalker"
-   ],
-   "city": "Ankrahmun",
-   "wikiTitle": "Horestis Tomb",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Horestis_Tomb",
-   "match": "curated-alias",
-   "evidence": [
-    "named:Elder Mummy",
-    "cyclopedia:1"
-   ]
-  },
   "orc-cults": {
    "creatures": [
     "Poison Spider",
@@ -3009,21 +2946,16 @@
   },
   "crypt-warriors": {
    "creatures": [
-    "Crypt Warden",
-    "Sphinx",
-    "Priestess of the Wild Sun",
-    "Black Sphinx Acolyte",
-    "Burning Gladiator"
+    "Crypt Warrior"
    ],
-   "city": "Issavi",
-   "wikiTitle": "Kilmaresh Catacombs",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
+   "city": "Thais",
+   "wikiTitle": "Bounac",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bounac",
    "match": "curated-alias",
    "evidence": [
-    "named:Crypt Warden",
+    "named:Crypt Warrior",
     "level",
-    "cyclopedia:5",
-    "corroborated"
+    "cyclopedia:1"
    ]
   },
   "summer-court": {
@@ -4798,25 +4730,6 @@
     "named:Dragon/Dragon Lord",
     "level",
     "cyclopedia:2"
-   ]
-  },
-  "haunted-treelings-vengoth": {
-   "creatures": [
-    "Gargoyle",
-    "Demon Skeleton",
-    "Elder Bonelord",
-    "Vampire",
-    "Energy Elemental"
-   ],
-   "city": "Yalahar",
-   "wikiTitle": "Vengoth",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
-   "match": "access-cache",
-   "evidence": [
-    "title:Vengoth",
-    "level",
-    "cyclopedia:5",
-    "corroborated"
    ]
   },
   "issavi-surafce-sd": {

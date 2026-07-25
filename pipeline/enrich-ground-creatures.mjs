@@ -93,7 +93,9 @@ const PAGE_RULES = [
   [/\bmammoths?.*svargrond/i, 'Formorgar Glacier/Mammoths'],
   [/\bputrid mummy\b/i, 'Horestis Tomb'],
   [/\b(?:edron )?orc cults?\b/i, 'Edron Orc Cave'],
-  [/\bcrypt warriors?\b/i, 'Kilmaresh Catacombs'],
+  // Crypt Warrior lives in Bounac; Kilmaresh Catacombs has the Crypt *Warden*.
+  // Different creature, different city (Thais vs Issavi) — owner-reported.
+  [/\bcrypt warriors?\b/i, 'Bounac'],
   [/\bfalcons?(?: eagle)?\b/i, 'Falcon Bastion'],
   [/\bissavi ogres?\b/i, 'Kilmaresh Mountains'],
   [/\bissavi.*(?:sphinx|crypt warden)|(?:sphinx|crypt warden).*issavi/i, 'Kilmaresh Catacombs'],
@@ -116,6 +118,7 @@ const PAGE_RULES = [
 
 const BROAD_PAGE_TITLES = new Set([
   'Alchemist Quarter',
+  'Bounac',
   'Arena and Zoo Quarter',
   'Banuta',
   'Cemetery Quarter',
@@ -427,11 +430,31 @@ function huntLevel(wikitext) {
  * unrelated sources agreeing. That is what "Cobras" fails — the snake `Cobra`
  * is listed in the Pharaoh Tombs, never in the Cobra Bastion.
  */
-function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, bestiaryLocations) {
+function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, bestiaryLocations, codex) {
   const label = new Set(words(groundName));
   const reasons = [];
   let points = 0;
   let strong = false;
+
+  /**
+   * A hard veto, checked before anything else. When the label spells out a
+   * specific creature in full — "Crypt Warriors" is exactly `Crypt Warrior` —
+   * the article has to list that creature, or this is the wrong place no
+   * matter how well the rest scores. Genus matching alone let "Crypt
+   * Warriors" pair with Kilmaresh Catacombs on the shared word "crypt", when
+   * that article holds the Crypt *Warden* and the real hunt is Bounac.
+   * Single-word names are exempt: a label saying "Elves" should not be forced
+   * to find a plain `Elf` in a list of Elf Scouts and Elf Arcanists.
+   */
+  const spelledOut = codex.creatures.filter((creature) => {
+    const parts = words(creature.name);
+    return parts.length >= 2 && parts.every((word) => label.has(word));
+  });
+  const missing = spelledOut.filter((creature) => !creatures.includes(creature.name));
+  if (spelledOut.length && missing.length === spelledOut.length) {
+    return { points: 0, strong: false, city: huntCity(wikitext), level: huntLevel(wikitext),
+      reasons: [`names ${missing.map((c) => c.name).join('/')}, absent from this article`] };
+  }
 
   const titleWords = words(title).filter((word) => !STOPWORDS.has(word));
   if (titleWords.length && titleWords.every((word) => label.has(word))) {
@@ -564,7 +587,7 @@ for (const ground of grounds) {
     creatures = creatures.filter((name) => !/^Quara /i.test(name));
   }
   const evidence = pairingEvidence(ground.name, match.title, pages.get(match.title),
-    creatures, ground.entryLevel ?? null, bestiaryLocations);
+    creatures, ground.entryLevel ?? null, bestiaryLocations, codex);
   if (!evidence.strong || evidence.points <= 0) {
     // A pairing nothing corroborates is a guess, and a guessed roster reads
     // exactly like a real one. Drop it: no creature list beats a wrong one.
