@@ -119,17 +119,20 @@ stage.innerHTML = `
     <section class="panel panel-pad tool-card" id="level-tool">
       <div class="tool-head">
         <h2>Level target</h2>
-        <span class="fine dim">exp needed and days-to-goal at ${esc(characterName)}'s recent pace</span>
+        <span class="fine dim">exp, hunting time and days-to-goal at ${esc(characterName)}'s recent pace</span>
       </div>
       <div class="tool-fields">
+        <label class="lbl lbl-narrow"><span class="eyebrow">Starting level</span><input id="level-start" type="number" min="1" max="2000" value="${characterLevel}"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="level-target" type="number" min="2" max="2001" value="${characterLevel + 10}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Exp per hour</span><input id="level-exp-hour" type="number" min="0" value="" placeholder="optional"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Hours per day</span><input id="level-hours-day" type="number" min="0" max="24" step="0.5" value="" placeholder="optional"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Avg daily exp</span><input id="level-pace" type="number" min="0" value="${avgDailyXp ?? ''}" placeholder="${avgDailyXp == null ? 'no pace data' : ''}"></label>
       </div>
       <div class="tool-result" id="level-out" role="status" aria-live="polite" aria-atomic="true"></div>
+      <p class="fine dim">Exp per hour and hours per day are optional. Fill both and the projection runs on that planned pace instead of the tracked daily average; exp per hour alone still gives the hunting time the goal costs.</p>
       <details class="tool-disclosure">
         <summary>Level &amp; experience table</summary>
         <div class="tool-fields">
-          <label class="lbl lbl-narrow"><span class="eyebrow">Current level</span><input id="level-current" type="number" min="1" max="2000" value="${characterLevel}"></label>
           <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
           <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
         </div>
@@ -229,34 +232,49 @@ function renderDamage() {
 }
 
 function renderLevelTarget() {
-  const current = Math.floor(numberInput('#level-current'));
+  const start = Math.floor(numberInput('#level-start'));
   const target = Math.floor(numberInput('#level-target'));
-  const pace = numberInput('#level-pace');
-  if (!Number.isFinite(current) || !Number.isFinite(target) || current < 1 || target <= current) {
-    $('#level-out').innerHTML = '<span class="dim">Pick a target level above the current level.</span>';
+  const expPerHour = numberInput('#level-exp-hour');
+  const hoursPerDay = numberInput('#level-hours-day');
+  const trackedPace = numberInput('#level-pace');
+  if (!Number.isFinite(start) || !Number.isFinite(target) || start < 1 || target <= start) {
+    $('#level-out').innerHTML = '<span class="dim">Pick a target level above the starting level.</span>';
     return;
   }
-  // Anchor on the character's real tracked XP when the current-level field
+  // Anchor on the character's real tracked XP when the starting-level field
   // matches the tracked level; otherwise fall back to the level formula, so
   // an edited "what-if" level still gets an honest (if less precise) answer.
-  const startExperience = current === characterLevel && characterExperience != null
+  const startExperience = start === characterLevel && characterExperience != null
     ? characterExperience
-    : experienceForLevel(current);
+    : experienceForLevel(start);
   const needed = experienceForLevel(target) - startExperience;
   if (needed <= 0) {
     $('#level-out').innerHTML = '<span class="dim">Already at or above that target.</span>';
     return;
   }
-  const hasPace = Number.isFinite(pace) && pace > 0;
-  const days = hasPace ? Math.ceil(needed / pace) : null;
+  // A planned pace is a deliberate override of the tracked average, so it
+  // only applies with both halves filled in — an exp/hour with no hours/day
+  // says nothing about how fast the days pass, and vice versa. Exp/hour on
+  // its own still answers "how many hours of hunting is this goal worth".
+  const plannedDaily = expPerHour > 0 && hoursPerDay > 0 ? expPerHour * hoursPerDay : null;
+  const dailyPace = plannedDaily ?? (trackedPace > 0 ? trackedPace : null);
+  const huntMinutes = expPerHour > 0 ? (needed / expPerHour) * 60 : null;
+  const days = dailyPace != null ? Math.ceil(needed / dailyPace) : null;
   const eta = days != null ? new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10) : null;
   $('#level-out').innerHTML = `
     <div class="tool-kpis">
       <span><b>${kk(needed)}</b><small>exp to level ${nf(target)}</small></span>
+      ${huntMinutes != null ? `<span><b>${hm(huntMinutes)}</b><small>hunting time needed</small></span>` : ''}
       ${days != null ? `<span><b>${nf(days)}</b><small>days at this pace</small></span>` : ''}
       ${eta != null ? `<span><b>${eta}</b><small>projected date</small></span>` : ''}
     </div>
-    ${!hasPace ? '<p class="fine dim">No recent daily-pace data to project a date from — enter one, or check back once more days are tracked.</p>' : ''}`;
+    <div class="tile-tags">
+      <span class="pill">${nf(target - start)} level${target - start === 1 ? '' : 's'} to go</span>
+      ${plannedDaily != null
+    ? `<span class="pill">Planned pace ${kk(plannedDaily)}/day · ${kk(expPerHour)}/h × ${hoursPerDay}h</span>`
+    : dailyPace != null ? `<span class="pill">Tracked pace ${kk(dailyPace)}/day</span>` : ''}
+    </div>
+    ${dailyPace == null ? '<p class="fine dim">No daily pace to project a date from — enter an exp per hour together with hours per day, or an average daily exp.</p>' : ''}`;
 }
 
 function renderLevelTable() {
@@ -647,7 +665,7 @@ bindSortMenu('imb-tier', (key) => {
   '#damage-fatal-chance', '#damage-fatal-damage', '#damage-charm', '#damage-charm-chance',
 ].forEach((id) => $(id).addEventListener('input', renderDamage));
 [
-  '#level-current', '#level-target', '#level-pace',
+  '#level-start', '#level-target', '#level-exp-hour', '#level-hours-day', '#level-pace',
 ].forEach((id) => $(id).addEventListener('input', renderLevelTarget));
 [
   '#level-table-from', '#level-table-to',
