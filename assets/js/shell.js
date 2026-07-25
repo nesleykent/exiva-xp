@@ -227,6 +227,17 @@ export function basisPill(basis) {
   return '<span class="badge">Curated</span>';
 }
 
+/**
+ * Marks a raw XP/h that is a cross-vocation stand-in rather than a figure
+ * published for this vocation — currently druid grounds falling back to
+ * tibiapal's retired Mage table. Never render such a number without it.
+ */
+export function standInPill(from) {
+  if (!from) return '';
+  const title = `No druid raw XP/h published for this ground yet — showing tibiapal's retired ${from.vocation} figure for "${from.place}" (${from.levelText}). A rough stand-in, not a druid measurement.`;
+  return `<span class="pill pill-warning" title="${esc(title)}">${esc(from.vocation)} stand-in</span>`;
+}
+
 export function trustMeter(trust, n) {
   const segs = Array.from({ length: 5 }, (_, i) => `<i class="${i < trust.bars ? 'on' : ''}"></i>`).join('');
   return `<span class="trust" title="${n} logged hunt${n === 1 ? '' : 's'}"><span class="seg">${segs}</span>${esc(trust.label)}</span>`;

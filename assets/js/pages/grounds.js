@@ -10,7 +10,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, basisPill, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
+import { $, ring, pillEl, basisPill, standInPill, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
 import { ELEMENTS, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
@@ -268,7 +268,7 @@ function renderDetail(slug) {
       { id: 'profitRate', label: 'Profit/h', num: true, cell: (r) => kk(r.profitRate) },
       { id: 'gear', label: 'Loadout', cell: (r) => (r.gear ? `<span class="fine dim" title="${esc(r.gearLabel || '')}">${esc(r.gear)}</span>` : '—') },
       { id: 'n', label: 'Hunts', num: true, cell: (r) => nf(r.n) },
-      { id: 'basis', label: 'Basis', cell: (r) => basisPill(r.basis) },
+      { id: 'basis', label: 'Basis', cell: (r) => [basisPill(r.basis), standInPill(r.xpRawFrom)].filter(Boolean).join(' ') },
     ],
     rows,
   });
@@ -386,6 +386,7 @@ function render() {
           </div>
           <div class="tile-tags">
             ${basisPill(g.badgeRow.basis)}
+            ${standInPill(g.badgeRow.xpRawFrom)}
             ${fastestTask ? `<span class="pill pill-info">${TASK_SPEED_LABEL[fastestTask]} task</span>` : ''}
             ${attackEl ? pillEl(attackEl) : ''}
             ${area ? `<span class="pill">${esc(area)}</span>` : ''}

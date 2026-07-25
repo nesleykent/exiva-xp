@@ -1,0 +1,440 @@
+{
+ "origin": "https://tibiapal.com/hunting-old",
+ "appliesTo": "Druid",
+ "capturedAt": "2026-07-25",
+ "note": "Raw XP/h from tibiapal's retired combined Mage table, used only where the live Druid table has no value yet. Mage figures, not druid measurements — present as a stand-in, never as a tibiapal druid figure.",
+ "entries": {
+  "Behemoths Forbidden Lands": {
+   "xpRaw": 570000,
+   "from": {
+    "place": "Behemoths Forbidden Lands",
+    "levelText": "130+",
+    "vocation": "Mage"
+   }
+  },
+  "Book World: Chapter II": {
+   "xpRaw": 2000000,
+   "from": {
+    "place": "Book World: Chapter II",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Book World: Chapter III": {
+   "xpRaw": 3500000,
+   "from": {
+    "place": "Book World: Chapter III",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Book World: Chapter IV": {
+   "xpRaw": 3500000,
+   "from": {
+    "place": "Book World: Chapter IV",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Brimstone Bugs WOTE": {
+   "xpRaw": 950000,
+   "from": {
+    "place": "Brimstone Bugs WOTE",
+    "levelText": "120+",
+    "vocation": "Mage"
+   }
+  },
+  "Calassa": {
+   "xpRaw": 1000000,
+   "from": {
+    "place": "Calassa",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Candia Nibblemaws": {
+   "xpRaw": 3200000,
+   "from": {
+    "place": "Candia Nibblemaws",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Carlin Cults": {
+   "xpRaw": 1200000,
+   "from": {
+    "place": "Carlin Cults",
+    "levelText": "120+",
+    "vocation": "Mage"
+   }
+  },
+  "Cobras": {
+   "xpRaw": 5000000,
+   "from": {
+    "place": "Cobras",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Crypt Warriors": {
+   "xpRaw": 6000000,
+   "from": {
+    "place": "Crypt Warriors",
+    "levelText": "500+",
+    "vocation": "Mage"
+   }
+  },
+  "Darashia Dragon Lords": {
+   "xpRaw": 450000,
+   "from": {
+    "place": "Darashia DLs SD",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Dark Faun Cave Feyrist": {
+   "xpRaw": 1050000,
+   "from": {
+    "place": "Dark Faun Cave Feyrist",
+    "levelText": "150+",
+    "vocation": "Mage"
+   }
+  },
+  "Deeplings Library": {
+   "xpRaw": 1300000,
+   "from": {
+    "place": "Deeplings Library",
+    "levelText": "150+",
+    "vocation": "Mage"
+   }
+  },
+  "Dragon Lords Fenrock": {
+   "xpRaw": 900000,
+   "from": {
+    "place": "Dragon Lords Fenrock",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Dragon Lords POI": {
+   "xpRaw": 850000,
+   "from": {
+    "place": "Dragon Lords POI",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Edron Old Fortress -2 (Hero)": {
+   "xpRaw": 1200000,
+   "from": {
+    "place": "Edron Old Fortress -2 (Hero)",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Edron Old Fortress -3 (Hero)": {
+   "xpRaw": 1150000,
+   "from": {
+    "place": "Edron Old Fortress -3 (Hero)",
+    "levelText": "120+",
+    "vocation": "Mage"
+   }
+  },
+  "Edron Vampire Crypt": {
+   "xpRaw": 850000,
+   "from": {
+    "place": "Edron Vampire Crypt",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Edron Were South": {
+   "xpRaw": 1400000,
+   "from": {
+    "place": "Edron Were South",
+    "levelText": "110+",
+    "vocation": "Mage"
+   }
+  },
+  "Exotic Cave": {
+   "xpRaw": 1200000,
+   "from": {
+    "place": "Exotic Cave",
+    "levelText": "110+",
+    "vocation": "Mage"
+   }
+  },
+  "Falcons": {
+   "xpRaw": 5500000,
+   "from": {
+    "place": "Falcons",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Feyrist Surface": {
+   "xpRaw": 600000,
+   "from": {
+    "place": "Feyrist Surface",
+    "levelText": "80+",
+    "vocation": "Mage"
+   }
+  },
+  "Giant Spiders Port Hope": {
+   "xpRaw": 600000,
+   "from": {
+    "place": "Giant Spiders Port Hope",
+    "levelText": "80+",
+    "vocation": "Mage"
+   }
+  },
+  "Grimvale -4": {
+   "xpRaw": 1000000,
+   "from": {
+    "place": "Grimvale -4",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Haunted Treelings Vengoth": {
+   "xpRaw": 375000,
+   "from": {
+    "place": "Haunted Treelings Vengoth",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Hive Surface": {
+   "xpRaw": 490000,
+   "from": {
+    "place": "Hive Surface",
+    "levelText": "80+",
+    "vocation": "Mage"
+   }
+  },
+  "Iksupan": {
+   "xpRaw": 1100000,
+   "from": {
+    "place": "Iksupan",
+    "levelText": "110+",
+    "vocation": "Mage"
+   }
+  },
+  "Iksupan Last Stand": {
+   "xpRaw": 5000000,
+   "from": {
+    "place": "Iksupan Last Stand",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Issavi Goannas": {
+   "xpRaw": 5500000,
+   "from": {
+    "place": "Issavi Goannas",
+    "levelText": "500+",
+    "vocation": "Mage"
+   }
+  },
+  "Krailos Bug Cave": {
+   "xpRaw": 600000,
+   "from": {
+    "place": "Krailos Bug Cave",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Liberty Bay Wyrms": {
+   "xpRaw": 600000,
+   "from": {
+    "place": "LB Wyrms SD",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Lion's Rock": {
+   "xpRaw": 440000,
+   "from": {
+    "place": "Lion's Rock Lions",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Lizard Chosens": {
+   "xpRaw": 1000000,
+   "from": {
+    "place": "Lizard Chosens",
+    "levelText": "120+",
+    "vocation": "Mage"
+   }
+  },
+  "Lizard City": {
+   "xpRaw": 1000000,
+   "from": {
+    "place": "Lizard City",
+    "levelText": "120+",
+    "vocation": "Mage"
+   }
+  },
+  "Lower Spike": {
+   "xpRaw": 3500000,
+   "from": {
+    "place": "Lower Spike",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Marapur Nagas": {
+   "xpRaw": 5500000,
+   "from": {
+    "place": "Marapur Nagas",
+    "levelText": "500+",
+    "vocation": "Mage"
+   }
+  },
+  "Middle Spike": {
+   "xpRaw": 800000,
+   "from": {
+    "place": "Middle Spike",
+    "levelText": "60+",
+    "vocation": "Mage"
+   }
+  },
+  "Mini Rosha": {
+   "xpRaw": 900000,
+   "from": {
+    "place": "Mini Rosha",
+    "levelText": "200+",
+    "vocation": "Mage"
+   }
+  },
+  "Mother of Scarabs Lair": {
+   "xpRaw": 680000,
+   "from": {
+    "place": "Mother of Scarabs Lair",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Muggy Plains": {
+   "xpRaw": 700000,
+   "from": {
+    "place": "Muggy Plains",
+    "levelText": "80+",
+    "vocation": "Mage"
+   }
+  },
+  "Old Masonry (Death portal)": {
+   "xpRaw": 950000,
+   "from": {
+    "place": "Old Masonry (Death portal)",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Oramond Catacombs": {
+   "xpRaw": 5000000,
+   "from": {
+    "place": "Oramond Catacombs",
+    "levelText": "500+",
+    "vocation": "Mage"
+   }
+  },
+  "Peninsula Tomb": {
+   "xpRaw": 440000,
+   "from": {
+    "place": "Peninsula Tomb",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
+  "Putrid Mummy": {
+   "xpRaw": 700000,
+   "from": {
+    "place": "Putrid Mummy",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Quaras Liberty Bay": {
+   "xpRaw": 1100000,
+   "from": {
+    "place": "Quaras Liberty Bay",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Ravenous Lava Lurkers": {
+   "xpRaw": 1800000,
+   "from": {
+    "place": "Ravenous Lava Lurkers",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Ripper Spectres": {
+   "xpRaw": 5000000,
+   "from": {
+    "place": "Ripper Spectres",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Summer Court": {
+   "xpRaw": 4500000,
+   "from": {
+    "place": "Summer Court",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Sunken Quarter": {
+   "xpRaw": 1300000,
+   "from": {
+    "place": "Sunken Quarter",
+    "levelText": "100+",
+    "vocation": "Mage"
+   }
+  },
+  "Warzone 5": {
+   "xpRaw": 4500000,
+   "from": {
+    "place": "Warzone 5",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Werehyaenas North": {
+   "xpRaw": 2200000,
+   "from": {
+    "place": "Werehyaenas North",
+    "levelText": "250+",
+    "vocation": "Mage"
+   }
+  },
+  "Werelions": {
+   "xpRaw": 3000000,
+   "from": {
+    "place": "Werelions",
+    "levelText": "300+",
+    "vocation": "Mage"
+   }
+  },
+  "Winter Court": {
+   "xpRaw": 4500000,
+   "from": {
+    "place": "Winter Court",
+    "levelText": "400+",
+    "vocation": "Mage"
+   }
+  },
+  "Yalahar Grim Reapers": {
+   "xpRaw": 3500000,
+   "from": {
+    "place": "Yalahar Grim Reapers",
+    "levelText": "250+",
+    "vocation": "Mage"
+   }
+  }
+ }
+}

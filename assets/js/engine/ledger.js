@@ -105,6 +105,10 @@ export function buildLedger(curated, hunts) {
       lootRate: owned ? ev.lootRate.avg : entry.loot,
       profitRate: ev ? ev.profitRate.avg : null,
       curatedValues: { xpRaw: entry.xpRaw, loot: entry.loot },
+      // Set only while the curated XP is a cross-vocation stand-in, so it
+      // clears the moment the row is owned by logged hunts or tibiapal
+      // publishes the real figure (see sources.js normalizeGrounds).
+      xpRawFrom: owned ? null : entry.xpRawFrom || null,
       evidence: ev,
       n: ev?.n || 0,
       trust: trustOf(ev?.n || 0),

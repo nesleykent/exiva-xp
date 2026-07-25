@@ -57,6 +57,7 @@ data/
   creature-tasks.json      owner-curated task speed + workbook route-rate observations
   charms.json              the Charm catalogue (read-only, sourced from TibiaWiki)
   grounds.json             curated entries from tibiapal.com/hunting (read-only)
+  grounds-xp-legacy.json   generated — raw XP/h stand-ins for druid grounds tibiapal hasn't rated yet, from its retired Mage table (labelled in the UI, never presented as druid figures)
   ground-creatures.json    generated — TibiaWiki hunting-place creature rosters
   access.json              generated — best-effort ground access notes (unverified)
   shared-hunts.json        generated — optional shared/approved hunts

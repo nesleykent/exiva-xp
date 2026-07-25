@@ -76,6 +76,26 @@ assert(codex.creature('emerald-damselfly').taskRates.some((rate) => rate.source.
 const groundRosters = data('ground-creatures.json');
 const grounds = normalizeGrounds(data('grounds.json'), groundRosters);
 assert(grounds.entries.length > 500, `grounds too small: ${grounds.entries.length}`);
+assert(grounds.entries.every((e) => e.xpRawFrom == null),
+  'grounds.json alone must produce no stand-in XP — the overlay is what fills those');
+
+// Druid raw-XP stand-ins (pipeline/fetch-druid-xp.mjs): they may only fill
+// blanks, may never restate a published value, and must always be traceable
+// back to the legacy row they came from — a stand-in that can't be labelled
+// would read as a real druid figure.
+const xpLegacy = data('grounds-xp-legacy.json');
+const withLegacy = normalizeGrounds(data('grounds.json'), groundRosters, xpLegacy);
+const published = new Map(grounds.entries.map((e) => [e.id, e.xpRaw]));
+const filled = withLegacy.entries.filter((e) => e.xpRawFrom != null);
+assert(filled.length > 25, `druid XP stand-ins too few: ${filled.length}`);
+assert(filled.every((e) => e.vocation === xpLegacy.appliesTo),
+  `stand-ins must stay within ${xpLegacy.appliesTo}`);
+assert(filled.every((e) => published.get(e.id) == null),
+  'a stand-in must never overwrite a value tibiapal already publishes');
+assert(filled.every((e) => e.xpRaw > 0 && e.xpRawFrom.place && e.xpRawFrom.vocation && e.xpRawFrom.origin),
+  'every stand-in needs a usable value and full provenance');
+assert(withLegacy.entries.every((e) => e.xpRawFrom != null || e.xpRaw === published.get(e.id)),
+  'the overlay must leave every other row exactly as captured');
 assert(Object.keys(groundRosters.grounds).length >= 325,
   `TibiaWiki ground roster coverage regressed: ${Object.keys(groundRosters.grounds).length}`);
 assert(Object.values(groundRosters.grounds).every((roster) =>

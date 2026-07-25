@@ -36,6 +36,7 @@ const FILES = {
   codexExtra: 'data/codex-extra.json',
   creatureTasks: 'data/creature-tasks.json',
   grounds: 'data/grounds.json',
+  groundsXpLegacy: 'data/grounds-xp-legacy.json',
   groundCreatures: 'data/ground-creatures.json',
   sharedHunts: 'data/shared-hunts.json',
   charms: 'data/charms.json',
@@ -81,20 +82,34 @@ export async function loadCodex(prefix = '') {
   return new Codex(raw, extra, tasks);
 }
 
-export function normalizeGrounds(raw, rosterCache = null) {
-  const entries = (raw?.entries || []).map((e, i) => ({
-    id: `c${i}`,
-    ground: e.ground,
-    groundSlug: slug(e.ground),
-    vocation: e.vocation || null,
-    party: !!e.party,
-    level: e.level ?? null,
-    levelText: e.levelText || (e.level != null ? `${e.level}+` : '—'),
-    xpRaw: e.xpRaw ?? null,
-    loot: e.loot ?? null,
-    gear: e.gear || null,
-    gearLabel: e.gearLabel || null,
-  }));
+/**
+ * Raw XP/h stand-ins for grounds tibiapal hasn't published a druid figure
+ * for yet, taken from its retired combined Mage table (see
+ * pipeline/fetch-druid-xp.mjs). They fill only genuine blanks — a real
+ * tibiapal druid value always wins — and every row they fill carries
+ * `xpRawFrom`, so no surface can show one of these as a druid measurement.
+ */
+export function normalizeGrounds(raw, rosterCache = null, xpLegacy = null) {
+  const standIn = (e) => (e.vocation === (xpLegacy?.appliesTo || 'Druid') && e.xpRaw == null
+    ? xpLegacy?.entries?.[e.ground] || null
+    : null);
+  const entries = (raw?.entries || []).map((e, i) => {
+    const legacy = standIn(e);
+    return {
+      id: `c${i}`,
+      ground: e.ground,
+      groundSlug: slug(e.ground),
+      vocation: e.vocation || null,
+      party: !!e.party,
+      level: e.level ?? null,
+      levelText: e.levelText || (e.level != null ? `${e.level}+` : '—'),
+      xpRaw: e.xpRaw ?? legacy?.xpRaw ?? null,
+      xpRawFrom: e.xpRaw == null && legacy ? { ...legacy.from, origin: xpLegacy?.origin || null } : null,
+      loot: e.loot ?? null,
+      gear: e.gear || null,
+      gearLabel: e.gearLabel || null,
+    };
+  });
 
   const dir = new Map();
   for (const e of entries) {
@@ -120,11 +135,12 @@ export function normalizeGrounds(raw, rosterCache = null) {
 }
 
 export async function loadGrounds(prefix = '') {
-  const [raw, rosters] = await Promise.all([
+  const [raw, rosters, xpLegacy] = await Promise.all([
     json(prefix + FILES.grounds),
     json(prefix + FILES.groundCreatures).catch(() => null),
+    json(prefix + FILES.groundsXpLegacy).catch(() => null), // stand-ins are optional
   ]);
-  return normalizeGrounds(raw, rosters);
+  return normalizeGrounds(raw, rosters, xpLegacy);
 }
 
 export async function loadSharedHunts(prefix = '') {
