@@ -221,21 +221,27 @@ export function bindSortMenu(id, onSelect) {
   document.addEventListener('click', (e) => { if (!root.contains(e.target)) close(); });
 }
 
+/**
+ * Only the states that say something happened get a badge. "Curated" is the
+ * default every row starts in — it marked nothing the reader didn't already
+ * assume, so per owner direction (2026-07-25) it renders as nothing at all,
+ * and Logged/Blended stand out for it.
+ */
 export function basisPill(basis) {
   if (basis === 'logged') return '<span class="badge badge-success">Logged</span>';
   if (basis === 'blended') return '<span class="badge badge-info">Blended</span>';
-  return '<span class="badge">Curated</span>';
+  return '';
 }
 
 /**
- * Marks a raw XP/h that is a cross-vocation stand-in rather than a figure
- * published for this vocation — currently druid grounds falling back to
- * tibiapal's retired Mage table. Never render such a number without it.
+ * Hover text for a value carried over from another vocation's table — druid
+ * grounds falling back to tibiapal's retired Mage figures. Owner-directed
+ * (2026-07-25) to be a tooltip rather than a visible chip: the provenance
+ * stays reachable and in the data, without a badge on every card.
  */
-export function standInPill(from) {
+export function standInTitle(from, what = 'figure') {
   if (!from) return '';
-  const title = `No druid raw XP/h published for this ground yet — showing tibiapal's retired ${from.vocation} figure for "${from.place}" (${from.levelText}). A rough stand-in, not a druid measurement.`;
-  return `<span class="pill pill-warning" title="${esc(title)}">${esc(from.vocation)} stand-in</span>`;
+  return `No druid ${what} published for this ground yet — tibiapal's retired ${from.vocation} value for "${from.place}" (${from.levelText}).`;
 }
 
 export function trustMeter(trust, n) {

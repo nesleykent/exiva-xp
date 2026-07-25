@@ -83,18 +83,22 @@ export async function loadCodex(prefix = '') {
 }
 
 /**
- * Raw XP/h stand-ins for grounds tibiapal hasn't published a druid figure
- * for yet, taken from its retired combined Mage table (see
- * pipeline/fetch-druid-xp.mjs). They fill only genuine blanks — a real
- * tibiapal druid value always wins — and every row they fill carries
- * `xpRawFrom`, so no surface can show one of these as a druid measurement.
+ * Raw XP/h and profit/h stand-ins for grounds tibiapal hasn't published a
+ * druid figure for yet, taken from its retired combined Mage table (see
+ * pipeline/fetch-druid-xp.mjs). Each field is filled only where it is
+ * genuinely blank — a real tibiapal druid value always wins — and a filled
+ * field records where it came from, so the number stays traceable to the
+ * mage row behind it.
  */
 export function normalizeGrounds(raw, rosterCache = null, xpLegacy = null) {
-  const standIn = (e) => (e.vocation === (xpLegacy?.appliesTo || 'Druid') && e.xpRaw == null
+  const standIn = (e) => (e.vocation === (xpLegacy?.appliesTo || 'Druid')
     ? xpLegacy?.entries?.[e.ground] || null
     : null);
   const entries = (raw?.entries || []).map((e, i) => {
     const legacy = standIn(e);
+    const from = (field) => (e[field] == null && legacy?.[field] != null
+      ? { ...legacy.from, origin: xpLegacy?.origin || null }
+      : null);
     return {
       id: `c${i}`,
       ground: e.ground,
@@ -104,8 +108,9 @@ export function normalizeGrounds(raw, rosterCache = null, xpLegacy = null) {
       level: e.level ?? null,
       levelText: e.levelText || (e.level != null ? `${e.level}+` : '—'),
       xpRaw: e.xpRaw ?? legacy?.xpRaw ?? null,
-      xpRawFrom: e.xpRaw == null && legacy ? { ...legacy.from, origin: xpLegacy?.origin || null } : null,
-      loot: e.loot ?? null,
+      xpRawFrom: from('xpRaw'),
+      loot: e.loot ?? legacy?.loot ?? null,
+      lootFrom: from('loot'),
       gear: e.gear || null,
       gearLabel: e.gearLabel || null,
     };

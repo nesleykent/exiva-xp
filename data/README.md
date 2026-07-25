@@ -30,13 +30,14 @@ These are rebuilt by pipeline scripts and committed:
   world. `observedAt` is the source row's timestamp; `updatedAt` is when the
   pipeline fetched it. Sparse items may use the newest sell observation in a
   30-day window and carry its exact `basis`; missing evidence stays missing.
-- `grounds-xp-legacy.json` - raw XP/h stand-ins for druid grounds tibiapal has
-  not published a druid figure for yet, lifted from its retired combined Mage
-  table at `/hunting-old` by `pipeline/fetch-druid-xp.mjs`. These are mage
-  numbers, not druid measurements: they fill blanks only, never override a
-  published value, and every filled row carries `xpRawFrom` so the UI can mark
-  it as a stand-in. `grounds.json` stays the untouched capture of the live
-  Druid table, and each stand-in retires by itself once tibiapal fills that row.
+- `grounds-xp-legacy.json` - raw XP/h and profit/h stand-ins for druid grounds
+  tibiapal has not published druid figures for yet, lifted from its retired
+  combined Mage table at `/hunting-old` by `pipeline/fetch-druid-xp.mjs`. These
+  are mage numbers, not druid measurements: each field fills only where it is
+  blank, never overrides a published value, and carries `xpRawFrom`/`lootFrom`
+  so it stays traceable to the mage row behind it (surfaced as hover text, not
+  a badge). `grounds.json` stays the untouched capture of the live Druid table,
+  and each stand-in retires by itself once tibiapal fills that row.
 - `creature-tasks.json` - one-time curated import from the owner-supplied
   `Kusnier's Tracker.xlsx`: owner-assigned task-speed tiers plus 313
   location-specific kills/hour or kills/lap observations. Workbook spelling

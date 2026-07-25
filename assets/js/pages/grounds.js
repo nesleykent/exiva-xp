@@ -10,7 +10,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, basisPill, standInPill, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
+import { $, ring, pillEl, basisPill, standInTitle, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
 import { ELEMENTS, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
@@ -263,12 +263,12 @@ function renderDetail(slug) {
       { id: 'level', label: 'Level', num: true, cell: (r) => esc(r.levelText) },
       { id: 'vocation', label: 'Vocation', cell: (r) => esc(r.vocation || 'Team') },
       { id: 'party', label: 'Hunt', cell: (r) => (r.party ? 'Team' : 'Solo') },
-      { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (r) => `<span class="num" title="${esc(seriesTitle(r.evidence?.xpRawRate))}">${kk(r.xpRawRate)}</span>` },
+      { id: 'xpRawRate', label: 'Raw XP/h', num: true, cell: (r) => `<span class="num" title="${esc(seriesTitle(r.evidence?.xpRawRate) || standInTitle(r.xpRawFrom, 'raw XP/h'))}">${kk(r.xpRawRate)}</span>` },
       { id: 'lootRate', label: 'Loot/h', num: true, cell: (r) => kk(r.lootRate) },
-      { id: 'profitRate', label: 'Profit/h', num: true, cell: (r) => kk(r.profitRate) },
+      { id: 'profitRate', label: 'Profit/h', num: true, cell: (r) => `<span class="num" title="${esc(standInTitle(r.lootFrom, 'profit/h'))}">${kk(r.profitRate)}</span>` },
       { id: 'gear', label: 'Loadout', cell: (r) => (r.gear ? `<span class="fine dim" title="${esc(r.gearLabel || '')}">${esc(r.gear)}</span>` : '—') },
       { id: 'n', label: 'Hunts', num: true, cell: (r) => nf(r.n) },
-      { id: 'basis', label: 'Basis', cell: (r) => [basisPill(r.basis), standInPill(r.xpRawFrom)].filter(Boolean).join(' ') },
+      { id: 'basis', label: 'Basis', cell: (r) => basisPill(r.basis) || '—' },
     ],
     rows,
   });
@@ -386,7 +386,6 @@ function render() {
           </div>
           <div class="tile-tags">
             ${basisPill(g.badgeRow.basis)}
-            ${standInPill(g.badgeRow.xpRawFrom)}
             ${fastestTask ? `<span class="pill pill-info">${TASK_SPEED_LABEL[fastestTask]} task</span>` : ''}
             ${attackEl ? pillEl(attackEl) : ''}
             ${area ? `<span class="pill">${esc(area)}</span>` : ''}

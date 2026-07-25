@@ -76,26 +76,35 @@ assert(codex.creature('emerald-damselfly').taskRates.some((rate) => rate.source.
 const groundRosters = data('ground-creatures.json');
 const grounds = normalizeGrounds(data('grounds.json'), groundRosters);
 assert(grounds.entries.length > 500, `grounds too small: ${grounds.entries.length}`);
-assert(grounds.entries.every((e) => e.xpRawFrom == null),
-  'grounds.json alone must produce no stand-in XP — the overlay is what fills those');
+assert(grounds.entries.every((e) => e.xpRawFrom == null && e.lootFrom == null),
+  'grounds.json alone must produce no stand-ins — the overlay is what fills those');
 
-// Druid raw-XP stand-ins (pipeline/fetch-druid-xp.mjs): they may only fill
-// blanks, may never restate a published value, and must always be traceable
-// back to the legacy row they came from — a stand-in that can't be labelled
-// would read as a real druid figure.
+// Druid stand-ins (pipeline/fetch-druid-xp.mjs): raw XP/h and profit/h are
+// filled independently, may only fill blanks, may never restate a published
+// value, and must stay traceable back to the legacy row they came from.
 const xpLegacy = data('grounds-xp-legacy.json');
 const withLegacy = normalizeGrounds(data('grounds.json'), groundRosters, xpLegacy);
-const published = new Map(grounds.entries.map((e) => [e.id, e.xpRaw]));
-const filled = withLegacy.entries.filter((e) => e.xpRawFrom != null);
-assert(filled.length > 25, `druid XP stand-ins too few: ${filled.length}`);
-assert(filled.every((e) => e.vocation === xpLegacy.appliesTo),
-  `stand-ins must stay within ${xpLegacy.appliesTo}`);
-assert(filled.every((e) => published.get(e.id) == null),
-  'a stand-in must never overwrite a value tibiapal already publishes');
-assert(filled.every((e) => e.xpRaw > 0 && e.xpRawFrom.place && e.xpRawFrom.vocation && e.xpRawFrom.origin),
-  'every stand-in needs a usable value and full provenance');
-assert(withLegacy.entries.every((e) => e.xpRawFrom != null || e.xpRaw === published.get(e.id)),
-  'the overlay must leave every other row exactly as captured');
+const captured = new Map(grounds.entries.map((e) => [e.id, e]));
+for (const [field, mark] of [['xpRaw', 'xpRawFrom'], ['loot', 'lootFrom']]) {
+  const filled = withLegacy.entries.filter((e) => e[mark] != null);
+  assert(filled.length > 25, `druid ${field} stand-ins too few: ${filled.length}`);
+  assert(filled.every((e) => e.vocation === xpLegacy.appliesTo),
+    `${field} stand-ins must stay within ${xpLegacy.appliesTo}`);
+  assert(filled.every((e) => captured.get(e.id)[field] == null),
+    `a ${field} stand-in must never overwrite a value tibiapal already publishes`);
+  assert(filled.every((e) => e[field] != null && e[mark].place && e[mark].vocation && e[mark].origin),
+    `every ${field} stand-in needs a usable value and full provenance`);
+  assert(withLegacy.entries.every((e) => e[mark] != null || e[field] === captured.get(e.id)[field]),
+    `the overlay must leave every other row's ${field} exactly as captured`);
+}
+
+// A curated row's only profit signal is tibiapal's own per-hour money column,
+// so it must reach profitRate rather than being dropped for want of a hunt.
+const curatedProfit = buildLedger(withLegacy.entries, [])
+  .filter((r) => r.curatedValues?.loot != null);
+assert(curatedProfit.length > 100, `curated profit rows too few: ${curatedProfit.length}`);
+assert(curatedProfit.every((r) => r.profitRate === r.curatedValues.loot),
+  'a curated row must show tibiapal\'s money column as its profit/h');
 assert(Object.keys(groundRosters.grounds).length >= 325,
   `TibiaWiki ground roster coverage regressed: ${Object.keys(groundRosters.grounds).length}`);
 assert(Object.values(groundRosters.grounds).every((roster) =>

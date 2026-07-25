@@ -146,16 +146,26 @@ const published = live.filter((r) => value(r.xp) != null);
 const publishedFor = (ground) => published.some((r) => r.place.toLowerCase() === ground.toLowerCase()
   || (key(r.place) === key(ground) && compatible(r.place, ground)));
 
-const gaps = grounds.entries.filter((e) => e.vocation === 'Druid' && e.xpRaw == null);
-const donors = legacy.filter((r) => value(r.xp) != null);
-console.log(`druid entries missing raw exp: ${gaps.length}`);
+// Raw exp and the profit column are filled independently: a druid row can
+// have one and not the other, and a legacy row is worth consulting as long
+// as it carries either.
+const gaps = grounds.entries.filter((e) => e.vocation === 'Druid' && (e.xpRaw == null || e.loot == null));
+const donors = legacy.filter((r) => value(r.xp) != null || value(r.loot) != null);
+console.log(`druid entries missing raw exp and/or profit: ${gaps.length}`);
 
 const claims = new Map(); // legacy place → [ground entries]
 const matchOf = new Map(); // ground name → legacy row
 const skipped = [];
 
 for (const gap of gaps) {
-  if (publishedFor(gap.ground)) {
+  // Per field, not per row: a druid ground can have a published raw exp and
+  // still be missing its profit figure, and only the blank half is filled.
+  const liveRow = publishedFor(gap.ground);
+  const needs = {
+    xpRaw: gap.xpRaw == null && value(liveRow?.xp) == null,
+    loot: gap.loot == null && value(liveRow?.loot) == null,
+  };
+  if (!needs.xpRaw && !needs.loot) {
     skipped.push([gap.ground, 'tibiapal now publishes a druid value']);
     continue;
   }
@@ -172,7 +182,7 @@ for (const gap of gaps) {
     skipped.push([gap.ground, `ambiguous: ${candidates.map((c) => c.place).join(' / ')}`]);
     continue;
   }
-  matchOf.set(gap.ground, candidates[0]);
+  matchOf.set(gap.ground, { ...candidates[0], needs });
   const claimed = claims.get(candidates[0].place) || [];
   claimed.push(gap.ground);
   claims.set(candidates[0].place, claimed);
@@ -189,8 +199,12 @@ for (const [place, claimants] of claims) {
 
 const entries = {};
 for (const [ground, row] of [...matchOf].sort((a, b) => a[0].localeCompare(b[0]))) {
+  const xpRaw = row.needs.xpRaw ? value(row.xp) : null;
+  const loot = row.needs.loot ? value(row.loot) : null;
+  if (xpRaw == null && loot == null) continue; // matched, but the legacy row was blank too
   entries[ground] = {
-    xpRaw: value(row.xp),
+    ...(xpRaw != null ? { xpRaw } : {}),
+    ...(loot != null ? { loot } : {}),
     from: { place: row.place, levelText: row.level, vocation: 'Mage' },
   };
 }
@@ -203,9 +217,13 @@ writeFileSync(OUT_PATH, `${JSON.stringify({
   entries,
 }, null, 1)}\n`);
 
-console.log(`\nwrote ${Object.keys(entries).length} stand-in value(s) to data/grounds-xp-legacy.json`);
-for (const [ground, row] of [...matchOf].sort((a, b) => a[0].localeCompare(b[0]))) {
-  console.log(`  ${ground} ← ${row.place} (${row.level}) ${row.xp}`);
+const standIns = Object.entries(entries).sort((a, b) => a[0].localeCompare(b[0]));
+console.log(`\nwrote ${standIns.length} stand-in row(s) to data/grounds-xp-legacy.json`
+  + ` (${standIns.filter(([, e]) => e.xpRaw != null).length} raw exp,`
+  + ` ${standIns.filter(([, e]) => e.loot != null).length} profit)`);
+for (const [ground, entry] of standIns) {
+  const fields = [entry.xpRaw != null ? `xp ${entry.xpRaw}` : null, entry.loot != null ? `profit ${entry.loot}` : null];
+  console.log(`  ${ground} ← ${entry.from.place} (${entry.from.levelText}) ${fields.filter(Boolean).join(', ')}`);
 }
 const reasons = skipped.reduce((acc, [, reason]) => {
   const bucket = reason.startsWith("ambiguous") ? "ambiguous"

@@ -9,7 +9,7 @@ import { compact, kk, nf, md } from '../lib/fmt.js';
 import { experienceUntilNextLevel, progressWithinLevel } from '../engine/progression.js';
 import { judge } from '../engine/rules.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
-import { ICONS, basisPill, standInPill } from '../shell.js';
+import { ICONS, basisPill } from '../shell.js';
 import { sparkline, chartInto } from '../viz/svg.js';
 
 const { stage, table, config } = await boot('index.html', { ledger: true, config: true });
@@ -150,7 +150,7 @@ stage.innerHTML = `
   <section class="panel home-next-hunt">
     <div class="home-card-kicker">
       <p class="eyebrow">Next hunt · from your evidence</p>
-      ${nextHunt ? `${basisPill(nextHunt.basis)}${standInPill(nextHunt.xpRawFrom)}` : ''}
+      ${nextHunt ? basisPill(nextHunt.basis) : ''}
     </div>
     ${nextHunt ? `
       <h2>${esc(nextHunt.ground)}</h2>

@@ -6,6 +6,7 @@
  "entries": {
   "Behemoths Forbidden Lands": {
    "xpRaw": 570000,
+   "loot": 80000,
    "from": {
     "place": "Behemoths Forbidden Lands",
     "levelText": "130+",
@@ -14,6 +15,7 @@
   },
   "Book World: Chapter II": {
    "xpRaw": 2000000,
+   "loot": 500000,
    "from": {
     "place": "Book World: Chapter II",
     "levelText": "300+",
@@ -22,6 +24,7 @@
   },
   "Book World: Chapter III": {
    "xpRaw": 3500000,
+   "loot": 800000,
    "from": {
     "place": "Book World: Chapter III",
     "levelText": "300+",
@@ -30,6 +33,7 @@
   },
   "Book World: Chapter IV": {
    "xpRaw": 3500000,
+   "loot": 800000,
    "from": {
     "place": "Book World: Chapter IV",
     "levelText": "300+",
@@ -38,6 +42,7 @@
   },
   "Brimstone Bugs WOTE": {
    "xpRaw": 950000,
+   "loot": 600000,
    "from": {
     "place": "Brimstone Bugs WOTE",
     "levelText": "120+",
@@ -46,6 +51,7 @@
   },
   "Calassa": {
    "xpRaw": 1000000,
+   "loot": -50000,
    "from": {
     "place": "Calassa",
     "levelText": "100+",
@@ -54,6 +60,7 @@
   },
   "Candia Nibblemaws": {
    "xpRaw": 3200000,
+   "loot": 600000,
    "from": {
     "place": "Candia Nibblemaws",
     "levelText": "300+",
@@ -62,22 +69,41 @@
   },
   "Carlin Cults": {
    "xpRaw": 1200000,
+   "loot": -100000,
    "from": {
     "place": "Carlin Cults",
     "levelText": "120+",
     "vocation": "Mage"
    }
   },
+  "Chor": {
+   "loot": -20000,
+   "from": {
+    "place": "Chor",
+    "levelText": "30+",
+    "vocation": "Mage"
+   }
+  },
   "Cobras": {
    "xpRaw": 5000000,
+   "loot": 1000000,
    "from": {
     "place": "Cobras",
     "levelText": "400+",
     "vocation": "Mage"
    }
   },
+  "Coryms Port Hope (AOE)": {
+   "loot": -100000,
+   "from": {
+    "place": "Coryms Port Hope (AOE)",
+    "levelText": "30+",
+    "vocation": "Mage"
+   }
+  },
   "Crypt Warriors": {
    "xpRaw": 6000000,
+   "loot": 700000,
    "from": {
     "place": "Crypt Warriors",
     "levelText": "500+",
@@ -86,6 +112,7 @@
   },
   "Darashia Dragon Lords": {
    "xpRaw": 450000,
+   "loot": -200000,
    "from": {
     "place": "Darashia DLs SD",
     "levelText": "50+",
@@ -94,6 +121,7 @@
   },
   "Dark Faun Cave Feyrist": {
    "xpRaw": 1050000,
+   "loot": 100000,
    "from": {
     "place": "Dark Faun Cave Feyrist",
     "levelText": "150+",
@@ -102,6 +130,7 @@
   },
   "Deeplings Library": {
    "xpRaw": 1300000,
+   "loot": 100000,
    "from": {
     "place": "Deeplings Library",
     "levelText": "150+",
@@ -110,6 +139,7 @@
   },
   "Dragon Lords Fenrock": {
    "xpRaw": 900000,
+   "loot": -50000,
    "from": {
     "place": "Dragon Lords Fenrock",
     "levelText": "100+",
@@ -118,14 +148,24 @@
   },
   "Dragon Lords POI": {
    "xpRaw": 850000,
+   "loot": -100000,
    "from": {
     "place": "Dragon Lords POI",
     "levelText": "100+",
     "vocation": "Mage"
    }
   },
+  "Dryad Gardens": {
+   "loot": -30000,
+   "from": {
+    "place": "Dryad Gardens",
+    "levelText": "30+",
+    "vocation": "Mage"
+   }
+  },
   "Edron Old Fortress -2 (Hero)": {
    "xpRaw": 1200000,
+   "loot": 100000,
    "from": {
     "place": "Edron Old Fortress -2 (Hero)",
     "levelText": "100+",
@@ -134,6 +174,7 @@
   },
   "Edron Old Fortress -3 (Hero)": {
    "xpRaw": 1150000,
+   "loot": 0,
    "from": {
     "place": "Edron Old Fortress -3 (Hero)",
     "levelText": "120+",
@@ -142,6 +183,7 @@
   },
   "Edron Vampire Crypt": {
    "xpRaw": 850000,
+   "loot": 400000,
    "from": {
     "place": "Edron Vampire Crypt",
     "levelText": "100+",
@@ -150,6 +192,7 @@
   },
   "Edron Were South": {
    "xpRaw": 1400000,
+   "loot": 100000,
    "from": {
     "place": "Edron Were South",
     "levelText": "110+",
@@ -158,6 +201,7 @@
   },
   "Exotic Cave": {
    "xpRaw": 1200000,
+   "loot": 300000,
    "from": {
     "place": "Exotic Cave",
     "levelText": "110+",
@@ -166,6 +210,7 @@
   },
   "Falcons": {
    "xpRaw": 5500000,
+   "loot": 1300000,
    "from": {
     "place": "Falcons",
     "levelText": "400+",
@@ -174,14 +219,24 @@
   },
   "Feyrist Surface": {
    "xpRaw": 600000,
+   "loot": 50000,
    "from": {
     "place": "Feyrist Surface",
     "levelText": "80+",
     "vocation": "Mage"
    }
   },
+  "Gargoyle Cave Meriana": {
+   "loot": 50000,
+   "from": {
+    "place": "Gargoyle Cave Meriana",
+    "levelText": "28+",
+    "vocation": "Mage"
+   }
+  },
   "Giant Spiders Port Hope": {
    "xpRaw": 600000,
+   "loot": -25000,
    "from": {
     "place": "Giant Spiders Port Hope",
     "levelText": "80+",
@@ -190,6 +245,7 @@
   },
   "Grimvale -4": {
    "xpRaw": 1000000,
+   "loot": 200000,
    "from": {
     "place": "Grimvale -4",
     "levelText": "100+",
@@ -198,6 +254,7 @@
   },
   "Haunted Treelings Vengoth": {
    "xpRaw": 375000,
+   "loot": -80000,
    "from": {
     "place": "Haunted Treelings Vengoth",
     "levelText": "50+",
@@ -206,6 +263,7 @@
   },
   "Hive Surface": {
    "xpRaw": 490000,
+   "loot": 240000,
    "from": {
     "place": "Hive Surface",
     "levelText": "80+",
@@ -214,6 +272,7 @@
   },
   "Iksupan": {
    "xpRaw": 1100000,
+   "loot": 300000,
    "from": {
     "place": "Iksupan",
     "levelText": "110+",
@@ -222,6 +281,7 @@
   },
   "Iksupan Last Stand": {
    "xpRaw": 5000000,
+   "loot": 1000000,
    "from": {
     "place": "Iksupan Last Stand",
     "levelText": "400+",
@@ -230,6 +290,7 @@
   },
   "Issavi Goannas": {
    "xpRaw": 5500000,
+   "loot": 700000,
    "from": {
     "place": "Issavi Goannas",
     "levelText": "500+",
@@ -238,6 +299,7 @@
   },
   "Krailos Bug Cave": {
    "xpRaw": 600000,
+   "loot": 150000,
    "from": {
     "place": "Krailos Bug Cave",
     "levelText": "100+",
@@ -246,6 +308,7 @@
   },
   "Liberty Bay Wyrms": {
    "xpRaw": 600000,
+   "loot": -150000,
    "from": {
     "place": "LB Wyrms SD",
     "levelText": "50+",
@@ -254,6 +317,7 @@
   },
   "Lion's Rock": {
    "xpRaw": 440000,
+   "loot": -20000,
    "from": {
     "place": "Lion's Rock Lions",
     "levelText": "50+",
@@ -262,6 +326,7 @@
   },
   "Lizard Chosens": {
    "xpRaw": 1000000,
+   "loot": 0,
    "from": {
     "place": "Lizard Chosens",
     "levelText": "120+",
@@ -270,6 +335,7 @@
   },
   "Lizard City": {
    "xpRaw": 1000000,
+   "loot": 100000,
    "from": {
     "place": "Lizard City",
     "levelText": "120+",
@@ -278,6 +344,7 @@
   },
   "Lower Spike": {
    "xpRaw": 3500000,
+   "loot": 300000,
    "from": {
     "place": "Lower Spike",
     "levelText": "300+",
@@ -286,6 +353,7 @@
   },
   "Marapur Nagas": {
    "xpRaw": 5500000,
+   "loot": 400000,
    "from": {
     "place": "Marapur Nagas",
     "levelText": "500+",
@@ -294,6 +362,7 @@
   },
   "Middle Spike": {
    "xpRaw": 800000,
+   "loot": -20000,
    "from": {
     "place": "Middle Spike",
     "levelText": "60+",
@@ -302,14 +371,24 @@
   },
   "Mini Rosha": {
    "xpRaw": 900000,
+   "loot": 200000,
    "from": {
     "place": "Mini Rosha",
     "levelText": "200+",
     "vocation": "Mage"
    }
   },
+  "Minotaurs Darashia (Stealth Ring)": {
+   "loot": -10000,
+   "from": {
+    "place": "Minotaurs Darashia (Stealth Ring)",
+    "levelText": "15+",
+    "vocation": "Mage"
+   }
+  },
   "Mother of Scarabs Lair": {
    "xpRaw": 680000,
+   "loot": -10000,
    "from": {
     "place": "Mother of Scarabs Lair",
     "levelText": "50+",
@@ -318,14 +397,40 @@
   },
   "Muggy Plains": {
    "xpRaw": 700000,
+   "loot": -50000,
    "from": {
     "place": "Muggy Plains",
     "levelText": "80+",
     "vocation": "Mage"
    }
   },
+  "Mummy/Bonebeasts MOSL -3": {
+   "loot": 150000,
+   "from": {
+    "place": "Mummy/Bonebeasts MOSL -3",
+    "levelText": "30+",
+    "vocation": "Mage"
+   }
+  },
+  "Mutated Humans Yala": {
+   "loot": -5000,
+   "from": {
+    "place": "Mutated Humans Yala",
+    "levelText": "20+",
+    "vocation": "Mage"
+   }
+  },
+  "Nibelor Crystal Spiders": {
+   "loot": -10000,
+   "from": {
+    "place": "Nibelor Crystal Spiders",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
   "Old Masonry (Death portal)": {
    "xpRaw": 950000,
+   "loot": 0,
    "from": {
     "place": "Old Masonry (Death portal)",
     "levelText": "100+",
@@ -334,14 +439,24 @@
   },
   "Oramond Catacombs": {
    "xpRaw": 5000000,
+   "loot": 500000,
    "from": {
     "place": "Oramond Catacombs",
     "levelText": "500+",
     "vocation": "Mage"
    }
   },
+  "Oramond West (Quara Raid)": {
+   "loot": -100000,
+   "from": {
+    "place": "Oramond West",
+    "levelText": "150+",
+    "vocation": "Mage"
+   }
+  },
   "Peninsula Tomb": {
    "xpRaw": 440000,
+   "loot": 60000,
    "from": {
     "place": "Peninsula Tomb",
     "levelText": "50+",
@@ -350,6 +465,7 @@
   },
   "Putrid Mummy": {
    "xpRaw": 700000,
+   "loot": 400000,
    "from": {
     "place": "Putrid Mummy",
     "levelText": "100+",
@@ -358,6 +474,7 @@
   },
   "Quaras Liberty Bay": {
    "xpRaw": 1100000,
+   "loot": 100000,
    "from": {
     "place": "Quaras Liberty Bay",
     "levelText": "100+",
@@ -366,6 +483,7 @@
   },
   "Ravenous Lava Lurkers": {
    "xpRaw": 1800000,
+   "loot": -100000,
    "from": {
     "place": "Ravenous Lava Lurkers",
     "levelText": "100+",
@@ -374,14 +492,24 @@
   },
   "Ripper Spectres": {
    "xpRaw": 5000000,
+   "loot": 1000000,
    "from": {
     "place": "Ripper Spectres",
     "levelText": "400+",
     "vocation": "Mage"
    }
   },
+  "Stonerefiners (AOE)": {
+   "loot": 25000,
+   "from": {
+    "place": "Stonerefiners (AOE)",
+    "levelText": "30+",
+    "vocation": "Mage"
+   }
+  },
   "Summer Court": {
    "xpRaw": 4500000,
+   "loot": 900000,
    "from": {
     "place": "Summer Court",
     "levelText": "400+",
@@ -390,22 +518,49 @@
   },
   "Sunken Quarter": {
    "xpRaw": 1300000,
+   "loot": 0,
    "from": {
     "place": "Sunken Quarter",
     "levelText": "100+",
     "vocation": "Mage"
    }
   },
+  "Tarantulas Port Hope": {
+   "loot": -10000,
+   "from": {
+    "place": "Tarantulas Port Hope",
+    "levelText": "14+",
+    "vocation": "Mage"
+   }
+  },
+  "Upper Spike": {
+   "loot": 75000,
+   "from": {
+    "place": "Upper Spike",
+    "levelText": "28+",
+    "vocation": "Mage"
+   }
+  },
   "Warzone 5": {
    "xpRaw": 4500000,
+   "loot": 800000,
    "from": {
     "place": "Warzone 5",
     "levelText": "400+",
     "vocation": "Mage"
    }
   },
+  "Water Elementals Port Hope": {
+   "loot": -50000,
+   "from": {
+    "place": "Water Elementals Port Hope",
+    "levelText": "50+",
+    "vocation": "Mage"
+   }
+  },
   "Werehyaenas North": {
    "xpRaw": 2200000,
+   "loot": 600000,
    "from": {
     "place": "Werehyaenas North",
     "levelText": "250+",
@@ -414,6 +569,7 @@
   },
   "Werelions": {
    "xpRaw": 3000000,
+   "loot": 800000,
    "from": {
     "place": "Werelions",
     "levelText": "300+",
@@ -422,6 +578,7 @@
   },
   "Winter Court": {
    "xpRaw": 4500000,
+   "loot": 900000,
    "from": {
     "place": "Winter Court",
     "levelText": "400+",
@@ -430,6 +587,7 @@
   },
   "Yalahar Grim Reapers": {
    "xpRaw": 3500000,
+   "loot": 300000,
    "from": {
     "place": "Yalahar Grim Reapers",
     "levelText": "250+",

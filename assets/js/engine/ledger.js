@@ -103,12 +103,19 @@ export function buildLedger(curated, hunts) {
       basis: owned ? 'logged' : ev ? 'blended' : 'curated',
       xpRawRate: owned ? ev.xpRawRate.avg : entry.xpRaw,
       lootRate: owned ? ev.lootRate.avg : entry.loot,
-      profitRate: ev ? ev.profitRate.avg : null,
+      // tibiapal's per-hour money column is a net figure — it goes negative on
+      // supply-heavy grounds (SD hunts read -200k), so it is a profit rate,
+      // not gross loot. With no logged hunts to beat it, it is the only profit
+      // signal a curated row has; the Loot/h column keeps showing the same
+      // source number, since that is the one column tibiapal publishes.
+      profitRate: ev ? ev.profitRate.avg : entry.loot ?? null,
       curatedValues: { xpRaw: entry.xpRaw, loot: entry.loot },
-      // Set only while the curated XP is a cross-vocation stand-in, so it
+      // Set only while the curated value is a cross-vocation stand-in, so it
       // clears the moment the row is owned by logged hunts or tibiapal
-      // publishes the real figure (see sources.js normalizeGrounds).
+      // publishes the real figure (see sources.js normalizeGrounds). Carried
+      // for traceability — hover text and the data contract, not a badge.
       xpRawFrom: owned ? null : entry.xpRawFrom || null,
+      lootFrom: owned ? null : entry.lootFrom || null,
       evidence: ev,
       n: ev?.n || 0,
       trust: trustOf(ev?.n || 0),
