@@ -300,6 +300,27 @@ function cleanCreature(value) {
     .trim();
 }
 
+/** Captions that describe the overworld around a hunt, not the hunt itself. */
+const AMBIENT_CONTEXT = /\bsurface\b|\bsurroundings?\b|\boutside\b|\babove ground\b|\bentrance\b/i;
+
+/**
+ * The hunting place's own city — the area a ground actually sits in.
+ * `Infobox Hunt` states it outright, which is what makes it trustworthy:
+ * access.json has to guess from a Geography article's `near` links instead,
+ * and that is how Oramond Catacombs came to read "Cormaya" (Rathleton) and
+ * Marapur Nagas "Roshamuul" (Marapur).
+ */
+function huntCity(wikitext) {
+  if (!/\{\{Infobox[_ ]Hunt/i.test(wikitext)) return null;
+  const raw = wikitext.match(/\|\s*city\s*=\s*([^\n|}]*)/i)?.[1];
+  const city = (raw || '')
+    .replace(/\[\[([^\]|]*\|)?([^\]]*)\]\]/g, '$2')
+    .replace(/\{\{[^}]*\}\}/g, '')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+  return city || null;
+}
+
 function listContext(wikitext, block) {
   const headings = [...wikitext.slice(0, block.start).matchAll(/^\s*(={2,4})\s*(.*?)\s*\1\s*$/gm)];
   const heading = headings.at(-1)?.[2] || '';
@@ -342,7 +363,18 @@ function creatureList(wikitext, codex, groundName = '') {
     const sectioned = keywords.length
       ? lists.filter((list) => keywords.some((word) => words(list.context).includes(word)))
       : [];
-    const regular = lists.filter((list) => !/\bboss\b/i.test(list.context));
+    /**
+     * Most cave/tomb articles open with the overworld fauna standing above
+     * the entrance — "Surface Creatures", "Surroundings", "Outside". Keeping
+     * those alongside the real roster is how a rotworm cave came to advertise
+     * butterflies, parrots, flamingos and seagulls. Drop them whenever the
+     * article also has a non-ambient list, unless the ground itself is the
+     * surface hunt ("Hive Surface", "Issavi Surface", "Krailos Surface").
+     */
+    const nonBoss = lists.filter((list) => !/\bboss\b/i.test(list.context));
+    const wantsSurface = /\bsurface\b|\boutside\b|\bsurroundings?\b/i.test(groundName);
+    const grounded = nonBoss.filter((list) => !AMBIENT_CONTEXT.test(list.context));
+    const regular = !wantsSurface && grounded.length ? grounded : nonBoss;
     if (special.length) selected = special;
     else if (numbered.length) selected = numbered;
     else if (sectioned.length) selected = sectioned;
@@ -421,6 +453,7 @@ for (const ground of grounds) {
   }
   rosters[ground.slug] = {
     creatures,
+    city: huntCity(pages.get(match.title)),
     wikiTitle: match.title,
     wikiUrl: `https://tibia.fandom.com/wiki/${encodeURIComponent(match.title.replace(/ /g, '_'))}`,
     match: match.method,
@@ -428,7 +461,7 @@ for (const ground of grounds) {
 }
 
 const output = {
-  source: 'tibia.fandom.com Category:Hunting Places (CreatureList templates and exact intro creature links)',
+  source: 'tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters',
   builtAt: new Date().toISOString(),
   grounds: rosters,
 };

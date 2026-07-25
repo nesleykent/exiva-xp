@@ -29,11 +29,18 @@ const characterLevel = profile?.level ?? null;
 // Tibia's promoted title ("Elder Druid") always contains its base vocation
 // name — match the same way character.js's isVocationCompatible does.
 const characterVocation = VOCATIONS.find((v) => (profile?.vocation || '').toLowerCase().includes(v.toLowerCase())) || '';
-const areaBySlug = new Map(Object.entries(access.grounds || {})
-  .map(([slug, entry]) => [slug, fold(entry.area || '')]));
-const areaOptions = [...new Set(Object.values(access.grounds || {})
-  .map((entry) => entry.area)
-  .filter(Boolean))]
+/**
+ * A ground's area comes from its resolved hunting place's own `city` when we
+ * have one — `Infobox Hunt` states it outright. access.json's area is a
+ * fallback: it has to infer one from a Geography article's `near` links,
+ * which is how Oramond Catacombs read "Cormaya" (it is Rathleton) and
+ * Marapur Nagas "Roshamuul" (it is Marapur).
+ */
+const areaOf = (groundSlug) => grounds.directory.find((g) => g.slug === groundSlug)?.roster?.city
+  || access.grounds?.[groundSlug]?.area
+  || null;
+const areaBySlug = new Map(grounds.directory.map((g) => [g.slug, fold(areaOf(g.slug) || '')]));
+const areaOptions = [...new Set([...areaBySlug.keys()].map(areaOf).filter(Boolean))]
   .sort((a, b) => a.localeCompare(b));
 
 const state = {
@@ -209,7 +216,7 @@ function renderDetail(slug) {
     <div>
       <h1>${esc(ground.name)}</h1>
       <div class="sub">
-        ${req?.area ? `<span class="pill pill-info">${esc(req.area)}</span>` : ''}
+        ${areaOf(ground.slug) ? `<span class="pill pill-info">${esc(areaOf(ground.slug))}</span>` : ''}
         ${trustMeter(trust, dossier.n)}
         ${(ground.vocations || []).map((v) => `<span class="pill">${esc(v)}</span>`).join('')}
         ${pop ? (pop.evidence === 'logged-wiki' || pop.evidence === 'logged'
@@ -233,8 +240,8 @@ function renderDetail(slug) {
     <div class="section-bar"><h2>Requirements</h2></div>
     ${req ? `
     <div class="panel panel-pad">
-      ${(req.area || req.level || req.quest || req.premium) ? `<div class="facts" style="margin-bottom:var(--s3)">
-        ${req.area ? `<div class="fact"><b>${esc(req.area)}</b><span class="fine dim">Area</span></div>` : ''}
+      ${(areaOf(ground.slug) || req.level || req.quest || req.premium) ? `<div class="facts" style="margin-bottom:var(--s3)">
+        ${areaOf(ground.slug) ? `<div class="fact"><b>${esc(areaOf(ground.slug))}</b><span class="fine dim">Area</span></div>` : ''}
         ${req.level ? `<div class="fact"><b class="num">${nf(req.level)}+</b><span class="fine dim">Minimum level</span></div>` : ''}
         ${req.quest ? `<div class="fact"><b>${esc(req.quest)}</b><span class="fine dim">Quest</span></div>` : ''}
         ${req.premium ? `<div class="fact"><b>Yes</b><span class="fine dim">Premium account</span></div>` : ''}
@@ -377,7 +384,7 @@ function render() {
     <div class="tiles planner-grid">
       ${visibleCards.map((g, index) => {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
-        const area = access.grounds?.[g.slug]?.area;
+        const area = areaOf(g.slug);
         const creatures = [...(ix?.get(g.slug)?.names || [])].slice(0, 3);
         const fastestTask = TASK_SPEEDS.find((speed) => ix?.get(g.slug)?.taskSpeeds.has(speed));
         return `
