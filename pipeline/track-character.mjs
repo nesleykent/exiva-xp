@@ -132,16 +132,33 @@ const c = profileData?.character?.character;
 if (!c || c.name !== NAME) throw new Error('character endpoint returned no matching profile');
 
 // ---- persist ----
-// Stamped once per day: reused across same-day reruns so an unchanged
-// reading doesn't get a fresh timestamp (and false-trigger the diff below).
-const capturedAt = experienceHistory[today]?.capturedAt || new Date().toISOString();
+// capturedAt must name when the *stored reading* was observed — the hub
+// renders it as Today's XP "as of HH:MM". Stamping it once per day (as this
+// did) mislabelled every later run: a Tibia day's first reading is usually
+// still yesterday's total, so the hourly run that finally recorded real
+// progress kept the pre-dawn timestamp, and the hub credited a full day's
+// gain to a moment hours before it happened.
+//
+// Refresh on a changed reading, keep it on an identical one. Keeping it is
+// what preserves the no-op semantics of the diff below — a fresh timestamp
+// over unchanged data would make every hourly run look like a change and
+// commit an empty snapshot. Comparison deliberately excludes capturedAt
+// itself, so the timestamp can never be its own reason to rewrite the row.
+const experienceReading = {
+  value: xp.value,
+  rank: xp.rank,
+  level: xp.level,
+  source: 'TibiaData highscores',
+};
+const readingIdentity = ({ value, rank, level, source }) => JSON.stringify({ value, rank, level, source });
+const storedToday = experienceHistory[today] || null;
+const sameReading = storedToday != null && readingIdentity(storedToday) === readingIdentity(experienceReading);
 const observations = {
   experience: {
-    value: xp.value,
-    rank: xp.rank,
-    level: xp.level,
-    source: 'TibiaData highscores',
-    capturedAt,
+    ...experienceReading,
+    // An unchanged reading that predates this field keeps having none, rather
+    // than being back-stamped with a capture time it was never read at.
+    capturedAt: sameReading ? storedToday.capturedAt : new Date().toISOString(),
   },
 };
 for (const { category } of TRACKED_HIGHSCORE_CATEGORIES) {
