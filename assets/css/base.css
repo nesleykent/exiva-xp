@@ -175,6 +175,11 @@
 
 * { box-sizing: border-box; }
 
+/* The UA's own `[hidden] { display: none }` loses to any class that sets a
+   display — `.filter-bar` is `display: flex`, so hiding it by attribute did
+   nothing until this rule. Anything marked hidden is hidden, full stop. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: rgb(var(--surface));

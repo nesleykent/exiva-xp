@@ -362,6 +362,15 @@ function render() {
     ? [selectedCard, ...cards.filter((card) => card !== selectedCard)].filter(Boolean).slice(0, 3)
     : cards.slice(0, state.shown);
 
+  // An open dossier is the whole page: the planner's own header, filter bar
+  // and card grid come off the top so it starts at its "← Hunt planner"
+  // control, the way a dedicated page would. Hidden, never emptied — closing
+  // the dossier (or browser-back) puts the list straight back.
+  const detailOpen = !!state.detailSlug;
+  $('#planner-head').hidden = detailOpen;
+  $('#f').hidden = detailOpen;
+  $('#out').hidden = detailOpen;
+
   $('#filter-count').textContent = `${nf(cards.length)} grounds · ${nf(rows.length)} rows`;
   $('#out').innerHTML = `
     <p class="fine dim count-line">Showing ${nf(visibleCards.length)} of ${nf(cards.length)} matching grounds</p>

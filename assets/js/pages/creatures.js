@@ -237,6 +237,15 @@ function render() {
       return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * (dir === 'asc' ? 1 : -1);
     });
 
+  // An open dossier is the whole page: the codex's own header, filter bar and
+  // tile grid come off the top so it starts at its "← Codex" control, the way
+  // a dedicated page would. Hidden, never emptied — closing the dossier (or
+  // browser-back) puts the list straight back.
+  const detailOpen = !!state.detailSlug;
+  $('#codex-head').hidden = detailOpen;
+  $('#c-filter').hidden = detailOpen;
+  $('#out').hidden = detailOpen;
+
   $('#out').innerHTML = `
     <p class="fine dim count-line">Showing ${nf(Math.min(all.length, state.detailSlug ? 8 : state.shown))} of ${nf(all.length)} creatures</p>
     <div class="tiles codex-grid">
@@ -264,6 +273,9 @@ function render() {
 
   const more = $('#more');
   more.hidden = !!state.detailSlug || all.length <= state.shown;
+  // The wrapper carries the button's top margin, so leaving it behind would
+  // still push the dossier down by a blank row.
+  more.parentElement.hidden = more.hidden;
   if (!more.hidden) more.textContent = `Show more (${nf(all.length - state.shown)} left)`;
   if (state.detailSlug) renderDetail(state.detailSlug);
   else $('#detail').innerHTML = '';
