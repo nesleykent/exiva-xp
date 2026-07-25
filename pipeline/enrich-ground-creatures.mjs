@@ -76,7 +76,10 @@ const PAGE_RULES = [
   [/\b(?:marapur )?nagas?\b/i, 'Temple of the Moon Goddess'],
   [/\boskayaat werecrocodiles?|werecrocodiles?/i, 'Murky Caverns'],
   [/\boskayaat weretigers?|weretigers?/i, 'Oskayaat Undercity'],
-  [/\b(?:floating savants?|mota fury)\b/i, 'Museum of Tibian Arts'],
+  // Floating Savants and Furies are in The Extension Site, not the museum
+  // proper — the Museum of Tibian Arts article lists animated exhibits and
+  // Goldhanded Cultists, neither of which is what these grounds hunt.
+  [/\b(?:floating savants?|mota fury)\b/i, 'The Extension Site'],
   [/\b(?:flimsy|flimsies).*venore|venore.*(?:flimsy|flimsies)/i, 'Brain Grounds'],
   [/\b(?:flimsy|flimsies).*(?:port hope|ph)|(?:port hope|ph).*(?:flimsy|flimsies)/i, 'Netherworld'],
   [/\bazzilon walls?\b/i, 'Azzilon Castle'],
@@ -91,7 +94,9 @@ const PAGE_RULES = [
   [/\braubritters? castle\b/i, 'Stag Bastion'],
   [/\btrue asuras?\b/i, 'Asura Vaults'],
   [/\bmammoths?.*svargrond/i, 'Formorgar Glacier/Mammoths'],
-  [/\bputrid mummy\b/i, 'Horestis Tomb'],
+  // Putrid Mummies are in Caverna Exanima (Darashia); Horestis Tomb does not
+  // list one at all — owner-reported.
+  [/\bputrid mummy\b/i, 'Caverna Exanima'],
   [/\b(?:edron )?orc cults?\b/i, 'Edron Orc Cave'],
   // Crypt Warrior lives in Bounac; Kilmaresh Catacombs has the Crypt *Warden*.
   // Different creature, different city (Thais vs Issavi) — owner-reported.
@@ -306,6 +311,23 @@ function cleanCreature(value) {
 /** Captions that describe the overworld around a hunt, not the hunt itself. */
 const AMBIENT_CONTEXT = /\bsurface\b|\bsurroundings?\b|\boutside\b|\babove ground\b|\bentrance\b/i;
 
+/** Size/age modifiers that sit in front of the genus in a creature name. */
+const CREATURE_MODIFIERS = new Set(['young', 'adult', 'elder', 'lesser', 'greater', 'massive',
+  'mean', 'ancient', 'giant', 'small', 'large', 'baby', 'juvenile', 'war']);
+
+/**
+ * Does this ground label name this creature? Full name, or the genus alone —
+ * Tibia names creatures genus-first and labels name the genus, not the rank,
+ * so "Nagas" names a Naga Warrior and "Coryms" a Corym Charlatan.
+ */
+function labelNamesCreature(label, creatureName) {
+  const parts = words(creatureName);
+  if (!parts.length) return false;
+  if (parts.every((word) => label.has(word))) return true;
+  const genus = parts.find((word) => !CREATURE_MODIFIERS.has(word));
+  return !!genus && genus.length >= 4 && label.has(genus);
+}
+
 /**
  * The hunting place's own city — the area a ground actually sits in.
  * `Infobox Hunt` states it outright, which is what makes it trustworthy:
@@ -384,6 +406,21 @@ function creatureList(wikitext, codex, groundName = '') {
     else if (regular.length) selected = regular;
   }
 
+  /**
+   * The ambient filter is about incidental fauna, not about outdoors. Some
+   * articles caption a genuine sub-area of the hunt "…, surface" — Vengoth's
+   * Haunted Treelings live in "Vengoth, surface" — and dropping it deleted
+   * the one creature the ground is named after, which then read as a wrong
+   * pairing. A list holding named prey is never ambient, whatever its caption.
+   */
+  if (groundName) {
+    const label = new Set(words(groundName));
+    const chosen = new Set(selected);
+    const restored = lists.filter((list) => !chosen.has(list)
+      && list.names.some((name) => labelNamesCreature(label, name)));
+    if (restored.length) selected = [...selected, ...restored];
+  }
+
   const names = new Set(selected.flatMap((list) => list.names));
   if (!names.size) {
     const intro = wikitext
@@ -402,10 +439,6 @@ function creatureList(wikitext, codex, groundName = '') {
  * "Grounds of Plague" is the plague seal players call "Feru Plague".
  */
 const STOPWORDS = new Set(['the', 'of', 'and', 'a', 'an', 'at', 'in', 'on', 'ground', 'grounds']);
-
-/** Size/age modifiers that sit in front of the genus in a creature name. */
-const CREATURE_MODIFIERS = new Set(['young', 'adult', 'elder', 'lesser', 'greater', 'massive',
-  'mean', 'ancient', 'giant', 'small', 'large', 'baby', 'juvenile', 'war']);
 
 /** Lowest recommended level the article gives for any vocation. */
 function huntLevel(wikitext) {

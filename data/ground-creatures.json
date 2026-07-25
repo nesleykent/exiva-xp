@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-25T20:51:16.317Z",
+ "builtAt": "2026-07-25T20:55:36.919Z",
  "grounds": {
   "rotworms-liberty-bay-darashia": {
    "creatures": [
@@ -312,6 +312,21 @@
     "cyclopedia:2"
    ]
   },
+  "vengoth-haunted-treelings": {
+   "creatures": [
+    "Haunted Treeling"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Vengoth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
+   "match": "access-cache",
+   "evidence": [
+    "title:Vengoth",
+    "named:Haunted Treeling",
+    "level",
+    "cyclopedia:1"
+   ]
+  },
   "old-fortress-1-bonebeasts": {
    "creatures": [
     "Bonebeast"
@@ -392,7 +407,11 @@
     "Waspoid",
     "Crawler",
     "Ladybug",
-    "Spitter"
+    "Spitter",
+    "Kollos",
+    "Spidris",
+    "Spidris Elite",
+    "Hive Overseer"
    ],
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
@@ -400,6 +419,7 @@
    "match": "curated-alias",
    "evidence": [
     "title:The Hive",
+    "named:Hive Overseer",
     "level"
    ]
   },
@@ -715,7 +735,13 @@
     "Orc Cult Fanatic",
     "Orc Cultist",
     "Orclops Doomhauler",
-    "Giant Spider"
+    "Giant Spider",
+    "Deer",
+    "Badger",
+    "Snake",
+    "Bat",
+    "Fox",
+    "Wisp"
    ],
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
@@ -728,16 +754,17 @@
   },
   "dark-faun-cave": {
    "creatures": [
-    "Dark Faun"
+    "Dark Faun",
+    "Faun"
    ],
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
    "match": "curated-alias",
    "evidence": [
-    "named:Dark Faun",
+    "named:Dark Faun/Faun",
     "level",
-    "cyclopedia:1"
+    "cyclopedia:2"
    ]
   },
   "replica-dungeon": {
@@ -1273,7 +1300,9 @@
     "Lost Soul",
     "Dark Torturer",
     "Undead Dragon",
-    "Fury"
+    "Fury",
+    "Spectre",
+    "Nightmare"
    ],
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
@@ -1699,6 +1728,24 @@
     "level",
     "cyclopedia:4",
     "corroborated"
+   ]
+  },
+  "floating-savants-mota": {
+   "creatures": [
+    "Fury",
+    "Retching Horror",
+    "Floating Savant",
+    "Demon",
+    "Hellhound",
+    "Lava Golem"
+   ],
+   "city": "Thais",
+   "wikiTitle": "The Extension Site",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Extension_Site",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Floating Savant",
+    "level"
    ]
   },
   "warzone-1": {
@@ -2445,6 +2492,23 @@
     "level"
    ]
   },
+  "putrid-mummy": {
+   "creatures": [
+    "Bonebeast",
+    "Putrid Mummy",
+    "Giant Spider"
+   ],
+   "city": "Darashia",
+   "wikiTitle": "Caverna Exanima",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Caverna_Exanima",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Putrid Mummy",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
+  },
   "orc-cults": {
    "creatures": [
     "Poison Spider",
@@ -2460,7 +2524,13 @@
     "Orc Cult Fanatic",
     "Orc Cultist",
     "Orclops Doomhauler",
-    "Giant Spider"
+    "Giant Spider",
+    "Deer",
+    "Badger",
+    "Snake",
+    "Bat",
+    "Fox",
+    "Wisp"
    ],
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
@@ -2536,16 +2606,19 @@
   },
   "mota-fury": {
    "creatures": [
-    "Goldhanded Cultist",
-    "Goldhanded Cultist Bride"
+    "Fury",
+    "Retching Horror",
+    "Floating Savant",
+    "Demon",
+    "Hellhound",
+    "Lava Golem"
    ],
    "city": "Thais",
-   "wikiTitle": "Museum of Tibian Arts",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Museum_of_Tibian_Arts",
+   "wikiTitle": "The Extension Site",
+   "wikiUrl": "https://tibia.fandom.com/wiki/The_Extension_Site",
    "match": "curated-alias",
    "evidence": [
-    "title:Museum of Tibian Arts",
-    "level"
+    "named:Fury"
    ]
   },
   "barkless-elves": {
@@ -4513,16 +4586,17 @@
   },
   "dark-faun-cave-feyrist": {
    "creatures": [
-    "Dark Faun"
+    "Dark Faun",
+    "Faun"
    ],
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
    "match": "curated-alias",
    "evidence": [
-    "named:Dark Faun",
+    "named:Dark Faun/Faun",
     "city:Feyrist",
-    "cyclopedia:1"
+    "cyclopedia:2"
    ]
   },
   "crumbling-caverns": {
@@ -4551,7 +4625,9 @@
     "Lost Soul",
     "Dark Torturer",
     "Undead Dragon",
-    "Fury"
+    "Fury",
+    "Spectre",
+    "Nightmare"
    ],
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
@@ -4730,6 +4806,21 @@
     "named:Dragon/Dragon Lord",
     "level",
     "cyclopedia:2"
+   ]
+  },
+  "haunted-treelings-vengoth": {
+   "creatures": [
+    "Haunted Treeling"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Vengoth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
+   "match": "access-cache",
+   "evidence": [
+    "title:Vengoth",
+    "named:Haunted Treeling",
+    "level",
+    "cyclopedia:1"
    ]
   },
   "issavi-surafce-sd": {
