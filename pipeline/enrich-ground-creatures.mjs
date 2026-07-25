@@ -394,6 +394,113 @@ function creatureList(wikitext, codex, groundName = '') {
   return [...names];
 }
 
+/**
+ * Grammatical filler in article titles — "The Hive" is the hive, and
+ * "Grounds of Plague" is the plague seal players call "Feru Plague".
+ */
+const STOPWORDS = new Set(['the', 'of', 'and', 'a', 'an', 'at', 'in', 'on', 'ground', 'grounds']);
+
+/** Size/age modifiers that sit in front of the genus in a creature name. */
+const CREATURE_MODIFIERS = new Set(['young', 'adult', 'elder', 'lesser', 'greater', 'massive',
+  'mean', 'ancient', 'giant', 'small', 'large', 'baby', 'juvenile', 'war']);
+
+/** Lowest recommended level the article gives for any vocation. */
+function huntLevel(wikitext) {
+  const levels = ['lvlknights', 'lvlpaladins', 'lvlmages']
+    .map((key) => Number(wikitext.match(new RegExp(`\\|\\s*${key}\\s*=\\s*(\\d+)`, 'i'))?.[1]))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  return levels.length ? Math.min(...levels) : null;
+}
+
+/**
+ * Does this pairing survive evidence, or is it just a name that looked right?
+ *
+ * Nothing here trusts similarity. `strong` is the gate — a pairing is only
+ * kept when the ground label names a creature the article actually lists, or
+ * spells out the article's own title. City and level only corroborate; they
+ * can raise confidence in a pairing but can never establish one, because
+ * every ground in a region shares a city and plenty share a level bracket.
+ *
+ * The Cyclopedia check is the useful one: bestiary.json's `locations` string
+ * is written by CipSoft, not by the wiki editors who wrote the article, so
+ * when it independently places those creatures here the pairing has two
+ * unrelated sources agreeing. That is what "Cobras" fails — the snake `Cobra`
+ * is listed in the Pharaoh Tombs, never in the Cobra Bastion.
+ */
+function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, bestiaryLocations) {
+  const label = new Set(words(groundName));
+  const reasons = [];
+  let points = 0;
+  let strong = false;
+
+  const titleWords = words(title).filter((word) => !STOPWORDS.has(word));
+  if (titleWords.length && titleWords.every((word) => label.has(word))) {
+    points += 3 + titleWords.length;
+    strong = true;
+    reasons.push(`title:${title}`);
+  }
+
+  /**
+   * Tibia names creatures genus-first — "Naga Warrior", "Corym Charlatan",
+   * "Elf Scout" — and a ground label names the genus, not the rank ("Nagas",
+   * "Coryms", "Elves Yalahar"). So the genus word counts, not just a full
+   * name match; requiring every word refused pairings that were right.
+   * Size/age modifiers are skipped, since "Young Goanna" is a goanna.
+   */
+  const named = creatures.filter((name) => {
+    const parts = words(name);
+    if (!parts.length) return false;
+    if (parts.every((word) => label.has(word))) return true;
+    const genus = parts.find((word) => !CREATURE_MODIFIERS.has(word));
+    return genus && genus.length >= 4 && label.has(genus);
+  });
+  if (named.length) {
+    points += 3 + named.length;
+    strong = true;
+    reasons.push(`named:${named.join('/')}`);
+  }
+
+  const city = huntCity(wikitext);
+  if (city && words(city).length && words(city).every((word) => label.has(word))) {
+    points += 2;
+    reasons.push(`city:${city}`);
+  }
+
+  const level = huntLevel(wikitext);
+  if (groundLevel != null && level != null) {
+    const gap = Math.abs(groundLevel - level);
+    if (gap <= 60) { points += 2; reasons.push('level'); }
+    else if (gap > 300) { points -= 2; reasons.push('level-far'); }
+  }
+
+  const corroborated = creatures.filter((name) => (bestiaryLocations.get(name) || [])
+    .some((where) => {
+      const parts = words(where);
+      return parts.length && titleWords.length && parts.every((word) => titleWords.includes(word));
+    }));
+  const cityAgrees = reasons.some((r) => r.startsWith('city:'));
+  const levelAgrees = reasons.includes('level');
+  if (corroborated.length) {
+    points += 2;
+    reasons.push(`cyclopedia:${corroborated.length}`);
+    /**
+     * No shared name, but three sources agree anyway: CipSoft places several
+     * of the article's creatures at this very place, and the ground's own
+     * city or level bracket lines up with the article's. That is corroboration
+     * rather than coincidence, and it is the only thing standing behind
+     * grounds whose local label shares no word with the wiki title — "Issavi
+     * Surface" for Kilmaresh Central Steppe, "Feyrist Surface" for Feyrist
+     * Meadows. A single stray creature never qualifies.
+     */
+    if (corroborated.length >= 3 && (cityAgrees || levelAgrees)) {
+      strong = true;
+      reasons.push('corroborated');
+    }
+  }
+
+  return { points, strong, reasons, city, level };
+}
+
 function resolvePage(ground, pages, access, codex) {
   const ruleTitle = PAGE_RULES.find(([pattern]) => pattern.test(ground.name))?.[1];
   if (ruleTitle && pages.has(ruleTitle) && creatureList(pages.get(ruleTitle), codex, ground.name).length) {
@@ -432,6 +539,11 @@ const titles = await huntingPlaceTitles();
 const pages = await pageWikitext(titles);
 const rosters = {};
 const unresolved = [];
+const refused = [];
+
+/** CipSoft's own location strings — an source independent of the wiki article. */
+const bestiaryLocations = new Map(readJson('bestiary.json').data
+  .map((c) => [c.name, String(c.locations || '').split(',').map((p) => p.trim()).filter(Boolean)]));
 
 for (const ground of grounds) {
   if (AMBIGUOUS_SUBAREAS.some((pattern) => pattern.test(ground.name))) {
@@ -451,12 +563,23 @@ for (const ground of grounds) {
   if (/oramond west \(no quara raid\)/i.test(ground.name)) {
     creatures = creatures.filter((name) => !/^Quara /i.test(name));
   }
+  const evidence = pairingEvidence(ground.name, match.title, pages.get(match.title),
+    creatures, ground.entryLevel ?? null, bestiaryLocations);
+  if (!evidence.strong || evidence.points <= 0) {
+    // A pairing nothing corroborates is a guess, and a guessed roster reads
+    // exactly like a real one. Drop it: no creature list beats a wrong one.
+    refused.push({ name: ground.name, title: match.title, method: match.method, reasons: evidence.reasons });
+    unresolved.push(ground.name);
+    continue;
+  }
+
   rosters[ground.slug] = {
     creatures,
-    city: huntCity(pages.get(match.title)),
+    city: evidence.city,
     wikiTitle: match.title,
     wikiUrl: `https://tibia.fandom.com/wiki/${encodeURIComponent(match.title.replace(/ /g, '_'))}`,
     match: match.method,
+    evidence: evidence.reasons,
   };
 }
 
@@ -471,4 +594,10 @@ if (!process.argv.includes('--dry-run')) {
 }
 
 console.log(`Resolved ${Object.keys(rosters).length}/${grounds.length} grounds; ${unresolved.length} unresolved.`);
+console.log(`  with a city: ${Object.values(rosters).filter((r) => r.city).length}`);
+console.log(`\nRefused for want of evidence (${refused.length}) — a name matched, nothing corroborated it:`);
+for (const row of refused) {
+  console.log(`  - ${row.name}  →  ${row.title} [${row.method}]${row.reasons.length ? `  only: ${row.reasons.join(', ')}` : '  no signal at all'}`);
+}
+console.log(`\nUnresolved (${unresolved.length}):`);
 console.log(unresolved.map((name) => `  - ${name}`).join('\n'));

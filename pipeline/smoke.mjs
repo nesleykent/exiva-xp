@@ -105,11 +105,18 @@ const curatedProfit = buildLedger(withLegacy.entries, [])
 assert(curatedProfit.length > 100, `curated profit rows too few: ${curatedProfit.length}`);
 assert(curatedProfit.every((r) => r.profitRate === r.curatedValues.loot),
   'a curated row must show tibiapal\'s money column as its profit/h');
-assert(Object.keys(groundRosters.grounds).length >= 325,
+// Coverage is deliberately lower than the old 325: pairings that no evidence
+// corroborated are refused rather than shown (2026-07-25). The floor still
+// catches an accidental collapse, but the real contract is below it — every
+// roster that survives must carry the evidence that kept it and the city of
+// the hunting place it came from.
+assert(Object.keys(groundRosters.grounds).length >= 280,
   `TibiaWiki ground roster coverage regressed: ${Object.keys(groundRosters.grounds).length}`);
 assert(Object.values(groundRosters.grounds).every((roster) =>
   roster.creatures.length && roster.creatures.every((name) => codex.identify(name)?.grade >= 0.97)),
 'TibiaWiki ground rosters must contain only canonical Bestiary creatures');
+assert(Object.values(groundRosters.grounds).every((roster) => roster.evidence?.length && roster.city),
+  'every accepted ground roster must record its evidence and its hunting place city');
 
 const s = readAnalyser([
   'Session data: From 2026-01-01, 10:00:00 to 2026-01-01, 12:00:00',

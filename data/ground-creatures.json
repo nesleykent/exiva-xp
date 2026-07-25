@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-25T16:10:47.373Z",
+ "builtAt": "2026-07-25T20:45:44.609Z",
  "grounds": {
   "rotworms-liberty-bay-darashia": {
    "creatures": [
@@ -14,7 +14,14 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Rotworm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Rotworm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Rotworm",
+    "city:Liberty Bay",
+    "level",
+    "cyclopedia:6",
+    "corroborated"
+   ]
   },
   "larva-ankrahmun": {
    "creatures": [
@@ -25,7 +32,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Larva Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Larva_Caves",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Larva",
+    "city:Ankrahmun",
+    "level"
+   ]
   },
   "swamp-trolls-port-hope-venore": {
    "creatures": [
@@ -41,7 +53,13 @@
    "city": "Port Hope",
    "wikiTitle": "Port Hope Swamp Trolls",
    "wikiUrl": "https://tibia.fandom.com/wiki/Port_Hope_Swamp_Trolls",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Port Hope Swamp Trolls",
+    "named:Swamp Troll",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "tarantulas-port-hope": {
    "creatures": [
@@ -54,21 +72,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda/Tarantula Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FTarantula_Caves",
-   "match": "curated-alias"
-  },
-  "elves-yalahar": {
-   "creatures": [
-    "Elf",
-    "Elf Scout",
-    "Elf Arcanist",
-    "Dragon",
-    "Hydra",
-    "Serpent Spawn"
-   ],
-   "city": "Yalahar",
-   "wikiTitle": "Foreigner Quarter/Elves",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Foreigner_Quarter%2FElves",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Tarantula",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "stonerefiners-stealth-ring": {
    "creatures": [
@@ -83,7 +92,11 @@
    "city": "Venore",
    "wikiTitle": "Corym Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Corym_Mines",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Stonerefiner",
+    "level"
+   ]
   },
   "mutated-humans-yalahar-single-target": {
    "creatures": [
@@ -92,7 +105,12 @@
    "city": "Yalahar",
    "wikiTitle": "Alchemist Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Mutated Human",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "coryms-port-hope": {
    "creatures": [
@@ -103,7 +121,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda Corym Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda_Corym_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Corym Charlatan/Corym Skirmisher/Corym Vanguard",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "zombies-treasure-island": {
    "creatures": [
@@ -124,7 +147,13 @@
    "city": "Liberty Bay",
    "wikiTitle": "Treasure Island",
    "wikiUrl": "https://tibia.fandom.com/wiki/Treasure_Island",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Treasure Island",
+    "level",
+    "cyclopedia:13",
+    "corroborated"
+   ]
   },
   "pirates-yalahar": {
    "creatures": [
@@ -177,7 +206,12 @@
    "city": "Yalahar",
    "wikiTitle": "Foreigner Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Foreigner_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Pirate Marauder/Pirate Cutthroat/Pirate Buccaneer/Pirate Corsair",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "mutated-humans-yalahar-exori": {
    "creatures": [
@@ -186,7 +220,12 @@
    "city": "Yalahar",
    "wikiTitle": "Alchemist Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Mutated Human",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "blood-crabs-laguna-islands": {
    "creatures": [
@@ -196,7 +235,13 @@
    "city": "Liberty Bay",
    "wikiTitle": "Laguna Islands",
    "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Laguna Islands",
+    "named:Crab/Blood Crab",
+    "level",
+    "cyclopedia:2"
+   ]
   },
   "laguna-islands": {
    "creatures": [
@@ -217,7 +262,13 @@
    "city": "Liberty Bay",
    "wikiTitle": "Laguna Islands",
    "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Laguna Islands",
+    "level",
+    "cyclopedia:13",
+    "corroborated"
+   ]
   },
   "lion-s-rock": {
    "creatures": [
@@ -238,7 +289,13 @@
    "city": "Darashia",
    "wikiTitle": "Lion's Rock",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lion's_Rock",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Lion's Rock",
+    "level",
+    "cyclopedia:13",
+    "corroborated"
+   ]
   },
   "nibelor-crystal-spiders": {
    "creatures": [
@@ -248,7 +305,12 @@
    "city": "Svargrond",
    "wikiTitle": "Nibelor Ice Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Nibelor_Ice_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crystal Spider",
+    "level",
+    "cyclopedia:2"
+   ]
   },
   "vengoth-haunted-treelings": {
    "creatures": [
@@ -261,7 +323,13 @@
    "city": "Yalahar",
    "wikiTitle": "Vengoth",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Vengoth",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "old-fortress-1-bonebeasts": {
    "creatures": [
@@ -270,7 +338,12 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Old Fortress",
+    "named:Bonebeast",
+    "level"
+   ]
   },
   "darashia-dragon-lair": {
    "creatures": [
@@ -281,7 +354,13 @@
    "city": "Darashia",
    "wikiTitle": "Darashia Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Darashia_Dragon_Lair",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Darashia Dragon Lair",
+    "named:Dragon/Dragon Hatchling/Dragon Lord",
+    "city:Darashia",
+    "level"
+   ]
   },
   "mutated-rats-alchemist-quarter": {
    "creatures": [
@@ -290,7 +369,12 @@
    "city": "Yalahar",
    "wikiTitle": "Alchemist Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Alchemist Quarter",
+    "named:Mutated Rat",
+    "level"
+   ]
   },
   "yalahar-dragons": {
    "creatures": [
@@ -299,7 +383,12 @@
    "city": "Yalahar",
    "wikiTitle": "Arena and Zoo Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Arena_and_Zoo_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dragon Lord",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "yalahar-bog-raiders-central": {
    "creatures": [
@@ -308,7 +397,12 @@
    "city": "Yalahar",
    "wikiTitle": "Alchemist Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Bog Raider",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "hive-surface": {
    "creatures": [
@@ -322,7 +416,11 @@
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
    "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:The Hive",
+    "level"
+   ]
   },
   "middle-spike": {
    "creatures": [
@@ -337,7 +435,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Middle Spike",
    "wikiUrl": "https://tibia.fandom.com/wiki/Middle_Spike",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Middle Spike",
+    "level",
+    "cyclopedia:7",
+    "corroborated"
+   ]
   },
   "wyrms-lb-1": {
    "creatures": [
@@ -347,7 +451,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Wyrm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Wyrm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Wyrm/Elder Wyrm",
+    "city:Liberty Bay",
+    "level"
+   ]
   },
   "giant-spiders-ph": {
    "creatures": [
@@ -358,7 +467,12 @@
    "city": "Port Hope",
    "wikiTitle": "Spider Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Giant Spider",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "carlin-cults": {
    "creatures": [
@@ -372,7 +486,12 @@
    "city": "Carlin",
    "wikiTitle": "Forbidden Temple (Carlin)",
    "wikiUrl": "https://tibia.fandom.com/wiki/Forbidden_Temple_(Carlin)",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Cult Believer/Cult Enforcer/Cult Scholar",
+    "city:Carlin",
+    "level"
+   ]
   },
   "nightmare-scions-krailos": {
    "creatures": [
@@ -383,16 +502,13 @@
    "city": "Rathleton",
    "wikiTitle": "Krailos Ruins",
    "wikiUrl": "https://tibia.fandom.com/wiki/Krailos_Ruins",
-   "match": "curated-alias"
-  },
-  "edron-heroes-2-3": {
-   "creatures": [
-    "Hero"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Old Fortress",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Nightmare Scion/Nightmare",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "fenrock-dragon-lords": {
    "creatures": [
@@ -402,7 +518,11 @@
    "city": "Yalahar",
    "wikiTitle": "Fenrock Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Fenrock_Dragon_Lair",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Dragon Lord Hatchling/Dragon Lord",
+    "level"
+   ]
   },
   "edron-vampire-crypt": {
    "creatures": [
@@ -419,7 +539,13 @@
    "city": "Edron",
    "wikiTitle": "Edron Vampire Crypt",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Edron Vampire Crypt",
+    "named:Vampire/Vampire Viscount/Vampire Bride",
+    "city:Edron",
+    "level"
+   ]
   },
   "inner-hive-stage2-east": {
    "creatures": [
@@ -436,7 +562,12 @@
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
    "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:The Hive",
+    "named:Hive Overseer",
+    "level"
+   ]
   },
   "sea-serpents": {
    "creatures": [
@@ -447,7 +578,11 @@
    "city": "Svargrond",
    "wikiTitle": "Sea Serpent Area",
    "wikiUrl": "https://tibia.fandom.com/wiki/Sea_Serpent_Area",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Sea Serpent",
+    "level"
+   ]
   },
   "yielothax": {
    "creatures": [
@@ -459,7 +594,11 @@
    "city": "Farmine",
    "wikiTitle": "Yielothax Dimension",
    "wikiUrl": "https://tibia.fandom.com/wiki/Yielothax_Dimension",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Yielothax",
+    "level"
+   ]
   },
   "exotic-cave": {
    "creatures": [
@@ -469,7 +608,12 @@
    "city": "Issavi",
    "wikiTitle": "Exotic Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Exotic_Cave",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Exotic Cave",
+    "named:Exotic Cave Spider/Exotic Bat",
+    "level"
+   ]
   },
   "ravenous-lava-lurkers": {
    "creatures": [
@@ -482,23 +626,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Gnome Deep Hub",
    "wikiUrl": "https://tibia.fandom.com/wiki/Gnome_Deep_Hub",
-   "match": "curated-alias"
-  },
-  "oramond-west": {
-   "creatures": [
-    "Glooth Blob",
-    "Rot Elemental",
-    "Blood Beast",
-    "Devourer",
-    "Quara Constrictor Scout",
-    "Quara Pincher Scout",
-    "Quara Predator Scout",
-    "Quara Hydromancer Scout"
-   ],
-   "city": "Rathleton",
-   "wikiTitle": "Oramond/Western Plains",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond%2FWestern_Plains",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Ravenous Lava Lurker/Lava Lurker",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "yalahar-sunken-quarter": {
    "creatures": [
@@ -511,7 +645,12 @@
    "city": "Yalahar",
    "wikiTitle": "Sunken Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Sunken_Quarter",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Sunken Quarter",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "okolnir": {
    "creatures": [
@@ -522,7 +661,13 @@
    "city": "Svargrond",
    "wikiTitle": "Okolnir",
    "wikiUrl": "https://tibia.fandom.com/wiki/Okolnir",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Okolnir",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "grimvale-4": {
    "creatures": [
@@ -534,7 +679,13 @@
    "city": "Edron",
    "wikiTitle": "Grimvale",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grimvale",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Grimvale",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "hydras-oramond": {
    "creatures": [
@@ -544,7 +695,11 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Hydra/Bog Raider Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Hydra%2FBog_Raider_Cave",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Hydra",
+    "level"
+   ]
   },
   "mini-rosha": {
    "creatures": [
@@ -555,7 +710,14 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "edron-orc-cults": {
    "creatures": [
@@ -577,7 +739,11 @@
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Orc",
+    "city:Edron"
+   ]
   },
   "dark-faun-cave": {
    "creatures": [
@@ -586,7 +752,12 @@
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Faun",
+    "level",
+    "cyclopedia:1"
+   ]
   },
   "replica-dungeon": {
    "creatures": [
@@ -597,7 +768,11 @@
    "city": "Port Hope",
    "wikiTitle": "Replica Dungeon",
    "wikiUrl": "https://tibia.fandom.com/wiki/Replica_Dungeon",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Replica Dungeon",
+    "level"
+   ]
   },
   "lizard-chosens": {
    "creatures": [
@@ -606,7 +781,11 @@
    "city": "Farmine",
    "wikiTitle": "Razachai",
    "wikiUrl": "https://tibia.fandom.com/wiki/Razachai",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Lizard Chosen",
+    "level"
+   ]
   },
   "desecrated-glade": {
    "creatures": [
@@ -617,7 +796,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Desecrated Glade",
    "wikiUrl": "https://tibia.fandom.com/wiki/Desecrated_Glade",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Desecrated Glade",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "barkless-ab-cults": {
    "creatures": [
@@ -627,7 +812,11 @@
    "city": "Ab'dendriel",
    "wikiTitle": "Barkless Cult Trial Zone",
    "wikiUrl": "https://tibia.fandom.com/wiki/Barkless_Cult_Trial_Zone",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Barkless Devotee/Barkless Fanatic",
+    "level"
+   ]
   },
   "lower-spike": {
    "creatures": [
@@ -646,7 +835,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Lower Spike",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Spike",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Lower Spike",
+    "level",
+    "cyclopedia:11",
+    "corroborated"
+   ]
   },
   "elder-wyrms-drefia": {
    "creatures": [
@@ -656,7 +851,11 @@
    "city": "Darashia",
    "wikiTitle": "Drefia",
    "wikiUrl": "https://tibia.fandom.com/wiki/Drefia",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Drefia",
+    "named:Wyrm/Elder Wyrm"
+   ]
   },
   "oramond-minos": {
    "creatures": [
@@ -670,7 +869,12 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Minotaur Camp",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Minotaur_Camp",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "level",
+    "cyclopedia:6",
+    "corroborated"
+   ]
   },
   "otherworld-kazo": {
    "creatures": [
@@ -682,7 +886,10 @@
    "city": "Svargrond",
    "wikiTitle": "Otherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Otherworld"
+   ]
   },
   "iksupan": {
    "creatures": [
@@ -696,7 +903,11 @@
    "city": "Port Hope",
    "wikiTitle": "Iksupan",
    "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Iksupan",
+    "cyclopedia:6"
+   ]
   },
   "deeplings-library": {
    "creatures": [
@@ -718,7 +929,11 @@
    "city": "Gray Beach",
    "wikiTitle": "Fiehonja",
    "wikiUrl": "https://tibia.fandom.com/wiki/Fiehonja",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Deepling Worker/Deepling Scout/Deepling Spellsinger/Deepling Warrior/Deepling Master Librarian/Deepling Guard/Deepling Elite/Deepling Tyrant",
+    "level"
+   ]
   },
   "yalahar-grim-reapers": {
    "creatures": [
@@ -727,7 +942,11 @@
    "city": "Yalahar",
    "wikiTitle": "Cemetery Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cemetery_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Grim Reaper",
+    "city:Yalahar"
+   ]
   },
   "werehyaenas-south": {
    "creatures": [
@@ -738,7 +957,13 @@
    "city": "Darashia",
    "wikiTitle": "Hyaena Lairs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Hyaena_Lairs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werehyaena/Werehyaena Shaman",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "werehyaenas-north": {
    "creatures": [
@@ -749,7 +974,13 @@
    "city": "Darashia",
    "wikiTitle": "Hyaena Lairs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Hyaena_Lairs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werehyaena/Werehyaena Shaman",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "seacrest-serpents": {
    "creatures": [
@@ -773,7 +1004,11 @@
    "city": "Rathleton",
    "wikiTitle": "Seacrest Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Seacrest_Grounds",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Seacrest Grounds",
+    "named:Seacrest Serpent"
+   ]
   },
   "draken-walls": {
    "creatures": [
@@ -785,7 +1020,11 @@
    "city": "Farmine",
    "wikiTitle": "Razachai/Inner Sanctum",
    "wikiUrl": "https://tibia.fandom.com/wiki/Razachai%2FInner_Sanctum",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Draken Abomination/Draken Elite",
+    "cyclopedia:3"
+   ]
   },
   "glooth-tower": {
    "creatures": [
@@ -799,7 +1038,11 @@
    "city": "Rathleton",
    "wikiTitle": "Glooth Factory",
    "wikiUrl": "https://tibia.fandom.com/wiki/Glooth_Factory",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Glooth Blob/Glooth Golem",
+    "cyclopedia:6"
+   ]
   },
   "hive-stage3": {
    "creatures": [
@@ -816,7 +1059,11 @@
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
    "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:The Hive",
+    "named:Hive Overseer"
+   ]
   },
   "otherworld-edron": {
    "creatures": [
@@ -828,7 +1075,11 @@
    "city": "Svargrond",
    "wikiTitle": "Otherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Otherworld",
+    "level"
+   ]
   },
   "glooth-bandits": {
    "creatures": [
@@ -838,7 +1089,11 @@
    "city": "Rathleton",
    "wikiTitle": "Glooth Bandit Hideouts",
    "wikiUrl": "https://tibia.fandom.com/wiki/Glooth_Bandit_Hideouts",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Glooth Bandit/Glooth Brigand",
+    "level"
+   ]
   },
   "pirats": {
    "creatures": [
@@ -849,7 +1104,11 @@
    "city": "Issavi",
    "wikiTitle": "Pirat Mine",
    "wikiUrl": "https://tibia.fandom.com/wiki/Pirat_Mine",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Pirat Cutthroat/Pirat Scoundrel/Pirat Bombardier",
+    "level"
+   ]
   },
   "minotaur-cults": {
    "creatures": [
@@ -860,7 +1119,10 @@
    "city": "Thais",
    "wikiTitle": "Minotaurs Cult Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Minotaurs_Cult_Cave",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Minotaur Cult Follower/Minotaur Cult Zealot/Minotaur Cult Prophet"
+   ]
   },
   "medusa-tower": {
    "creatures": [
@@ -876,7 +1138,14 @@
    "city": "Port Hope",
    "wikiTitle": "Medusa Tower",
    "wikiUrl": "https://tibia.fandom.com/wiki/Medusa_Tower",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Medusa Tower",
+    "named:Medusa",
+    "level",
+    "cyclopedia:8",
+    "corroborated"
+   ]
   },
   "carnivora-s-rock": {
    "creatures": [
@@ -887,7 +1156,13 @@
    "city": "Port Hope",
    "wikiTitle": "Carnivora's Rocks",
    "wikiUrl": "https://tibia.fandom.com/wiki/Carnivora's_Rocks",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Carnivora's Rocks",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "warzone-4": {
    "creatures": [
@@ -900,7 +1175,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 4",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_4",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Warzone 4"
+   ]
   },
   "asura-palace": {
    "creatures": [
@@ -921,7 +1199,11 @@
    "city": "Port Hope",
    "wikiTitle": "Asura Palace",
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Palace",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Asura Palace",
+    "cyclopedia:7"
+   ]
   },
   "werelions-1": {
    "creatures": [
@@ -932,7 +1214,13 @@
    "city": "Darashia",
    "wikiTitle": "Lion Sanctum",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lion_Sanctum",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werelion",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "candia-nibblemaws": {
    "creatures": [
@@ -945,7 +1233,13 @@
    "city": "Candia",
    "wikiTitle": "Chocolate Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Chocolate_Mines",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Nibblemaw",
+    "city:Candia",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "drefia-grim-reapers": {
    "creatures": [
@@ -963,7 +1257,11 @@
    "city": "Darashia",
    "wikiTitle": "Drefia Grim Reaper Dungeons",
    "wikiUrl": "https://tibia.fandom.com/wiki/Drefia_Grim_Reaper_Dungeons",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Grim Reaper",
+    "cyclopedia:4"
+   ]
   },
   "werelions-2": {
    "creatures": [
@@ -974,7 +1272,13 @@
    "city": "Darashia",
    "wikiTitle": "Lion Sanctum",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lion_Sanctum",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werelion",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "oramond-fury-dungeon": {
    "creatures": [
@@ -993,7 +1297,12 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Fury_Dungeon",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Oramond Fury Dungeon",
+    "named:Fury",
+    "cyclopedia:4"
+   ]
   },
   "diremaw-task-area": {
    "creatures": [
@@ -1006,7 +1315,11 @@
    "city": "Kazordoon",
    "wikiTitle": "Gnome Deep Hub",
    "wikiUrl": "https://tibia.fandom.com/wiki/Gnome_Deep_Hub",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Diremaw",
+    "cyclopedia:5"
+   ]
   },
   "book-world-ii": {
    "creatures": [
@@ -1016,7 +1329,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "book-world-iii": {
    "creatures": [
@@ -1026,7 +1343,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "book-world-iv": {
    "creatures": [
@@ -1036,7 +1357,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "asura-mirror-1": {
    "creatures": [
@@ -1049,7 +1374,12 @@
    "city": "Port Hope",
    "wikiTitle": "Asura Vaults",
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "warzone-5": {
    "creatures": [
@@ -1060,19 +1390,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 5",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_5",
-   "match": "exact-title"
-  },
-  "oramond-wildlife-raid": {
-   "creatures": [
-    "Blood Beast",
-    "Mooh'tah Warrior",
-    "Minotaur Hunter",
-    "Worm Priestess"
-   ],
-   "city": "Rathleton",
-   "wikiTitle": "Oramond Marshes",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Marshes",
-   "match": "curated-alias"
+   "match": "exact-title",
+   "evidence": [
+    "title:Warzone 5"
+   ]
   },
   "gazer-spectre": {
    "creatures": [
@@ -1082,7 +1403,10 @@
    "city": "Port Hope",
    "wikiTitle": "Haunted Temple",
    "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Temple",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Gazer Spectre"
+   ]
   },
   "lower-rosha": {
    "creatures": [
@@ -1093,7 +1417,14 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "winter-court-behind-tp-portal": {
    "creatures": [
@@ -1107,7 +1438,10 @@
    "city": "Svargrond",
    "wikiTitle": "Court of Winter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Winter"
+   ]
   },
   "buried-cathedral-1": {
    "creatures": [
@@ -1119,7 +1453,11 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Buried Cathedral",
+    "cyclopedia:4"
+   ]
   },
   "burster-spectre": {
    "creatures": [
@@ -1128,17 +1466,10 @@
    "city": "Darashia",
    "wikiTitle": "Haunted Tomb",
    "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Tomb",
-   "match": "curated-alias"
-  },
-  "haunted-house": {
-   "creatures": [
-    "Gazer Spectre",
-    "Thanatursus"
-   ],
-   "city": "Port Hope",
-   "wikiTitle": "Haunted Temple",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Temple",
-   "match": "access-cache"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Burster Spectre"
+   ]
   },
   "roshamuul-mines": {
    "creatures": [
@@ -1148,7 +1479,12 @@
    "city": "Roshamuul",
    "wikiTitle": "Roshamuul Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul_Mines",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Roshamuul Mines",
+    "city:Roshamuul",
+    "cyclopedia:2"
+   ]
   },
   "rosha-west": {
    "creatures": [
@@ -1159,7 +1495,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "winter-court": {
    "creatures": [
@@ -1173,7 +1515,11 @@
    "city": "Svargrond",
    "wikiTitle": "Court of Winter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Winter",
+    "level"
+   ]
   },
   "warzone-6": {
    "creatures": [
@@ -1186,7 +1532,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 6",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_6",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Warzone 6"
+   ]
   },
   "marapur-turtles-and-foam-stalkers": {
    "creatures": [
@@ -1196,7 +1545,13 @@
    "city": "Marapur",
    "wikiTitle": "Great Pearl Fan Reef",
    "wikiUrl": "https://tibia.fandom.com/wiki/Great_Pearl_Fan_Reef",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Foam Stalker",
+    "city:Marapur",
+    "level",
+    "cyclopedia:2"
+   ]
   },
   "nagas": {
    "creatures": [
@@ -1207,7 +1562,11 @@
    "city": "Marapur",
    "wikiTitle": "Temple of the Moon Goddess",
    "wikiUrl": "https://tibia.fandom.com/wiki/Temple_of_the_Moon_Goddess",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Naga Warrior/Naga Archer",
+    "level"
+   ]
   },
   "summer-court-for-first-timers-half-boxes": {
    "creatures": [
@@ -1221,7 +1580,10 @@
    "city": "Feyrist",
    "wikiTitle": "Court of Summer",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Summer"
+   ]
   },
   "roshamuul-shockheads": {
    "creatures": [
@@ -1232,7 +1594,14 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "level-far",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "issavi-crypts-sphinx-wardens": {
    "creatures": [
@@ -1245,7 +1614,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crypt Warden/Sphinx",
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "summer-court-full-boxing": {
    "creatures": [
@@ -1259,7 +1634,11 @@
    "city": "Feyrist",
    "wikiTitle": "Court of Summer",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Summer",
+    "level-far"
+   ]
   },
   "cobra-bastion-for-beginners": {
    "creatures": [
@@ -1270,7 +1649,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Cobra Bastion",
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "oskayaat-weretigers": {
    "creatures": [
@@ -1281,7 +1665,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Oskayaat Undercity",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Weretiger",
+    "cyclopedia:3"
+   ]
   },
   "oskayaat-werecrocodiles": {
    "creatures": [
@@ -1292,7 +1680,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Murky Caverns",
    "wikiUrl": "https://tibia.fandom.com/wiki/Murky_Caverns",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werecrocodile",
+    "cyclopedia:3"
+   ]
   },
   "warzone-2": {
    "creatures": [
@@ -1305,7 +1697,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 2",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_2",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Warzone 2"
+   ]
   },
   "nightmare-isles": {
    "creatures": [
@@ -1317,7 +1712,13 @@
    "city": "Darama",
    "wikiTitle": "Nightmare Isles",
    "wikiUrl": "https://tibia.fandom.com/wiki/Nightmare_Isles",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Nightmare Isles",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "floating-savants-mota": {
    "creatures": [
@@ -1327,7 +1728,10 @@
    "city": "Thais",
    "wikiTitle": "Museum of Tibian Arts",
    "wikiUrl": "https://tibia.fandom.com/wiki/Museum_of_Tibian_Arts",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Museum of Tibian Arts"
+   ]
   },
   "warzone-1": {
    "creatures": [
@@ -1339,7 +1743,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 1",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_1",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Warzone 1"
+   ]
   },
   "otherworld": {
    "creatures": [
@@ -1351,7 +1758,10 @@
    "city": "Svargrond",
    "wikiTitle": "Otherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Otherworld"
+   ]
   },
   "cobra-bastion-1": {
    "creatures": [
@@ -1362,7 +1772,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Cobra Bastion",
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "flimsy-venore-1": {
    "creatures": [
@@ -1374,7 +1789,11 @@
    "city": "Venore",
    "wikiTitle": "Brain Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "city:Venore"
+   ]
   },
   "flimsy-port-hope": {
    "creatures": [
@@ -1385,18 +1804,11 @@
    "city": "Venore",
    "wikiTitle": "Netherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
-   "match": "curated-alias"
-  },
-  "azzilon-walls": {
-   "creatures": [
-    "Broodrider Inferniarch",
-    "Gorger Inferniarch",
-    "Sineater Inferniarch"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Azzilon Castle",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Azzilon_Castle",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "cyclopedia:3"
+   ]
   },
   "issavi-surface-east": {
    "creatures": [
@@ -1419,7 +1831,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Central Steppe",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Central_Steppe",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "level-far",
+    "cyclopedia:14",
+    "corroborated"
+   ]
   },
   "warzone-3": {
    "creatures": [
@@ -1431,7 +1849,10 @@
    "city": "Kazordoon",
    "wikiTitle": "Warzone 3",
    "wikiUrl": "https://tibia.fandom.com/wiki/Warzone_3",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Warzone 3"
+   ]
   },
   "issavi-sewers": {
    "creatures": [
@@ -1442,18 +1863,13 @@
    "city": "Issavi",
    "wikiTitle": "Issavi Sewers",
    "wikiUrl": "https://tibia.fandom.com/wiki/Issavi_Sewers",
-   "match": "access-cache"
-  },
-  "temple-of-the-sun-and-sea": {
-   "creatures": [
-    "Naga Warrior",
-    "Naga Archer",
-    "Makara"
-   ],
-   "city": "Marapur",
-   "wikiTitle": "Temple of the Moon Goddess",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Temple_of_the_Moon_Goddess",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Issavi Sewers",
+    "city:Issavi",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "norcferatu-fortress": {
    "creatures": [
@@ -1467,7 +1883,12 @@
    "city": "Yalahar",
    "wikiTitle": "Norcferatu Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Fortress",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Norcferatu Fortress",
+    "named:Norcferatu Heartless/Norcferatu Nightweaver",
+    "cyclopedia:6"
+   ]
   },
   "bulltaurs": {
    "creatures": [
@@ -1478,7 +1899,12 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
+    "level-far",
+    "cyclopedia:3"
+   ]
   },
   "azzilon-castle": {
    "creatures": [
@@ -1489,7 +1915,11 @@
    "city": "Edron",
    "wikiTitle": "Azzilon Castle",
    "wikiUrl": "https://tibia.fandom.com/wiki/Azzilon_Castle",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Azzilon Castle",
+    "cyclopedia:3"
+   ]
   },
   "feru-plague-seal": {
    "creatures": [
@@ -1501,7 +1931,11 @@
    "city": "Farmine",
    "wikiTitle": "Grounds of Plague",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Plague",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Grounds of Plague",
+    "level-far"
+   ]
   },
   "cobra-bastion": {
    "creatures": [
@@ -1512,62 +1946,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "access-cache"
-  },
-  "feru-pumin-seal": {
-   "creatures": [
-    "Nightmare",
-    "Phantasm",
-    "Vexclaw",
-    "Grimeleech"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Deceit",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Deceit",
-   "match": "curated-alias"
-  },
-  "feru-infernatil-seal": {
-   "creatures": [
-    "Fury",
-    "Hellfire Fighter",
-    "Hellhound",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Fire",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Fire",
-   "match": "curated-alias"
-  },
-  "feru-way": {
-   "creatures": [
-    "Lich",
-    "Serpent Spawn",
-    "Hydra",
-    "Fire Elemental",
-    "Dragon Lord",
-    "Behemoth",
-    "Warlock",
-    "Demon"
-   ],
-   "city": "Liberty Bay",
-   "wikiTitle": "Ferumbras Citadel",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Ferumbras_Citadel",
-   "match": "curated-alias"
-  },
-  "feru-dt-seal": {
-   "creatures": [
-    "Destroyer",
-    "Fury",
-    "Vexclaw",
-    "Hellflayer",
-    "Juggernaut"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Destruction",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Cobra Bastion",
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "norcferatu-dungeons-west": {
    "creatures": [
@@ -1581,7 +1965,14 @@
    "city": "Yalahar",
    "wikiTitle": "Norcferatu Dungeons",
    "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Norcferatu Dungeons",
+    "named:Norcferatu Heartless/Norcferatu Nightweaver",
+    "level",
+    "cyclopedia:6",
+    "corroborated"
+   ]
   },
   "norcferatu-dungeons-east": {
    "creatures": [
@@ -1595,7 +1986,14 @@
    "city": "Yalahar",
    "wikiTitle": "Norcferatu Dungeons",
    "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Norcferatu Dungeons",
+    "named:Norcferatu Heartless/Norcferatu Nightweaver",
+    "level",
+    "cyclopedia:6",
+    "corroborated"
+   ]
   },
   "raubritters-castle": {
    "creatures": [
@@ -1609,7 +2007,11 @@
    "city": "Edron",
    "wikiTitle": "Stag Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Stag_Bastion",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Raubritter Chastener/Raubritter Marksman/Raubritter Skirmisher",
+    "cyclopedia:4"
+   ]
   },
   "bloodfire-gorge": {
    "creatures": [
@@ -1620,7 +2022,11 @@
    "city": "Roshamuul",
    "wikiTitle": "Bloodfire Gorge",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bloodfire_Gorge",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Bloodfire Gorge",
+    "cyclopedia:3"
+   ]
   },
   "true-asuras": {
    "creatures": [
@@ -1633,24 +2039,11 @@
    "city": "Port Hope",
    "wikiTitle": "Asura Vaults",
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults",
-   "match": "curated-alias"
-  },
-  "edron-tomb": {
-   "creatures": [
-    "Skeleton",
-    "Ghoul",
-    "Mummy",
-    "Gargoyle",
-    "Crypt Shambler",
-    "Blue Djinn",
-    "Demon Skeleton",
-    "Vampire",
-    "Bonebeast"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Forgotten Tomb",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Forgotten_Tomb",
-   "match": "access-cache"
+   "match": "curated-alias",
+   "evidence": [
+    "named:True Dawnfire Asura/True Midnight Asura/True Frost Flower Asura",
+    "cyclopedia:5"
+   ]
   },
   "mutated-humans-yalahar": {
    "creatures": [
@@ -1659,7 +2052,12 @@
    "city": "Yalahar",
    "wikiTitle": "Alchemist Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Mutated Human",
+    "city:Yalahar",
+    "level"
+   ]
   },
   "coryms-port-hope-stealth-ring": {
    "creatures": [
@@ -1670,7 +2068,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda Corym Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda_Corym_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Corym Charlatan/Corym Skirmisher/Corym Vanguard",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "mammoths-badgers-svargrond": {
    "creatures": [
@@ -1687,7 +2090,14 @@
    "city": "Svargrond",
    "wikiTitle": "Formorgar Glacier/Mammoths",
    "wikiUrl": "https://tibia.fandom.com/wiki/Formorgar_Glacier%2FMammoths",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Badger/Mammoth",
+    "city:Svargrond",
+    "level",
+    "cyclopedia:8",
+    "corroborated"
+   ]
   },
   "chor": {
    "creatures": [
@@ -1706,7 +2116,13 @@
    "city": "Port Hope",
    "wikiTitle": "Chor",
    "wikiUrl": "https://tibia.fandom.com/wiki/Chor",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Chor",
+    "level",
+    "cyclopedia:7",
+    "corroborated"
+   ]
   },
   "banuta-apes": {
    "creatures": [
@@ -1717,7 +2133,13 @@
    "city": "Port Hope",
    "wikiTitle": "Banuta",
    "wikiUrl": "https://tibia.fandom.com/wiki/Banuta",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Banuta",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "edron-old-fortress-1-bonebeasts": {
    "creatures": [
@@ -1726,7 +2148,13 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Old Fortress",
+    "named:Bonebeast",
+    "city:Edron",
+    "level"
+   ]
   },
   "krailos-surface": {
    "creatures": [
@@ -1749,7 +2177,12 @@
    "city": "Rathleton",
    "wikiTitle": "Krailos Steppe",
    "wikiUrl": "https://tibia.fandom.com/wiki/Krailos_Steppe",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "level",
+    "cyclopedia:15",
+    "corroborated"
+   ]
   },
   "laguna-islands-profit": {
    "creatures": [
@@ -1770,7 +2203,13 @@
    "city": "Liberty Bay",
    "wikiTitle": "Laguna Islands",
    "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Laguna Islands",
+    "level",
+    "cyclopedia:13",
+    "corroborated"
+   ]
   },
   "wyrms-liberty-bay-1": {
    "creatures": [
@@ -1780,7 +2219,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Wyrm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Wyrm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Wyrm/Elder Wyrm",
+    "city:Liberty Bay",
+    "level"
+   ]
   },
   "forbidden-temple-ankrahmun-cults": {
    "creatures": [
@@ -1796,7 +2240,14 @@
    "city": "Ankrahmun",
    "wikiTitle": "Forbidden Temple",
    "wikiUrl": "https://tibia.fandom.com/wiki/Forbidden_Temple",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Forbidden Temple",
+    "city:Ankrahmun",
+    "level",
+    "cyclopedia:8",
+    "corroborated"
+   ]
   },
   "ramoa-bonebeast-island": {
    "creatures": [
@@ -1817,7 +2268,14 @@
    "city": "Liberty Bay",
    "wikiTitle": "Ramoa",
    "wikiUrl": "https://tibia.fandom.com/wiki/Ramoa",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Ramoa",
+    "named:Bonebeast",
+    "level",
+    "cyclopedia:10",
+    "corroborated"
+   ]
   },
   "peninsula-tomb": {
    "creatures": [
@@ -1850,7 +2308,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Peninsula Tomb",
    "wikiUrl": "https://tibia.fandom.com/wiki/Peninsula_Tomb",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Peninsula Tomb",
+    "level"
+   ]
   },
   "werebadgers-grimvale-1": {
    "creatures": [
@@ -1862,7 +2324,14 @@
    "city": "Edron",
    "wikiTitle": "Grimvale",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grimvale",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Grimvale",
+    "named:Werebadger",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "liberty-bay-bonelord-cave-full-lap": {
    "creatures": [
@@ -1874,7 +2343,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Bonelord Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Bonelord_Cave",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Bonelord/Elder Bonelord",
+    "city:Liberty Bay",
+    "level"
+   ]
   },
   "demonwar-crypt-both-spawns": {
    "creatures": [
@@ -1888,7 +2362,11 @@
    "city": "Edron",
    "wikiTitle": "Demonwar Crypt",
    "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Demonwar Crypt",
+    "level"
+   ]
   },
   "dragon-lords-fenrock": {
    "creatures": [
@@ -1898,20 +2376,11 @@
    "city": "Yalahar",
    "wikiTitle": "Fenrock Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Fenrock_Dragon_Lair",
-   "match": "access-cache"
-  },
-  "edron-south-were": {
-   "creatures": [
-    "Werefox",
-    "Werebadger",
-    "Werewolf",
-    "Wereboar",
-    "Werebear"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Edron Lycanthropes Cave",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Lycanthropes_Cave",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "named:Dragon Lord Hatchling/Dragon Lord",
+    "level"
+   ]
   },
   "werehyaenas-1": {
    "creatures": [
@@ -1922,7 +2391,11 @@
    "city": "Darashia",
    "wikiTitle": "Hyaena Lairs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Hyaena_Lairs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werehyaena/Werehyaena Shaman",
+    "cyclopedia:3"
+   ]
   },
   "feyrist-surface": {
    "creatures": [
@@ -1942,7 +2415,13 @@
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "city:Feyrist",
+    "level",
+    "cyclopedia:12",
+    "corroborated"
+   ]
   },
   "ice-witch-temple": {
    "creatures": [
@@ -1955,7 +2434,12 @@
    "city": "Svargrond",
    "wikiTitle": "Ice Witch Temple",
    "wikiUrl": "https://tibia.fandom.com/wiki/Ice_Witch_Temple",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Ice Witch Temple",
+    "named:Ice Witch",
+    "level"
+   ]
   },
   "old-masonry-death-portal": {
    "creatures": [
@@ -1973,7 +2457,11 @@
    "city": "Ab'Dendriel",
    "wikiTitle": "Old Masonry",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Masonry",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Old Masonry",
+    "level"
+   ]
   },
   "misguided": {
    "creatures": [
@@ -1983,7 +2471,11 @@
    "city": "Thais",
    "wikiTitle": "Misguided Camp",
    "wikiUrl": "https://tibia.fandom.com/wiki/Misguided_Camp",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Misguided Thief/Misguided Bully",
+    "level"
+   ]
   },
   "putrid-mummy": {
    "creatures": [
@@ -2010,7 +2502,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Horestis Tomb",
    "wikiUrl": "https://tibia.fandom.com/wiki/Horestis_Tomb",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Elder Mummy",
+    "cyclopedia:1"
+   ]
   },
   "orc-cults": {
    "creatures": [
@@ -2032,7 +2528,10 @@
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Orc"
+   ]
   },
   "okolnir-frost-dragons": {
    "creatures": [
@@ -2043,7 +2542,14 @@
    "city": "Svargrond",
    "wikiTitle": "Okolnir",
    "wikiUrl": "https://tibia.fandom.com/wiki/Okolnir",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Okolnir",
+    "named:Frost Dragon Hatchling/Frost Dragon",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "souleater-mountain": {
    "creatures": [
@@ -2057,7 +2563,12 @@
    "city": "Farmine",
    "wikiTitle": "Souleater Mountains",
    "wikiUrl": "https://tibia.fandom.com/wiki/Souleater_Mountains",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Souleater Mountains",
+    "named:Souleater",
+    "level"
+   ]
   },
   "talahu-medusas-serpents": {
    "creatures": [
@@ -2066,7 +2577,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Talahu",
    "wikiUrl": "https://tibia.fandom.com/wiki/Talahu",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Talahu",
+    "named:Medusa",
+    "cyclopedia:1"
+   ]
   },
   "ghastly-dragons": {
    "creatures": [
@@ -2075,7 +2591,11 @@
    "city": "Farmine",
    "wikiTitle": "Ghastly Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Ghastly_Dragon_Lair",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Ghastly Dragon",
+    "level"
+   ]
   },
   "mota-fury": {
    "creatures": [
@@ -2085,25 +2605,11 @@
    "city": "Thais",
    "wikiTitle": "Museum of Tibian Arts",
    "wikiUrl": "https://tibia.fandom.com/wiki/Museum_of_Tibian_Arts",
-   "match": "curated-alias"
-  },
-  "edron-heroes-3": {
-   "creatures": [
-    "Hero"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Old Fortress",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
-  },
-  "edron-heroes-2": {
-   "creatures": [
-    "Hero"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Old Fortress",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Museum of Tibian Arts",
+    "level"
+   ]
   },
   "barkless-elves": {
    "creatures": [
@@ -2113,7 +2619,11 @@
    "city": "Ab'dendriel",
    "wikiTitle": "Barkless Cult Trial Zone",
    "wikiUrl": "https://tibia.fandom.com/wiki/Barkless_Cult_Trial_Zone",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Barkless Devotee/Barkless Fanatic",
+    "level"
+   ]
   },
   "lizard-city": {
    "creatures": [
@@ -2146,20 +2656,13 @@
    "city": "Farmine",
    "wikiTitle": "Razachai",
    "wikiUrl": "https://tibia.fandom.com/wiki/Razachai",
-   "match": "curated-alias"
-  },
-  "werecreatures-edron": {
-   "creatures": [
-    "Werefox",
-    "Werebadger",
-    "Werewolf",
-    "Wereboar",
-    "Werebear"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Edron Lycanthropes Cave",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Lycanthropes_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Lizard Legionnaire/Lizard Dragon Priest/Lizard High Guard/Lizard Zaogun/Lizard Noble/Lizard Magistratus/Lizard Chosen",
+    "level",
+    "cyclopedia:17",
+    "corroborated"
+   ]
   },
   "otherworld-kazordoon-dwarf-bridge": {
    "creatures": [
@@ -2169,7 +2672,10 @@
    "city": "Thais",
    "wikiTitle": "Otherworld (Dwarf Bridge)",
    "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld_(Dwarf_Bridge)",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Otherworld (Dwarf Bridge)"
+   ]
   },
   "carnivora-s-rocks": {
    "creatures": [
@@ -2180,7 +2686,13 @@
    "city": "Port Hope",
    "wikiTitle": "Carnivora's Rocks",
    "wikiUrl": "https://tibia.fandom.com/wiki/Carnivora's_Rocks",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Carnivora's Rocks",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "hive-stage-3": {
    "creatures": [
@@ -2197,7 +2709,11 @@
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
    "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:The Hive",
+    "named:Hive Overseer"
+   ]
   },
   "seacrest-serpents-birthing-grounds": {
    "creatures": [
@@ -2221,7 +2737,11 @@
    "city": "Rathleton",
    "wikiTitle": "Seacrest Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Seacrest_Grounds",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Seacrest Grounds",
+    "named:Seacrest Serpent"
+   ]
   },
   "book-world-chapter-ii": {
    "creatures": [
@@ -2231,7 +2751,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "book-world-chapter-iii": {
    "creatures": [
@@ -2241,7 +2765,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "book-world-chapter-iv": {
    "creatures": [
@@ -2251,7 +2779,11 @@
    "city": "Edron",
    "wikiTitle": "Book World",
    "wikiUrl": "https://tibia.fandom.com/wiki/Book_World",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Book World",
+    "cyclopedia:2"
+   ]
   },
   "weretigers-1": {
    "creatures": [
@@ -2262,7 +2794,13 @@
    "city": "Ankrahmun",
    "wikiTitle": "Oskayaat Undercity",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Weretiger",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "asura-mirror": {
    "creatures": [
@@ -2275,7 +2813,12 @@
    "city": "Port Hope",
    "wikiTitle": "Asura Vaults",
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "lower-roshamuul": {
    "creatures": [
@@ -2286,7 +2829,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "iksupan-occupied-sanctuary": {
    "creatures": [
@@ -2297,7 +2846,11 @@
    "city": "Port Hope",
    "wikiTitle": "Iksupan Occupied Sanctuary",
    "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Occupied_Sanctuary",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Iksupan Occupied Sanctuary",
+    "cyclopedia:3"
+   ]
   },
   "iksupan-last-stand": {
    "creatures": [
@@ -2308,7 +2861,11 @@
    "city": "Port Hope",
    "wikiTitle": "Iksupan Last Stand",
    "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Last_Stand",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Iksupan Last Stand",
+    "cyclopedia:3"
+   ]
   },
   "weretigers-2": {
    "creatures": [
@@ -2319,7 +2876,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Oskayaat Undercity",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Weretiger",
+    "cyclopedia:3"
+   ]
   },
   "werecrocodiles-1": {
    "creatures": [
@@ -2330,7 +2891,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Murky Caverns",
    "wikiUrl": "https://tibia.fandom.com/wiki/Murky_Caverns",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werecrocodile",
+    "cyclopedia:3"
+   ]
   },
   "burster-spectres": {
    "creatures": [
@@ -2339,7 +2904,11 @@
    "city": "Darashia",
    "wikiTitle": "Haunted Tomb",
    "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Tomb",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Burster Spectre",
+    "level"
+   ]
   },
   "ripper-spectres": {
    "creatures": [
@@ -2351,7 +2920,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Ripper Spectre",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "buried-cathedral-8": {
    "creatures": [
@@ -2363,7 +2938,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Buried Cathedral",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "gazer-spectres": {
    "creatures": [
@@ -2373,7 +2954,10 @@
    "city": "Port Hope",
    "wikiTitle": "Haunted Temple",
    "wikiUrl": "https://tibia.fandom.com/wiki/Haunted_Temple",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Gazer Spectre"
+   ]
   },
   "oramond-abandoned-sewers": {
    "creatures": [
@@ -2384,7 +2968,10 @@
    "city": "Rathleton",
    "wikiTitle": "Abandoned Sewers",
    "wikiUrl": "https://tibia.fandom.com/wiki/Abandoned_Sewers",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Abandoned Sewers"
+   ]
   },
   "rosha-shockheads": {
    "creatures": [
@@ -2395,7 +2982,14 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "level-far",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "roshamuul-mines-terrorsleeps": {
    "creatures": [
@@ -2405,7 +2999,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Roshamuul Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Roshamuul_Mines",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Roshamuul Mines",
+    "named:Terrorsleep",
+    "city:Roshamuul",
+    "cyclopedia:2"
+   ]
   },
   "crypt-warriors": {
    "creatures": [
@@ -2418,7 +3018,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crypt Warden",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "summer-court": {
    "creatures": [
@@ -2432,7 +3038,10 @@
    "city": "Feyrist",
    "wikiTitle": "Court of Summer",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Summer"
+   ]
   },
   "marapur-naga": {
    "creatures": [
@@ -2443,7 +3052,11 @@
    "city": "Marapur",
    "wikiTitle": "Temple of the Moon Goddess",
    "wikiUrl": "https://tibia.fandom.com/wiki/Temple_of_the_Moon_Goddess",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Naga Warrior/Naga Archer",
+    "city:Marapur"
+   ]
   },
   "upper-roshamuul-north": {
    "creatures": [
@@ -2459,7 +3072,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Upper Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Roshamuul",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Upper Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "upper-roshamuul-south": {
    "creatures": [
@@ -2475,7 +3094,14 @@
    "city": "Roshamuul",
    "wikiTitle": "Upper Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Roshamuul",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Upper Roshamuul",
+    "city:Roshamuul",
+    "level-far",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "falcon-s-eagle": {
    "creatures": [
@@ -2486,7 +3112,11 @@
    "city": "Farmine",
    "wikiTitle": "Falcon Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Falcon_Bastion",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Falcon Paladin/Falcon Knight",
+    "cyclopedia:2"
+   ]
   },
   "venore-flimsies": {
    "creatures": [
@@ -2498,7 +3128,12 @@
    "city": "Venore",
    "wikiTitle": "Brain Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "city:Venore",
+    "level"
+   ]
   },
   "port-hope-flimsies": {
    "creatures": [
@@ -2509,7 +3144,11 @@
    "city": "Venore",
    "wikiTitle": "Netherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "cyclopedia:3"
+   ]
   },
   "issavi-ogres": {
    "creatures": [
@@ -2522,29 +3161,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Mountains",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Mountains",
-   "match": "curated-alias"
-  },
-  "nimmersatt-s-bottom-floor-7": {
-   "creatures": [
-    "Dragolisk",
-    "Mega Dragon",
-    "Wardragon"
-   ],
-   "city": "Zao",
-   "wikiTitle": "Nimmersatt's Breeding Ground",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
-   "match": "curated-alias"
-  },
-  "nimmersatt-s-boss-floor-6": {
-   "creatures": [
-    "Dragolisk",
-    "Mega Dragon",
-    "Wardragon"
-   ],
-   "city": "Zao",
-   "wikiTitle": "Nimmersatt's Breeding Ground",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "level-far",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "deep-desert": {
    "creatures": [
@@ -2555,7 +3178,11 @@
    "city": "Darashia",
    "wikiTitle": "Deep Desert",
    "wikiUrl": "https://tibia.fandom.com/wiki/Deep_Desert",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Deep Desert",
+    "cyclopedia:3"
+   ]
   },
   "cobras-1": {
    "creatures": [
@@ -2566,7 +3193,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "issavi-sphinx-crypt-wardens": {
    "creatures": [
@@ -2579,19 +3210,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
-  },
-  "feru-pumin": {
-   "creatures": [
-    "Nightmare",
-    "Phantasm",
-    "Vexclaw",
-    "Grimeleech"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Deceit",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Deceit",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crypt Warden/Sphinx",
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "issavi-surface": {
    "creatures": [
@@ -2614,7 +3239,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Central Steppe",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Central_Steppe",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "level-far",
+    "cyclopedia:14",
+    "corroborated"
+   ]
   },
   "feru-undead-dragons": {
    "creatures": [
@@ -2626,7 +3257,10 @@
    "city": "Roshamuul",
    "wikiTitle": "Grounds of Undeath",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Undeath",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Undead Dragon"
+   ]
   },
   "bulltaur-lair": {
    "creatures": [
@@ -2637,23 +3271,12 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "access-cache"
-  },
-  "ferumbras-way": {
-   "creatures": [
-    "Lich",
-    "Serpent Spawn",
-    "Hydra",
-    "Fire Elemental",
-    "Dragon Lord",
-    "Behemoth",
-    "Warlock",
-    "Demon"
-   ],
-   "city": "Liberty Bay",
-   "wikiTitle": "Ferumbras Citadel",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Ferumbras_Citadel",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Bulltaur Lair",
+    "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
+    "cyclopedia:3"
+   ]
   },
   "azzilon-catacombs": {
    "creatures": [
@@ -2664,20 +3287,10 @@
    "city": "Edron",
    "wikiTitle": "Azzilon Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Azzilon_Catacombs",
-   "match": "access-cache"
-  },
-  "feru-dt": {
-   "creatures": [
-    "Destroyer",
-    "Fury",
-    "Vexclaw",
-    "Hellflayer",
-    "Juggernaut"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Destruction",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Azzilon Catacombs"
+   ]
   },
   "podzilla-quaras": {
    "creatures": [
@@ -2692,34 +3305,12 @@
    "city": "Oramond",
    "wikiTitle": "Podzilla",
    "wikiUrl": "https://tibia.fandom.com/wiki/Podzilla",
-   "match": "access-cache"
-  },
-  "feru-juggernauts": {
-   "creatures": [
-    "Spectre",
-    "Hand of Cursed Fate",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Despair",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Despair",
-   "match": "curated-alias"
-  },
-  "feru-infernatil": {
-   "creatures": [
-    "Fury",
-    "Hellfire Fighter",
-    "Hellhound",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Fire",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Fire",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Podzilla",
+    "named:Quara Raider/Quara Plunderer/Quara Looter",
+    "cyclopedia:3"
+   ]
   },
   "forsaken-crypt": {
    "creatures": [
@@ -2730,7 +3321,12 @@
    "city": "Ab'Dendriel",
    "wikiTitle": "Forsaken Crypt",
    "wikiUrl": "https://tibia.fandom.com/wiki/Forsaken_Crypt",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Forsaken Crypt",
+    "named:Crypt Mage",
+    "cyclopedia:3"
+   ]
   },
   "larva-ankh": {
    "creatures": [
@@ -2741,7 +3337,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Larva Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Larva_Caves",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "named:Larva",
+    "city:Ankrahmun",
+    "level"
+   ]
   },
   "edron-forgotten-tomb": {
    "creatures": [
@@ -2758,7 +3359,11 @@
    "city": "Edron",
    "wikiTitle": "Forgotten Tomb",
    "wikiUrl": "https://tibia.fandom.com/wiki/Forgotten_Tomb",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Forgotten Tomb",
+    "city:Edron"
+   ]
   },
   "chor-runes": {
    "creatures": [
@@ -2777,7 +3382,13 @@
    "city": "Port Hope",
    "wikiTitle": "Chor",
    "wikiUrl": "https://tibia.fandom.com/wiki/Chor",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Chor",
+    "level",
+    "cyclopedia:7",
+    "corroborated"
+   ]
   },
   "banuta-apes-runes": {
    "creatures": [
@@ -2788,7 +3399,13 @@
    "city": "Port Hope",
    "wikiTitle": "Banuta",
    "wikiUrl": "https://tibia.fandom.com/wiki/Banuta",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Banuta",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "coryms-ph-runes": {
    "creatures": [
@@ -2799,7 +3416,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda Corym Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda_Corym_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Corym Charlatan/Corym Skirmisher/Corym Vanguard",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "upper-spike-runes": {
    "creatures": [
@@ -2816,7 +3438,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Upper Spike",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Spike",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Upper Spike",
+    "level",
+    "cyclopedia:8",
+    "corroborated"
+   ]
   },
   "mosl-3": {
    "creatures": [
@@ -2830,7 +3458,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Mother of Scarabs Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Scarab/Ancient Scarab",
+    "level"
+   ]
   },
   "meriana-gargoyle-cave-runes": {
    "creatures": [
@@ -2843,7 +3476,14 @@
    "city": "Liberty Bay",
    "wikiTitle": "Meriana Gargoyle Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Meriana_Gargoyle_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Meriana Gargoyle Cave",
+    "named:Gargoyle",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "wyrms-lb": {
    "creatures": [
@@ -2853,7 +3493,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Wyrm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Wyrm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Wyrm/Elder Wyrm",
+    "city:Liberty Bay",
+    "level"
+   ]
   },
   "killer-caiman-cave-zao": {
    "creatures": [
@@ -2862,7 +3507,12 @@
    "city": "Farmine",
    "wikiTitle": "Killer Caiman Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Killer_Caiman_Cave",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Killer Caiman Cave",
+    "named:Killer Caiman",
+    "level"
+   ]
   },
   "water-elementals-south-port-hope": {
    "creatures": [
@@ -2872,7 +3522,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda/Water Elemental Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FWater_Elemental_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Water Elemental",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "water-elementals-west-port-hope": {
    "creatures": [
@@ -2882,7 +3537,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda/Water Elemental Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FWater_Elemental_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Water Elemental",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "edron-vampire-crypts": {
    "creatures": [
@@ -2899,7 +3559,13 @@
    "city": "Edron",
    "wikiTitle": "Edron Vampire Crypt",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Vampire_Crypt",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Edron Vampire Crypt",
+    "named:Vampire/Vampire Viscount/Vampire Bride",
+    "city:Edron",
+    "level"
+   ]
   },
   "iksupan-entrance": {
    "creatures": [
@@ -2913,7 +3579,11 @@
    "city": "Port Hope",
    "wikiTitle": "Iksupan",
    "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Iksupan",
+    "cyclopedia:6"
+   ]
   },
   "mother-of-scarabs-lair": {
    "creatures": [
@@ -2927,7 +3597,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Mother of Scarabs Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Scarab/Ancient Scarab",
+    "level"
+   ]
   },
   "poi-dragon-lords": {
    "creatures": [
@@ -2938,7 +3613,11 @@
    "city": "Venore",
    "wikiTitle": "Pits of Inferno Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno_Dragon_Lair",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dragon Hatchling/Dragon/Dragon Lord",
+    "level"
+   ]
   },
   "edron-old-fortress-heroes": {
    "creatures": [
@@ -2947,7 +3626,12 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Old Fortress",
+    "city:Edron",
+    "level"
+   ]
   },
   "giant-spiders-task-port-hope": {
    "creatures": [
@@ -2958,7 +3642,12 @@
    "city": "Port Hope",
    "wikiTitle": "Spider Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Giant Spider",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "sunken-quarter": {
    "creatures": [
@@ -2971,7 +3660,11 @@
    "city": "Yalahar",
    "wikiTitle": "Sunken Quarter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Sunken_Quarter",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Sunken Quarter",
+    "level"
+   ]
   },
   "orclops-desecrated-glade": {
    "creatures": [
@@ -2982,7 +3675,14 @@
    "city": "Kazordoon",
    "wikiTitle": "Desecrated Glade",
    "wikiUrl": "https://tibia.fandom.com/wiki/Desecrated_Glade",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Desecrated Glade",
+    "named:Orclops Doomhauler/Orclops Ravager",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "barkless-elves-ab": {
    "creatures": [
@@ -2992,19 +3692,11 @@
    "city": "Ab'dendriel",
    "wikiTitle": "Barkless Cult Trial Zone",
    "wikiUrl": "https://tibia.fandom.com/wiki/Barkless_Cult_Trial_Zone",
-   "match": "curated-alias"
-  },
-  "wildlife-raid-active": {
-   "creatures": [
-    "Blood Beast",
-    "Mooh'tah Warrior",
-    "Minotaur Hunter",
-    "Worm Priestess"
-   ],
-   "city": "Rathleton",
-   "wikiTitle": "Oramond Marshes",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Marshes",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Barkless Devotee/Barkless Fanatic",
+    "level"
+   ]
   },
   "werehyaenas": {
    "creatures": [
@@ -3015,7 +3707,11 @@
    "city": "Darashia",
    "wikiTitle": "Hyaena Lairs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Hyaena_Lairs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werehyaena/Werehyaena Shaman",
+    "cyclopedia:3"
+   ]
   },
   "carnivoras": {
    "creatures": [
@@ -3026,7 +3722,12 @@
    "city": "Port Hope",
    "wikiTitle": "Carnivora's Rocks",
    "wikiUrl": "https://tibia.fandom.com/wiki/Carnivora's_Rocks",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "werelions": {
    "creatures": [
@@ -3037,7 +3738,13 @@
    "city": "Darashia",
    "wikiTitle": "Lion Sanctum",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lion_Sanctum",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werelion",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "marapur-nagas": {
    "creatures": [
@@ -3048,7 +3755,11 @@
    "city": "Marapur",
    "wikiTitle": "Temple of the Moon Goddess",
    "wikiUrl": "https://tibia.fandom.com/wiki/Temple_of_the_Moon_Goddess",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Naga Warrior/Naga Archer",
+    "city:Marapur"
+   ]
   },
   "oskayaat-weretigers-2": {
    "creatures": [
@@ -3059,7 +3770,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Oskayaat Undercity",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Weretiger",
+    "cyclopedia:3"
+   ]
   },
   "lower-rosh": {
    "creatures": [
@@ -3070,17 +3785,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "strong-title"
-  },
-  "marapur-turtles": {
-   "creatures": [
-    "Foam Stalker",
-    "Two-Headed Turtle"
-   ],
-   "city": "Marapur",
-   "wikiTitle": "Great Pearl Fan Reef",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Great_Pearl_Fan_Reef",
-   "match": "curated-alias"
+   "match": "strong-title",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "buried-cathedral": {
    "creatures": [
@@ -3092,7 +3803,11 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Buried Cathedral",
+    "cyclopedia:4"
+   ]
   },
   "iksupan-last-stand-entrance": {
    "creatures": [
@@ -3103,7 +3818,13 @@
    "city": "Port Hope",
    "wikiTitle": "Iksupan Last Stand",
    "wikiUrl": "https://tibia.fandom.com/wiki/Iksupan_Last_Stand",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Iksupan Last Stand",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "marapur-nagas-soulkamas": {
    "creatures": [
@@ -3114,7 +3835,12 @@
    "city": "Marapur",
    "wikiTitle": "Temple of the Moon Goddess",
    "wikiUrl": "https://tibia.fandom.com/wiki/Temple_of_the_Moon_Goddess",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Naga Warrior/Naga Archer",
+    "city:Marapur",
+    "level"
+   ]
   },
   "cobra-bastion-1-basement": {
    "creatures": [
@@ -3125,7 +3851,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Cobra Bastion",
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "upper-roshamuul": {
    "creatures": [
@@ -3141,7 +3872,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Upper Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Roshamuul",
-   "match": "exact-title"
+   "match": "exact-title",
+   "evidence": [
+    "title:Upper Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "falcons": {
    "creatures": [
@@ -3152,7 +3889,11 @@
    "city": "Farmine",
    "wikiTitle": "Falcon Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Falcon_Bastion",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Falcon Paladin/Falcon Knight",
+    "cyclopedia:2"
+   ]
   },
   "sphinx-crypt-warden-issavi": {
    "creatures": [
@@ -3165,19 +3906,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
-  },
-  "pumin-feru-seal": {
-   "creatures": [
-    "Nightmare",
-    "Phantasm",
-    "Vexclaw",
-    "Grimeleech"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Deceit",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Deceit",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crypt Warden/Sphinx",
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "plague-feru-seal": {
    "creatures": [
@@ -3189,18 +3924,10 @@
    "city": "Farmine",
    "wikiTitle": "Grounds of Plague",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Plague",
-   "match": "curated-alias"
-  },
-  "nimmersatt-s-dragons-7-bottom-floor": {
-   "creatures": [
-    "Dragolisk",
-    "Mega Dragon",
-    "Wardragon"
-   ],
-   "city": "Zao",
-   "wikiTitle": "Nimmersatt's Breeding Ground",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Grounds of Plague"
+   ]
   },
   "roshamuul-west": {
    "creatures": [
@@ -3211,18 +3938,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Lower Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Lower_Roshamuul",
-   "match": "strong-title"
-  },
-  "nimmersatt-s-dragons-6-boss-floor": {
-   "creatures": [
-    "Dragolisk",
-    "Mega Dragon",
-    "Wardragon"
-   ],
-   "city": "Zao",
-   "wikiTitle": "Nimmersatt's Breeding Ground",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
-   "match": "curated-alias"
+   "match": "strong-title",
+   "evidence": [
+    "title:Lower Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "feru-undead-dragon-seal": {
    "creatures": [
@@ -3234,21 +3956,10 @@
    "city": "Roshamuul",
    "wikiTitle": "Grounds of Undeath",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Undeath",
-   "match": "curated-alias"
-  },
-  "feru-mazoran-seal": {
-   "creatures": [
-    "Fury",
-    "Hellfire Fighter",
-    "Hellhound",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Fire",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Fire",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Undead Dragon"
+   ]
   },
   "flimsy-lost-souls-venore": {
    "creatures": [
@@ -3260,7 +3971,11 @@
    "city": "Venore",
    "wikiTitle": "Brain Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul/Mean Lost Soul",
+    "city:Venore"
+   ]
   },
   "falcons-sanguine": {
    "creatures": [
@@ -3271,20 +3986,12 @@
    "city": "Farmine",
    "wikiTitle": "Falcon Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Falcon_Bastion",
-   "match": "curated-alias"
-  },
-  "feru-dt-seal-1": {
-   "creatures": [
-    "Destroyer",
-    "Fury",
-    "Vexclaw",
-    "Hellflayer",
-    "Juggernaut"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Destruction",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Falcon Paladin/Falcon Knight",
+    "level-far",
+    "cyclopedia:2"
+   ]
   },
   "buried-cathedral-sanguine": {
    "creatures": [
@@ -3296,7 +4003,12 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Buried Cathedral",
+    "level-far",
+    "cyclopedia:4"
+   ]
   },
   "winter-court-sanguine": {
    "creatures": [
@@ -3310,7 +4022,11 @@
    "city": "Svargrond",
    "wikiTitle": "Court of Winter",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Winter",
+    "level-far"
+   ]
   },
   "summer-court-sanguine": {
    "creatures": [
@@ -3324,7 +4040,11 @@
    "city": "Feyrist",
    "wikiTitle": "Court of Summer",
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Court of Summer",
+    "level-far"
+   ]
   },
   "flimsy-lost-souls-port-hope": {
    "creatures": [
@@ -3335,20 +4055,11 @@
    "city": "Venore",
    "wikiTitle": "Netherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
-   "match": "curated-alias"
-  },
-  "feru-dt-seal-2": {
-   "creatures": [
-    "Destroyer",
-    "Fury",
-    "Vexclaw",
-    "Hellflayer",
-    "Juggernaut"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Destruction",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul/Mean Lost Soul",
+    "cyclopedia:3"
+   ]
   },
   "undead-dragon-feru-seal": {
    "creatures": [
@@ -3360,34 +4071,10 @@
    "city": "Roshamuul",
    "wikiTitle": "Grounds of Undeath",
    "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Undeath",
-   "match": "curated-alias"
-  },
-  "infernatil-feru-seal": {
-   "creatures": [
-    "Fury",
-    "Hellfire Fighter",
-    "Hellhound",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Fire",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Fire",
-   "match": "curated-alias"
-  },
-  "juggernaut-feru-seal": {
-   "creatures": [
-    "Spectre",
-    "Hand of Cursed Fate",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Despair",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Despair",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Undead Dragon"
+   ]
   },
   "otherworld-sanguine": {
    "creatures": [
@@ -3399,7 +4086,11 @@
    "city": "Svargrond",
    "wikiTitle": "Otherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Otherworld",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Otherworld",
+    "level-far"
+   ]
   },
   "deep-desert-darashia-skeletons": {
    "creatures": [
@@ -3410,7 +4101,15 @@
    "city": "Darashia",
    "wikiTitle": "Deep Desert",
    "wikiUrl": "https://tibia.fandom.com/wiki/Deep_Desert",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Deep Desert",
+    "named:Skeleton Elite Warrior",
+    "city:Darashia",
+    "level-far",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "raubritters-bloodfire-gorge": {
    "creatures": [
@@ -3421,7 +4120,12 @@
    "city": "Roshamuul",
    "wikiTitle": "Bloodfire Gorge",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bloodfire_Gorge",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Bloodfire Gorge",
+    "named:Raubritter Skirmisher/Raubritter Marksman/Raubritter Chastener",
+    "cyclopedia:3"
+   ]
   },
   "bulltaurs-2": {
    "creatures": [
@@ -3432,7 +4136,12 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
+    "level-far",
+    "cyclopedia:3"
+   ]
   },
   "ingol-surface": {
    "creatures": [
@@ -3447,46 +4156,12 @@
    "city": "Oramond",
    "wikiTitle": "Podzilla",
    "wikiUrl": "https://tibia.fandom.com/wiki/Podzilla",
-   "match": "curated-alias"
-  },
-  "energy-library": {
-   "creatures": [
-    "Flying Book",
-    "Biting Book",
-    "Knowledge Elemental",
-    "Energuardian of Tales",
-    "Brain Squid",
-    "Energetic Book"
-   ],
-   "city": "Carlin",
-   "wikiTitle": "Secret Library",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library",
-   "match": "access-cache"
-  },
-  "fire-library": {
-   "creatures": [
-    "Flying Book",
-    "Ink Blob",
-    "Guardian of Tales",
-    "Rage Squid",
-    "Burning Book"
-   ],
-   "city": "Carlin",
-   "wikiTitle": "Secret Library",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library",
-   "match": "access-cache"
-  },
-  "ice-library": {
-   "creatures": [
-    "Ink Blob",
-    "Animated Feather",
-    "Squid Warden",
-    "Icecold Book"
-   ],
-   "city": "Carlin",
-   "wikiTitle": "Secret Library",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library",
-   "match": "access-cache"
+   "match": "curated-alias",
+   "evidence": [
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "terramites-darashia": {
    "creatures": [
@@ -3495,7 +4170,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Darama Terramite Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Darama_Terramite_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Terramite",
+    "level"
+   ]
   },
   "larvas": {
    "creatures": [
@@ -3506,7 +4185,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Larva Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Larva_Caves",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Larva",
+    "level"
+   ]
   },
   "cormaya-dwarf-mines": {
    "creatures": [
@@ -3518,7 +4201,13 @@
    "city": "Edron",
    "wikiTitle": "Cormaya Dwarf Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cormaya_Dwarf_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dwarf/Dwarf Soldier/Dwarf Guard/Dwarf Geomancer",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "cyclops-mistrock": {
    "creatures": [
@@ -3530,7 +4219,14 @@
    "city": "Yalahar",
    "wikiTitle": "Mistrock",
    "wikiUrl": "https://tibia.fandom.com/wiki/Mistrock",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Mistrock",
+    "named:Cyclops/Cyclops Drone/Cyclops Smith",
+    "level",
+    "cyclopedia:4",
+    "corroborated"
+   ]
   },
   "edron-earth-elementals": {
    "creatures": [
@@ -3540,7 +4236,12 @@
    "city": "Edron",
    "wikiTitle": "Edron Earth Elemental Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Earth_Elemental_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Earth Elemental",
+    "city:Edron",
+    "level"
+   ]
   },
   "gargoyle-cave-meriana": {
    "creatures": [
@@ -3553,7 +4254,14 @@
    "city": "Liberty Bay",
    "wikiTitle": "Meriana Gargoyle Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Meriana_Gargoyle_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Meriana Gargoyle Cave",
+    "named:Gargoyle",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "upper-spike": {
    "creatures": [
@@ -3570,7 +4278,13 @@
    "city": "Kazordoon",
    "wikiTitle": "Upper Spike",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Spike",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Upper Spike",
+    "level",
+    "cyclopedia:8",
+    "corroborated"
+   ]
   },
   "stonerefiners": {
    "creatures": [
@@ -3585,7 +4299,11 @@
    "city": "Venore",
    "wikiTitle": "Corym Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Corym_Mines",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Stonerefiner",
+    "level"
+   ]
   },
   "dryad-gardens": {
    "creatures": [
@@ -3603,7 +4321,13 @@
    "city": "Edron",
    "wikiTitle": "Dryad Gardens",
    "wikiUrl": "https://tibia.fandom.com/wiki/Dryad_Gardens",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Dryad Gardens",
+    "level",
+    "cyclopedia:10",
+    "corroborated"
+   ]
   },
   "apes-banuta": {
    "creatures": [
@@ -3614,7 +4338,13 @@
    "city": "Port Hope",
    "wikiTitle": "Banuta",
    "wikiUrl": "https://tibia.fandom.com/wiki/Banuta",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Banuta",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "water-elementals-port-hope": {
    "creatures": [
@@ -3624,7 +4354,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda/Water Elemental Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FWater_Elemental_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Water Elemental",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "ice-witch-temple-zushuka": {
    "creatures": [
@@ -3637,7 +4372,12 @@
    "city": "Svargrond",
    "wikiTitle": "Ice Witch Temple",
    "wikiUrl": "https://tibia.fandom.com/wiki/Ice_Witch_Temple",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Ice Witch Temple",
+    "named:Ice Witch",
+    "level"
+   ]
   },
   "liberty-bay-wyrms": {
    "creatures": [
@@ -3647,7 +4387,12 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Wyrm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Wyrm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Wyrm/Elder Wyrm",
+    "city:Liberty Bay",
+    "level"
+   ]
   },
   "krailos-ogres-surface": {
    "creatures": [
@@ -3670,7 +4415,13 @@
    "city": "Rathleton",
    "wikiTitle": "Krailos Steppe",
    "wikiUrl": "https://tibia.fandom.com/wiki/Krailos_Steppe",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Ogre Shaman/Ogre Brute/Ogre Savage",
+    "level",
+    "cyclopedia:15",
+    "corroborated"
+   ]
   },
   "issavi-sphinxes-surface-sd": {
    "creatures": [
@@ -3683,7 +4434,12 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "muggy-plains": {
    "creatures": [
@@ -3701,7 +4457,13 @@
    "city": "Farmine",
    "wikiTitle": "Muggy Plains",
    "wikiUrl": "https://tibia.fandom.com/wiki/Muggy_Plains",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Muggy Plains",
+    "level",
+    "cyclopedia:9",
+    "corroborated"
+   ]
   },
   "giant-spiders-port-hope": {
    "creatures": [
@@ -3712,7 +4474,12 @@
    "city": "Port Hope",
    "wikiTitle": "Spider Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Giant Spider",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "calassa": {
    "creatures": [
@@ -3727,20 +4494,13 @@
    "city": "Liberty Bay",
    "wikiTitle": "Calassa",
    "wikiUrl": "https://tibia.fandom.com/wiki/Calassa",
-   "match": "access-cache"
-  },
-  "edron-were-south": {
-   "creatures": [
-    "Werefox",
-    "Werebadger",
-    "Werewolf",
-    "Wereboar",
-    "Werebear"
-   ],
-   "city": "Edron",
-   "wikiTitle": "Edron Lycanthropes Cave",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Lycanthropes_Cave",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Calassa",
+    "level",
+    "cyclopedia:7",
+    "corroborated"
+   ]
   },
   "edron-old-fortress-heroes-2-3": {
    "creatures": [
@@ -3749,7 +4509,12 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Old Fortress",
+    "city:Edron",
+    "level"
+   ]
   },
   "behemoths-cyclopolis": {
    "creatures": [
@@ -3775,7 +4540,12 @@
    "city": "Edron",
    "wikiTitle": "Cyclopolis",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cyclopolis",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Cyclopolis",
+    "named:Behemoth",
+    "cyclopedia:18"
+   ]
   },
   "barkless": {
    "creatures": [
@@ -3785,7 +4555,11 @@
    "city": "Ab'dendriel",
    "wikiTitle": "Barkless Cult Trial Zone",
    "wikiUrl": "https://tibia.fandom.com/wiki/Barkless_Cult_Trial_Zone",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Barkless Devotee/Barkless Fanatic",
+    "level"
+   ]
   },
   "oramond-minotaur-plains": {
    "creatures": [
@@ -3799,7 +4573,11 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Minotaur Camp",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Minotaur_Camp",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Minotaur Hunter/Minotaur Amazon",
+    "cyclopedia:6"
+   ]
   },
   "dark-faun-cave-feyrist": {
    "creatures": [
@@ -3808,7 +4586,12 @@
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Faun",
+    "city:Feyrist",
+    "cyclopedia:1"
+   ]
   },
   "crumbling-caverns": {
    "creatures": [
@@ -3818,7 +4601,11 @@
    "city": "Edron",
    "wikiTitle": "Crumbling Caverns",
    "wikiUrl": "https://tibia.fandom.com/wiki/Crumbling_Caverns",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Crumbling Caverns",
+    "cyclopedia:2"
+   ]
   },
   "oramond-fury": {
    "creatures": [
@@ -3837,7 +4624,11 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Fury_Dungeon",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Fury",
+    "cyclopedia:4"
+   ]
   },
   "flimsy-port-hope-1-only": {
    "creatures": [
@@ -3848,7 +4639,11 @@
    "city": "Venore",
    "wikiTitle": "Netherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "cyclopedia:3"
+   ]
   },
   "issavi-sphinxes-crypt-wardens": {
    "creatures": [
@@ -3861,7 +4656,13 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Catacombs",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Crypt Warden",
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "cobra-basement-1": {
    "creatures": [
@@ -3872,7 +4673,11 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "cyclopedia:3"
+   ]
   },
   "upper-rosh": {
    "creatures": [
@@ -3888,7 +4693,13 @@
    "city": "Roshamuul",
    "wikiTitle": "Upper Roshamuul",
    "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Roshamuul",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "title:Upper Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "issavi-ogre-mountain": {
    "creatures": [
@@ -3901,7 +4712,12 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Mountains",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Mountains",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "flimsy-port-hope-1-2": {
    "creatures": [
@@ -3912,7 +4728,11 @@
    "city": "Venore",
    "wikiTitle": "Netherworld",
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "cyclopedia:3"
+   ]
   },
   "flimsy-venore": {
    "creatures": [
@@ -3924,33 +4744,11 @@
    "city": "Venore",
    "wikiTitle": "Brain Grounds",
    "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
-   "match": "curated-alias"
-  },
-  "feru-pumin-boss-floor": {
-   "creatures": [
-    "Nightmare",
-    "Phantasm",
-    "Vexclaw",
-    "Grimeleech"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Deceit",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Deceit",
-   "match": "curated-alias"
-  },
-  "feru-mazoran": {
-   "creatures": [
-    "Fury",
-    "Hellfire Fighter",
-    "Hellhound",
-    "Vexclaw",
-    "Grimeleech",
-    "Hellflayer"
-   ],
-   "city": "Roshamuul",
-   "wikiTitle": "Grounds of Fire",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Fire",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Flimsy Lost Soul",
+    "city:Venore"
+   ]
   },
   "coryms-port-hope-aoe": {
    "creatures": [
@@ -3961,7 +4759,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda Corym Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda_Corym_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Corym Charlatan/Corym Skirmisher/Corym Vanguard",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "stonerefiners-aoe": {
    "creatures": [
@@ -3976,7 +4779,11 @@
    "city": "Venore",
    "wikiTitle": "Corym Mines",
    "wikiUrl": "https://tibia.fandom.com/wiki/Corym_Mines",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Stonerefiner",
+    "level"
+   ]
   },
   "darashia-dragon-lords": {
    "creatures": [
@@ -3986,7 +4793,12 @@
    "city": "Ankrahmun",
    "wikiTitle": "Kha'zeel Dragon Lairs/Kha'labal",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kha'zeel_Dragon_Lairs%2FKha'labal",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dragon/Dragon Lord",
+    "level",
+    "cyclopedia:2"
+   ]
   },
   "haunted-treelings-vengoth": {
    "creatures": [
@@ -3999,7 +4811,13 @@
    "city": "Yalahar",
    "wikiTitle": "Vengoth",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vengoth",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Vengoth",
+    "level",
+    "cyclopedia:5",
+    "corroborated"
+   ]
   },
   "issavi-surafce-sd": {
    "creatures": [
@@ -4022,7 +4840,12 @@
    "city": "Issavi",
    "wikiTitle": "Kilmaresh Central Steppe",
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Central_Steppe",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "city:Issavi",
+    "cyclopedia:14",
+    "corroborated"
+   ]
   },
   "dragon-lords-poi": {
    "creatures": [
@@ -4033,7 +4856,11 @@
    "city": "Venore",
    "wikiTitle": "Pits of Inferno Dragon Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno_Dragon_Lair",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dragon Hatchling/Dragon/Dragon Lord",
+    "level"
+   ]
   },
   "edron-old-fortress-3-hero": {
    "creatures": [
@@ -4042,7 +4869,13 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Old Fortress",
+    "named:Hero",
+    "city:Edron",
+    "level"
+   ]
   },
   "edron-old-fortress-2-hero": {
    "creatures": [
@@ -4051,7 +4884,13 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Old Fortress",
+    "named:Hero",
+    "city:Edron",
+    "level"
+   ]
   },
   "behemoths-forbidden-lands": {
    "creatures": [
@@ -4075,19 +4914,11 @@
    "city": "Port Hope",
    "wikiTitle": "Forbidden Lands",
    "wikiUrl": "https://tibia.fandom.com/wiki/Forbidden_Lands",
-   "match": "access-cache"
-  },
-  "oramond-west-no-quara-raid": {
-   "creatures": [
-    "Glooth Blob",
-    "Rot Elemental",
-    "Blood Beast",
-    "Devourer"
-   ],
-   "city": "Rathleton",
-   "wikiTitle": "Oramond/Western Plains",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond%2FWestern_Plains",
-   "match": "curated-alias"
+   "match": "access-cache",
+   "evidence": [
+    "title:Forbidden Lands",
+    "named:Behemoth"
+   ]
   },
   "oramond-west-quara-raid": {
    "creatures": [
@@ -4103,7 +4934,11 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond/Western Plains",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond%2FWestern_Plains",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Quara Constrictor Scout/Quara Pincher Scout/Quara Predator Scout/Quara Hydromancer Scout",
+    "level"
+   ]
   },
   "oramond-minotaur-south-plains": {
    "creatures": [
@@ -4117,7 +4952,11 @@
    "city": "Rathleton",
    "wikiTitle": "Oramond Minotaur Camp",
    "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Minotaur_Camp",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Minotaur Hunter/Minotaur Amazon",
+    "cyclopedia:6"
+   ]
   },
   "dessert-dungeon": {
    "creatures": [
@@ -4129,7 +4968,11 @@
    "city": "Candia",
    "wikiTitle": "Dessert Dungeons",
    "wikiUrl": "https://tibia.fandom.com/wiki/Dessert_Dungeons",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Dessert Dungeons",
+    "cyclopedia:4"
+   ]
   },
   "cobras": {
    "creatures": [
@@ -4140,7 +4983,13 @@
    "city": "Ankrahmun",
    "wikiTitle": "Cobra Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Cobra_Bastion",
-   "match": "strong-title"
+   "match": "strong-title",
+   "evidence": [
+    "named:Cobra Scout/Cobra Assassin/Cobra Vizier",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
   },
   "rotworms-liberty-bay": {
    "creatures": [
@@ -4154,7 +5003,14 @@
    "city": "Liberty Bay",
    "wikiTitle": "Vandura Rotworm Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Vandura_Rotworm_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Rotworm",
+    "city:Liberty Bay",
+    "level",
+    "cyclopedia:6",
+    "corroborated"
+   ]
   },
   "tarantulas-ph": {
    "creatures": [
@@ -4167,7 +5023,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda/Tarantula Caves",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FTarantula_Caves",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Tarantula",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "coryms-ph": {
    "creatures": [
@@ -4178,7 +5039,12 @@
    "city": "Port Hope",
    "wikiTitle": "Tiquanda Corym Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda_Corym_Cave",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Corym Charlatan/Corym Skirmisher/Corym Vanguard",
+    "city:Port Hope",
+    "level"
+   ]
   },
   "old-fortress-heroes": {
    "creatures": [
@@ -4187,7 +5053,11 @@
    "city": "Edron",
    "wikiTitle": "Old Fortress",
    "wikiUrl": "https://tibia.fandom.com/wiki/Old_Fortress",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:Old Fortress",
+    "level"
+   ]
   },
   "inner-hive": {
    "creatures": [
@@ -4204,7 +5074,12 @@
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
    "wikiUrl": "https://tibia.fandom.com/wiki/The_Hive",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "title:The Hive",
+    "named:Hive Overseer",
+    "level"
+   ]
   },
   "deeper-banuta": {
    "creatures": [
@@ -4240,7 +5115,13 @@
    "city": "Port Hope",
    "wikiTitle": "Deeper Banuta",
    "wikiUrl": "https://tibia.fandom.com/wiki/Deeper_Banuta",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Deeper Banuta",
+    "level",
+    "cyclopedia:28",
+    "corroborated"
+   ]
   },
   "ripper-spectre-venore": {
    "creatures": [
@@ -4252,7 +5133,11 @@
    "city": "Roshamuul",
    "wikiTitle": "Buried Cathedral",
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Ripper Spectre",
+    "cyclopedia:4"
+   ]
   },
   "falcons-eagle": {
    "creatures": [
@@ -4263,22 +5148,12 @@
    "city": "Farmine",
    "wikiTitle": "Falcon Bastion",
    "wikiUrl": "https://tibia.fandom.com/wiki/Falcon_Bastion",
-   "match": "curated-alias"
-  },
-  "ingol": {
-   "creatures": [
-    "Rootthing Amber Shaper",
-    "Rootthing Bug Tracker",
-    "Rootthing Nutshell",
-    "Quara Raider",
-    "Quara Plunderer",
-    "Quara Looter",
-    "Shark"
-   ],
-   "city": "Oramond",
-   "wikiTitle": "Podzilla",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Podzilla",
-   "match": "curated-alias"
+   "match": "curated-alias",
+   "evidence": [
+    "named:Falcon Paladin/Falcon Knight",
+    "level",
+    "cyclopedia:2"
+   ]
   },
   "norcferatu-dungeons": {
    "creatures": [
@@ -4292,7 +5167,12 @@
    "city": "Yalahar",
    "wikiTitle": "Norcferatu Dungeons",
    "wikiUrl": "https://tibia.fandom.com/wiki/Norcferatu_Dungeons",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Norcferatu Dungeons",
+    "named:Norcferatu Heartless/Norcferatu Nightweaver",
+    "cyclopedia:6"
+   ]
   },
   "secret-library": {
    "creatures": [
@@ -4314,7 +5194,10 @@
    "city": "Carlin",
    "wikiTitle": "Secret Library",
    "wikiUrl": "https://tibia.fandom.com/wiki/Secret_Library",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Secret Library"
+   ]
   },
   "unhallowed-crypt": {
    "creatures": [
@@ -4325,7 +5208,12 @@
    "city": "Ab'Dendriel",
    "wikiTitle": "Unhallowed Crypt",
    "wikiUrl": "https://tibia.fandom.com/wiki/Unhallowed_Crypt",
-   "match": "access-cache"
+   "match": "access-cache",
+   "evidence": [
+    "title:Unhallowed Crypt",
+    "named:Crypt Fiend/Crypt Construct",
+    "cyclopedia:3"
+   ]
   }
  }
 }
