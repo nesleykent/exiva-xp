@@ -247,6 +247,21 @@ async function wiki(params) {
   throw new Error(`${url} → ${lastError?.message || 'request failed'}`);
 }
 
+/**
+ * Last resort: ask TibiaWiki's own search for the ground, the way a player
+ * would. Local labels borrow nicknames and abbreviations that appear nowhere
+ * in an article title, so token matching can't reach them — but the wiki's
+ * full-text index has read the article bodies, where those nicknames usually
+ * do appear. Hits are narrowed to the Hunting Places catalogue, and every
+ * survivor still has to clear the same evidence gate as any other pairing,
+ * so a search hit is a candidate and never a conclusion.
+ */
+async function searchHuntingPlaces(name, pages) {
+  const query = name.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+  const body = await wiki({ action: 'query', list: 'search', srsearch: `${query} hunting place`, srlimit: '15' });
+  return (body.query?.search || []).map((hit) => hit.title).filter((title) => pages.has(title));
+}
+
 async function huntingPlaceTitles() {
   const titles = [];
   let cmcontinue = null;
@@ -566,11 +581,48 @@ function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, be
   return { points, strong, reasons, city, level };
 }
 
-function resolvePage(ground, pages, access, codex) {
+/**
+ * Resolve a ground from where the Cyclopedia says its prey lives.
+ *
+ * This is the strongest signal available and it needs no name similarity at
+ * all: the label names a creature, `bestiary.json` says which places that
+ * creature inhabits, and one of those places is a Hunting Place article. Two
+ * sources, neither derived from the other. It is how "Putrid Mummy" reaches
+ * Caverna Exanima and "Feru DT" reaches Grounds of Damnation without anyone
+ * hand-writing a rule.
+ *
+ * When the label names several creatures, only places common to all of them
+ * count — "Rotworms Liberty Bay" should not match every cave with a rotworm.
+ * A location naming more than one article, or none, resolves nothing.
+ */
+function resolveByCyclopedia(ground, pages, codex, bestiaryLocations, titleIndex) {
+  const label = new Set(words(ground.name));
+  const named = codex.creatures.filter((creature) => labelNamesCreature(label, creature.name));
+  if (!named.length || named.length > 6) return null;
+
+  const perCreature = named.map((creature) => new Set(bestiaryLocations.get(creature.name) || []));
+  if (perCreature.some((places) => places.size === 0)) return null;
+  const shared = [...perCreature[0]].filter((place) => perCreature.every((places) => places.has(place)));
+  if (!shared.length) return null;
+
+  const titles = [...new Set(shared.map((place) => titleIndex.get(fold(place))).filter(Boolean))];
+  if (titles.length !== 1) return null;
+
+  const title = titles[0];
+  if (!pages.has(title) || !creatureList(pages.get(title), codex, ground.name).length) return null;
+  return { title, method: 'cyclopedia-location', score: 1 };
+}
+
+function resolvePage(ground, pages, access, codex, bestiaryLocations, titleIndex) {
   const ruleTitle = PAGE_RULES.find(([pattern]) => pattern.test(ground.name))?.[1];
   if (ruleTitle && pages.has(ruleTitle) && creatureList(pages.get(ruleTitle), codex, ground.name).length) {
     return { title: ruleTitle, method: 'curated-alias', score: titleScore(ground.name, ruleTitle) };
   }
+
+  // Ahead of the access cache and title ranking: those are name heuristics,
+  // this is two independent sources agreeing on where the prey lives.
+  const byPrey = resolveByCyclopedia(ground, pages, codex, bestiaryLocations, titleIndex);
+  if (byPrey) return byPrey;
 
   const accessTitle = access[ground.slug]?.wikiTitle;
   const groundNumber = distinguishingNumber(ground.name);
@@ -607,6 +659,9 @@ const unresolved = [];
 const refused = [];
 
 /** CipSoft's own location strings — an source independent of the wiki article. */
+/** Cyclopedia location string → the Hunting Place article of that name. */
+const titleIndex = new Map([...pages.keys()].map((title) => [fold(title), title]));
+
 const bestiaryLocations = new Map(readJson('bestiary.json').data
   .map((c) => [c.name, String(c.locations || '').split(',').map((p) => p.trim()).filter(Boolean)]));
 
@@ -615,25 +670,55 @@ for (const ground of grounds) {
     unresolved.push(ground.name);
     continue;
   }
-  const match = resolvePage(ground, pages, access, codex);
-  if (!match) {
+  /** Roster + evidence for one candidate article, ready to accept or reject. */
+  const consider = (title, method) => {
+    let creatures = creatureList(pages.get(title), codex, ground.name);
+    const hints = explicitCreatureHints(ground.name, codex, creatures);
+    if (BROAD_PAGE_TITLES.has(title) && hints.length) creatures = hints;
+    if (/oramond west \(no quara raid\)/i.test(ground.name)) {
+      creatures = creatures.filter((name) => !/^Quara /i.test(name));
+    }
+    const evidence = pairingEvidence(ground.name, title, pages.get(title),
+      creatures, ground.entryLevel ?? null, bestiaryLocations, codex);
+    return { title, method, creatures, evidence };
+  };
+
+  const match = resolvePage(ground, pages, access, codex, bestiaryLocations, titleIndex);
+  let candidate = match ? consider(match.title, match.method) : null;
+
+  // Nothing local worked, or what did failed its evidence: ask the wiki's own
+  // search and let the best evidenced hit stand in.
+  if (!candidate || !candidate.evidence.strong || candidate.evidence.points <= 0) {
+    const hits = await searchHuntingPlaces(ground.name, pages);
+    /**
+     * Search hits are held to a harder standard than a local match: they must
+     * name a creature the article lists, or the article's own title, and may
+     * not lean on the three-source corroboration shortcut. Full-text search
+     * happily returns any large article in the right region, and corroboration
+     * alone waved several of them through — Crocodiles Port Hope matched Chor
+     * (no crocodile in it), Edron Heroes matched the Edron Dragon Lair, and
+     * Cults Yalahar matched a temple in Ankrahmun. A search result is a lead,
+     * so it has to name its evidence outright.
+     */
+    const searched = hits.map((title) => consider(title, 'wiki-search'))
+      .filter((row) => row.creatures.length && row.evidence.points > 0
+        && row.evidence.reasons.some((r) => r.startsWith('named:') || r.startsWith('title:')))
+      .sort((a, b) => b.evidence.points - a.evidence.points);
+    // A tie between two equally-evidenced articles identifies neither.
+    if (searched.length && !(searched[1] && searched[1].evidence.points === searched[0].evidence.points)) {
+      candidate = searched[0];
+    }
+  }
+
+  if (!candidate) {
     unresolved.push(ground.name);
     continue;
   }
-  let creatures = creatureList(pages.get(match.title), codex, ground.name);
-  const hints = explicitCreatureHints(ground.name, codex, creatures);
-  if (BROAD_PAGE_TITLES.has(match.title) && hints.length) {
-    creatures = hints;
-  }
-  if (/oramond west \(no quara raid\)/i.test(ground.name)) {
-    creatures = creatures.filter((name) => !/^Quara /i.test(name));
-  }
-  const evidence = pairingEvidence(ground.name, match.title, pages.get(match.title),
-    creatures, ground.entryLevel ?? null, bestiaryLocations, codex);
+  const { creatures, evidence } = candidate;
   if (!evidence.strong || evidence.points <= 0) {
     // A pairing nothing corroborates is a guess, and a guessed roster reads
     // exactly like a real one. Drop it: no creature list beats a wrong one.
-    refused.push({ name: ground.name, title: match.title, method: match.method, reasons: evidence.reasons });
+    refused.push({ name: ground.name, title: candidate.title, method: candidate.method, reasons: evidence.reasons });
     unresolved.push(ground.name);
     continue;
   }
@@ -641,9 +726,9 @@ for (const ground of grounds) {
   rosters[ground.slug] = {
     creatures,
     city: evidence.city,
-    wikiTitle: match.title,
-    wikiUrl: `https://tibia.fandom.com/wiki/${encodeURIComponent(match.title.replace(/ /g, '_'))}`,
-    match: match.method,
+    wikiTitle: candidate.title,
+    wikiUrl: `https://tibia.fandom.com/wiki/${encodeURIComponent(candidate.title.replace(/ /g, '_'))}`,
+    match: candidate.method,
     evidence: evidence.reasons,
   };
 }

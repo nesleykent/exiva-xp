@@ -1,7 +1,57 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-26T00:43:24.081Z",
+ "builtAt": "2026-07-26T01:05:35.889Z",
  "grounds": {
+  "targuna-lizards": {
+   "creatures": [
+    "Lizard Commander",
+    "Lizard Executioner",
+    "Lizard Henchman",
+    "Lizard Magician",
+    "Lizard Swordmaster"
+   ],
+   "city": "Thais",
+   "wikiTitle": "Hidden Lizard Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Hidden_Lizard_Temple",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Lizard Commander/Lizard Executioner/Lizard Henchman/Lizard Magician/Lizard Swordmaster",
+    "cyclopedia:5"
+   ]
+  },
+  "targuna-pirates": {
+   "creatures": [
+    "Pirate Navigator",
+    "Pirate Gunner",
+    "Pirate Cook",
+    "Pirate Quartermaster",
+    "Sea Captain"
+   ],
+   "city": "Thais",
+   "wikiTitle": "Aragonia",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Aragonia",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Pirate Navigator/Pirate Gunner/Pirate Cook/Pirate Quartermaster",
+    "cyclopedia:5"
+   ]
+  },
+  "targuna-infernoids": {
+   "creatures": [
+    "Infernoid Blob",
+    "Infernoid Hound",
+    "Infernoid Soul",
+    "Infernoid Spiritual"
+   ],
+   "city": "Thais",
+   "wikiTitle": "Crimson Court",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Crimson_Court",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Infernoid Blob/Infernoid Hound/Infernoid Soul/Infernoid Spiritual",
+    "cyclopedia:4"
+   ]
+  },
   "rotworms-liberty-bay-darashia": {
    "creatures": [
     "Bug",
@@ -61,6 +111,32 @@
     "level"
    ]
   },
+  "crocodiles-port-hope": {
+   "creatures": [
+    "Poison Spider",
+    "Bat",
+    "Cobra",
+    "Crocodile",
+    "Larva",
+    "Lizard Sentinel",
+    "Lizard Templar",
+    "Lizard Snakecharmer",
+    "Scarab",
+    "Spit Nettle",
+    "Wyvern"
+   ],
+   "city": "Port Hope",
+   "wikiTitle": "Chor",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Chor",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Crocodile",
+    "city:Port Hope",
+    "level",
+    "cyclopedia:7",
+    "corroborated"
+   ]
+  },
   "tarantulas-port-hope": {
    "creatures": [
     "Spider",
@@ -76,6 +152,24 @@
    "evidence": [
     "named:Tarantula",
     "city:Port Hope",
+    "level"
+   ]
+  },
+  "yalahar-darashia-minotaurs-stealth-ring": {
+   "creatures": [
+    "Minotaur",
+    "Minotaur Archer",
+    "Minotaur Guard",
+    "Minotaur Mage",
+    "Mummy"
+   ],
+   "city": "Darashia",
+   "wikiTitle": "Dark Pyramid",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dark_Pyramid",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Minotaur/Minotaur Archer/Minotaur Guard/Minotaur Mage",
+    "city:Darashia",
     "level"
    ]
   },
@@ -130,28 +224,38 @@
   },
   "zombies-treasure-island": {
    "creatures": [
+    "Seagull",
+    "Island Troll",
     "Crab",
-    "Blood Crab",
-    "Quara Constrictor Scout",
-    "Crustacea Gigantica",
+    "Cobra",
+    "Scorpion",
     "Skeleton",
-    "Larva",
-    "Ghoul",
     "Pirate Skeleton",
+    "Fire Devil",
     "Ghost",
-    "Scarab",
-    "Crypt Shambler",
+    "Witch",
+    "Stone Golem",
+    "Blood Crab",
+    "Fire Elemental",
     "Pirate Ghost",
-    "Zombie"
+    "Elder Bonelord",
+    "Acolyte of the Cult",
+    "Efreet",
+    "Adept of the Cult",
+    "Enlightened of the Cult",
+    "Dragon",
+    "Dragon Lord",
+    "Demon",
+    "Hellhound"
    ],
    "city": "Liberty Bay",
-   "wikiTitle": "Treasure Island",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Treasure_Island",
-   "match": "access-cache",
+   "wikiTitle": "Goroma",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Goroma",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Treasure Island",
+    "named:Island Troll",
     "level",
-    "cyclopedia:13",
+    "cyclopedia:10",
     "corroborated"
    ]
   },
@@ -245,28 +349,38 @@
   },
   "laguna-islands": {
    "creatures": [
-    "Amazon",
-    "Azure Frog",
-    "Crab",
-    "Crimson Frog",
-    "Green Frog",
-    "Orchid Frog",
-    "Coral Frog",
-    "Crocodile",
     "Seagull",
-    "Toad",
-    "Tortoise",
-    "Thornback Tortoise",
-    "Blood Crab"
+    "Island Troll",
+    "Crab",
+    "Cobra",
+    "Scorpion",
+    "Skeleton",
+    "Pirate Skeleton",
+    "Fire Devil",
+    "Ghost",
+    "Witch",
+    "Stone Golem",
+    "Blood Crab",
+    "Fire Elemental",
+    "Pirate Ghost",
+    "Elder Bonelord",
+    "Acolyte of the Cult",
+    "Efreet",
+    "Adept of the Cult",
+    "Enlightened of the Cult",
+    "Dragon",
+    "Dragon Lord",
+    "Demon",
+    "Hellhound"
    ],
    "city": "Liberty Bay",
-   "wikiTitle": "Laguna Islands",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands",
-   "match": "access-cache",
+   "wikiTitle": "Goroma",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Goroma",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Laguna Islands",
+    "named:Island Troll",
     "level",
-    "cyclopedia:13",
+    "cyclopedia:10",
     "corroborated"
    ]
   },
@@ -1046,7 +1160,7 @@
    "city": "Rathleton",
    "wikiTitle": "Glooth Factory",
    "wikiUrl": "https://tibia.fandom.com/wiki/Glooth_Factory",
-   "match": "access-cache",
+   "match": "cyclopedia-location",
    "evidence": [
     "named:Glooth Blob/Glooth Golem",
     "cyclopedia:6"
@@ -1105,17 +1219,25 @@
   },
   "pirats": {
    "creatures": [
-    "Pirat Cutthroat",
-    "Pirat Scoundrel",
-    "Pirat Bombardier"
+    "Dragon Hatchling",
+    "Dragon",
+    "Dragon Lord",
+    "Jellyfish",
+    "Water Elemental",
+    "Shark",
+    "Pirate Marauder",
+    "Pirate Cutthroat",
+    "Pirate Buccaneer",
+    "Pirate Corsair",
+    "Pirat Cutthroat"
    ],
-   "city": "Issavi",
-   "wikiTitle": "Pirat Mine",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Pirat_Mine",
-   "match": "strong-title",
+   "city": "Rathleton",
+   "wikiTitle": "Krailos Steppe",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Krailos_Steppe",
+   "match": "cyclopedia-location",
    "evidence": [
-    "named:Pirat Cutthroat/Pirat Scoundrel/Pirat Bombardier",
-    "level"
+    "named:Pirat Cutthroat",
+    "cyclopedia:11"
    ]
   },
   "minotaur-cults": {
@@ -1251,24 +1373,18 @@
   },
   "drefia-grim-reapers": {
    "creatures": [
-    "Tarnished Spirit",
-    "Demon Skeleton",
-    "Zombie",
-    "Necromancer",
-    "Lich",
-    "Shadow Pupil",
-    "Banshee",
-    "Gravedigger",
-    "Spectre",
-    "Grim Reaper"
+    "Grim Reaper",
+    "Flimsy Lost Soul",
+    "Mean Lost Soul",
+    "Freakish Lost Soul"
    ],
-   "city": "Darashia",
-   "wikiTitle": "Drefia Grim Reaper Dungeons",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Drefia_Grim_Reaper_Dungeons",
-   "match": "access-cache",
+   "city": "Venore",
+   "wikiTitle": "Brain Grounds",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
+   "match": "cyclopedia-location",
    "evidence": [
     "named:Grim Reaper",
-    "cyclopedia:4"
+    "level"
    ]
   },
   "werelions-2": {
@@ -1453,6 +1569,80 @@
     "title:Court of Winter"
    ]
   },
+  "poi-infernatil-seal-fire": {
+   "creatures": [
+    "Demon Skeleton",
+    "Spectre",
+    "Nightmare",
+    "Diabolic Imp",
+    "Defiler",
+    "Destroyer",
+    "Hellfire Fighter",
+    "Plaguesmith",
+    "Lost Soul",
+    "Fire Devil",
+    "Dark Torturer",
+    "Blightwalker",
+    "Phantasm",
+    "Betrayed Wraith",
+    "Hand of Cursed Fate",
+    "Hellhound",
+    "Demon",
+    "Son of Verminor",
+    "Banshee",
+    "Fury",
+    "Juggernaut",
+    "Lich",
+    "Undead Dragon",
+    "Dragon",
+    "Dragon Lord"
+   ],
+   "city": "Venore",
+   "wikiTitle": "Pits of Inferno",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Pits of Inferno",
+    "named:Fire Devil"
+   ]
+  },
+  "poi-dark-torturer-seal": {
+   "creatures": [
+    "Demon Skeleton",
+    "Spectre",
+    "Nightmare",
+    "Diabolic Imp",
+    "Defiler",
+    "Destroyer",
+    "Hellfire Fighter",
+    "Plaguesmith",
+    "Lost Soul",
+    "Fire Devil",
+    "Dark Torturer",
+    "Blightwalker",
+    "Phantasm",
+    "Betrayed Wraith",
+    "Hand of Cursed Fate",
+    "Hellhound",
+    "Demon",
+    "Son of Verminor",
+    "Banshee",
+    "Fury",
+    "Juggernaut",
+    "Lich",
+    "Undead Dragon",
+    "Dragon",
+    "Dragon Lord"
+   ],
+   "city": "Venore",
+   "wikiTitle": "Pits of Inferno",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Pits of Inferno",
+    "named:Dark Torturer"
+   ]
+  },
   "buried-cathedral-1": {
    "creatures": [
     "Ripper Spectre",
@@ -1547,6 +1737,42 @@
     "title:Warzone 6"
    ]
   },
+  "poi-verminor-seal": {
+   "creatures": [
+    "Demon Skeleton",
+    "Spectre",
+    "Nightmare",
+    "Diabolic Imp",
+    "Defiler",
+    "Destroyer",
+    "Hellfire Fighter",
+    "Plaguesmith",
+    "Lost Soul",
+    "Fire Devil",
+    "Dark Torturer",
+    "Blightwalker",
+    "Phantasm",
+    "Betrayed Wraith",
+    "Hand of Cursed Fate",
+    "Hellhound",
+    "Demon",
+    "Son of Verminor",
+    "Banshee",
+    "Fury",
+    "Juggernaut",
+    "Lich",
+    "Undead Dragon",
+    "Dragon",
+    "Dragon Lord"
+   ],
+   "city": "Venore",
+   "wikiTitle": "Pits of Inferno",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Pits of Inferno"
+   ]
+  },
   "marapur-turtles-and-foam-stalkers": {
    "creatures": [
     "Foam Stalker",
@@ -1561,6 +1787,43 @@
     "city:Marapur",
     "level",
     "cyclopedia:2"
+   ]
+  },
+  "poi-infernatil-dt-seals": {
+   "creatures": [
+    "Demon Skeleton",
+    "Spectre",
+    "Nightmare",
+    "Diabolic Imp",
+    "Defiler",
+    "Destroyer",
+    "Hellfire Fighter",
+    "Plaguesmith",
+    "Lost Soul",
+    "Fire Devil",
+    "Dark Torturer",
+    "Blightwalker",
+    "Phantasm",
+    "Betrayed Wraith",
+    "Hand of Cursed Fate",
+    "Hellhound",
+    "Demon",
+    "Son of Verminor",
+    "Banshee",
+    "Fury",
+    "Juggernaut",
+    "Lich",
+    "Undead Dragon",
+    "Dragon",
+    "Dragon Lord"
+   ],
+   "city": "Venore",
+   "wikiTitle": "Pits of Inferno",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Pits of Inferno",
+    "named:Dark Torturer"
    ]
   },
   "nagas": {
@@ -1696,6 +1959,23 @@
     "cyclopedia:3"
    ]
   },
+  "deathlings": {
+   "creatures": [
+    "Deepling Warrior",
+    "Deathling Scout",
+    "Deathling Spellsinger"
+   ],
+   "city": "Port Hope",
+   "wikiTitle": "Sunken Temple",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Sunken_Temple",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Deathling Scout/Deathling Spellsinger",
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
+  },
   "warzone-2": {
    "creatures": [
     "Lost Berserker",
@@ -1825,6 +2105,20 @@
     "cyclopedia:3"
    ]
   },
+  "bashmu": {
+   "creatures": [
+    "Juvenile Bashmu",
+    "Bashmu"
+   ],
+   "city": "Issavi",
+   "wikiTitle": "Salt Caves",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Salt_Caves",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Juvenile Bashmu/Bashmu",
+    "cyclopedia:2"
+   ]
+  },
   "issavi-surface-east": {
    "creatures": [
     "Seagull",
@@ -1886,6 +2180,19 @@
     "corroborated"
    ]
   },
+  "girtablilus": {
+   "creatures": [
+    "Venerable Girtablilu",
+    "Girtablilu Warrior"
+   ],
+   "city": "Issavi",
+   "wikiTitle": "Ruins of Nuur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ruins_of_Nuur",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Girtablilu Warrior"
+   ]
+  },
   "norcferatu-fortress": {
    "creatures": [
     "Dworc Shadowstalker",
@@ -1914,7 +2221,7 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "strong-title",
+   "match": "cyclopedia-location",
    "evidence": [
     "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
     "level-far",
@@ -1934,6 +2241,20 @@
    "evidence": [
     "title:Azzilon Castle",
     "cyclopedia:3"
+   ]
+  },
+  "wardragons": {
+   "creatures": [
+    "Dragolisk",
+    "Mega Dragon",
+    "Wardragon"
+   ],
+   "city": "Zao",
+   "wikiTitle": "Nimmersatt's Breeding Ground",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Wardragon"
    ]
   },
   "feru-plague-seal": {
@@ -2172,6 +2493,25 @@
     "corroborated"
    ]
   },
+  "mosl-3-mummy-bonebeasts": {
+   "creatures": [
+    "Larva",
+    "Mummy",
+    "Scarab",
+    "Bonebeast",
+    "Necromancer",
+    "Ancient Scarab"
+   ],
+   "city": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Mummy/Scarab/Bonebeast/Ancient Scarab",
+    "level"
+   ]
+  },
   "edron-old-fortress-1-bonebeasts": {
    "creatures": [
     "Bonebeast"
@@ -2217,28 +2557,38 @@
   },
   "laguna-islands-profit": {
    "creatures": [
-    "Amazon",
-    "Azure Frog",
-    "Crab",
-    "Crimson Frog",
-    "Green Frog",
-    "Orchid Frog",
-    "Coral Frog",
-    "Crocodile",
     "Seagull",
-    "Toad",
-    "Tortoise",
-    "Thornback Tortoise",
-    "Blood Crab"
+    "Island Troll",
+    "Crab",
+    "Cobra",
+    "Scorpion",
+    "Skeleton",
+    "Pirate Skeleton",
+    "Fire Devil",
+    "Ghost",
+    "Witch",
+    "Stone Golem",
+    "Blood Crab",
+    "Fire Elemental",
+    "Pirate Ghost",
+    "Elder Bonelord",
+    "Acolyte of the Cult",
+    "Efreet",
+    "Adept of the Cult",
+    "Enlightened of the Cult",
+    "Dragon",
+    "Dragon Lord",
+    "Demon",
+    "Hellhound"
    ],
    "city": "Liberty Bay",
-   "wikiTitle": "Laguna Islands",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Laguna_Islands",
-   "match": "access-cache",
+   "wikiTitle": "Goroma",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Goroma",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Laguna Islands",
+    "named:Island Troll",
     "level",
-    "cyclopedia:13",
+    "cyclopedia:10",
     "corroborated"
    ]
   },
@@ -2381,6 +2731,25 @@
     "level"
    ]
   },
+  "mosl-4-ancient-scarabs": {
+   "creatures": [
+    "Larva",
+    "Mummy",
+    "Scarab",
+    "Bonebeast",
+    "Necromancer",
+    "Ancient Scarab"
+   ],
+   "city": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Scarab/Ancient Scarab",
+    "level"
+   ]
+  },
   "demonwar-crypt-both-spawns": {
    "creatures": [
     "Askarak Demon",
@@ -2494,6 +2863,30 @@
     "level"
    ]
   },
+  "quaras-liberty-bay": {
+   "creatures": [
+    "Quara Mantassin Scout",
+    "Quara Constrictor Scout",
+    "Quara Predator Scout",
+    "Quara Pincher Scout",
+    "Quara Hydromancer Scout",
+    "Quara Mantassin",
+    "Quara Constrictor",
+    "Quara Predator",
+    "Quara Pincher",
+    "Quara Hydromancer",
+    "Crab"
+   ],
+   "city": "Liberty Bay",
+   "wikiTitle": "Quara Grotto",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Quara_Grotto",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Quara Mantassin Scout/Quara Constrictor Scout/Quara Predator Scout/Quara Pincher Scout/Quara Hydromancer Scout/Quara Mantassin/Quara Constrictor/Quara Predator/Quara Pincher/Quara Hydromancer",
+    "city:Liberty Bay",
+    "level"
+   ]
+  },
   "misguided": {
    "creatures": [
     "Misguided Thief",
@@ -2576,21 +2969,36 @@
   },
   "souleater-mountain": {
    "creatures": [
-    "Death Blob",
-    "Mutated Rat",
-    "Mutated Bat",
-    "Mutated Tiger",
-    "Killer Caiman",
-    "Souleater"
+    "Butterfly (Purple)",
+    "Butterfly (Red)",
+    "Parrot",
+    "Skunk",
+    "Snake",
+    "Bat",
+    "Spider",
+    "Bug",
+    "Spit Nettle",
+    "Poison Spider",
+    "Wasp",
+    "Cobra",
+    "Centipede",
+    "Tiger",
+    "Sibang",
+    "Kongra",
+    "Tarantula",
+    "Merlkin",
+    "Carniphila",
+    "Terror Bird",
+    "Wyvern"
    ],
-   "city": "Farmine",
-   "wikiTitle": "Souleater Mountains",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Souleater_Mountains",
-   "match": "access-cache",
+   "city": "Port Hope",
+   "wikiTitle": "Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Banuta",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Souleater Mountains",
-    "named:Souleater",
-    "level"
+    "level",
+    "cyclopedia:8",
+    "corroborated"
    ]
   },
   "talahu-medusas-serpents": {
@@ -2701,6 +3109,22 @@
    "match": "access-cache",
    "evidence": [
     "title:Otherworld (Dwarf Bridge)"
+   ]
+  },
+  "brimstone-bugs-wote": {
+   "creatures": [
+    "Toad",
+    "Lancer Beetle",
+    "Wailing Widow",
+    "Brimstone Bug"
+   ],
+   "city": "Farmine",
+   "wikiTitle": "Brimstone Bug Caves",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Brimstone_Bug_Caves",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Brimstone Bug",
+    "level"
    ]
   },
   "carnivora-s-rocks": {
@@ -3033,6 +3457,28 @@
     "cyclopedia:2"
    ]
   },
+  "rosha-bones": {
+   "creatures": [
+    "Frazzlemaw",
+    "Silencer",
+    "Retching Horror",
+    "Choking Fear",
+    "Guzzlemaw",
+    "Feversleep",
+    "Terrorsleep",
+    "Sight of Surrender"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Upper Roshamuul",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Upper_Roshamuul",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Upper Roshamuul",
+    "city:Roshamuul",
+    "cyclopedia:5",
+    "corroborated"
+   ]
+  },
   "crypt-warriors": {
    "creatures": [
     "Crypt Warrior"
@@ -3171,6 +3617,19 @@
     "cyclopedia:3"
    ]
   },
+  "girtablilu": {
+   "creatures": [
+    "Venerable Girtablilu",
+    "Girtablilu Warrior"
+   ],
+   "city": "Issavi",
+   "wikiTitle": "Ruins of Nuur",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Ruins_of_Nuur",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Girtablilu Warrior"
+   ]
+  },
   "issavi-ogres": {
    "creatures": [
     "Priestess of the Wild Sun",
@@ -3188,6 +3647,29 @@
     "level-far",
     "cyclopedia:5",
     "corroborated"
+   ]
+  },
+  "usurpers": {
+   "creatures": [
+    "Agrestic Chicken",
+    "Bat",
+    "Bear",
+    "Cat",
+    "Crypt Warrior",
+    "Deer",
+    "Dog",
+    "Pig",
+    "Usurper Knight",
+    "Usurper Archer",
+    "Usurper Warlock"
+   ],
+   "city": "Thais",
+   "wikiTitle": "Bounac",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bounac",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Usurper Knight/Usurper Archer/Usurper Warlock",
+    "cyclopedia:11"
    ]
   },
   "deep-desert": {
@@ -3292,7 +3774,7 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "access-cache",
+   "match": "cyclopedia-location",
    "evidence": [
     "title:Bulltaur Lair",
     "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
@@ -3418,6 +3900,73 @@
     "city:Edron"
    ]
   },
+  "larva-mummy-mosl-1-2": {
+   "creatures": [
+    "Larva",
+    "Mummy",
+    "Scarab",
+    "Bonebeast",
+    "Necromancer",
+    "Ancient Scarab"
+   ],
+   "city": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Larva/Mummy/Scarab/Ancient Scarab",
+    "level"
+   ]
+  },
+  "minotaurs-darashia-stealth-ring": {
+   "creatures": [
+    "Minotaur",
+    "Minotaur Archer",
+    "Minotaur Guard",
+    "Minotaur Mage",
+    "Mummy"
+   ],
+   "city": "Darashia",
+   "wikiTitle": "Dark Pyramid",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dark_Pyramid",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Minotaur/Minotaur Archer/Minotaur Guard/Minotaur Mage",
+    "city:Darashia",
+    "level"
+   ]
+  },
+  "cyclops-mistrock-mount-sternum": {
+   "creatures": [
+    "Cave Rat",
+    "Bat",
+    "Spider",
+    "Poison Spider",
+    "Skeleton",
+    "Ghoul",
+    "Cyclops",
+    "Cyclops Drone",
+    "Cyclops Smith",
+    "Wolf",
+    "Bear",
+    "Hunter",
+    "Elf",
+    "Elf Scout",
+    "Elf Arcanist"
+   ],
+   "city": "Thais",
+   "wikiTitle": "Mount Sternum",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mount_Sternum",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Mount Sternum",
+    "named:Cyclops/Cyclops Drone/Cyclops Smith",
+    "level",
+    "cyclopedia:9",
+    "corroborated"
+   ]
+  },
   "chor-runes": {
    "creatures": [
     "Poison Spider",
@@ -3458,6 +4007,21 @@
     "level",
     "cyclopedia:3",
     "corroborated"
+   ]
+  },
+  "carniphilas-port-hope": {
+   "creatures": [
+    "Carniphila"
+   ],
+   "city": "Port Hope",
+   "wikiTitle": "Banuta",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Banuta",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Carniphila",
+    "city:Port Hope",
+    "level",
+    "cyclopedia:1"
    ]
   },
   "coryms-ph-runes": {
@@ -3538,6 +4102,30 @@
     "corroborated"
    ]
   },
+  "lb-quara-scouts": {
+   "creatures": [
+    "Quara Mantassin Scout",
+    "Quara Constrictor Scout",
+    "Quara Predator Scout",
+    "Quara Pincher Scout",
+    "Quara Hydromancer Scout",
+    "Quara Mantassin",
+    "Quara Constrictor",
+    "Quara Predator",
+    "Quara Pincher",
+    "Quara Hydromancer",
+    "Crab"
+   ],
+   "city": "Liberty Bay",
+   "wikiTitle": "Quara Grotto",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Quara_Grotto",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Quara Mantassin Scout/Quara Constrictor Scout/Quara Predator Scout/Quara Pincher Scout/Quara Hydromancer Scout/Quara Mantassin/Quara Constrictor/Quara Predator/Quara Pincher/Quara Hydromancer",
+    "city:Liberty Bay",
+    "level"
+   ]
+  },
   "wyrms-lb": {
    "creatures": [
     "Wyrm",
@@ -3564,6 +4152,21 @@
    "evidence": [
     "title:Killer Caiman Cave",
     "named:Killer Caiman",
+    "level"
+   ]
+  },
+  "kha-zeel-ancient-scarabs": {
+   "creatures": [
+    "Larva",
+    "Scarab",
+    "Ancient Scarab"
+   ],
+   "city": "Ankrahmun",
+   "wikiTitle": "Kha'zeel Scarab Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Kha'zeel_Scarab_Lair",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Scarab/Ancient Scarab",
     "level"
    ]
   },
@@ -3594,6 +4197,30 @@
    "evidence": [
     "named:Water Elemental",
     "city:Port Hope",
+    "level"
+   ]
+  },
+  "quaras-lb": {
+   "creatures": [
+    "Quara Mantassin Scout",
+    "Quara Constrictor Scout",
+    "Quara Predator Scout",
+    "Quara Pincher Scout",
+    "Quara Hydromancer Scout",
+    "Quara Mantassin",
+    "Quara Constrictor",
+    "Quara Predator",
+    "Quara Pincher",
+    "Quara Hydromancer",
+    "Crab"
+   ],
+   "city": "Liberty Bay",
+   "wikiTitle": "Quara Grotto",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Quara_Grotto",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Quara Mantassin Scout/Quara Constrictor Scout/Quara Predator Scout/Quara Pincher Scout/Quara Hydromancer Scout/Quara Mantassin/Quara Constrictor/Quara Predator/Quara Pincher/Quara Hydromancer",
+    "city:Liberty Bay",
     "level"
    ]
   },
@@ -3967,6 +4594,35 @@
     "corroborated"
    ]
   },
+  "issavi-goannas-central-steppe": {
+   "creatures": [
+    "Seagull",
+    "Flamingo",
+    "Crocodile",
+    "Hyaena",
+    "Lion",
+    "Scorpion",
+    "Young Goanna",
+    "Adult Goanna",
+    "Feral Sphinx",
+    "Manticore",
+    "Ogre Sage",
+    "Ogre Rowdy",
+    "Ogre Ruffian",
+    "Lamassu",
+    "Sphinx"
+   ],
+   "city": "Issavi",
+   "wikiTitle": "Kilmaresh Central Steppe",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Central_Steppe",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Young Goanna/Adult Goanna",
+    "city:Issavi",
+    "cyclopedia:14",
+    "corroborated"
+   ]
+  },
   "plague-feru-seal": {
    "creatures": [
     "Plaguesmith",
@@ -4226,6 +4882,23 @@
     "cyclopedia:3"
    ]
   },
+  "raubritters-ada-outskirts": {
+   "creatures": [
+    "Deer",
+    "Stag",
+    "Raubritter Chastener",
+    "Raubritter Marksman",
+    "Raubritter Skirmisher",
+    "Night Harpy"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Isle of Ada",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Isle_of_Ada",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Raubritter Chastener/Raubritter Marksman/Raubritter Skirmisher"
+   ]
+  },
   "bulltaurs-2": {
    "creatures": [
     "Bulltaur Brute",
@@ -4235,7 +4908,7 @@
    "city": "Venore",
    "wikiTitle": "Bulltaur Lair",
    "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
-   "match": "strong-title",
+   "match": "cyclopedia-location",
    "evidence": [
     "named:Bulltaur Brute/Bulltaur Alchemist/Bulltaur Forgepriest",
     "level-far",
@@ -4420,7 +5093,7 @@
    "city": "Edron",
    "wikiTitle": "Dryad Gardens",
    "wikiUrl": "https://tibia.fandom.com/wiki/Dryad_Gardens",
-   "match": "access-cache",
+   "match": "cyclopedia-location",
    "evidence": [
     "title:Dryad Gardens",
     "level",
@@ -4577,6 +5250,24 @@
    "evidence": [
     "named:Giant Spider",
     "city:Port Hope",
+    "level"
+   ]
+  },
+  "askarak-demons": {
+   "creatures": [
+    "Askarak Demon",
+    "Shaburak Demon",
+    "Askarak Lord",
+    "Shaburak Lord",
+    "Askarak Prince",
+    "Shaburak Prince"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Demonwar Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Askarak Demon/Askarak Lord/Askarak Prince",
     "level"
    ]
   },
@@ -4887,6 +5578,25 @@
     "level"
    ]
   },
+  "mummy-bonebeasts-mosl-3": {
+   "creatures": [
+    "Larva",
+    "Mummy",
+    "Scarab",
+    "Bonebeast",
+    "Necromancer",
+    "Ancient Scarab"
+   ],
+   "city": "Ankrahmun",
+   "wikiTitle": "Mother of Scarabs Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Mother_of_Scarabs_Lair",
+   "match": "wiki-search",
+   "evidence": [
+    "title:Mother of Scarabs Lair",
+    "named:Mummy/Scarab/Bonebeast/Ancient Scarab",
+    "level"
+   ]
+  },
   "darashia-dragon-lords": {
    "creatures": [
     "Dragon",
@@ -4915,6 +5625,24 @@
     "named:Haunted Treeling",
     "level",
     "cyclopedia:1"
+   ]
+  },
+  "shaburak-demons": {
+   "creatures": [
+    "Askarak Demon",
+    "Shaburak Demon",
+    "Askarak Lord",
+    "Shaburak Lord",
+    "Askarak Prince",
+    "Shaburak Prince"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Demonwar Crypt",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Shaburak Demon/Shaburak Lord/Shaburak Prince",
+    "level"
    ]
   },
   "issavi-surafce-sd": {
@@ -5295,6 +6023,45 @@
    "match": "access-cache",
    "evidence": [
     "title:Secret Library"
+   ]
+  },
+  "soul-war-areas": {
+   "creatures": [
+    "Hibernal Moth",
+    "Lacewing Moth",
+    "Crazed Summer Rearguard",
+    "Crazed Summer Vanguard",
+    "Crazed Winter Rearguard",
+    "Crazed Winter Vanguard",
+    "Arachnophobica",
+    "Insane Siren",
+    "Soul-Broken Harbinger",
+    "Thanatursus"
+   ],
+   "city": "Feyrist",
+   "wikiTitle": "Dream Labyrinth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Soul-Broken Harbinger",
+    "level-far",
+    "cyclopedia:10"
+   ]
+  },
+  "rotten-blood": {
+   "creatures": [
+    "Oozing Carcass",
+    "Sopping Carcass",
+    "Rotten Man-Maggot",
+    "Meandering Mushroom"
+   ],
+   "city": "Northern Darama",
+   "wikiTitle": "Putrefactory",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Putrefactory",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Rotten Man-Maggot",
+    "cyclopedia:4"
    ]
   },
   "unhallowed-crypt": {
