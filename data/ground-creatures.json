@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-25T20:55:36.919Z",
+ "builtAt": "2026-07-26T00:43:24.081Z",
  "grounds": {
   "rotworms-liberty-bay-darashia": {
    "creatures": [
@@ -1968,6 +1968,22 @@
     "cyclopedia:3"
    ]
   },
+  "feru-dt-seal": {
+   "creatures": [
+    "Dark Torturer",
+    "Vexclaw",
+    "Grimeleech",
+    "Hellflayer"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Damnation",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Damnation",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Torturer",
+    "level-far"
+   ]
+  },
   "norcferatu-dungeons-west": {
    "creatures": [
     "Dworc Shadowstalker",
@@ -3297,6 +3313,22 @@
     "title:Azzilon Catacombs"
    ]
   },
+  "feru-dt": {
+   "creatures": [
+    "Dark Torturer",
+    "Vexclaw",
+    "Grimeleech",
+    "Hellflayer"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Damnation",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Damnation",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Torturer",
+    "level-far"
+   ]
+  },
   "podzilla-quaras": {
    "creatures": [
     "Rootthing Amber Shaper",
@@ -3315,6 +3347,22 @@
     "title:Podzilla",
     "named:Quara Raider/Quara Plunderer/Quara Looter",
     "cyclopedia:3"
+   ]
+  },
+  "feru-juggernauts": {
+   "creatures": [
+    "Destroyer",
+    "Fury",
+    "Vexclaw",
+    "Hellflayer",
+    "Juggernaut"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Destruction",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Juggernaut"
    ]
   },
   "forsaken-crypt": {
@@ -3998,6 +4046,21 @@
     "cyclopedia:2"
    ]
   },
+  "feru-dt-seal-1": {
+   "creatures": [
+    "Dark Torturer",
+    "Vexclaw",
+    "Grimeleech",
+    "Hellflayer"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Damnation",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Damnation",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Torturer"
+   ]
+  },
   "buried-cathedral-sanguine": {
    "creatures": [
     "Ripper Spectre",
@@ -4066,6 +4129,21 @@
     "cyclopedia:3"
    ]
   },
+  "feru-dt-seal-2": {
+   "creatures": [
+    "Dark Torturer",
+    "Vexclaw",
+    "Grimeleech",
+    "Hellflayer"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Damnation",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Damnation",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Dark Torturer"
+   ]
+  },
   "undead-dragon-feru-seal": {
    "creatures": [
     "Blightwalker",
@@ -4079,6 +4157,22 @@
    "match": "curated-alias",
    "evidence": [
     "named:Undead Dragon"
+   ]
+  },
+  "juggernaut-feru-seal": {
+   "creatures": [
+    "Destroyer",
+    "Fury",
+    "Vexclaw",
+    "Hellflayer",
+    "Juggernaut"
+   ],
+   "city": "Roshamuul",
+   "wikiTitle": "Grounds of Destruction",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Grounds_of_Destruction",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Juggernaut"
    ]
   },
   "otherworld-sanguine": {

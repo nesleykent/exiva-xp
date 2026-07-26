@@ -28,6 +28,11 @@ const NOISE = new Set([
 
 const PHRASES = new Map([
   ['ab', "ab'dendriel"],
+  // Player shorthand for the prey itself — expanding it lets the evidence
+  // check see the creature the label is actually naming.
+  ['dt', 'dark torturer'],
+  ['dts', 'dark torturer'],
+  ['feru', 'ferumbras'],
   ['ankh', 'ankrahmun'],
   ['kazo', 'kazordoon'],
   ['lb', 'liberty bay'],
@@ -88,8 +93,12 @@ const PAGE_RULES = [
   [/\bferu(?:mbras)?.*pumin|pumin.*feru/i, 'Grounds of Deceit'],
   [/\bferu(?:mbras)?.*(?:infernatil|mazoran)|(?:infernatil|mazoran).*feru/i, 'Grounds of Fire'],
   [/\bferu(?:mbras)?.*(?:undead dragon)|undead dragon.*feru/i, 'Grounds of Undeath'],
-  [/\bferu(?:mbras)?.*juggernaut|juggernaut.*feru/i, 'Grounds of Despair'],
-  [/\bferu(?:mbras)?.*(?:dt|dark torturer)|(?:dt|dark torturer).*feru/i, 'Grounds of Destruction'],
+  // The seal rooms were crossed over. Grounds of Destruction is the one with
+  // the Juggernauts (with Destroyer, Fury, Vexclaw, Hellflayer); the Dark
+  // Torturers are in Grounds of Damnation. Grounds of Despair holds Spectres
+  // and Hands of Cursed Fate, neither of which either ground hunts.
+  [/\bferu(?:mbras)?.*juggernaut|juggernaut.*feru/i, 'Grounds of Destruction'],
+  [/\bferu(?:mbras)?.*(?:dt|dark torturer)|(?:dt|dark torturer).*feru/i, 'Grounds of Damnation'],
   [/\bferu(?:mbras)? way\b/i, 'Ferumbras Citadel'],
   [/\braubritters? castle\b/i, 'Stag Bastion'],
   [/\btrue asuras?\b/i, 'Asura Vaults'],
