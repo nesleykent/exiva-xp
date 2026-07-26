@@ -169,6 +169,42 @@ function numberInput(id) {
   return Number.isFinite(value) ? value : 0;
 }
 
+const FULL_STAMINA = 42 * 60;
+
+/** "17 hours and 28 minutes" — spelled out, the way the sentence reads. */
+function spokenDuration(minutes) {
+  const total = Math.max(0, Math.round(minutes));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  const parts = [];
+  if (h) parts.push(`${h} hour${h === 1 ? '' : 's'}`);
+  if (m || !h) parts.push(`${m} minute${m === 1 ? '' : 's'}`);
+  return parts.join(' and ');
+}
+
+/** "21:35" on the player's own clock. */
+const clock = (date) => new Intl.DateTimeFormat('en-GB', {
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+}).format(date);
+
+/** "on 26 July 2026 at 15:03", prefixed with today/tomorrow when it lands close. */
+function whenReady(from, ready) {
+  const dayGap = Math.round(
+    (new Date(ready.getFullYear(), ready.getMonth(), ready.getDate())
+      - new Date(from.getFullYear(), from.getMonth(), from.getDate())) / 86_400_000,
+  );
+  const date = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(ready);
+  const named = dayGap === 0 ? 'today, ' : dayGap === 1 ? 'tomorrow, ' : 'on ';
+  return `${named}${date} at ${clock(ready)}`;
+}
+
+/**
+ * Recovery is stated against the player's own clock rather than as a bare
+ * duration: "18h10m offline" still leaves you working out when you can log
+ * back in. Everything comes from the browser, so it is the user's real local
+ * time and timezone — no server clock, nothing to configure — and the whole
+ * block re-renders every minute so "now" never goes stale on an open tab.
+ */
 function renderStamina() {
   const current = parseStamina($('#stamina-current').value);
   const session = parseStamina($('#stamina-session').value);
@@ -178,14 +214,27 @@ function renderStamina() {
     return;
   }
   const plan = staminaProjection(current, session, target);
+  const now = new Date();
+  const ready = new Date(now.getTime() + plan.recovery.readyInMinutes * 60_000);
+  const goal = target >= FULL_STAMINA ? 'full stamina' : `${formatStamina(target)} stamina`;
+  const resting = plan.recovery.readyInMinutes > 0;
+
   $('#stamina-out').innerHTML = `
     <div class="tool-kpis">
       <span><b>${formatStamina(plan.afterHunt)}</b><small>after hunt</small></span>
       <span><b>${formatStamina(plan.recovery.needed)}</b><small>stamina to recover</small></span>
       <span><b>${hm(plan.recovery.readyInMinutes)}</b><small>offline time</small></span>
     </div>
+    <p class="stamina-plan">
+      <span class="dim">Now it's ${clock(now)}.</span>
+      ${resting
+    ? `You need to rest <b>${spokenDuration(plan.recovery.readyInMinutes)}</b> to get from
+       <b>${formatStamina(plan.afterHunt)}</b> to ${goal}.
+       If you start resting now, you will reach ${goal} <b>${whenReady(now, ready)}</b>.`
+    : `You are already at ${goal} after that hunt — no resting needed.`}
+    </p>
     ${plan.recovery.segments.length ? `<div class="mini-list">${plan.recovery.segments.map((s) => `
-      <span>${esc(s.label)}: +${formatStamina(s.gain)} in ${hm(s.offline)}</span>`).join('')}</div>` : '<span class="dim">Already at target after that hunt.</span>'}`;
+      <span>${esc(s.label)}: +${formatStamina(s.gain)} in ${hm(s.offline)}</span>`).join('')}</div>` : ''}`;
 }
 
 function chosenCreature() {
@@ -672,6 +721,9 @@ bindSortMenu('imb-tier', (key) => {
 ].forEach((id) => $(id).addEventListener('input', renderLevelTable));
 
 renderStamina();
+// Keep "Now it's …" honest on a tab left open. Only #stamina-out is rewritten,
+// so a half-typed stamina field is never disturbed.
+setInterval(renderStamina, 30_000);
 renderDamage();
 renderProfit();
 renderImbuementGrid();

@@ -406,6 +406,15 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   display: grid;
   gap: var(--s3);
 }
+/* The stamina plan reads as a sentence, so it gets prose measure and leading
+   rather than the tight metric styling around it. */
+.stamina-plan {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--fs-14);
+  line-height: 1.5;
+}
+.stamina-plan b { font-weight: 600; }
 .tool-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
