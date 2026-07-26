@@ -128,6 +128,13 @@ const PAGE_RULES = [
   [/\b(?:darashia dragon lords?|dragon lords? darashia)\b/i, "Kha'zeel Dragon Lairs/Kha'labal"],
   [/\b(?:poi dragon lords?|dragon lords? poi)\b/i, 'Pits of Inferno Dragon Lair'],
   [/\brotworms? liberty bay\b/i, 'Vandura Rotworm Cave'],
+  // Owner-reported. Chor lists a Crocodile and sits in Port Hope, but the
+  // Port Hope crocodile hunt is the Tiquanda cave; Crocodile lives in twenty
+  // places, so "has one" was never enough to identify a spot.
+  [/\bcrocodiles?.*(?:port hope|ph)|(?:port hope|ph).*crocodiles?/i, 'Tiquanda/Reptile and Crustacean Caves'],
+  // The Yalahar cultists (Novice/Acolyte/Adept/Enlightened of the Cult) are in
+  // the Magician Quarter's Research Centre — the Cult Cave is Liberty Bay's.
+  [/\b(?:yalahar cults?|cults? yalahar)\b/i, 'Magician Quarter/Research Centre'],
 ];
 
 const BROAD_PAGE_TITLES = new Set([
@@ -339,17 +346,32 @@ const AMBIENT_CONTEXT = /\bsurface\b|\bsurroundings?\b|\boutside\b|\babove groun
 const CREATURE_MODIFIERS = new Set(['young', 'adult', 'elder', 'lesser', 'greater', 'massive',
   'mean', 'ancient', 'giant', 'small', 'large', 'baby', 'juvenile', 'war']);
 
+/** Rank and role words shared across creatures — never identifying on their own. */
+const GENERIC_RANKS = new Set(['warrior', 'archer', 'scout', 'mage', 'magician', 'knight',
+  'priest', 'priestess', 'acolyte', 'assassin', 'vizier', 'guard', 'brute', 'savage', 'shaman',
+  'novice', 'adept', 'master', 'swordmaster', 'lord', 'warlock', 'hunter', 'commander',
+  'soldier', 'executioner', 'henchman', 'servant', 'champion', 'worker', 'queen', 'king']);
+
 /**
- * Does this ground label name this creature? Full name, or the genus alone —
- * Tibia names creatures genus-first and labels name the genus, not the rank,
- * so "Nagas" names a Naga Warrior and "Coryms" a Corym Charlatan.
+ * Does this ground label name this creature? Either the full name is spelled
+ * out, or the label carries a word distinctive enough to identify it.
+ *
+ * Tibia builds creature names as genus + rank, but the genus is not always
+ * first: "Naga Warrior" leads with it, "Novice of the Cult" ends with it. So
+ * rank words are discarded and any surviving word counts, which is what lets
+ * "Coryms Port Hope" reach a Corym Charlatan and "Yalahar Cults" reach the
+ * Novice/Adept/Enlightened of the Cult. Dropping ranks cannot make two
+ * different creatures collide dangerously — Crypt Warrior and Crypt Warden
+ * both reduce to "crypt" — because the spelled-out veto in pairingEvidence
+ * still requires the exact creature to be present.
  */
 function labelNamesCreature(label, creatureName) {
   const parts = words(creatureName);
   if (!parts.length) return false;
   if (parts.every((word) => label.has(word))) return true;
-  const genus = parts.find((word) => !CREATURE_MODIFIERS.has(word));
-  return !!genus && genus.length >= 4 && label.has(genus);
+  const distinctive = parts.filter((word) => word.length >= 4
+    && !CREATURE_MODIFIERS.has(word) && !GENERIC_RANKS.has(word));
+  return distinctive.some((word) => label.has(word));
 }
 
 /**
@@ -487,7 +509,7 @@ function huntLevel(wikitext) {
  * unrelated sources agreeing. That is what "Cobras" fails — the snake `Cobra`
  * is listed in the Pharaoh Tombs, never in the Cobra Bastion.
  */
-function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, bestiaryLocations, codex) {
+function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, bestiaryLocations, codex, articleCreatures = creatures) {
   const label = new Set(words(groundName));
   const reasons = [];
   let points = 0;
@@ -527,13 +549,7 @@ function pairingEvidence(groundName, title, wikitext, creatures, groundLevel, be
    * name match; requiring every word refused pairings that were right.
    * Size/age modifiers are skipped, since "Young Goanna" is a goanna.
    */
-  const named = creatures.filter((name) => {
-    const parts = words(name);
-    if (!parts.length) return false;
-    if (parts.every((word) => label.has(word))) return true;
-    const genus = parts.find((word) => !CREATURE_MODIFIERS.has(word));
-    return genus && genus.length >= 4 && label.has(genus);
-  });
+  const named = articleCreatures.filter((name) => labelNamesCreature(label, name));
   if (named.length) {
     points += 3 + named.length;
     strong = true;
@@ -672,14 +688,18 @@ for (const ground of grounds) {
   }
   /** Roster + evidence for one candidate article, ready to accept or reject. */
   const consider = (title, method) => {
-    let creatures = creatureList(pages.get(title), codex, ground.name);
+    const full = creatureList(pages.get(title), codex, ground.name);
+    let creatures = full;
     const hints = explicitCreatureHints(ground.name, codex, creatures);
     if (BROAD_PAGE_TITLES.has(title) && hints.length) creatures = hints;
     if (/oramond west \(no quara raid\)/i.test(ground.name)) {
       creatures = creatures.filter((name) => !/^Quara /i.test(name));
     }
+    // Evidence is judged against the article's own full roster, never the
+    // narrowed one: a broad page trimmed to the named prey must not lose the
+    // very creature that proves the pairing.
     const evidence = pairingEvidence(ground.name, title, pages.get(title),
-      creatures, ground.entryLevel ?? null, bestiaryLocations, codex);
+      creatures, ground.entryLevel ?? null, bestiaryLocations, codex, full);
     return { title, method, creatures, evidence };
   };
 
@@ -702,7 +722,13 @@ for (const ground of grounds) {
      */
     const searched = hits.map((title) => consider(title, 'wiki-search'))
       .filter((row) => row.creatures.length && row.evidence.points > 0
-        && row.evidence.reasons.some((r) => r.startsWith('named:') || r.startsWith('title:')))
+        && row.evidence.reasons.some((r) => r.startsWith('title:')
+          // A creature that lives almost everywhere cannot identify a spot.
+          // Crocodile is in twenty places, so "this article has a Crocodile"
+          // matched Chor for a hunt that belongs in the Tiquanda caves; only
+          // a reasonably location-specific creature counts as identification.
+          || (r.startsWith('named:') && r.slice(6).split('/')
+            .some((name) => (bestiaryLocations.get(name) || []).length <= 8))))
       .sort((a, b) => b.evidence.points - a.evidence.points);
     // A tie between two equally-evidenced articles identifies neither.
     if (searched.length && !(searched[1] && searched[1].evidence.points === searched[0].evidence.points)) {

@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-26T01:05:35.889Z",
+ "builtAt": "2026-07-26T01:19:45.515Z",
  "grounds": {
   "targuna-lizards": {
    "creatures": [
@@ -113,28 +113,21 @@
   },
   "crocodiles-port-hope": {
    "creatures": [
-    "Poison Spider",
-    "Bat",
-    "Cobra",
+    "Crab",
     "Crocodile",
-    "Larva",
-    "Lizard Sentinel",
-    "Lizard Templar",
-    "Lizard Snakecharmer",
-    "Scarab",
-    "Spit Nettle",
-    "Wyvern"
+    "Green Frog",
+    "Tortoise",
+    "Blood Crab",
+    "Carrion Worm"
    ],
    "city": "Port Hope",
-   "wikiTitle": "Chor",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Chor",
-   "match": "wiki-search",
+   "wikiTitle": "Tiquanda/Reptile and Crustacean Caves",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Tiquanda%2FReptile_and_Crustacean_Caves",
+   "match": "curated-alias",
    "evidence": [
     "named:Crocodile",
     "city:Port Hope",
-    "level",
-    "cyclopedia:7",
-    "corroborated"
+    "level"
    ]
   },
   "tarantulas-port-hope": {
@@ -152,24 +145,6 @@
    "evidence": [
     "named:Tarantula",
     "city:Port Hope",
-    "level"
-   ]
-  },
-  "yalahar-darashia-minotaurs-stealth-ring": {
-   "creatures": [
-    "Minotaur",
-    "Minotaur Archer",
-    "Minotaur Guard",
-    "Minotaur Mage",
-    "Mummy"
-   ],
-   "city": "Darashia",
-   "wikiTitle": "Dark Pyramid",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Dark_Pyramid",
-   "match": "wiki-search",
-   "evidence": [
-    "named:Minotaur/Minotaur Archer/Minotaur Guard/Minotaur Mage",
-    "city:Darashia",
     "level"
    ]
   },
@@ -201,7 +176,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
    "match": "curated-alias",
    "evidence": [
-    "named:Mutated Human",
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
     "city:Yalahar",
     "level"
    ]
@@ -326,7 +301,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
    "match": "curated-alias",
    "evidence": [
-    "named:Mutated Human",
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
     "city:Yalahar",
     "level"
    ]
@@ -406,6 +381,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Lion's Rock",
+    "named:Noble Lion/Roaring Lion",
     "level",
     "cyclopedia:13",
     "corroborated"
@@ -482,7 +458,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Alchemist Quarter",
-    "named:Mutated Rat",
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
     "level"
    ]
   },
@@ -512,6 +488,22 @@
     "named:Bog Raider",
     "city:Yalahar",
     "level"
+   ]
+  },
+  "yalahar-alchemist-outskirts": {
+   "creatures": [
+    "Bulltaur Brute",
+    "Bulltaur Alchemist",
+    "Bulltaur Forgepriest"
+   ],
+   "city": "Venore",
+   "wikiTitle": "Bulltaur Lair",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Bulltaur_Lair",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Bulltaur Alchemist",
+    "level-far",
+    "cyclopedia:3"
    ]
   },
   "hive-surface": {
@@ -584,7 +576,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
    "match": "curated-alias",
    "evidence": [
-    "named:Giant Spider",
+    "named:Poison Spider/Giant Spider",
     "city:Port Hope",
     "level"
    ]
@@ -695,7 +687,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Sea_Serpent_Area",
    "match": "strong-title",
    "evidence": [
-    "named:Sea Serpent",
+    "named:Young Sea Serpent/Sea Serpent",
     "level"
    ]
   },
@@ -862,7 +854,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
    "match": "curated-alias",
    "evidence": [
-    "named:Orc",
+    "named:Orc/Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic",
     "city:Edron"
    ]
   },
@@ -883,17 +875,19 @@
   },
   "replica-dungeon": {
    "creatures": [
-    "Iron Servant Replica",
-    "Golden Servant Replica",
-    "Diamond Servant Replica"
+    "Shaper Matriarch",
+    "Broken Shaper",
+    "Twisted Shaper",
+    "Stone Rhino"
    ],
    "city": "Port Hope",
-   "wikiTitle": "Replica Dungeon",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Replica_Dungeon",
-   "match": "access-cache",
+   "wikiTitle": "Astral Shaper Ruins",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Astral_Shaper_Ruins",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Replica Dungeon",
-    "level"
+    "level",
+    "cyclopedia:4",
+    "corroborated"
    ]
   },
   "lizard-chosens": {
@@ -905,7 +899,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Razachai",
    "match": "curated-alias",
    "evidence": [
-    "named:Lizard Chosen",
+    "named:Lizard Legionnaire/Lizard Dragon Priest/Lizard High Guard/Lizard Zaogun/Lizard Noble/Lizard Magistratus/Lizard Chosen",
     "level"
    ]
   },
@@ -1129,7 +1123,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Seacrest Grounds",
-    "named:Seacrest Serpent"
+    "named:Sea Serpent/Seacrest Serpent/Young Sea Serpent"
    ]
   },
   "draken-walls": {
@@ -1332,6 +1326,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Asura Palace",
+    "named:Dawnfire Asura/Midnight Asura/Frost Flower Asura/True Dawnfire Asura/True Midnight Asura/True Frost Flower Asura",
     "cyclopedia:7"
    ]
   },
@@ -1502,6 +1497,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults",
    "match": "access-cache",
    "evidence": [
+    "named:True Dawnfire Asura/True Midnight Asura/True Frost Flower Asura",
     "level",
     "cyclopedia:5",
     "corroborated"
@@ -1566,7 +1562,8 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Winter",
    "match": "access-cache",
    "evidence": [
-    "title:Court of Winter"
+    "title:Court of Winter",
+    "named:Crazed Winter Vanguard/Crazed Winter Rearguard"
    ]
   },
   "poi-infernatil-seal-fire": {
@@ -1718,6 +1715,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Court of Winter",
+    "named:Crazed Winter Vanguard/Crazed Winter Rearguard",
     "level"
    ]
   },
@@ -1770,7 +1768,8 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
    "match": "wiki-search",
    "evidence": [
-    "title:Pits of Inferno"
+    "title:Pits of Inferno",
+    "named:Son of Verminor"
    ]
   },
   "marapur-turtles-and-foam-stalkers": {
@@ -1783,7 +1782,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Great_Pearl_Fan_Reef",
    "match": "curated-alias",
    "evidence": [
-    "named:Foam Stalker",
+    "named:Foam Stalker/Two-Headed Turtle",
     "city:Marapur",
     "level",
     "cyclopedia:2"
@@ -1843,19 +1842,24 @@
   },
   "summer-court-for-first-timers-half-boxes": {
    "creatures": [
+    "Hibernal Moth",
     "Lacewing Moth",
-    "Crazed Summer Vanguard",
     "Crazed Summer Rearguard",
-    "Insane Siren",
+    "Crazed Summer Vanguard",
+    "Crazed Winter Rearguard",
+    "Crazed Winter Vanguard",
     "Arachnophobica",
+    "Insane Siren",
+    "Soul-Broken Harbinger",
     "Thanatursus"
    ],
    "city": "Feyrist",
-   "wikiTitle": "Court of Summer",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache",
+   "wikiTitle": "Dream Labyrinth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Court of Summer"
+    "named:Crazed Summer Rearguard/Crazed Summer Vanguard",
+    "cyclopedia:10"
    ]
   },
   "roshamuul-shockheads": {
@@ -1889,7 +1893,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
    "match": "curated-alias",
    "evidence": [
-    "named:Crypt Warden/Sphinx",
+    "named:Crypt Warden/Sphinx/Black Sphinx Acolyte",
     "city:Issavi",
     "cyclopedia:5",
     "corroborated"
@@ -1897,20 +1901,24 @@
   },
   "summer-court-full-boxing": {
    "creatures": [
+    "Hibernal Moth",
     "Lacewing Moth",
-    "Crazed Summer Vanguard",
     "Crazed Summer Rearguard",
-    "Insane Siren",
+    "Crazed Summer Vanguard",
+    "Crazed Winter Rearguard",
+    "Crazed Winter Vanguard",
     "Arachnophobica",
+    "Insane Siren",
+    "Soul-Broken Harbinger",
     "Thanatursus"
    ],
    "city": "Feyrist",
-   "wikiTitle": "Court of Summer",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache",
+   "wikiTitle": "Dream Labyrinth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Court of Summer",
-    "level-far"
+    "named:Crazed Summer Rearguard/Crazed Summer Vanguard",
+    "cyclopedia:10"
    ]
   },
   "cobra-bastion-for-beginners": {
@@ -1940,7 +1948,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
    "match": "curated-alias",
    "evidence": [
-    "named:Weretiger",
+    "named:Weretiger/White Weretiger",
     "cyclopedia:3"
    ]
   },
@@ -1955,7 +1963,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Murky_Caverns",
    "match": "curated-alias",
    "evidence": [
-    "named:Werecrocodile",
+    "named:Feral Werecrocodile/Werecrocodile",
     "cyclopedia:3"
    ]
   },
@@ -2041,6 +2049,20 @@
    "match": "access-cache",
    "evidence": [
     "title:Warzone 1"
+   ]
+  },
+  "carnisylvans": {
+   "creatures": [
+    "Dark Carnisylvan",
+    "Poisonous Carnisylvan",
+    "Hulking Carnisylvan"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Forest of Life",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Forest_of_Life",
+   "match": "cyclopedia-location",
+   "evidence": [
+    "named:Dark Carnisylvan/Poisonous Carnisylvan/Hulking Carnisylvan"
    ]
   },
   "otherworld": {
@@ -2190,7 +2212,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Ruins_of_Nuur",
    "match": "cyclopedia-location",
    "evidence": [
-    "named:Girtablilu Warrior"
+    "named:Venerable Girtablilu/Girtablilu Warrior"
    ]
   },
   "norcferatu-fortress": {
@@ -2406,7 +2428,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
    "match": "curated-alias",
    "evidence": [
-    "named:Mutated Human",
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
     "city:Yalahar",
     "level"
    ]
@@ -2624,6 +2646,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Forbidden Temple",
+    "named:Novice of the Cult/Acolyte of the Cult/Adept of the Cult/Enlightened of the Cult",
     "city:Ankrahmun",
     "level",
     "cyclopedia:8",
@@ -2692,6 +2715,24 @@
    "match": "access-cache",
    "evidence": [
     "title:Peninsula Tomb",
+    "level"
+   ]
+  },
+  "cults-yalahar": {
+   "creatures": [
+    "Novice of the Cult",
+    "Acolyte of the Cult",
+    "Adept of the Cult",
+    "Enlightened of the Cult",
+    "Serpent Spawn"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Magician Quarter/Research Centre",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Magician_Quarter%2FResearch_Centre",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Novice of the Cult/Acolyte of the Cult/Adept of the Cult/Enlightened of the Cult",
+    "city:Yalahar",
     "level"
    ]
   },
@@ -2946,7 +2987,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
    "match": "curated-alias",
    "evidence": [
-    "named:Orc"
+    "named:Orc/Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic"
    ]
   },
   "okolnir-frost-dragons": {
@@ -3011,7 +3052,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Talahu",
-    "named:Medusa",
+    "named:Serpent Spawn/Medusa",
     "cyclopedia:1"
    ]
   },
@@ -3190,7 +3231,7 @@
    "match": "access-cache",
    "evidence": [
     "title:Seacrest Grounds",
-    "named:Seacrest Serpent"
+    "named:Sea Serpent/Seacrest Serpent/Young Sea Serpent"
    ]
   },
   "book-world-chapter-ii": {
@@ -3246,7 +3287,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
    "match": "curated-alias",
    "evidence": [
-    "named:Weretiger",
+    "named:Weretiger/White Weretiger",
     "level",
     "cyclopedia:3",
     "corroborated"
@@ -3265,6 +3306,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Asura_Vaults",
    "match": "access-cache",
    "evidence": [
+    "named:True Dawnfire Asura/True Midnight Asura/True Frost Flower Asura",
     "level",
     "cyclopedia:5",
     "corroborated"
@@ -3328,7 +3370,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
    "match": "curated-alias",
    "evidence": [
-    "named:Weretiger",
+    "named:Weretiger/White Weretiger",
     "cyclopedia:3"
    ]
   },
@@ -3343,7 +3385,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Murky_Caverns",
    "match": "curated-alias",
    "evidence": [
-    "named:Werecrocodile",
+    "named:Feral Werecrocodile/Werecrocodile",
     "cyclopedia:3"
    ]
   },
@@ -3372,7 +3414,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
    "match": "curated-alias",
    "evidence": [
-    "named:Ripper Spectre",
+    "named:Ripper Spectre/Gazer Spectre/Burster Spectre",
     "level",
     "cyclopedia:4",
     "corroborated"
@@ -3495,19 +3537,26 @@
   },
   "summer-court": {
    "creatures": [
+    "Hibernal Moth",
     "Lacewing Moth",
-    "Crazed Summer Vanguard",
     "Crazed Summer Rearguard",
-    "Insane Siren",
+    "Crazed Summer Vanguard",
+    "Crazed Winter Rearguard",
+    "Crazed Winter Vanguard",
     "Arachnophobica",
+    "Insane Siren",
+    "Soul-Broken Harbinger",
     "Thanatursus"
    ],
    "city": "Feyrist",
-   "wikiTitle": "Court of Summer",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache",
+   "wikiTitle": "Dream Labyrinth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Court of Summer"
+    "named:Crazed Summer Rearguard/Crazed Summer Vanguard",
+    "level",
+    "cyclopedia:10",
+    "corroborated"
    ]
   },
   "marapur-naga": {
@@ -3627,7 +3676,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Ruins_of_Nuur",
    "match": "cyclopedia-location",
    "evidence": [
-    "named:Girtablilu Warrior"
+    "named:Venerable Girtablilu/Girtablilu Warrior"
    ]
   },
   "issavi-ogres": {
@@ -3715,7 +3764,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
    "match": "curated-alias",
    "evidence": [
-    "named:Crypt Warden/Sphinx",
+    "named:Crypt Warden/Sphinx/Black Sphinx Acolyte",
     "city:Issavi",
     "cyclopedia:5",
     "corroborated"
@@ -3921,19 +3970,16 @@
   },
   "minotaurs-darashia-stealth-ring": {
    "creatures": [
-    "Minotaur",
-    "Minotaur Archer",
-    "Minotaur Guard",
-    "Minotaur Mage",
-    "Mummy"
+    "Minotaur Cult Follower",
+    "Minotaur Cult Zealot",
+    "Minotaur Cult Prophet"
    ],
-   "city": "Darashia",
-   "wikiTitle": "Dark Pyramid",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Dark_Pyramid",
+   "city": "Thais",
+   "wikiTitle": "Minotaurs Cult Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Minotaurs_Cult_Cave",
    "match": "wiki-search",
    "evidence": [
-    "named:Minotaur/Minotaur Archer/Minotaur Guard/Minotaur Mage",
-    "city:Darashia",
+    "named:Minotaur Cult Follower/Minotaur Cult Zealot/Minotaur Cult Prophet",
     "level"
    ]
   },
@@ -3965,6 +4011,19 @@
     "level",
     "cyclopedia:9",
     "corroborated"
+   ]
+  },
+  "mutated-humans-alchemist": {
+   "creatures": [
+    "Mutated Human"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Alchemist Quarter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
+    "level"
    ]
   },
   "chor-runes": {
@@ -4082,6 +4141,20 @@
     "level"
    ]
   },
+  "mutated-rats-yalahar-alchemist": {
+   "creatures": [
+    "Mutated Rat"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Alchemist Quarter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
+    "city:Yalahar",
+    "level"
+   ]
+  },
   "meriana-gargoyle-cave-runes": {
    "creatures": [
     "Tarantula",
@@ -4100,6 +4173,38 @@
     "level",
     "cyclopedia:5",
     "corroborated"
+   ]
+  },
+  "mutated-rats-yalahar-arena": {
+   "creatures": [
+    "Mutated Rat"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Alchemist Quarter",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Alchemist_Quarter",
+   "match": "wiki-search",
+   "evidence": [
+    "named:Mutated Human/Mutated Rat/Mutated Bat/Mutated Tiger",
+    "city:Yalahar",
+    "level"
+   ]
+  },
+  "yalahar-cults": {
+   "creatures": [
+    "Novice of the Cult",
+    "Acolyte of the Cult",
+    "Adept of the Cult",
+    "Enlightened of the Cult",
+    "Serpent Spawn"
+   ],
+   "city": "Yalahar",
+   "wikiTitle": "Magician Quarter/Research Centre",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Magician_Quarter%2FResearch_Centre",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Novice of the Cult/Acolyte of the Cult/Adept of the Cult/Enlightened of the Cult",
+    "city:Yalahar",
+    "level"
    ]
   },
   "lb-quara-scouts": {
@@ -4152,21 +4257,6 @@
    "evidence": [
     "title:Killer Caiman Cave",
     "named:Killer Caiman",
-    "level"
-   ]
-  },
-  "kha-zeel-ancient-scarabs": {
-   "creatures": [
-    "Larva",
-    "Scarab",
-    "Ancient Scarab"
-   ],
-   "city": "Ankrahmun",
-   "wikiTitle": "Kha'zeel Scarab Lair",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Kha'zeel_Scarab_Lair",
-   "match": "wiki-search",
-   "evidence": [
-    "named:Scarab/Ancient Scarab",
     "level"
    ]
   },
@@ -4324,7 +4414,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
    "match": "curated-alias",
    "evidence": [
-    "named:Giant Spider",
+    "named:Poison Spider/Giant Spider",
     "city:Port Hope",
     "level"
    ]
@@ -4452,7 +4542,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Oskayaat_Undercity",
    "match": "curated-alias",
    "evidence": [
-    "named:Weretiger",
+    "named:Weretiger/White Weretiger",
     "cyclopedia:3"
    ]
   },
@@ -4471,6 +4561,22 @@
     "city:Roshamuul",
     "cyclopedia:3",
     "corroborated"
+   ]
+  },
+  "marapur-turtles": {
+   "creatures": [
+    "Foam Stalker",
+    "Two-Headed Turtle"
+   ],
+   "city": "Marapur",
+   "wikiTitle": "Great Pearl Fan Reef",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Great_Pearl_Fan_Reef",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Two-Headed Turtle",
+    "city:Marapur",
+    "level",
+    "cyclopedia:2"
    ]
   },
   "buried-cathedral": {
@@ -4588,7 +4694,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Kilmaresh_Catacombs",
    "match": "curated-alias",
    "evidence": [
-    "named:Crypt Warden/Sphinx",
+    "named:Crypt Warden/Sphinx/Black Sphinx Acolyte",
     "city:Issavi",
     "cyclopedia:5",
     "corroborated"
@@ -4638,6 +4744,20 @@
     "title:Grounds of Plague"
    ]
   },
+  "nimmersatt-s-dragons-7-bottom-floor": {
+   "creatures": [
+    "Dragolisk",
+    "Mega Dragon",
+    "Wardragon"
+   ],
+   "city": "Zao",
+   "wikiTitle": "Nimmersatt's Breeding Ground",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Mega Dragon"
+   ]
+  },
   "roshamuul-west": {
    "creatures": [
     "Shock Head",
@@ -4653,6 +4773,20 @@
     "city:Roshamuul",
     "cyclopedia:3",
     "corroborated"
+   ]
+  },
+  "nimmersatt-s-dragons-6-boss-floor": {
+   "creatures": [
+    "Dragolisk",
+    "Mega Dragon",
+    "Wardragon"
+   ],
+   "city": "Zao",
+   "wikiTitle": "Nimmersatt's Breeding Ground",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Nimmersatt's_Breeding_Ground",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Mega Dragon"
    ]
   },
   "feru-undead-dragon-seal": {
@@ -4682,7 +4816,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Brain_Grounds",
    "match": "curated-alias",
    "evidence": [
-    "named:Flimsy Lost Soul/Mean Lost Soul",
+    "named:Flimsy Lost Soul/Mean Lost Soul/Freakish Lost Soul",
     "city:Venore"
    ]
   },
@@ -4749,25 +4883,31 @@
    "match": "access-cache",
    "evidence": [
     "title:Court of Winter",
+    "named:Crazed Winter Vanguard/Crazed Winter Rearguard",
     "level-far"
    ]
   },
   "summer-court-sanguine": {
    "creatures": [
+    "Hibernal Moth",
     "Lacewing Moth",
-    "Crazed Summer Vanguard",
     "Crazed Summer Rearguard",
-    "Insane Siren",
+    "Crazed Summer Vanguard",
+    "Crazed Winter Rearguard",
+    "Crazed Winter Vanguard",
     "Arachnophobica",
+    "Insane Siren",
+    "Soul-Broken Harbinger",
     "Thanatursus"
    ],
    "city": "Feyrist",
-   "wikiTitle": "Court of Summer",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Court_of_Summer",
-   "match": "access-cache",
+   "wikiTitle": "Dream Labyrinth",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
+   "match": "cyclopedia-location",
    "evidence": [
-    "title:Court of Summer",
-    "level-far"
+    "named:Crazed Summer Rearguard/Crazed Summer Vanguard",
+    "level-far",
+    "cyclopedia:10"
    ]
   },
   "flimsy-lost-souls-port-hope": {
@@ -4781,7 +4921,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Netherworld",
    "match": "curated-alias",
    "evidence": [
-    "named:Flimsy Lost Soul/Mean Lost Soul",
+    "named:Flimsy Lost Soul/Mean Lost Soul/Freakish Lost Soul",
     "cyclopedia:3"
    ]
   },
@@ -5248,7 +5388,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Spider_Caves",
    "match": "curated-alias",
    "evidence": [
-    "named:Giant Spider",
+    "named:Poison Spider/Giant Spider",
     "city:Port Hope",
     "level"
    ]
@@ -5267,7 +5407,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt",
    "match": "wiki-search",
    "evidence": [
-    "named:Askarak Demon/Askarak Lord/Askarak Prince",
+    "named:Askarak Demon/Shaburak Demon/Askarak Lord/Askarak Prince",
     "level"
    ]
   },
@@ -5641,7 +5781,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Demonwar_Crypt",
    "match": "wiki-search",
    "evidence": [
-    "named:Shaburak Demon/Shaburak Lord/Shaburak Prince",
+    "named:Askarak Demon/Shaburak Demon/Shaburak Lord/Shaburak Prince",
     "level"
    ]
   },
@@ -5744,6 +5884,22 @@
    "evidence": [
     "title:Forbidden Lands",
     "named:Behemoth"
+   ]
+  },
+  "oramond-west-no-quara-raid": {
+   "creatures": [
+    "Glooth Blob",
+    "Rot Elemental",
+    "Blood Beast",
+    "Devourer"
+   ],
+   "city": "Rathleton",
+   "wikiTitle": "Oramond/Western Plains",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond%2FWestern_Plains",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Quara Constrictor Scout/Quara Pincher Scout/Quara Predator Scout/Quara Hydromancer Scout",
+    "level"
    ]
   },
   "oramond-west-quara-raid": {
@@ -5961,7 +6117,7 @@
    "wikiUrl": "https://tibia.fandom.com/wiki/Buried_Cathedral",
    "match": "curated-alias",
    "evidence": [
-    "named:Ripper Spectre",
+    "named:Ripper Spectre/Gazer Spectre/Burster Spectre",
     "cyclopedia:4"
    ]
   },
@@ -6027,25 +6183,39 @@
   },
   "soul-war-areas": {
    "creatures": [
-    "Hibernal Moth",
-    "Lacewing Moth",
-    "Crazed Summer Rearguard",
-    "Crazed Summer Vanguard",
-    "Crazed Winter Rearguard",
-    "Crazed Winter Vanguard",
-    "Arachnophobica",
-    "Insane Siren",
-    "Soul-Broken Harbinger",
-    "Thanatursus"
+    "Demon Skeleton",
+    "Spectre",
+    "Nightmare",
+    "Diabolic Imp",
+    "Defiler",
+    "Destroyer",
+    "Hellfire Fighter",
+    "Plaguesmith",
+    "Lost Soul",
+    "Fire Devil",
+    "Dark Torturer",
+    "Blightwalker",
+    "Phantasm",
+    "Betrayed Wraith",
+    "Hand of Cursed Fate",
+    "Hellhound",
+    "Demon",
+    "Son of Verminor",
+    "Banshee",
+    "Fury",
+    "Juggernaut",
+    "Lich",
+    "Undead Dragon",
+    "Dragon",
+    "Dragon Lord"
    ],
-   "city": "Feyrist",
-   "wikiTitle": "Dream Labyrinth",
-   "wikiUrl": "https://tibia.fandom.com/wiki/Dream_Labyrinth",
-   "match": "cyclopedia-location",
+   "city": "Venore",
+   "wikiTitle": "Pits of Inferno",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Pits_of_Inferno",
+   "match": "wiki-search",
    "evidence": [
-    "named:Soul-Broken Harbinger",
-    "level-far",
-    "cyclopedia:10"
+    "named:Lost Soul",
+    "level-far"
    ]
   },
   "rotten-blood": {
