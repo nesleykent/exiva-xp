@@ -43,6 +43,9 @@ const PHRASES = new Map([
   ['rosh', 'roshamuul'],
   ['rosha', 'roshamuul'],
   ['yala', 'yalahar'],
+  // Players write the werecreature hunts as "Were" — expanding it lets the
+  // evidence check see the Werewolf/Werebear the label means.
+  ['were', 'werewolf'],
 ]);
 
 const PAGE_RULES = [
@@ -125,6 +128,9 @@ const PAGE_RULES = [
   [/\bwater elementals?.*(?:port hope|ph)|(?:port hope|ph).*water elementals?/i, 'Tiquanda/Water Elemental Cave'],
   [/\b(?:krailos surface|krailos ogres?)\b/i, 'Krailos Steppe'],
   [/\boramond fury\b/i, 'Oramond Fury Dungeon'],
+  // No "Oramond Catacombs" article exists; the hunt is the deep Oramond
+  // Dungeon under Rathleton (Destroyer, Grim Reaper, Dark Torturer, Juggernaut).
+  [/\boramond catacombs?\b/i, 'Oramond Dungeon'],
   [/\b(?:darashia dragon lords?|dragon lords? darashia)\b/i, "Kha'zeel Dragon Lairs/Kha'labal"],
   [/\b(?:poi dragon lords?|dragon lords? poi)\b/i, 'Pits of Inferno Dragon Lair'],
   [/\brotworms? liberty bay\b/i, 'Vandura Rotworm Cave'],
@@ -145,11 +151,9 @@ const BROAD_PAGE_TITLES = new Set([
   'Cemetery Quarter',
   'Drefia',
   'Ferumbras Citadel',
-  'Feyrist Meadows',
   "Kha'zeel Dragon Lairs/Kha'labal",
   'Laguna Islands',
   'Museum of Tibian Arts',
-  'Old Fortress',
   'Razachai',
   'Talahu',
   'Vengoth',
@@ -165,11 +169,17 @@ const AMBIGUOUS_SUBAREAS = [
 
 const ROMAN = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9 };
 
+/** Articles head their floors in words — "Second Floor" is the ground's -2. */
+const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6,
+  seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
+
 function distinguishingNumber(value) {
   const digit = String(value).match(/(?:^|\s)(?:warzone\s+|chapter\s+)?-?(\d+)(?:\b|\/)/i);
   if (digit) return Number(digit[1]);
   const roman = String(value).match(/\b(?:warzone|chapter|world)\s*:?\s*(i{1,3}|iv|v|vi{0,3}|ix)\b/i);
-  return roman ? ROMAN[roman[1].toLowerCase()] : null;
+  if (roman) return ROMAN[roman[1].toLowerCase()];
+  const ordinal = String(value).match(/\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b/i);
+  return ordinal ? ORDINALS[ordinal[1].toLowerCase()] : null;
 }
 
 function readJson(name) {
@@ -417,9 +427,13 @@ function creatureList(wikitext, codex, groundName = '') {
     .map((block) => ({ context: listContext(wikitext, block), names: namesFromBlock(block, codex) }))
     .filter((list) => list.names.length);
   let selected = lists;
+  // Set when a rule or a prey-naming caption picked the sub-area outright.
+  let explicit = false;
   if (lists.length > 1) {
+    // The Hive has two "Outside" lists and only the ground floor is the
+    // surface hunt — the Small Towers hold Kollos, Spidris and the Overseer.
     const special = /\bhive surface\b/i.test(groundName)
-      ? lists.filter((list) => /\boutside\b/i.test(list.context))
+      ? lists.filter((list) => /ground floor outside/i.test(list.context))
       : /\binner hive stage ?2\b/i.test(groundName)
         ? lists.filter((list) => /\btowers?\b/i.test(list.context) && !/western tower underground/i.test(list.context))
         : /\bbanuta apes?|\bapes banuta\b/i.test(groundName)
@@ -445,8 +459,46 @@ function creatureList(wikitext, codex, groundName = '') {
     const nonBoss = lists.filter((list) => !/\bboss\b/i.test(list.context));
     const wantsSurface = /\bsurface\b|\boutside\b|\bsurroundings?\b/i.test(groundName);
     const grounded = nonBoss.filter((list) => !AMBIENT_CONTEXT.test(list.context));
-    const regular = !wantsSurface && grounded.length ? grounded : nonBoss;
-    if (special.length) selected = special;
+    /**
+     * A surface hunt wants the surface lists, not every list. "Feyrist
+     * Surface" is the day and night meadow, not the nightmare cave below it,
+     * and "Hive Surface" is the ground floor outside, not the Kollos and
+     * Spidris within. Falling back to everything only hid the distinction.
+     */
+    const surfaceLists = nonBoss.filter((list) => AMBIENT_CONTEXT.test(list.context));
+    const regular = wantsSurface
+      ? (surfaceLists.length ? surfaceLists : nonBoss)
+      : (grounded.length ? grounded : nonBoss);
+    /**
+     * A caption naming the ground's own prey is the most precise signal an
+     * article offers: "Forbidden Lands' Behemoth cave creatures" is exactly
+     * the Behemoth hunt, while the ground-level list beside it is sixteen
+     * animals that happen to share the region.
+     */
+    const labelWords = new Set(words(groundName));
+    /**
+     * Words that identify the prey itself, taken from the creatures the label
+     * names. A caption carrying one of these points at the exact sub-area:
+     * "Forbidden Lands' Behemoth cave creatures" is the Behemoth hunt, while
+     * "ground level creatures" beside it is sixteen animals sharing a region.
+     * Matching on any shared caption word was too loose — both captions
+     * mention "Forbidden Lands".
+     */
+    const preyWords = new Set(nonBoss
+      .flatMap((list) => list.names)
+      .filter((name) => labelNamesCreature(labelWords, name))
+      .flatMap((name) => words(name))
+      .filter((word) => labelWords.has(word)));
+    const captioned = preyWords.size
+      ? nonBoss.filter((list) => list.context
+        && words(list.context).some((word) => preyWords.has(word)))
+      : [];
+
+    // `special` stays ahead of it: a hand-written rule already knows which
+    // sub-area a ground means, and "Hive Surface" must not be lured into the
+    // inner hive by a caption that also says "hive".
+    if (special.length) { selected = special; explicit = true; }
+    else if (captioned.length && captioned.length < nonBoss.length) { selected = captioned; explicit = true; }
     else if (numbered.length) selected = numbered;
     else if (sectioned.length) selected = sectioned;
     else if (regular.length) selected = regular;
@@ -459,10 +511,15 @@ function creatureList(wikitext, codex, groundName = '') {
    * the one creature the ground is named after, which then read as a wrong
    * pairing. A list holding named prey is never ambient, whatever its caption.
    */
-  if (groundName) {
+  if (groundName && !explicit) {
     const label = new Set(words(groundName));
     const chosen = new Set(selected);
-    const restored = lists.filter((list) => !chosen.has(list)
+    const already = new Set(selected.flatMap((list) => list.names));
+    const havePrey = [...already].some((name) => labelNamesCreature(label, name));
+    // Only rescue prey that is actually missing. Restoring unconditionally
+    // dragged the inner hive back into "Hive Surface", because Hive Overseer
+    // answers to the same "hive" the label uses.
+    const restored = havePrey ? [] : lists.filter((list) => !chosen.has(list)
       && list.names.some((name) => labelNamesCreature(label, name)));
     if (restored.length) selected = [...selected, ...restored];
   }

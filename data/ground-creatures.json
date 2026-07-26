@@ -1,6 +1,6 @@
 {
  "source": "tibia.fandom.com Category:Hunting Places — Infobox Hunt city + non-ambient CreatureList rosters",
- "builtAt": "2026-07-26T01:19:45.515Z",
+ "builtAt": "2026-07-26T02:16:23.897Z",
  "grounds": {
   "targuna-lizards": {
    "creatures": [
@@ -236,47 +236,6 @@
   },
   "pirates-yalahar": {
    "creatures": [
-    "Orc Spearman",
-    "Orc Warrior",
-    "Orc Shaman",
-    "Orc Berserker",
-    "Orc Warlord",
-    "Hydra",
-    "Serpent Spawn",
-    "Dragon",
-    "Elf Arcanist",
-    "Elf Scout",
-    "Elf",
-    "Minotaur",
-    "Minotaur Mage",
-    "Minotaur Guard",
-    "Minotaur Archer",
-    "Cyclops",
-    "Cat",
-    "Dog",
-    "Pig",
-    "Troll",
-    "Goblin",
-    "Swamp Troll",
-    "Crazed Beggar",
-    "Troll Champion",
-    "Dworc Fleshhunter",
-    "Dworc Venomsniper",
-    "Smuggler",
-    "Amazon",
-    "Wild Warrior",
-    "Poacher",
-    "Bandit",
-    "Gang Member",
-    "Valkyrie",
-    "Lizard Sentinel",
-    "Lizard Templar",
-    "Barbarian Headsplitter",
-    "Stalker",
-    "Assassin",
-    "Dark Monk",
-    "Hunter",
-    "Dwarf Guard",
     "Pirate Marauder",
     "Pirate Cutthroat",
     "Pirate Buccaneer",
@@ -419,7 +378,9 @@
   },
   "old-fortress-1-bonebeasts": {
    "creatures": [
-    "Bonebeast"
+    "Bonebeast",
+    "Necromancer",
+    "Vicious Squire"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -512,12 +473,7 @@
     "Insectoid Worker",
     "Waspoid",
     "Crawler",
-    "Ladybug",
-    "Spitter",
-    "Kollos",
-    "Spidris",
-    "Spidris Elite",
-    "Hive Overseer"
+    "Ladybug"
    ],
    "city": "Gray Beach",
    "wikiTitle": "The Hive",
@@ -525,7 +481,6 @@
    "match": "curated-alias",
    "evidence": [
     "title:The Hive",
-    "named:Hive Overseer",
     "level"
    ]
   },
@@ -778,7 +733,6 @@
   },
   "grimvale-4": {
    "creatures": [
-    "Werebadger",
     "Wereboar",
     "Werebear",
     "Werewolf"
@@ -790,7 +744,7 @@
    "evidence": [
     "title:Grimvale",
     "level",
-    "cyclopedia:4",
+    "cyclopedia:3",
     "corroborated"
    ]
   },
@@ -828,49 +782,37 @@
   },
   "edron-orc-cults": {
    "creatures": [
-    "Poison Spider",
-    "Orc",
-    "Orc Spearman",
-    "Orc Warrior",
-    "Orc Shaman",
-    "Orc Berserker",
-    "Orc Leader",
     "Orc Cult Minion",
     "Orc Cult Inquisitor",
     "Orc Cult Priest",
     "Orc Cult Fanatic",
     "Orc Cultist",
-    "Orclops Doomhauler",
-    "Giant Spider",
-    "Deer",
-    "Badger",
-    "Snake",
-    "Bat",
-    "Fox",
-    "Wisp"
+    "Orclops Doomhauler"
    ],
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
    "match": "curated-alias",
    "evidence": [
-    "named:Orc/Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic",
+    "named:Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic",
     "city:Edron"
    ]
   },
   "dark-faun-cave": {
    "creatures": [
+    "Boogy",
     "Dark Faun",
-    "Faun"
+    "Twisted Pooka"
    ],
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
    "match": "curated-alias",
    "evidence": [
-    "named:Dark Faun/Faun",
+    "named:Dark Faun",
     "level",
-    "cyclopedia:2"
+    "cyclopedia:3",
+    "corroborated"
    ]
   },
   "replica-dungeon": {
@@ -1411,9 +1353,7 @@
     "Lost Soul",
     "Dark Torturer",
     "Undead Dragon",
-    "Fury",
-    "Spectre",
-    "Nightmare"
+    "Fury"
    ],
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
@@ -1489,8 +1429,7 @@
     "Hellspawn",
     "True Dawnfire Asura",
     "True Midnight Asura",
-    "True Frost Flower Asura",
-    "Hellhound"
+    "True Frost Flower Asura"
    ],
    "city": "Port Hope",
    "wikiTitle": "Asura Vaults",
@@ -1499,7 +1438,7 @@
    "evidence": [
     "named:True Dawnfire Asura/True Midnight Asura/True Frost Flower Asura",
     "level",
-    "cyclopedia:5",
+    "cyclopedia:4",
     "corroborated"
    ]
   },
@@ -1737,31 +1676,10 @@
   },
   "poi-verminor-seal": {
    "creatures": [
-    "Demon Skeleton",
-    "Spectre",
-    "Nightmare",
-    "Diabolic Imp",
     "Defiler",
-    "Destroyer",
-    "Hellfire Fighter",
     "Plaguesmith",
-    "Lost Soul",
-    "Fire Devil",
-    "Dark Torturer",
-    "Blightwalker",
-    "Phantasm",
-    "Betrayed Wraith",
-    "Hand of Cursed Fate",
-    "Hellhound",
-    "Demon",
     "Son of Verminor",
-    "Banshee",
-    "Fury",
-    "Juggernaut",
-    "Lich",
-    "Undead Dragon",
-    "Dragon",
-    "Dragon Lord"
+    "Blightwalker"
    ],
    "city": "Venore",
    "wikiTitle": "Pits of Inferno",
@@ -1984,6 +1902,33 @@
     "corroborated"
    ]
   },
+  "oramond-catacombs": {
+   "creatures": [
+    "Glooth Golem",
+    "Rustheap Golem",
+    "Worker Golem",
+    "War Golem",
+    "Minotaur Amazon",
+    "Execowtioner",
+    "Moohtant",
+    "Destroyer",
+    "Hellspawn",
+    "Grim Reaper",
+    "Dark Torturer",
+    "Demon",
+    "Hellhound",
+    "Juggernaut"
+   ],
+   "city": "Rathleton",
+   "wikiTitle": "Oramond Dungeon",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Oramond_Dungeon",
+   "match": "curated-alias",
+   "evidence": [
+    "level",
+    "cyclopedia:3",
+    "corroborated"
+   ]
+  },
   "warzone-2": {
    "creatures": [
     "Lost Berserker",
@@ -2099,9 +2044,7 @@
   "flimsy-venore-1": {
    "creatures": [
     "Grim Reaper",
-    "Flimsy Lost Soul",
-    "Mean Lost Soul",
-    "Freakish Lost Soul"
+    "Flimsy Lost Soul"
    ],
    "city": "Venore",
    "wikiTitle": "Brain Grounds",
@@ -2536,7 +2479,9 @@
   },
   "edron-old-fortress-1-bonebeasts": {
    "creatures": [
-    "Bonebeast"
+    "Bonebeast",
+    "Necromancer",
+    "Vicious Squire"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -2562,10 +2507,7 @@
     "Pirate Cutthroat",
     "Pirate Buccaneer",
     "Pirate Corsair",
-    "Pirat Cutthroat",
-    "Jellyfish",
-    "Water Elemental",
-    "Shark"
+    "Pirat Cutthroat"
    ],
    "city": "Rathleton",
    "wikiTitle": "Krailos Steppe",
@@ -2573,7 +2515,7 @@
    "match": "curated-alias",
    "evidence": [
     "level",
-    "cyclopedia:15",
+    "cyclopedia:12",
     "corroborated"
    ]
   },
@@ -2739,9 +2681,7 @@
   "werebadgers-grimvale-1": {
    "creatures": [
     "Werebadger",
-    "Wereboar",
-    "Werebear",
-    "Werewolf"
+    "Wereboar"
    ],
    "city": "Edron",
    "wikiTitle": "Grimvale",
@@ -2751,8 +2691,7 @@
     "title:Grimvale",
     "named:Werebadger",
     "level",
-    "cyclopedia:4",
-    "corroborated"
+    "cyclopedia:2"
    ]
   },
   "liberty-bay-bonelord-cave-full-lap": {
@@ -2823,6 +2762,24 @@
     "level"
    ]
   },
+  "edron-south-were": {
+   "creatures": [
+    "Werefox",
+    "Werebadger",
+    "Werewolf",
+    "Wereboar",
+    "Werebear"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Edron Lycanthropes Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Lycanthropes_Cave",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werewolf",
+    "city:Edron",
+    "level"
+   ]
+  },
   "werehyaenas-1": {
    "creatures": [
     "Lich",
@@ -2849,9 +2806,7 @@
     "Swan Maiden",
     "Boogy",
     "Dark Faun",
-    "Twisted Pooka",
-    "Enfeebled Silencer",
-    "Weakened Frazzlemaw"
+    "Twisted Pooka"
    ],
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
@@ -2860,7 +2815,7 @@
    "evidence": [
     "city:Feyrist",
     "level",
-    "cyclopedia:12",
+    "cyclopedia:10",
     "corroborated"
    ]
   },
@@ -2915,8 +2870,7 @@
     "Quara Constrictor",
     "Quara Predator",
     "Quara Pincher",
-    "Quara Hydromancer",
-    "Crab"
+    "Quara Hydromancer"
    ],
    "city": "Liberty Bay",
    "wikiTitle": "Quara Grotto",
@@ -2961,33 +2915,19 @@
   },
   "orc-cults": {
    "creatures": [
-    "Poison Spider",
-    "Orc",
-    "Orc Spearman",
-    "Orc Warrior",
-    "Orc Shaman",
-    "Orc Berserker",
-    "Orc Leader",
     "Orc Cult Minion",
     "Orc Cult Inquisitor",
     "Orc Cult Priest",
     "Orc Cult Fanatic",
     "Orc Cultist",
-    "Orclops Doomhauler",
-    "Giant Spider",
-    "Deer",
-    "Badger",
-    "Snake",
-    "Bat",
-    "Fox",
-    "Wisp"
+    "Orclops Doomhauler"
    ],
    "city": "Edron",
    "wikiTitle": "Edron Orc Cave",
    "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Orc_Cave",
    "match": "curated-alias",
    "evidence": [
-    "named:Orc/Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic"
+    "named:Orc Cult Minion/Orc Cult Inquisitor/Orc Cult Priest/Orc Cult Fanatic"
    ]
   },
   "okolnir-frost-dragons": {
@@ -4218,8 +4158,7 @@
     "Quara Constrictor",
     "Quara Predator",
     "Quara Pincher",
-    "Quara Hydromancer",
-    "Crab"
+    "Quara Hydromancer"
    ],
    "city": "Liberty Bay",
    "wikiTitle": "Quara Grotto",
@@ -4301,8 +4240,7 @@
     "Quara Constrictor",
     "Quara Predator",
     "Quara Pincher",
-    "Quara Hydromancer",
-    "Crab"
+    "Quara Hydromancer"
    ],
    "city": "Liberty Bay",
    "wikiTitle": "Quara Grotto",
@@ -4391,7 +4329,15 @@
   },
   "edron-old-fortress-heroes": {
    "creatures": [
-    "Hero"
+    "Bonebeast",
+    "Necromancer",
+    "Vicious Squire",
+    "Blood Priest",
+    "Lich",
+    "Hero",
+    "Renegade Knight",
+    "Vile Grandmaster",
+    "Undead Gladiator"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -5319,10 +5265,7 @@
     "Pirate Cutthroat",
     "Pirate Buccaneer",
     "Pirate Corsair",
-    "Pirat Cutthroat",
-    "Jellyfish",
-    "Water Elemental",
-    "Shark"
+    "Pirat Cutthroat"
    ],
    "city": "Rathleton",
    "wikiTitle": "Krailos Steppe",
@@ -5331,7 +5274,7 @@
    "evidence": [
     "named:Ogre Shaman/Ogre Brute/Ogre Savage",
     "level",
-    "cyclopedia:15",
+    "cyclopedia:12",
     "corroborated"
    ]
   },
@@ -5432,9 +5375,33 @@
     "corroborated"
    ]
   },
+  "edron-were-south": {
+   "creatures": [
+    "Werefox",
+    "Werebadger",
+    "Werewolf",
+    "Wereboar",
+    "Werebear"
+   ],
+   "city": "Edron",
+   "wikiTitle": "Edron Lycanthropes Cave",
+   "wikiUrl": "https://tibia.fandom.com/wiki/Edron_Lycanthropes_Cave",
+   "match": "curated-alias",
+   "evidence": [
+    "named:Werewolf",
+    "city:Edron",
+    "level"
+   ]
+  },
   "edron-old-fortress-heroes-2-3": {
    "creatures": [
-    "Hero"
+    "Necromancer",
+    "Blood Priest",
+    "Lich",
+    "Vicious Squire",
+    "Hero",
+    "Renegade Knight",
+    "Vile Grandmaster"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -5511,17 +5478,19 @@
   },
   "dark-faun-cave-feyrist": {
    "creatures": [
+    "Boogy",
     "Dark Faun",
-    "Faun"
+    "Twisted Pooka"
    ],
    "city": "Feyrist",
    "wikiTitle": "Feyrist Meadows",
    "wikiUrl": "https://tibia.fandom.com/wiki/Feyrist_Meadows",
    "match": "curated-alias",
    "evidence": [
-    "named:Dark Faun/Faun",
+    "named:Dark Faun",
     "city:Feyrist",
-    "cyclopedia:2"
+    "cyclopedia:3",
+    "corroborated"
    ]
   },
   "crumbling-caverns": {
@@ -5550,9 +5519,7 @@
     "Lost Soul",
     "Dark Torturer",
     "Undead Dragon",
-    "Fury",
-    "Spectre",
-    "Nightmare"
+    "Fury"
    ],
    "city": "Rathleton",
    "wikiTitle": "Oramond Fury Dungeon",
@@ -5830,7 +5797,15 @@
   },
   "edron-old-fortress-3-hero": {
    "creatures": [
-    "Hero"
+    "Bonebeast",
+    "Necromancer",
+    "Undead Gladiator",
+    "Blood Priest",
+    "Lich",
+    "Vicious Squire",
+    "Hero",
+    "Renegade Knight",
+    "Vile Grandmaster"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -5845,7 +5820,13 @@
   },
   "edron-old-fortress-2-hero": {
    "creatures": [
-    "Hero"
+    "Necromancer",
+    "Blood Priest",
+    "Lich",
+    "Vicious Squire",
+    "Hero",
+    "Renegade Knight",
+    "Vile Grandmaster"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
@@ -5860,21 +5841,6 @@
   },
   "behemoths-forbidden-lands": {
    "creatures": [
-    "Snake",
-    "Crab",
-    "Cobra",
-    "Centipede",
-    "Tiger",
-    "Spit Nettle",
-    "Slime",
-    "Tarantula",
-    "Carniphila",
-    "Stone Golem",
-    "Terror Bird",
-    "Elephant",
-    "Massive Earth Elemental",
-    "Giant Spider",
-    "Hydra",
     "Behemoth"
    ],
    "city": "Port Hope",
@@ -6030,7 +5996,15 @@
   },
   "old-fortress-heroes": {
    "creatures": [
-    "Hero"
+    "Bonebeast",
+    "Necromancer",
+    "Vicious Squire",
+    "Blood Priest",
+    "Lich",
+    "Hero",
+    "Renegade Knight",
+    "Vile Grandmaster",
+    "Undead Gladiator"
    ],
    "city": "Edron",
    "wikiTitle": "Old Fortress",
