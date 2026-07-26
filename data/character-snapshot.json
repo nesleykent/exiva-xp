@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2105,
-    "value": 155196275237
+    "value": 155203255500
    },
    {
     "rank": 8,
@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1867,
-    "value": 108173349099
+    "value": 108180327974
    },
    {
     "rank": 11,
@@ -153,8 +153,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1562,
-    "value": 63366899952
+    "level": 1563,
+    "value": 63482553225
    },
    {
     "rank": 20,
@@ -334,6 +334,14 @@
    },
    {
     "rank": 42,
+    "name": "Akkao",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1244,
+    "value": 31989622625
+   },
+   {
+    "rank": 43,
     "name": "Ell Droid Cansado",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -341,20 +349,12 @@
     "value": 31985991191
    },
    {
-    "rank": 43,
+    "rank": 44,
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1244,
     "value": 31932045790
-   },
-   {
-    "rank": 44,
-    "name": "Akkao",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1243,
-    "value": 31901168429
    },
    {
     "rank": 45,
