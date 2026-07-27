@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-07-27T20:44:04.626Z",
+ "updatedAt": "2026-07-27T22:19:42.487Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
@@ -36,7 +36,7 @@
   "magiclevel": 214,
   "shielding": 332,
   "swordfighting": 66,
-  "weeklytasks": 2
+  "weeklytasks": 3
  },
  "skillRanks": {
   "achievements": 79,
@@ -54,7 +54,7 @@
   "magiclevel": 214,
   "shielding": 332,
   "swordfighting": 66,
-  "weeklytasks": 2
+  "weeklytasks": 3
  },
  "deaths": []
 }
