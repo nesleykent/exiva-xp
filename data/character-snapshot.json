@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2585,
-    "value": 287526647614
+    "value": 287529797614
    },
    {
     "rank": 3,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1557,
-    "value": 62687499693
+    "value": 62718774693
    },
    {
     "rank": 21,
@@ -182,19 +182,19 @@
    },
    {
     "rank": 23,
-    "name": "Ma ri",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1478,
-    "value": 53634020006
-   },
-   {
-    "rank": 24,
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1478,
-    "value": 53623105483
+    "value": 53644930483
+   },
+   {
+    "rank": 24,
+    "name": "Ma ri",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1478,
+    "value": 53634022031
    },
    {
     "rank": 25,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1247,
-    "value": 32189666488
+    "value": 32206868461
    },
    {
     "rank": 43,
