@@ -34,7 +34,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2222,
-    "value": 182450373051
+    "value": 182525971685
    },
    {
     "rank": 5,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1693,
-    "value": 80679551235
+    "value": 80725330019
    },
    {
     "rank": 14,
@@ -142,19 +142,19 @@
    },
    {
     "rank": 18,
+    "name": "Sojoker",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1571,
+    "value": 64485729801
+   },
+   {
+    "rank": 19,
     "name": "Vyttu",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1571,
     "value": 64480035012
-   },
-   {
-    "rank": 19,
-    "name": "Sojoker",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1571,
-    "value": 64405073515
    },
    {
     "rank": 20,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1543,
-    "value": 61088279101
+    "value": 61096137881
    },
    {
     "rank": 22,
@@ -282,7 +282,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1334,
-    "value": 39399620700
+    "value": 39401069962
    },
    {
     "rank": 36,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1252,
-    "value": 32615991234
+    "value": 32627427642
    },
    {
     "rank": 41,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1248,
-    "value": 32248738730
+    "value": 32250995886
    },
    {
     "rank": 43,
@@ -346,7 +346,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1246,
-    "value": 32156091740
+    "value": 32156093071
    },
    {
     "rank": 44,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1225,
-    "value": 30496405426
+    "value": 30509143148
    },
    {
     "rank": 48,
@@ -394,7 +394,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1205,
-    "value": 29019046649
+    "value": 29034173589
    },
    {
     "rank": 50,
