@@ -26,7 +26,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2311,
-    "value": 205210632500
+    "value": 205250190312
    },
    {
     "rank": 4,
@@ -34,7 +34,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2227,
-    "value": 183739605979
+    "value": 183779163791
    },
    {
     "rank": 5,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2112,
-    "value": 156774727644
+    "value": 156779430071
    },
    {
     "rank": 8,
@@ -105,8 +105,8 @@
     "name": "Lekisna",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1697,
-    "value": 81240448253
+    "level": 1698,
+    "value": 81349052764
    },
    {
     "rank": 14,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1624,
-    "value": 71185660816
+    "value": 71187356142
    },
    {
     "rank": 16,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1459,
-    "value": 51578337979
+    "value": 51595101384
    },
    {
     "rank": 26,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1451,
-    "value": 50752485121
+    "value": 50752540946
    },
    {
     "rank": 27,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1426,
-    "value": 48135631933
+    "value": 48139397351
    },
    {
     "rank": 30,
@@ -282,7 +282,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1334,
-    "value": 39436651630
+    "value": 39467596249
    },
    {
     "rank": 36,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1254,
-    "value": 32724791483
+    "value": 32725017318
    },
    {
     "rank": 41,
@@ -382,19 +382,19 @@
    },
    {
     "rank": 48,
+    "name": "Shillyni",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1207,
+    "value": 29225153164
+   },
+   {
+    "rank": 49,
     "name": "Treko Coconut Seller",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1207,
     "value": 29223327016
-   },
-   {
-    "rank": 49,
-    "name": "Shillyni",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1207,
-    "value": 29220742110
    },
    {
     "rank": 50,
