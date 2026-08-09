@@ -214,19 +214,19 @@
    },
    {
     "rank": 27,
+    "name": "Luuh Druid",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1430,
+    "value": 48558224050
+   },
+   {
+    "rank": 28,
     "name": "David Mithrandir",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1430,
     "value": 48556299950
-   },
-   {
-    "rank": 28,
-    "name": "Luuh Druid",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1429,
-    "value": 48528420878
    },
    {
     "rank": 29,
