@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2590,
-    "value": 289183541518
+    "value": 289183998997
    },
    {
     "rank": 3,
@@ -26,7 +26,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2311,
-    "value": 205254978222
+    "value": 205404062945
    },
    {
     "rank": 4,
@@ -66,7 +66,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1937,
-    "value": 120906012376
+    "value": 120908806301
    },
    {
     "rank": 9,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1759,
-    "value": 90482887972
+    "value": 90483355234
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1728,
-    "value": 85702978365
+    "value": 85749854150
    },
    {
     "rank": 13,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1688,
-    "value": 80013470480
+    "value": 80013996688
    },
    {
     "rank": 15,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1593,
-    "value": 67192370263
+    "value": 67192755232
    },
    {
     "rank": 18,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1547,
-    "value": 61513166700
+    "value": 61524376791
    },
    {
     "rank": 22,
@@ -178,7 +178,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1535,
-    "value": 60150487881
+    "value": 60153241484
    },
    {
     "rank": 23,
@@ -209,8 +209,8 @@
     "name": "Nezuko Kerochimas",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1451,
-    "value": 50752540959
+    "level": 1452,
+    "value": 50845560003
    },
    {
     "rank": 27,
@@ -266,7 +266,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1356,
-    "value": 41433270691
+    "value": 41435032684
    },
    {
     "rank": 34,
@@ -314,7 +314,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1271,
-    "value": 34070928150
+    "value": 34086888822
    },
    {
     "rank": 40,
@@ -337,8 +337,8 @@
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1249,
-    "value": 32396081812
+    "level": 1250,
+    "value": 32398807715
    },
    {
     "rank": 43,
@@ -386,7 +386,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1207,
-    "value": 29229175658
+    "value": 29229176254
    },
    {
     "rank": 49,
@@ -401,8 +401,8 @@
     "name": "Erto Mage",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1200,
-    "value": 28711583104
+    "level": 1201,
+    "value": 28730806086
    }
   ],
   "highscore_page": {
