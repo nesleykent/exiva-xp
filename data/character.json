@@ -1,14 +1,14 @@
 {
- "updatedAt": "2026-08-10T04:50:41.716Z",
+ "updatedAt": "2026-08-10T10:29:25.670Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
  "vocation": "Elder Druid",
- "level": 508,
+ "level": 510,
  "world": "Gentebra",
  "residence": "Thais",
  "achievementPoints": 714,
- "lastLogin": "2026-08-10T03:34:08Z",
+ "lastLogin": "2026-08-10T09:12:01Z",
  "accountStatus": "Premium Account",
  "accountCreated": "2003-08-01T22:04:00Z",
  "loyaltyTitle": "Warrior of Tibia",
@@ -24,11 +24,11 @@
   "axefighting": 190,
   "bosspoints": 288,
   "bountypoints": 49,
-  "charmpoints": 169,
+  "charmpoints": 167,
   "clubfighting": 501,
   "distancefighting": null,
   "dromescore": 209,
-  "experience": 291,
+  "experience": 290,
   "fishing": 3,
   "fistfighting": 4,
   "goshnarstaint": null,
@@ -36,14 +36,14 @@
   "magiclevel": 216,
   "shielding": 339,
   "swordfighting": 67,
-  "weeklytasks": 3
+  "weeklytasks": 1
  },
  "skillRanks": {
   "achievements": 78,
   "axefighting": 190,
   "bosspoints": 288,
   "bountypoints": 49,
-  "charmpoints": 169,
+  "charmpoints": 167,
   "clubfighting": 501,
   "distancefighting": null,
   "dromescore": 209,
@@ -54,7 +54,7 @@
   "magiclevel": 216,
   "shielding": 339,
   "swordfighting": 67,
-  "weeklytasks": 3
+  "weeklytasks": 1
  },
  "deaths": []
 }
