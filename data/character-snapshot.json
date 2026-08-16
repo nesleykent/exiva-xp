@@ -209,8 +209,8 @@
     "name": "Nezuko Kerochimas",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1458,
-    "value": 51543672594
+    "level": 1460,
+    "value": 51662815153
    },
    {
     "rank": 27,
@@ -242,7 +242,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1392,
-    "value": 44842075565
+    "value": 44845795507
    },
    {
     "rank": 31,
@@ -350,19 +350,19 @@
    },
    {
     "rank": 44,
+    "name": "Mustafariy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1248,
+    "value": 32291354697
+   },
+   {
+    "rank": 45,
     "name": "Akkao",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1248,
     "value": 32286529977
-   },
-   {
-    "rank": 45,
-    "name": "Mustafariy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1248,
-    "value": 32285528582
    },
    {
     "rank": 46,
@@ -386,7 +386,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1210,
-    "value": 29444069259
+    "value": 29451316958
    },
    {
     "rank": 49,
