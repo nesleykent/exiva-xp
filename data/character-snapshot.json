@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2137,
-    "value": 162398397306
+    "value": 162398479465
    },
    {
     "rank": 7,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1734,
-    "value": 86685114268
+    "value": 86692508833
    },
    {
     "rank": 13,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1551,
-    "value": 62005008319
+    "value": 62005275964
    },
    {
     "rank": 22,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1432,
-    "value": 48792046471
+    "value": 48793283564
    },
    {
     "rank": 29,
@@ -241,8 +241,8 @@
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1392,
-    "value": 44845795507
+    "level": 1393,
+    "value": 44881540738
    },
    {
     "rank": 31,
@@ -346,15 +346,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1251,
-    "value": 32475603717
+    "value": 32485601998
    },
    {
     "rank": 44,
     "name": "Mustafariy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1248,
-    "value": 32311239066
+    "level": 1249,
+    "value": 32321082650
    },
    {
     "rank": 45,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1234,
-    "value": 31209462052
+    "value": 31241914610
    },
    {
     "rank": 48,
@@ -386,7 +386,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1211,
-    "value": 29464655452
+    "value": 29464665047
    },
    {
     "rank": 49,
@@ -401,8 +401,8 @@
     "name": "Erto Mage",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1203,
-    "value": 28939349169
+    "level": 1204,
+    "value": 28957153120
    }
   ],
   "highscore_page": {
