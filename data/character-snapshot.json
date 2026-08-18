@@ -18,15 +18,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2597,
-    "value": 291409191301
+    "value": 291409693103
    },
    {
     "rank": 3,
     "name": "Hiro Teensina",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2319,
-    "value": 207489530301
+    "level": 2320,
+    "value": 207685813491
    },
    {
     "rank": 4,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2138,
-    "value": 162583122047
+    "value": 162583127079
    },
    {
     "rank": 7,
@@ -66,7 +66,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1947,
-    "value": 122743906115
+    "value": 122749393943
    },
    {
     "rank": 9,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1760,
-    "value": 90598031151
+    "value": 90598993323
    },
    {
     "rank": 12,
@@ -113,8 +113,8 @@
     "name": "Sparkr",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1690,
-    "value": 80295497433
+    "level": 1691,
+    "value": 80347687881
    },
    {
     "rank": 15,
@@ -178,7 +178,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1547,
-    "value": 61499224871
+    "value": 61499329696
    },
    {
     "rank": 23,
@@ -186,7 +186,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1487,
-    "value": 54644907601
+    "value": 54683662706
    },
    {
     "rank": 24,
@@ -194,10 +194,18 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1482,
-    "value": 54039356111
+    "value": 54040151646
    },
    {
     "rank": 25,
+    "name": "Nezuko Kerochimas",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1461,
+    "value": 51864791374
+   },
+   {
+    "rank": 26,
     "name": "Wingcat",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -205,20 +213,12 @@
     "value": 51848843874
    },
    {
-    "rank": 26,
-    "name": "Nezuko Kerochimas",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1461,
-    "value": 51808761600
-   },
-   {
     "rank": 27,
     "name": "Luuh Druid",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1438,
-    "value": 49376302135
+    "value": 49376576642
    },
    {
     "rank": 28,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1433,
-    "value": 48872144990
+    "value": 48872489498
    },
    {
     "rank": 29,
@@ -241,8 +241,8 @@
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1393,
-    "value": 44929895950
+    "level": 1394,
+    "value": 44954661028
    },
    {
     "rank": 31,
@@ -250,7 +250,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1385,
-    "value": 44156057347
+    "value": 44158383487
    },
    {
     "rank": 32,
@@ -290,15 +290,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1328,
-    "value": 38896330692
+    "value": 38914144831
    },
    {
     "rank": 37,
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1312,
-    "value": 37526639368
+    "level": 1310,
+    "value": 37368261244
    },
    {
     "rank": 38,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1256,
-    "value": 32933662698
+    "value": 32937222026
    },
    {
     "rank": 41,
@@ -361,8 +361,8 @@
     "name": "Mustafariy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1247,
-    "value": 32215576855
+    "level": 1248,
+    "value": 32273928876
    },
    {
     "rank": 46,
@@ -378,15 +378,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1236,
-    "value": 31320180512
+    "value": 31321268069
    },
    {
     "rank": 48,
     "name": "Shillyni",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1211,
-    "value": 29489593730
+    "level": 1212,
+    "value": 29527086304
    },
    {
     "rank": 49,
