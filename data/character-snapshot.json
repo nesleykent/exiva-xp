@@ -17,8 +17,8 @@
     "name": "Gutierrezs",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2598,
-    "value": 291907739298
+    "level": 2599,
+    "value": 292072395751
    },
    {
     "rank": 3,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2138,
-    "value": 162633577798
+    "value": 162633647113
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2119,
-    "value": 158207171861
+    "value": 158308943626
    },
    {
     "rank": 8,
@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1889,
-    "value": 112098093891
+    "value": 112156112154
    },
    {
     "rank": 11,
@@ -250,7 +250,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1388,
-    "value": 44452411002
+    "value": 44452771002
    },
    {
     "rank": 32,
@@ -294,19 +294,19 @@
    },
    {
     "rank": 37,
+    "name": "Jankii",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1312,
+    "value": 37471251173
+   },
+   {
+    "rank": 38,
     "name": "Darkz Bea",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1311,
     "value": 37466137735
-   },
-   {
-    "rank": 38,
-    "name": "Jankii",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1311,
-    "value": 37459458145
    },
    {
     "rank": 39,
