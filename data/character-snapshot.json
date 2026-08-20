@@ -74,7 +74,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1911,
-    "value": 115986877599
+    "value": 116070788413
    },
    {
     "rank": 10,
@@ -201,8 +201,8 @@
     "name": "Nezuko Kerochimas",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1463,
-    "value": 52074468756
+    "level": 1465,
+    "value": 52210256458
    },
    {
     "rank": 26,
@@ -294,19 +294,19 @@
    },
    {
     "rank": 37,
+    "name": "Darkz Bea",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1311,
+    "value": 37466137735
+   },
+   {
+    "rank": 38,
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1311,
-    "value": 37409229662
-   },
-   {
-    "rank": 38,
-    "name": "Darkz Bea",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1310,
-    "value": 37364226999
+    "value": 37413783145
    },
    {
     "rank": 39,
@@ -402,7 +402,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1206,
-    "value": 29114398926
+    "value": 29120686681
    }
   ],
   "highscore_page": {
