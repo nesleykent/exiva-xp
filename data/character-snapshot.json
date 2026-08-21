@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2138,
-    "value": 162633911501
+    "value": 162633924907
    },
    {
     "rank": 7,
@@ -122,15 +122,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1636,
-    "value": 72818264793
+    "value": 72818621342
    },
    {
     "rank": 16,
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1622,
-    "value": 70962310083
+    "level": 1623,
+    "value": 71082416067
    },
    {
     "rank": 17,
@@ -290,23 +290,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1329,
-    "value": 38978136625
+    "value": 39013835209
    },
    {
     "rank": 37,
+    "name": "Darkz Bea",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1313,
+    "value": 37564022569
+   },
+   {
+    "rank": 38,
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1312,
     "value": 37481367411
-   },
-   {
-    "rank": 38,
-    "name": "Darkz Bea",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1311,
-    "value": 37466677735
    },
    {
     "rank": 39,
