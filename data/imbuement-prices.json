@@ -1,494 +1,494 @@
 {
  "Gentebra": {
   "gold-token": {
-   "price": 50699,
+   "price": 49499,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.555Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.358Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "vampire-teeth": {
-   "price": 662,
+   "price": 391,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.417Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.192Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "bloody-pincers": {
-   "price": 15486,
+   "price": 15216,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.357Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.134Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "piece-of-dead-brain": {
-   "price": 28984,
+   "price": 28993,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.404Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.182Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "rope-belt": {
-   "price": 4567,
+   "price": 4490,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.694Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.469Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "silencer-claws": {
-   "price": 3797,
+   "price": 4091,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.340Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.108Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "grimeleech-wings": {
-   "price": 2291,
+   "price": 1996,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.562Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.364Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "protective-charm": {
-   "price": 3679,
+   "price": 3388,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.617Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.396Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "sabretooth": {
-   "price": 6798,
+   "price": 6495,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.503Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.286Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "vexclaw-talon": {
-   "price": 997,
+   "price": 1389,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.559Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.361Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "damselfly-wing": {
-   "price": 320,
+   "price": 329,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.169Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.954Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "compass": {
-   "price": 489,
+   "price": 280,
    "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.490Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "basis": "daily-lowest-sell",
+   "observedAt": "2026-08-23T07:17:36.276Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "fairy-wings": {
-   "price": 497,
+   "price": 395,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.775Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.557Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "little-bowl-of-myrrh": {
-   "price": 4864,
+   "price": 3981,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.789Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.565Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "goosebump-leather": {
-   "price": 748,
+   "price": 585,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.344Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.119Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "wereboar-hooves": {
-   "price": 198,
+   "price": 230,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.483Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.281Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "crystallized-anger": {
-   "price": 525,
+   "price": 445,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.625Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.409Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "quill": {
-   "price": 2695,
+   "price": 2499,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:11.065Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.860Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "flask-of-embalming-fluid": {
-   "price": 6099,
+   "price": 5994,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.655Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.433Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "gloom-wolf-fur": {
-   "price": 26979,
+   "price": 24969,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.470Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.272Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "mystical-hourglass": {
-   "price": 847,
+   "price": 900,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.400Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.178Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "piece-of-swampling-wood": {
-   "price": 2686,
+   "price": 5297,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.192Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.968Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "snake-skin-item": {
-   "price": 1394,
+   "price": 1283,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.428Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.206Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "brimstone-fangs": {
-   "price": 9785,
+   "price": 11493,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.816Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.581Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "green-dragon-leather": {
-   "price": 15499,
+   "price": 15985,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:08.451Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:35.226Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "blazing-bone": {
-   "price": 913,
+   "price": 795,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.097Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.886Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "draken-sulphur": {
    "price": 800,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.776Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.557Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "winter-wolf-fur": {
-   "price": 5587,
+   "price": 6699,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.477Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.269Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "thick-fur": {
+   "price": 1091,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.282Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "deepling-warts": {
+   "price": 200,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.744Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "wyvern-talisman": {
+   "price": 7214,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.155Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "crawler-head-plating": {
+   "price": 4796,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.777Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "wyrm-scale": {
    "price": 889,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.498Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "deepling-warts": {
-   "price": 274,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.947Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "wyvern-talisman": {
-   "price": 7094,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.371Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "crawler-head-plating": {
-   "price": 4387,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.984Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "wyrm-scale": {
-   "price": 749,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.407Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.186Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "cultish-robe": {
-   "price": 141,
+   "price": 259,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.363Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.146Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "cultish-mask": {
-   "price": 18440,
+   "price": 16956,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.362Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.144Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "hellspawn-tail": {
-   "price": 472,
+   "price": 474,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.493Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.279Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "elven-scouting-glass": {
-   "price": 333,
+   "price": 322,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.651Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.431Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "elven-hoof": {
-   "price": 12499,
+   "price": 11996,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.255Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.032Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "metal-spike": {
-   "price": 1440,
+   "price": 990,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.483Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.272Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "elvish-talisman": {
-   "price": 4399,
+   "price": 5882,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.359Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.138Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "broken-shamanic-staff": {
-   "price": 13491,
+   "price": 14496,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.632Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.412Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "strand-of-medusa-hair": {
-   "price": 7780,
+   "price": 6490,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.501Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.284Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "fiery-heart": {
-   "price": 500,
+   "price": 600,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.360Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.140Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "green-dragon-scale": {
-   "price": 95,
+   "price": 80,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:08.516Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:35.277Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "slime-heart": {
-   "price": 152,
+   "price": 149,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.415Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.202Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "frosty-heart": {
    "price": 390,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.401Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.180Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "orc-tooth": {
-   "price": 724,
+   "price": 954,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.441Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.228Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "battle-stone": {
-   "price": 700,
+   "price": 590,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.626Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.400Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "moohtant-horn": {
-   "price": 9899,
+   "price": 9379,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.424Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.211Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "lions-mane": {
-   "price": 75,
+   "price": 76,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.425Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.201Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "moohtah-shell": {
-   "price": 3455,
+   "price": 2789,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.426Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.215Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "war-crystal": {
-   "price": 999,
+   "price": 800,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.390Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.165Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "cyclops-toe": {
-   "price": 999,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.393Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "ogre-nose-ring": {
-   "price": 500,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.531Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "warmasters-wristguards": {
-   "price": 439,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.550Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "waspoid-wing": {
-   "price": 1128,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.988Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "petrified-scream": {
-   "price": 600,
-   "source": "tibiamarket",
-   "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.566Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
-  },
-  "piece-of-scarab-shell": {
    "price": 900,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.367Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.168Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "ogre-nose-ring": {
+   "price": 296,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:37.321Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "warmasters-wristguards": {
+   "price": 390,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.341Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "waspoid-wing": {
+   "price": 1090,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.779Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "petrified-scream": {
+   "price": 599,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.364Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
+  },
+  "piece-of-scarab-shell": {
+   "price": 750,
+   "source": "tibiamarket",
+   "basis": "active-sell-offer",
+   "observedAt": "2026-08-24T07:17:36.149Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "brimstone-shell": {
-   "price": 740,
+   "price": 539,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.818Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.582Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "polar-bear-paw": {
-   "price": 996,
+   "price": 990,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.383Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.175Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "peacock-feather-fan": {
-   "price": 339,
+   "price": 348,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.465Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.270Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "energy-vein": {
-   "price": 264,
+   "price": 250,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.627Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.411Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "pile-of-grave-earth": {
-   "price": 300,
+   "price": 299,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.680Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.462Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "frazzle-skin": {
-   "price": 370,
+   "price": 987,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.339Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.107Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "demon-horn": {
    "price": 1044,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:08.541Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:35.305Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "swamp-grass": {
-   "price": 398,
+   "price": 200,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.419Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.194Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "poisonous-slime": {
-   "price": 47,
+   "price": 12,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.365Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.148Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "seacrest-hair": {
    "price": 797,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.449Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.254Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "rorc-feather": {
-   "price": 850,
+   "price": 799,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:10.254Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:37.030Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   },
   "demonic-skeletal-hand": {
-   "price": 400,
+   "price": 70,
    "source": "tibiamarket",
    "basis": "active-sell-offer",
-   "observedAt": "2026-08-20T06:45:09.377Z",
-   "updatedAt": "2026-08-24T02:35:53.507Z"
+   "observedAt": "2026-08-24T07:17:36.160Z",
+   "updatedAt": "2026-08-24T09:58:23.042Z"
   }
  }
 }
