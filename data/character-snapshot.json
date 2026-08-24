@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2601,
-    "value": 292815772034
+    "value": 292819964453
    },
    {
     "rank": 3,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2120,
-    "value": 158549590416
+    "value": 158570272855
    },
    {
     "rank": 8,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1760,
-    "value": 90669213242
+    "value": 90678041590
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1740,
-    "value": 87582866055
+    "value": 87615666960
    },
    {
     "rank": 13,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1556,
-    "value": 62560149773
+    "value": 62564288593
    },
    {
     "rank": 22,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1258,
-    "value": 33044178561
+    "value": 33069439265
    },
    {
     "rank": 41,
@@ -351,10 +351,10 @@
    {
     "rank": 44,
     "name": "Trefor Das Sombras",
-    "vocation": "Elder Druid",
+    "vocation": "Druid",
     "world": "Gentebra",
-    "level": 1251,
-    "value": 32548133284
+    "level": 1252,
+    "value": 32576270820
    },
    {
     "rank": 45,
