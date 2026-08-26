@@ -146,7 +146,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1596,
-    "value": 67504059504
+    "value": 67576127257
    },
    {
     "rank": 19,
@@ -238,6 +238,14 @@
    },
    {
     "rank": 30,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1394,
+    "value": 45047173383
+   },
+   {
+    "rank": 31,
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -245,20 +253,12 @@
     "value": 45045324798
    },
    {
-    "rank": 31,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1394,
-    "value": 44962537688
-   },
-   {
     "rank": 32,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1392,
-    "value": 44818026244
+    "level": 1393,
+    "value": 44929399429
    },
    {
     "rank": 33,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1259,
-    "value": 33104162223
+    "value": 33106646627
    },
    {
     "rank": 41,
@@ -353,8 +353,8 @@
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1252,
-    "value": 32618929939
+    "level": 1253,
+    "value": 32691635812
    },
    {
     "rank": 45,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1241,
-    "value": 31715115476
+    "value": 31749923087
    },
    {
     "rank": 47,
@@ -393,8 +393,8 @@
     "name": "Treko Coconut Seller",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1211,
-    "value": 29498841759
+    "level": 1212,
+    "value": 29536778780
    },
    {
     "rank": 50,
