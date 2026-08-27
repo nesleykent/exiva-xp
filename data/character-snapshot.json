@@ -26,7 +26,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2327,
-    "value": 209521806290
+    "value": 209694122830
    },
    {
     "rank": 4,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2141,
-    "value": 163230582662
+    "value": 163231585588
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2122,
-    "value": 158907281704
+    "value": 158952100594
    },
    {
     "rank": 8,
@@ -74,7 +74,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1914,
-    "value": 116534498906
+    "value": 116638901744
    },
    {
     "rank": 10,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1761,
-    "value": 90763098249
+    "value": 90764108374
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1742,
-    "value": 87868564218
+    "value": 87933392998
    },
    {
     "rank": 13,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1711,
-    "value": 83293382081
+    "value": 83293382640
    },
    {
     "rank": 14,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1694,
-    "value": 80766869326
+    "value": 80800097117
    },
    {
     "rank": 15,
@@ -122,15 +122,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1642,
-    "value": 73596210446
+    "value": 73597221674
    },
    {
     "rank": 16,
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1627,
-    "value": 71520301715
+    "level": 1628,
+    "value": 71654516911
    },
    {
     "rank": 17,
@@ -169,8 +169,8 @@
     "name": "Diinoco",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1559,
-    "value": 63019532639
+    "level": 1560,
+    "value": 63123411434
    },
    {
     "rank": 22,
@@ -178,15 +178,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1556,
-    "value": 62594762421
+    "value": 62643193231
    },
    {
     "rank": 23,
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1493,
-    "value": 55292980952
+    "level": 1494,
+    "value": 55367178031
    },
    {
     "rank": 24,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1483,
-    "value": 54159738125
+    "value": 54160388168
    },
    {
     "rank": 25,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1466,
-    "value": 52369012585
+    "value": 52369683203
    },
    {
     "rank": 26,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1463,
-    "value": 52041312620
+    "value": 52041313012
    },
    {
     "rank": 27,
@@ -218,15 +218,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1444,
-    "value": 50068364069
+    "value": 50069188303
    },
    {
     "rank": 28,
     "name": "Genezyzz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1441,
-    "value": 49715649197
+    "level": 1442,
+    "value": 49820855302
    },
    {
     "rank": 29,
@@ -238,19 +238,19 @@
    },
    {
     "rank": 30,
+    "name": "Vannak Wrath",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1395,
+    "value": 45092735558
+   },
+   {
+    "rank": 31,
     "name": "Flandy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1395,
-    "value": 45056333537
-   },
-   {
-    "rank": 31,
-    "name": "Vannak Wrath",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1394,
-    "value": 45045324798
+    "value": 45059133906
    },
    {
     "rank": 32,
@@ -265,8 +265,8 @@
     "name": "Mithjynn",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1365,
-    "value": 42260333153
+    "level": 1363,
+    "value": 42106549545
    },
    {
     "rank": 34,
@@ -289,8 +289,8 @@
     "name": "Yumk Roux",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1331,
-    "value": 39168026835
+    "level": 1329,
+    "value": 39033682872
    },
    {
     "rank": 37,
@@ -306,15 +306,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1311,
-    "value": 37408796497
+    "value": 37429374001
    },
    {
     "rank": 39,
     "name": "King Cahaya",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1281,
-    "value": 34942144526
+    "level": 1282,
+    "value": 34966556084
    },
    {
     "rank": 40,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1259,
-    "value": 33106646627
+    "value": 33117090921
    },
    {
     "rank": 41,
@@ -338,23 +338,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1255,
-    "value": 32863795953
+    "value": 32864695255
    },
    {
     "rank": 43,
     "name": "Mustafariy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1254,
-    "value": 32781162328
+    "level": 1255,
+    "value": 32830768199
    },
    {
     "rank": 44,
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1253,
-    "value": 32691635812
+    "level": 1254,
+    "value": 32728726701
    },
    {
     "rank": 45,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1241,
-    "value": 31758524611
+    "value": 31763963814
    },
    {
     "rank": 47,
@@ -385,8 +385,8 @@
     "name": "Shillyni",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1215,
-    "value": 29788627040
+    "level": 1216,
+    "value": 29830644020
    },
    {
     "rank": 49,
@@ -401,8 +401,8 @@
     "name": "Erto Mage",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1207,
-    "value": 29164787580
+    "level": 1205,
+    "value": 29062644097
    }
   ],
   "highscore_page": {
