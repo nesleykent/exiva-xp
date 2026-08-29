@@ -9,8 +9,8 @@
     "name": "Ke vinho",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2966,
-    "value": 434300201547
+    "level": 2967,
+    "value": 434725236623
    },
    {
     "rank": 2,
@@ -26,7 +26,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2329,
-    "value": 210043929833
+    "value": 210106321642
    },
    {
     "rank": 4,
@@ -34,7 +34,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2251,
-    "value": 189669412888
+    "value": 189724012888
    },
    {
     "rank": 5,
@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2233,
-    "value": 185134323070
+    "value": 185246337002
    },
    {
     "rank": 6,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2143,
-    "value": 163745279290
+    "value": 163745279959
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2123,
-    "value": 159228698282
+    "value": 159231497358
    },
    {
     "rank": 8,
@@ -66,7 +66,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1959,
-    "value": 124969354484
+    "value": 124994164651
    },
    {
     "rank": 9,
@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1896,
-    "value": 113407827968
+    "value": 113412018099
    },
    {
     "rank": 11,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1713,
-    "value": 83560933685
+    "value": 83595759881
    },
    {
     "rank": 14,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1643,
-    "value": 73780311277
+    "value": 73780851277
    },
    {
     "rank": 16,
@@ -130,7 +130,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1630,
-    "value": 71929140985
+    "value": 72041730188
    },
    {
     "rank": 17,
@@ -145,8 +145,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1599,
-    "value": 67972483005
+    "level": 1600,
+    "value": 68030695206
    },
    {
     "rank": 19,
@@ -154,7 +154,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1575,
-    "value": 64923755853
+    "value": 64976587211
    },
    {
     "rank": 20,
@@ -177,8 +177,8 @@
     "name": "Evan Gelion",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1557,
-    "value": 62736271654
+    "level": 1558,
+    "value": 62788730394
    },
    {
     "rank": 23,
@@ -186,7 +186,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1495,
-    "value": 55521692308
+    "value": 55561842100
    },
    {
     "rank": 24,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1483,
-    "value": 54210877770
+    "value": 54210977132
    },
    {
     "rank": 25,
@@ -218,15 +218,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1446,
-    "value": 50205060789
+    "value": 50206049841
    },
    {
     "rank": 28,
     "name": "Genezyzz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1444,
-    "value": 50052507221
+    "level": 1445,
+    "value": 50083453771
    },
    {
     "rank": 29,
@@ -242,7 +242,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1397,
-    "value": 45338844626
+    "value": 45338853072
    },
    {
     "rank": 31,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1259,
-    "value": 33137649413
+    "value": 33150792376
    },
    {
     "rank": 41,
@@ -330,7 +330,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1257,
-    "value": 32947168738
+    "value": 32951464657
    },
    {
     "rank": 42,
@@ -342,19 +342,19 @@
    },
    {
     "rank": 43,
-    "name": "Ell Droid Cansado",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1256,
-    "value": 32866195859
-   },
-   {
-    "rank": 44,
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1255,
-    "value": 32839405175
+    "value": 32850473969
+   },
+   {
+    "rank": 44,
+    "name": "Ell Droid Cansado",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1254,
+    "value": 32754599959
    },
    {
     "rank": 45,
@@ -402,7 +402,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1206,
-    "value": 29122687397
+    "value": 29137061101
    }
   ],
   "highscore_page": {
