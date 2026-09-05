@@ -26,15 +26,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2335,
-    "value": 211693012160
+    "value": 211825203396
    },
    {
     "rank": 4,
     "name": "Restlin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2261,
-    "value": 192318595914
+    "level": 2262,
+    "value": 192401471026
    },
    {
     "rank": 5,
@@ -97,16 +97,16 @@
     "name": "Owanda Datribo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1752,
-    "value": 89438882608
+    "level": 1753,
+    "value": 89567275370
    },
    {
     "rank": 13,
     "name": "Lekisna",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1719,
-    "value": 84475082947
+    "level": 1721,
+    "value": 84704334001
    },
    {
     "rank": 14,
@@ -145,8 +145,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1606,
-    "value": 68898892589
+    "level": 1608,
+    "value": 69106396730
    },
    {
     "rank": 19,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1455,
-    "value": 51126703742
+    "value": 51127423742
    },
    {
     "rank": 29,
@@ -326,19 +326,19 @@
    },
    {
     "rank": 41,
+    "name": "Brunin Himself",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1260,
+    "value": 33203513853
+   },
+   {
+    "rank": 42,
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1260,
     "value": 33199878627
-   },
-   {
-    "rank": 42,
-    "name": "Brunin Himself",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1260,
-    "value": 33193974144
    },
    {
     "rank": 43,
@@ -362,7 +362,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1249,
-    "value": 32333061064
+    "value": 32363212101
    },
    {
     "rank": 46,
