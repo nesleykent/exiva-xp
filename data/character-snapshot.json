@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2612,
-    "value": 296362212316
+    "value": 296483801999
    },
    {
     "rank": 3,
@@ -34,7 +34,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2261,
-    "value": 192314588038
+    "value": 192318595914
    },
    {
     "rank": 5,
@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2234,
-    "value": 185403535516
+    "value": 185478235129
    },
    {
     "rank": 6,
@@ -65,8 +65,8 @@
     "name": "Fa vey",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1963,
-    "value": 125834397564
+    "level": 1965,
+    "value": 126235208611
    },
    {
     "rank": 9,
@@ -97,8 +97,8 @@
     "name": "Owanda Datribo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1750,
-    "value": 89124028742
+    "level": 1751,
+    "value": 89227968740
    },
    {
     "rank": 13,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1699,
-    "value": 81463637684
+    "value": 81504890594
    },
    {
     "rank": 15,
@@ -153,24 +153,24 @@
     "name": "Druiidguaba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1580,
-    "value": 65600968415
+    "level": 1581,
+    "value": 65676564330
    },
    {
     "rank": 20,
+    "name": "Diinoco",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1574,
+    "value": 64801232064
+   },
+   {
+    "rank": 21,
     "name": "Vyttu",
     "vocation": "Druid",
     "world": "Gentebra",
     "level": 1571,
     "value": 64480035012
-   },
-   {
-    "rank": 21,
-    "name": "Diinoco",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1571,
-    "value": 64464203632
    },
    {
     "rank": 22,
@@ -258,7 +258,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1398,
-    "value": 45395613364
+    "value": 45433594955
    },
    {
     "rank": 33,
@@ -289,8 +289,8 @@
     "name": "Yumk Roux",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1334,
-    "value": 39451175675
+    "level": 1335,
+    "value": 39492814793
    },
    {
     "rank": 37,
@@ -306,15 +306,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1313,
-    "value": 37592589819
+    "value": 37594423161
    },
    {
     "rank": 39,
     "name": "King Cahaya",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1289,
-    "value": 35602674798
+    "level": 1290,
+    "value": 35635116915
    },
    {
     "rank": 40,
@@ -345,8 +345,8 @@
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1258,
-    "value": 33029887118
+    "level": 1260,
+    "value": 33188615262
    },
    {
     "rank": 44,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1248,
-    "value": 32268532573
+    "value": 32276947372
    },
    {
     "rank": 47,
