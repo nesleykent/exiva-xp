@@ -66,7 +66,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1970,
-    "value": 127083110475
+    "value": 127083445329
    },
    {
     "rank": 9,
@@ -145,8 +145,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1609,
-    "value": 69179992670
+    "level": 1610,
+    "value": 69316324349
    },
    {
     "rank": 19,
@@ -230,6 +230,14 @@
    },
    {
     "rank": 29,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1408,
+    "value": 46395608480
+   },
+   {
+    "rank": 30,
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
@@ -237,20 +245,12 @@
     "value": 46242972242
    },
    {
-    "rank": 30,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1407,
-    "value": 46238269435
-   },
-   {
     "rank": 31,
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1400,
-    "value": 45557432756
+    "value": 45557433218
    },
    {
     "rank": 32,
@@ -297,8 +297,8 @@
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1314,
-    "value": 37690509780
+    "level": 1315,
+    "value": 37787963001
    },
    {
     "rank": 38,
@@ -306,7 +306,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1291,
-    "value": 35722112560
+    "value": 35727534838
    },
    {
     "rank": 39,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1260,
-    "value": 33199904709
+    "value": 33187737725
    },
    {
     "rank": 43,
@@ -353,16 +353,16 @@
     "name": "Akkao",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1251,
-    "value": 32532982672
+    "level": 1252,
+    "value": 32606373113
    },
    {
     "rank": 45,
     "name": "Dark Obscuro",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1249,
-    "value": 32381604685
+    "level": 1250,
+    "value": 32444021388
    },
    {
     "rank": 46,
