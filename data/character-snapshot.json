@@ -97,16 +97,16 @@
     "name": "Owanda Datribo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1755,
-    "value": 89846986639
+    "level": 1756,
+    "value": 90058918674
    },
    {
     "rank": 13,
     "name": "Lekisna",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1721,
-    "value": 84761666141
+    "level": 1723,
+    "value": 85097159547
    },
    {
     "rank": 14,
@@ -129,8 +129,8 @@
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1637,
-    "value": 72851988308
+    "level": 1638,
+    "value": 73078795982
    },
    {
     "rank": 17,
@@ -145,8 +145,8 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1612,
-    "value": 69683596047
+    "level": 1613,
+    "value": 69794867979
    },
    {
     "rank": 19,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1579,
-    "value": 65453732925
+    "value": 65453742828
    },
    {
     "rank": 21,
@@ -185,8 +185,8 @@
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1500,
-    "value": 56066255248
+    "level": 1503,
+    "value": 56457835787
    },
    {
     "rank": 24,
@@ -242,15 +242,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1409,
-    "value": 46458085955
+    "value": 46513930279
    },
    {
     "rank": 31,
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1400,
-    "value": 45607474786
+    "level": 1403,
+    "value": 45851898276
    },
    {
     "rank": 32,
@@ -270,19 +270,19 @@
    },
    {
     "rank": 34,
+    "name": "Yumk Roux",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1337,
+    "value": 39697945037
+   },
+   {
+    "rank": 35,
     "name": "Aevin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1337,
     "value": 39657375570
-   },
-   {
-    "rank": 35,
-    "name": "Yumk Roux",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1336,
-    "value": 39598154459
    },
    {
     "rank": 36,
@@ -297,8 +297,8 @@
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1315,
-    "value": 37806772184
+    "level": 1316,
+    "value": 37876822369
    },
    {
     "rank": 38,
@@ -345,8 +345,8 @@
     "name": "Ell Droid Cansado",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1255,
-    "value": 32865003488
+    "level": 1256,
+    "value": 32869068591
    },
    {
     "rank": 44,
