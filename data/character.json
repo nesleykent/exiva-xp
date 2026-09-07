@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-09-07T16:26:46.602Z",
+ "updatedAt": "2026-09-07T20:31:33.060Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
@@ -34,9 +34,9 @@
   "goshnarstaint": null,
   "loyaltypoints": 137,
   "magiclevel": 210,
-  "shielding": 339,
+  "shielding": 340,
   "swordfighting": 68,
-  "weeklytasks": 2
+  "weeklytasks": 3
  },
  "skillRanks": {
   "achievements": 83,
@@ -52,9 +52,9 @@
   "goshnarstaint": null,
   "loyaltypoints": 137,
   "magiclevel": 210,
-  "shielding": 339,
+  "shielding": 340,
   "swordfighting": 68,
-  "weeklytasks": 2
+  "weeklytasks": 3
  },
  "deaths": []
 }
