@@ -25,8 +25,8 @@
     "name": "Hiro Teensina",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2343,
-    "value": 214006046822
+    "level": 2344,
+    "value": 214192822967
    },
    {
     "rank": 4,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2158,
-    "value": 167077780726
+    "value": 167078884951
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2133,
-    "value": 161335247469
+    "value": 161364363184
    },
    {
     "rank": 8,
@@ -74,7 +74,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1925,
-    "value": 118555480050
+    "value": 118647127183
    },
    {
     "rank": 10,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1759,
-    "value": 90541637262
+    "value": 90542493147
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1758,
-    "value": 90245999964
+    "value": 90306707407
    },
    {
     "rank": 13,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1702,
-    "value": 81993527328
+    "value": 82022616162
    },
    {
     "rank": 15,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1662,
-    "value": 76283830008
+    "value": 76287759190
    },
    {
     "rank": 16,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1623,
-    "value": 71053955383
+    "value": 71061028920
    },
    {
     "rank": 18,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1585,
-    "value": 66175774475
+    "value": 66188372968
    },
    {
     "rank": 21,
@@ -186,7 +186,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1506,
-    "value": 56701430125
+    "value": 56759857321
    },
    {
     "rank": 24,
@@ -201,8 +201,8 @@
     "name": "Nezuko Kerochimas",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1484,
-    "value": 54326744941
+    "level": 1485,
+    "value": 54411372136
    },
    {
     "rank": 26,
@@ -210,15 +210,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1467,
-    "value": 52419934734
+    "value": 52420029076
    },
    {
     "rank": 27,
     "name": "Genezyzz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1464,
-    "value": 52106379388
+    "level": 1465,
+    "value": 52220701064
    },
    {
     "rank": 28,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1458,
-    "value": 51496115236
+    "value": 51496997321
    },
    {
     "rank": 29,
@@ -250,7 +250,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1404,
-    "value": 45989485330
+    "value": 46017074489
    },
    {
     "rank": 32,
@@ -270,27 +270,27 @@
    },
    {
     "rank": 34,
+    "name": "Aevin",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1339,
+    "value": 39868236586
+   },
+   {
+    "rank": 35,
     "name": "Yumk Roux",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1338,
-    "value": 39816113211
-   },
-   {
-    "rank": 35,
-    "name": "Aevin",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1337,
-    "value": 39689479686
+    "value": 39830656995
    },
    {
     "rank": 36,
     "name": "Darkz Bea",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1326,
-    "value": 38692733075
+    "level": 1327,
+    "value": 38776526197
    },
    {
     "rank": 37,
@@ -298,7 +298,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1318,
-    "value": 38028939374
+    "value": 38030186967
    },
    {
     "rank": 38,
@@ -306,7 +306,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1295,
-    "value": 36059328871
+    "value": 36063856344
    },
    {
     "rank": 39,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1264,
-    "value": 33545778130
+    "value": 33552696385
    },
    {
     "rank": 41,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1225,
-    "value": 30557334572
+    "value": 30561767851
    },
    {
     "rank": 48,
@@ -386,7 +386,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1222,
-    "value": 30272769621
+    "value": 30273551850
    },
    {
     "rank": 49,
