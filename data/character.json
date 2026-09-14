@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-09-13T19:22:17.726Z",
+ "updatedAt": "2026-09-14T12:37:25.278Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
@@ -8,7 +8,7 @@
  "world": "Gentebra",
  "residence": "Thais",
  "achievementPoints": 716,
- "lastLogin": "2026-09-13T06:08:12Z",
+ "lastLogin": "2026-09-14T08:30:48Z",
  "accountStatus": "Premium Account",
  "accountCreated": "2003-08-01T22:04:00Z",
  "loyaltyTitle": "Warrior of Tibia",
@@ -36,7 +36,7 @@
   "magiclevel": 213,
   "shielding": 342,
   "swordfighting": 67,
-  "weeklytasks": 3
+  "weeklytasks": 2
  },
  "skillRanks": {
   "achievements": 82,
@@ -54,7 +54,7 @@
   "magiclevel": 213,
   "shielding": 342,
   "swordfighting": 67,
-  "weeklytasks": 3
+  "weeklytasks": 2
  },
  "deaths": []
 }
