@@ -26,15 +26,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2351,
-    "value": 216267762485
+    "value": 216274866369
    },
    {
     "rank": 4,
     "name": "Restlin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2280,
-    "value": 197232507108
+    "level": 2281,
+    "value": 197435709297
    },
    {
     "rank": 5,
@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2238,
-    "value": 186486317243
+    "value": 186500717243
    },
    {
     "rank": 6,
@@ -50,15 +50,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2167,
-    "value": 169322750778
+    "value": 169332352296
    },
    {
     "rank": 7,
     "name": "Jack Black Sabbath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2136,
-    "value": 162192612530
+    "level": 2137,
+    "value": 162225229667
    },
    {
     "rank": 8,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1762,
-    "value": 90893535657
+    "value": 90907935657
    },
    {
     "rank": 12,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1739,
-    "value": 87428818829
+    "value": 87459781205
    },
    {
     "rank": 14,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1669,
-    "value": 77286012704
+    "value": 77287173933
    },
    {
     "rank": 16,
@@ -138,23 +138,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1631,
-    "value": 72051492086
+    "value": 72061095029
    },
    {
     "rank": 18,
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1624,
-    "value": 71199654608
+    "level": 1625,
+    "value": 71358452397
    },
    {
     "rank": 19,
     "name": "Diinoco",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1598,
-    "value": 67772647403
+    "level": 1599,
+    "value": 67911890523
    },
    {
     "rank": 20,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1464,
-    "value": 52116004900
+    "value": 52139381885
    },
    {
     "rank": 29,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1428,
-    "value": 48425400961
+    "value": 48425498611
    },
    {
     "rank": 30,
@@ -297,8 +297,8 @@
     "name": "Jankii",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1320,
-    "value": 38229066712
+    "level": 1321,
+    "value": 38282302054
    },
    {
     "rank": 38,
@@ -326,27 +326,27 @@
    },
    {
     "rank": 41,
+    "name": "Trefor Das Sombras",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1264,
+    "value": 33514814899
+   },
+   {
+    "rank": 42,
     "name": "Brunin Himself",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1263,
-    "value": 33488373287
-   },
-   {
-    "rank": 42,
-    "name": "Trefor Das Sombras",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1263,
-    "value": 33467643110
+    "value": 33491520185
    },
    {
     "rank": 43,
     "name": "Dark Obscuro",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1262,
-    "value": 33399851536
+    "level": 1263,
+    "value": 33432630356
    },
    {
     "rank": 44,
@@ -369,8 +369,8 @@
     "name": "Buenoz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1244,
-    "value": 31932665369
+    "level": 1246,
+    "value": 32099129965
    },
    {
     "rank": 47,
