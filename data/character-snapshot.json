@@ -17,8 +17,8 @@
     "name": "Gutierrezs",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2628,
-    "value": 302090456700
+    "level": 2629,
+    "value": 302373043921
    },
    {
     "rank": 3,
@@ -33,8 +33,8 @@
     "name": "Restlin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2285,
-    "value": 198406190017
+    "level": 2286,
+    "value": 198735460498
    },
    {
     "rank": 5,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2172,
-    "value": 170405868168
+    "value": 170473265773
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2139,
-    "value": 162822066406
+    "value": 162865197477
    },
    {
     "rank": 8,
@@ -81,8 +81,8 @@
     "name": "Nxte",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1922,
-    "value": 118106537615
+    "level": 1923,
+    "value": 118182804345
    },
    {
     "rank": 11,
@@ -97,8 +97,8 @@
     "name": "General Keyllor Segundo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1758,
-    "value": 90359665785
+    "level": 1759,
+    "value": 90439316942
    },
    {
     "rank": 13,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1707,
-    "value": 82662473103
+    "value": 82662783678
    },
    {
     "rank": 15,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1634,
-    "value": 72522799973
+    "value": 72526631642
    },
    {
     "rank": 18,
@@ -146,7 +146,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1630,
-    "value": 71958991952
+    "value": 72003083904
    },
    {
     "rank": 19,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1597,
-    "value": 67629403069
+    "value": 67647734856
    },
    {
     "rank": 21,
@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1574,
-    "value": 64785622869
+    "value": 64846850368
    },
    {
     "rank": 22,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1494,
-    "value": 55456228658
+    "value": 55456253818
    },
    {
     "rank": 25,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1477,
-    "value": 53545230001
+    "value": 53545230023
    },
    {
     "rank": 27,
@@ -266,7 +266,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1345,
-    "value": 40447336945
+    "value": 40448584288
    },
    {
     "rank": 34,
@@ -290,7 +290,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1328,
-    "value": 38933175830
+    "value": 38933608196
    },
    {
     "rank": 37,
@@ -326,19 +326,19 @@
    },
    {
     "rank": 41,
+    "name": "Trefor Das Sombras",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1266,
+    "value": 33671053898
+   },
+   {
+    "rank": 42,
     "name": "Dark Obscuro",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1265,
     "value": 33656927594
-   },
-   {
-    "rank": 42,
-    "name": "Trefor Das Sombras",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1265,
-    "value": 33628207983
    },
    {
     "rank": 43,
@@ -362,15 +362,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1257,
-    "value": 32989732407
+    "value": 32989764697
    },
    {
     "rank": 46,
     "name": "Buenoz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1252,
-    "value": 32558969018
+    "level": 1254,
+    "value": 32767214276
    },
    {
     "rank": 47,
@@ -394,7 +394,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1220,
-    "value": 30165095827
+    "value": 30166030481
    },
    {
     "rank": 50,
