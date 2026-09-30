@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
 import { DAY_MS, gp, hm, kk, nf, pct } from '../lib/fmt.js';
-import { $, emptyState, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
+import { $, emptyState, note, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
@@ -76,9 +76,9 @@ stage.innerHTML = `
         <span class="fine dim">usage and recovery</span>
       </div>
       <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Current</span><input id="stamina-current" type="text" value="${formatStamina(STAMINA_BONUS_START)}" inputmode="numeric"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Hunt time</span><input id="stamina-session" type="text" value="2:00" inputmode="numeric"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Target</span><input id="stamina-target" type="text" value="${formatStamina(STAMINA_MAX)}" inputmode="numeric"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Current</span><input id="stamina-current" type="text" value="${formatStamina(STAMINA_BONUS_START)}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Hunt time</span><input id="stamina-session" type="text" value="2:00"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target</span><input id="stamina-target" type="text" value="${formatStamina(STAMINA_MAX)}"></label>
       </div>
       <div class="tool-result" id="stamina-out" role="status" aria-live="polite" aria-atomic="true"></div>
       <p class="fine dim">Offline regeneration: no regen for the first 10 minutes, then 3 min per stamina minute up to 39:00 and twice that (6 min) for the 39:00–42:00 bonus hours — 39:00 → 42:00 takes 18h10m offline.</p>
@@ -204,8 +204,11 @@ function renderStamina() {
   const current = parseStamina($('#stamina-current').value);
   const session = parseStamina($('#stamina-session').value);
   const target = parseStamina($('#stamina-target').value);
+  $('#stamina-current').setAttribute('aria-invalid', String(current == null));
+  $('#stamina-session').setAttribute('aria-invalid', String(session == null));
+  $('#stamina-target').setAttribute('aria-invalid', String(target == null));
   if (current == null || session == null || target == null) {
-    $('#stamina-out').innerHTML = '<span class="dim">Use time as HH:MM.</span>';
+    $('#stamina-out').innerHTML = note('error', 'Use time as HH:MM.');
     return;
   }
   const plan = staminaProjection(current, session, target);
@@ -282,7 +285,7 @@ function renderLevelTarget() {
   const hoursPerDay = numberInput('#level-hours-day');
   const trackedPace = numberInput('#level-pace');
   if (!Number.isFinite(start) || !Number.isFinite(target) || start < 1 || target <= start) {
-    $('#level-out').innerHTML = '<span class="dim">Pick a target level above the starting level.</span>';
+    $('#level-out').innerHTML = note('error', 'Pick a target level above the starting level.');
     return;
   }
   // Anchor on the character's real tracked XP when the starting-level field
@@ -325,12 +328,12 @@ function renderLevelTable() {
   const from = Math.floor(numberInput('#level-table-from'));
   const to = Math.floor(numberInput('#level-table-to'));
   if (!Number.isFinite(from) || !Number.isFinite(to) || from < 1 || to <= from) {
-    $('#level-table-out').innerHTML = '<span class="dim">Pick a "to" level above the "from" level.</span>';
+    $('#level-table-out').innerHTML = note('error', 'Pick a "to" level above the "from" level.');
     return;
   }
   const span = to - from;
   if (span > 500) {
-    $('#level-table-out').innerHTML = '<span class="dim">Keep the range to 500 levels or fewer.</span>';
+    $('#level-table-out').innerHTML = note('error', 'Keep the range to 500 levels or fewer.');
     return;
   }
   const rows = [];
@@ -720,8 +723,14 @@ bindSortMenu('imb-tier', (key) => {
 
 renderStamina();
 // Keep "Now it's …" honest on a tab left open. Only #stamina-out is rewritten,
-// so a half-typed stamina field is never disturbed.
-setInterval(renderStamina, 30_000);
+// so a half-typed stamina field is never disturbed. The clock tick is silenced:
+// only input-driven results should be read out, not the same plan every minute.
+setInterval(() => {
+  const out = $('#stamina-out');
+  out.setAttribute('aria-live', 'off');
+  renderStamina();
+  setTimeout(() => out.setAttribute('aria-live', 'polite'), 1000);
+}, 30_000);
 renderDamage();
 renderProfit();
 renderImbuementGrid();

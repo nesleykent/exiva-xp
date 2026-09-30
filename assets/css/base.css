@@ -251,8 +251,7 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
   font-weight: 700; font-size: var(--fs-26); line-height: normal; letter-spacing: -.5px;
   white-space: nowrap;
 }
-.wordmark svg { width: 30px; height: 30px; flex-shrink: 0; }
-.wordmark svg { display: none; }
+.wordmark svg { width: 30px; height: 30px; flex-shrink: 0; display: none; }
 
 .rail-nav { display: flex; flex-direction: column; gap: var(--s1); flex: 1; }
 
@@ -277,10 +276,11 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
 /* icon rail on narrow desktop */
 @media (max-width: 1100px) {
   .rail { width: var(--rail-slim); align-items: center; padding: var(--s2) var(--s2) var(--s5); }
-  .wordmark span { display: none; }
+  /* labels leave the layout but stay the links' accessible names — with
+     display:none the wordmark link had no name at all on the icon rail */
+  .wordmark span, .rail-item span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .wordmark svg { display: block; }
   .wordmark { padding: var(--s6) 0 var(--s5); justify-content: center; }
-  .rail-item span { display: none; }
   .rail-item { justify-content: center; width: 48px; }
 }
 
@@ -294,7 +294,7 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
     justify-content: space-around; padding: 0 var(--s2) env(safe-area-inset-bottom);
     border-right: 0; border-top: 1px solid rgb(var(--line));
   }
-  .wordmark, .rail-foot .theme-label { display: none; }
+  .wordmark { display: none; }
   .rail-nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 0; }
   .rail-item { padding: var(--s2) 6px; width: auto; }
   .rail-nav .rail-item, .rail-foot .rail-item { min-width: var(--tap); min-height: var(--tap); }
@@ -397,6 +397,8 @@ input[type="text"], input[type="search"], input[type="number"], select, textarea
   border: 1px solid rgb(var(--stroke)); border-radius: var(--r-input);
   padding: 10px var(--s3); min-height: 36px; /* 10px: established cozy half-step, matches .fact/table cells/toast */
 }
+/* a field the controller marked invalid */
+:is(input, select, textarea)[aria-invalid="true"] { border-color: rgb(var(--red)); }
 textarea { width: 100%; font-family: var(--f-mono); font-size: var(--fs-12); line-height: 1.5; resize: vertical; }
 
 label.lbl { display: grid; gap: var(--s1); }

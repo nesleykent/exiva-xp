@@ -108,11 +108,11 @@ stage.innerHTML = `
 
   <section class="panel home-next-hunt">
     <div class="home-card-kicker">
-      <p class="eyebrow">Next hunt · from your evidence</p>
+      <h2 class="eyebrow">Next hunt · from your evidence</h2>
       ${nextHunt ? basisPill(nextHunt.basis) : ''}
     </div>
     ${nextHunt ? `
-      <h2>${esc(nextHunt.ground)}</h2>
+      <h3>${esc(nextHunt.ground)}</h3>
       <p class="dim">The strongest level-fit ${esc(nextHunt.vocation || 'team')} planner row available for ${esc(characterName)} right now. Open the dossier to check creatures, access and the best usable attack element before hunting.</p>
       <div class="home-hunt-stats">
         <span><b class="num">${kk(nextHunt.xpRawRate)}</b><small>raw XP/h</small></span>
@@ -123,13 +123,13 @@ stage.innerHTML = `
         <a class="btn btn-primary" href="grounds.html?g=${esc(nextHunt.groundSlug)}">Open hunt planner</a>
         <a class="btn btn-secondary" href="submit.html">Log a hunt</a>
       </div>` : `
-      <h2>No level-fit rated hunt yet</h2>
+      <h3>No level-fit rated hunt yet</h3>
       <p class="dim">Widen the planner filters to inspect unrated and team options.</p>
       <div class="home-card-actions"><a class="btn btn-primary" href="grounds.html">Open hunt planner</a></div>`}
   </section>
 
   <section class="panel home-attention">
-    <p class="eyebrow">Needs attention</p>
+    <h2 class="eyebrow">Needs attention</h2>
     <div class="home-attention-list">
       ${attention.slice(0, 3).map((item) => `
         <div><span>${esc(item.text)}</span><a href="${esc(item.href)}">${esc(item.label)}</a></div>`).join('')}
@@ -137,7 +137,7 @@ stage.innerHTML = `
   </section>
 
   <section class="home-shortcuts-section">
-    <p class="eyebrow">Shortcuts</p>
+    <h2 class="eyebrow">Shortcuts</h2>
     <div class="home-shortcuts">
       ${shortcuts.map(([href, label, icon]) => `<a href="${href}">${ICONS[icon]}<span>${esc(label)}</span></a>`).join('')}
     </div>

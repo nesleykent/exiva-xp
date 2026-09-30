@@ -139,7 +139,7 @@ function niceTicks(min, max, n = 4) {
  * population); every other row is a muted de-emphasis grey so the leader
  * reads as the answer, not just the longest bar. Direct-labelled, so no grid.
  */
-export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk, empty } = {}) {
+export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk, empty, label = '' } = {}) {
   if (!data.length) return vizEmpty(empty);
   // the label column keeps its share of a narrow chart instead of a fixed
   // 290px that would swallow the whole lane on a phone
@@ -167,7 +167,9 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
       <text class="vvalue" x="${labelW + w + 8}" y="${y + rowH / 2}" dominant-baseline="central">${fmt(d.n)}</text>
     </g>`;
   }).join('');
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" xmlns="http://www.w3.org/2000/svg">${defs}${body}</svg>`;
+  // values are otherwise only reachable by pointer hover: the name carries them
+  const name = `${label ? `${label}: ` : ''}${data.map((d) => `${d.key} ${fmt(d.n)}`).join(', ')}`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" xmlns="http://www.w3.org/2000/svg">${defs}${body}</svg>`;
 }
 
 /**
@@ -177,7 +179,7 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
  * for cumulative series (total XP) whose interesting movement is far above
  * zero; rate-style series keep the honest zero baseline.
  */
-export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty } = {}) {
+export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty, label = '' } = {}) {
   if (!data.length) return vizEmpty(empty);
   const pad = { t: 16, r: 16, b: 26, l: 46 }; // t/r on the spacing scale; b = axis band, l = tick gutter
   const max = Math.max(...data.map((d) => d.n), baseline === 'min' ? -Infinity : 1);
@@ -222,7 +224,9 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
     `<text class="vtick" x="${x(i).toFixed(1)}" y="${height - 6}" text-anchor="${anchor(i)}">${esc(data[i].key)}</text>`).join('');
   const grad = flowGradientDefs();
 
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
+  const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
+  const name = `${label ? `${label}: ` : ''}${data[0].key} ${fmt(data[0].n)} to ${data.at(-1).key} ${fmt(data.at(-1).n)}, peak ${fmt(peak.n)} on ${peak.key}`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
 }
 
 /**

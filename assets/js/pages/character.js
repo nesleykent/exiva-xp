@@ -211,13 +211,13 @@ function statCardHtml(row) {
 function nextHuntsHtml() {
   if (!grounds4me.length) return '';
   return `
-    <div class="next-hunts" role="list">
+    <ul class="next-hunts">
       ${grounds4me.slice(0, 8).map((row) => `
-        <a class="next-hunts-item" role="listitem" href="grounds.html?g=${esc(row.groundSlug)}">
+        <li><a class="next-hunts-item" href="grounds.html?g=${esc(row.groundSlug)}">
           <span class="next-hunts-ring"><span>${esc(initials(row.ground))}</span></span>
           <small>${esc(row.ground)}</small>
-        </a>`).join('')}
-    </div>`;
+        </a></li>`).join('')}
+    </ul>`;
 }
 
 const SKILL_KIND = 'skill level';
@@ -388,14 +388,14 @@ stage.innerHTML = `
 
   ${grounds4me.length ? `
   <section aria-label="Next hunts">
-    <p class="eyebrow panel-eyebrow">Next hunts</p>
+    <h2 class="eyebrow panel-eyebrow">Next hunts</h2>
     ${nextHuntsHtml()}
   </section>` : ''}
 
   ${historyRows.length ? `
   <section class="panel panel-pad viz" aria-label="Experience">
     <div class="exp-head">
-      <p class="eyebrow panel-eyebrow exp-title">Experience</p>
+      <h2 class="eyebrow panel-eyebrow exp-title">Experience</h2>
       <div class="segmented" id="xp-year" role="group" aria-label="Year">
         ${chartYears.map((year) => `<button type="button" data-year="${year}" aria-pressed="${String(year === (chartYears.at(-1)))}">${year}</button>`).join('')}
       </div>
@@ -407,7 +407,7 @@ stage.innerHTML = `
 
   ${skillRows.length ? `
   <section class="panel panel-pad" aria-label="Skills">
-    <p class="eyebrow panel-eyebrow">Skills</p>
+    <h2 class="eyebrow panel-eyebrow">Skills</h2>
     <div class="skill-grid">${skillRows.map(skillCardHtml).join('')}</div>
   </section>` : ''}
 
@@ -418,11 +418,11 @@ stage.innerHTML = `
 
   <section class="activity-duo" aria-label="Hunting activity and recent deaths">
     <div class="panel panel-pad viz">
-      <p class="eyebrow panel-eyebrow">Daily XP activity</p>
+      <h2 class="eyebrow panel-eyebrow">Daily XP activity</h2>
       ${activityHeatmapHtml()}
     </div>
     <div class="panel panel-pad">
-      <p class="eyebrow panel-eyebrow">Recent deaths</p>
+      <h2 class="eyebrow panel-eyebrow">Recent deaths</h2>
       ${recentDeathsHtml()}
     </div>
   </section>
