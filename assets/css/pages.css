@@ -30,7 +30,7 @@
 .home-attention-list { display: grid; }
 .home-attention-list > div { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); min-height: 48px; border-top: 1px solid rgb(var(--line)); }
 .home-attention-list > div:first-child { border-top: 0; }
-.home-attention-list a { color: rgb(var(--blue)); font-weight: 600; white-space: nowrap; }
+.home-attention-list a { color: rgb(var(--ink-info)); font-weight: 600; white-space: nowrap; }
 .home-shortcuts-section { display: grid; gap: var(--s3); margin-top: var(--s6); }
 .home-shortcuts-section > p { margin: 0; }
 .home-shortcuts { display: flex; flex-wrap: wrap; gap: var(--s3); }
@@ -157,9 +157,13 @@
 .pill[class*="el-"] { background: rgba(var(--el), .14); }
 /* semantic tones, not colour names — matches the source Badge component's
    tone system (a fixed vocabulary of meanings, not literal hues) */
-.pill-info { background: rgba(var(--blue), .12); color: rgb(var(--blue)); }
+.pill-info { background: rgba(var(--blue), .12); color: rgb(var(--ink-info)); }
+/* a pill that navigates (Codex habitats → ground) carries a link cue the
+   same-looking static labels don't */
+a.pill { text-decoration: underline; text-decoration-color: rgba(var(--ink-info), .4); text-underline-offset: 2px; }
+a.pill:hover { background: rgba(var(--blue), .2); text-decoration-color: currentColor; }
 .pill-success { background: rgba(var(--green), .14); color: rgb(var(--ink-success)); }
-.pill-error { background: rgba(var(--red), .12); color: rgb(var(--red)); }
+.pill-error { background: rgba(var(--red), .12); color: rgb(var(--ink-error)); }
 .pill-warning { background: rgba(var(--brand-orange), .14); color: rgb(var(--ink-warning)); }
 
 .el-physical { --el: var(--c-physical); }
@@ -211,7 +215,8 @@ table.grid td { border-bottom: 1px solid rgb(var(--line)); }
 table.grid tr:last-child td { border-bottom: 0; }
 table.grid tbody tr:hover, table.grid tr.is-current { background: rgba(var(--overlay), var(--overlay-a)); }
 table.grid .num { text-align: right; }
-table.grid a { color: rgb(var(--blue)); font-weight: 600; }
+table.grid a { color: rgb(var(--ink-info)); font-weight: 600; }
+table.grid a:hover { text-decoration: underline; }
 .sheet + .count-line { margin-top: var(--s2); }
 .admin-transfer-actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .admin-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); }
@@ -306,7 +311,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .guess .pct { margin-left: auto; font-weight: 700; font-size: var(--fs-15); }
 
 .note { border-radius: var(--r-md); padding: var(--s3) var(--s4); font-size: var(--fs-14); margin: var(--s2) 0; }
-.note-error { background: rgba(var(--red), .08); color: rgb(var(--red)); }
+.note-error { background: rgba(var(--red), .08); color: rgb(var(--ink-error)); }
 .note-warning { background: rgba(var(--brand-orange), .1); color: rgb(var(--ink-warning)); }
 .note-success { background: rgba(var(--green), .1); color: rgb(var(--ink-success)); }
 
@@ -333,7 +338,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: var(--s4);
 }
 .tool-disclosure { border-top: 1px solid rgb(var(--line)); padding-top: var(--s3); }
-.tool-disclosure summary { color: rgb(var(--blue)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
+.tool-disclosure summary { color: rgb(var(--ink-info)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .tool-disclosure .tool-fields { margin-top: var(--s3); }
 #level-tool { order: 3; }
 #imbuement-tool { order: 4; }
@@ -546,9 +551,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: var(--fs-13);
   font-weight: 600;
 }
-.imb-tier-text-basic { color: rgb(var(--green)); }
-.imb-tier-text-intricate { color: rgb(var(--blue)); }
-.imb-tier-text-powerful { color: rgb(var(--red)); }
+.imb-tier-text-basic { color: rgb(var(--ink-success)); }
+.imb-tier-text-intricate { color: rgb(var(--ink-info)); }
+.imb-tier-text-powerful { color: rgb(var(--ink-error)); }
 .imb-tier-items {
   padding: var(--s2) var(--s3);
   background: rgb(var(--surface-raised));
@@ -612,7 +617,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: var(--s1);
 }
 .imb-compare-row strong { font-variant-numeric: tabular-nums; }
-.imb-compare-row em { color: rgb(var(--red)); font-style: normal; font-weight: 700; }
+.imb-compare-row em { color: rgb(var(--ink-error)); font-style: normal; font-weight: 700; }
 .imb-tier-pop p { margin: var(--s3) 0 0; padding: var(--s2); text-align: center; background: rgb(var(--surface-2)); border-radius: var(--r-sm); }
 /* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
 .imb-copy-btn {
@@ -691,7 +696,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 /* the one signed-delta vocabulary (Character KPIs, Progress deltas); size comes from its context */
 .metric-delta { font-style: normal; font-weight: 700; }
 .metric-delta.up { color: rgb(var(--ink-success)); }
-.metric-delta.down { color: rgb(var(--red)); }
+.metric-delta.down { color: rgb(var(--ink-error)); }
 .metric-delta.even { color: rgb(var(--ink-2)); }
 .metric-spark { margin-top: 2px; }
 .metric-spark svg { display: block; width: 100%; height: auto; }
@@ -733,7 +738,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .pace-message { display: grid; gap: var(--s1); min-width: 0; }
 .pace-message > b { font-size: var(--fs-17); line-height: 22px; }
-.pace-down .pace-message > b { color: rgb(var(--red)); }
+.pace-down .pace-message > b { color: rgb(var(--ink-error)); }
 .pace-up .pace-message > b { color: rgb(var(--ink-success)); }
 .pace-support { display: flex; align-items: center; flex-shrink: 0; }
 .pace-support > span { display: grid; gap: 2px; min-width: 100px; padding-left: var(--s4); border-left: 1px solid rgb(var(--line)); }
