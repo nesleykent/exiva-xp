@@ -83,7 +83,12 @@
 .planner-card-creatures { min-height: 34px; }
 
 @media (max-width: 700px) {
-  #stage > header { padding-right: calc(var(--tap) * 2 + var(--s2)) !important; }
+  /* Reserve room beside the floating GitHub/appearance cluster (.rail-foot,
+     ~50px tall) only for the lines that sit next to it: a float on block
+     page heads, the first rows of Home's grid head, the Character hero row.
+     Reserving the whole header squeezed every lede into a ~210px column. */
+  .page-head::before { content: ''; float: right; width: calc(var(--tap) * 2 + var(--s4)); height: calc(var(--tap) + var(--s2)); }
+  .home-dashboard-head > :not(:last-child), .character-hero { padding-right: calc(var(--tap) * 2 + var(--s4)); }
   /* Stacked and tighter here; the bar is already static and opaque for every
      width (see the base rule above for why it isn't sticky anywhere). */
   .filter-bar {
@@ -281,8 +286,8 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 @media (max-width: 520px) { .stepper-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
 /* keeps the last step's circle clear of the floating GitHub/appearance
    cluster (.rail-foot, fixed top-right) — focusing a later step's heading
-   can scroll a short flow right under it; same reserve as #stage > header. */
-@media (max-width: 700px) { .stepper-list { padding-right: calc(var(--tap) * 2 + var(--s2)); } }
+   can scroll a short flow right under it; same reserve as the page heads. */
+@media (max-width: 700px) { .stepper-list { padding-right: calc(var(--tap) * 2 + var(--s4)); } }
 
 .step-nav { display: flex; justify-content: space-between; gap: var(--s3); margin-top: var(--s4); }
 

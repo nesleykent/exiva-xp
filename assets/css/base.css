@@ -295,12 +295,17 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
   /* the tab bar carries only the five daily-loop destinations; the rest
      stay in the desktop sidebar and on the home workspace grid */
   .rail-nav .rail-desktop-only { display: none; }
-  main.stage { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
 }
 
 main.stage {
   flex: 1; min-width: 0;
   padding: var(--s8) var(--s8) var(--s16);
+}
+/* phone gutters are HIG's 16pt layout margin — the desktop s8 left ~263px of
+   content inside a padded panel at 375. The top stays s8: the floating
+   utility cluster's `top` is measured from it. */
+@media (max-width: 700px) {
+  main.stage { padding: var(--s8) var(--s4) calc(72px + env(safe-area-inset-bottom)); }
 }
 .stage-inner { max-width: var(--canvas); margin: 0 auto; animation: page-settle var(--t-reveal) var(--e-settle) both; }
 .stage-inner.narrow { max-width: var(--feed); }
@@ -345,6 +350,7 @@ main.stage {
   border-radius: var(--r-card);
 }
 .panel-pad { padding: var(--s6); }
+@media (max-width: 700px) { .panel-pad { padding: var(--s4); } }
 
 .eyebrow {
   font-size: var(--fs-11); line-height: 13px; font-weight: 600;
