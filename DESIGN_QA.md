@@ -201,6 +201,15 @@ The dead `chartPoint` helper is removed. Verified on both pages at 320/375/768/1
 
 Open: `bars()` non-leader rows are still grey (§5 exception 2), which is an owner call and is listed in §12 #16.
 
+## Reverted by the owner (2026-09-30)
+
+The owner asked to put the segmented controls back ("why did u increase the segment controls height… revert"). Undone:
+
+- **Height:** the ≤700 px 44 px min-height and min-width (from `cca57a5`).
+- **Wrapping:** multi-row options and the Codex full-row filter layout (from `197a7d4`).
+
+Segments are 30 px again and scroll horizontally in one row. What remains changes no size: the hover text tone, a focus ring drawn inside, and the dark-mode selected surface.
+
 ## Removed (restorable from the commit named)
 
 - **Planner filter-bar count** "167 grounds · 189 rows" and **Codex filter-bar count** "833 creatures" (`19900d8`). Each duplicated the "Showing N of M" line directly below it.

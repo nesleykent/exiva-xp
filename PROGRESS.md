@@ -38,5 +38,8 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 ## Follow-up 3 (user): "yes [convert Character] but now you lose the site design-system colours" + "gray is not part of the system check instagram design system"
 - DONE: IG DS manual/02-color.md checked (scratchpad clone). columns() = hero-gradient sweep columns, ink trend + halo, avg value in caption band. Character Experience chart converted (year=months, month=days). Verified both pages 320-1280 both themes. Open Q: bars() grey rows (§12 #16).
 
+## Follow-up 4 (user): revert segmented control height
+- DONE (a51b5d6): removed mobile 44px min-height/width and wrap; restored original overflow-x single row, .exp-month flex, Codex filter layout. Kept hover/focus-inside/dark selected. DO NOT re-enlarge segmented controls.
+
 ## Next step
 - DONE. Only the final report remains (chat). Open items are in DESIGN_QA.md → Remaining / Needs decision and AGENTS.md §12 #16.
