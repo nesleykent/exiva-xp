@@ -213,7 +213,7 @@ function renderDetail(slug) {
   <header class="masthead">
     ${ring(ground.name, { quiet: !dossier.n })}
     <div>
-      <h1>${esc(ground.name)}</h1>
+      <h1 tabindex="-1">${esc(ground.name)}</h1>
       <div class="sub">
         ${areaOf(ground.slug) ? `<span class="pill pill-info">${esc(areaOf(ground.slug))}</span>` : ''}
         ${trustMeter(trust, dossier.n)}
@@ -336,14 +336,19 @@ function openDetail(slug, { push = true } = {}) {
   if (push) history.pushState({ g: slug }, '', `grounds.html?g=${encodeURIComponent(slug)}`);
   render();
   $('#detail').scrollIntoView({ block: 'start' });
+  // the activated tile is gone from view: move focus to the dossier it opened
+  $('#detail h1')?.focus({ preventScroll: true });
 }
 
 function closeDetail({ push = true } = {}) {
+  const was = state.detailSlug;
   state.detailSlug = null;
   document.title = PAGE_TITLE;
   if (push) history.pushState({}, '', 'grounds.html');
   $('#detail').innerHTML = '';
   render();
+  // back to the tile the dossier was opened from, so keyboard users keep their place
+  if (was) document.querySelector(`[data-ground-slug="${CSS.escape(was)}"]`)?.focus();
 }
 
 window.addEventListener('popstate', () => {
@@ -433,8 +438,11 @@ bindSegmented('f-party', (value) => { state.mode = value; state.shown = PAGE_SIZ
 bindSegmented('f-level-band', (value) => { state.levelBand = value; state.shown = PAGE_SIZE; render(); });
 $('#out').addEventListener('click', (e) => {
   if (e.target.closest('[data-show-more]')) {
+    const first = state.shown;
     state.shown += PAGE_STEP;
     render();
+    // the button re-rendered away: continue from the first newly shown card
+    document.querySelectorAll('#out [data-ground-slug]')[first]?.focus();
     return;
   }
   const tile = e.target.closest('[data-ground-slug]');

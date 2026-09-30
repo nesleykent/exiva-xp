@@ -692,6 +692,9 @@ function openImbuementModal(id) {
     openButton.focus();
   };
   $('#imb-modal-close').addEventListener('click', () => modal.close());
+  // a price edit re-renders the grid, replacing the card that opened the
+  // dialog, so the browser has nothing to return focus to: find its successor
+  modal.addEventListener('close', () => document.querySelector(`#imb-grid [data-imb="${CSS.escape(id)}"]`)?.focus(), { once: true });
   modal.showModal();
 }
 

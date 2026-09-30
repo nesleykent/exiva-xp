@@ -141,6 +141,8 @@ function refresh() {
     writeLogbook(after);
     offerUndo('Hunt deleted.', before);
     refresh();
+    // the pressed Delete re-rendered away; the next useful control is Undo
+    $('#k-undo [data-undo]')?.focus();
   };
 
   const packs = new Map();
@@ -168,6 +170,7 @@ function refresh() {
       writeLogbook(before.filter((h) => !drop.has(h.id)));
       offerUndo(`Swept ${pack.length - 1} duplicate${pack.length > 2 ? 's' : ''}.`, before);
       refresh();
+      $('#k-undo [data-undo]')?.focus();
     };
   }
 }

@@ -109,7 +109,7 @@ function renderDetail(creatureSlug) {
       ? `<span class="art-disc"><img class="critter critter-lg" src="${esc(c.art)}" alt="${esc(c.name)}" onerror="this.parentElement.remove()"></span>`
       : ring(c.name, { quiet: !weak.length })}
     <div>
-      <h1>${esc(c.name)}</h1>
+      <h1 tabindex="-1">${esc(c.name)}</h1>
       <div class="sub">
         ${c.family ? `<span class="pill">${esc(c.family)}</span>` : ''}
         ${c.tier ? `<span class="pill">${esc(c.tier)}</span>` : ''}
@@ -206,14 +206,19 @@ function openDetail(creatureSlug, { push = true } = {}) {
   if (push) history.pushState({ c: creatureSlug }, '', `creatures.html?c=${encodeURIComponent(creatureSlug)}`);
   render();
   $('#detail').scrollIntoView({ block: 'start' });
+  // the activated tile is gone from view: move focus to the dossier it opened
+  $('#detail h1')?.focus({ preventScroll: true });
 }
 
 function closeDetail({ push = true } = {}) {
+  const was = state.detailSlug;
   state.detailSlug = null;
   document.title = PAGE_TITLE;
   if (push) history.pushState({}, '', 'creatures.html');
   $('#detail').innerHTML = '';
   render();
+  // back to the tile the dossier was opened from, so keyboard users keep their place
+  if (was) document.querySelector(`[data-creature-slug="${CSS.escape(was)}"]`)?.focus();
 }
 
 window.addEventListener('popstate', () => {
@@ -300,7 +305,13 @@ bindSegmented('c-family', (value) => {
 });
 bindSegmented('c-task-speed', (value) => { state.taskSpeed = value; state.shown = PAGE_SIZE; render(); });
 bindSegmented('c-sort', (value) => { state.sort = value; state.shown = PAGE_SIZE; render(); });
-$('#more').addEventListener('click', () => { state.shown += PAGE_STEP; render(); });
+$('#more').addEventListener('click', () => {
+  const first = state.shown;
+  state.shown += PAGE_STEP;
+  render();
+  // continue from the first newly shown tile rather than wherever the button ends up
+  document.querySelectorAll('#out [data-creature-slug]')[first]?.focus();
+});
 $('#out').addEventListener('click', (e) => {
   const tile = e.target.closest('[data-creature-slug]');
   if (!tile || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
