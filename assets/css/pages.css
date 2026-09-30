@@ -11,7 +11,7 @@
    use: eyebrow label, value, optional .fine.dim detail line and sparkline.
    Chrome (surface/border/radius) comes from .panel. */
 .metric { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; padding: var(--s4); }
-.metric > b, .metric-value-row > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.metric > b, .metric-value-row > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; white-space: nowrap; }
 .metric b em { margin-left: 2px; color: rgb(var(--ink-2)); font-size: var(--fs-14); font-style: normal; font-weight: 600; }
 /* compact tier (Character's point-stat cards); doubled class so it outranks
    the ≤700px .metric step below */
@@ -671,10 +671,18 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--s6);
 }
+/* four KPI cards at a tablet canvas leave ~140px each — too narrow for a
+   figure plus its inline sparkline; two per row until the full sidebar */
+@media (max-width: 1000px) {
+  .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 /* featured KPI card — value and its sparkline share one baseline-aligned row,
    matching the reference (spark sits top-right of the number, no axis labels) */
-.metric-value-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s3); }
-.metric-value-row .metric-spark { margin: 0; width: 96px; flex: 0 0 96px; }
+/* a figure never breaks mid-number: the value keeps its width and the spark
+   shrinks, then drops below it when the card is too narrow for both */
+.metric-value-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s3); }
+.metric-value-row > b { flex: 0 0 auto; }
+.metric-value-row .metric-spark { margin: 0; flex: 1 1 64px; max-width: 96px; }
 /* the one signed-delta vocabulary (Character KPIs, Progress deltas); size comes from its context */
 .metric-delta { font-style: normal; font-weight: 700; }
 .metric-delta.up { color: rgb(var(--ink-success)); }
@@ -757,24 +765,27 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 }
 .skill-card {
   display: grid;
+  min-width: 0;
   gap: var(--s3);
   padding: var(--s4);
 }
 .skill-card-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--s3);
+  gap: var(--s1) var(--s3);
 }
 .skill-card-head h3 {
   font-size: var(--fs-15);
   line-height: 19px;
 }
+.skill-card-head > div { min-width: 0; }
 .skill-card-head > b {
+  flex-shrink: 0;
   font-size: var(--fs-22);
   line-height: 26px;
-  min-width: 0;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
   text-align: right;
 }
 .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s6); margin-top: var(--s3); }
