@@ -201,6 +201,34 @@ The dead `chartPoint` helper is removed. Verified on both pages at 320/375/768/1
 
 Open: `bars()` non-leader rows are still grey (§5 exception 2), which is an owner call and is listed in §12 #16.
 
+## Follow-up 4: chart hover (owner, 2026-09-30)
+
+The owner's report was "hover still bugged for all charts". I reproduced it with real mouse moves and touch taps through CDP (`.claude/qa-shots/hovertest.mjs`: 6 chart types × 18 probes × 375/1280 × light/dark):
+
+- **Taps did nothing.** A tap never showed a tip, because `pointerleave` fires when the finger lifts.
+- **Edge tips ran off-screen.** Tips near the right edge left the viewport, since the clamp assumed a tip 80 px wide.
+- **The panel answered for the chart.** Hovering the stats strip or legend drove the chart's tip.
+- **Column anchors were wrong.** The column-chart anchor sat on the trend line, so "0" pointed at a 12M dot.
+- **Bars were mostly dead.** Only the painted bar shape was a target; the label, value and gap did nothing.
+- **Heatmap gaps missed.** The pointer found nothing in the 4 px gaps between cells.
+- **Tooltips doubled up.** Native SVG `<title>` tooltips appeared on top of the custom tip.
+- **Sparklines had no hover** at all.
+
+The fix is in `attachVizHover`, the shared hover layer. Series charts answer only while the pointer is over their own svg:
+
+- **Columns** highlight the column (siblings dim to .4) and anchor at its top.
+- **`flow()`** keeps its crosshair and grown dot.
+- **Bar rows** are whole-row targets.
+- **Heatmap** hovers take the nearest cell.
+- **No-data bands and donut segments** anchor at the pointer.
+- **The tip** is measured at natural width (≤280 px), kept in the viewport and flipped below when there is no room above.
+- **Taps** pin the tip until a tap elsewhere.
+- **Scroll or resize** hides it.
+- **Sparklines** (Home KPIs, Character total XP, Progress highscore cards) get hover anchors, and multi-year ones carry the year.
+- **Cleanup:** `<title>` duplicates and the dead `viz:pick` event are removed.
+
+Result: every probe that should show a tip does. The two blanks are the stats strip and empty panel space, where no tip is correct. Nothing leaves the viewport in either theme.
+
 ## Reverted by the owner (2026-09-30)
 
 The owner asked to put the segmented controls back ("why did u increase the segment controls height… revert"). Undone:

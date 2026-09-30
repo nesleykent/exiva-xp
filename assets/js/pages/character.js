@@ -317,7 +317,7 @@ function profitPerHour() {
 
 const monthGain = monthToDateGain();
 const profitRate = profitPerHour();
-const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: md(row.date), n: row.experience })), 24);
+const totalXpSpark = sampledSeries(historyRows.map((row) => ({ key: md(row.date), label: longDate(row.date), n: row.experience })), 24);
 
 const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delta ${tone}">${text}</em>`);
 
@@ -461,6 +461,7 @@ document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 
 // sparklines mount at their container's true pixel width (token-size text)
 chartInto($('#xp-total-spark'), (width) => sparkline(totalXpSpark, { width, height: 28, fmt: compact, ticks: false }));
+attachVizHover($('#xp-total-spark')?.closest('.metric'));
 
 // ---- share profile: copy the character URL; no server, so just the link ----
 const shareBtn = $('#share-profile');

@@ -165,9 +165,12 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
     const bar = `M${labelW},${y} h${(w - r).toFixed(1)} a${r},${r} 0 0 1 ${r},${r} v${rowH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${(w - r).toFixed(1)} Z`;
     const isLead = i === topIdx;
     const fill = isLead ? ` fill="url(#${gradId})"` : '';
-    return `<g>
+    // the whole row band (label, bar, value, the gap below) is the hover
+    // target — the bar shape alone left most of the row dead to the pointer
+    return `<g class="vrow" data-v="${esc(fmt(d.n))}" data-l="${esc(d.key)}">
+      <rect class="vhit" x="0" y="${y - gap / 2}" width="${width}" height="${rowH + gap}"/>
       <text class="vlabel" x="${labelW - 8}" y="${y + rowH / 2}" text-anchor="end" dominant-baseline="central">${esc(clip(d.key, labelChars))}</text>
-      <path class="vbar${isLead ? '' : ' vbar-rest'}" d="${bar}"${fill} data-v="${esc(fmt(d.n))}" data-l="${esc(d.key)}"><title>${esc(d.key)}: ${fmt(d.n)}</title></path>
+      <path class="vbar${isLead ? '' : ' vbar-rest'}" d="${bar}"${fill}/>
       <text class="vvalue" x="${labelW + w + 8}" y="${y + rowH / 2}" dominant-baseline="central">${fmt(d.n)}</text>
     </g>`;
   }).join('');
@@ -219,7 +222,7 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
     const note = x2 - x1 >= 64
       ? `<text class="vgap-label" x="${((x1 + x2) / 2).toFixed(1)}" y="${pad.t + 10}" text-anchor="middle">not tracked</text>`
       : '';
-    return `<rect class="vgap" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}"><title>Not tracked: ${esc(data[run[0] - 1].label ?? data[run[0] - 1].key)} → ${esc(data[run[0]].label ?? data[run[0]].key)}</title></rect>${note}`;
+    return `<rect class="vgap" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}" data-v="Not tracked" data-l="${esc(data[run[0] - 1].label ?? data[run[0] - 1].key)} → ${esc(data[run[0]].label ?? data[run[0]].key)}"/>${note}`;
   }).join('');
   const lonely = new Set(runs.filter((run) => run.length === 1).map((run) => run[0]));
 
@@ -234,7 +237,7 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const dots = data.map((d, i) => {
     const r = i === last ? Math.max(dotR, 3) : lonely.has(i) ? Math.max(dotR, 2) : dotR;
     const cls = i === last ? 'vdot vdot-current' : 'vdot';
-    return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${r}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`;
+    return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${r}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"/>`;
   }).join('');
   // on a dense series (the same >48 threshold that hides the dots) full-size
   // event markers merged into a solid band: draw them small and tight instead
@@ -244,7 +247,7 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
     const cx = x(i) + (eventIndex * evR * 1.6);
     const cy = y(d.n) - (evR + 4);
     const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense ? ' vevent-dense' : ''}`;
-    return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${evR}"><title>${esc(event.label)}</title></circle>`;
+    return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${evR}"/>`;
   })).join('');
   const grid = ticks.map((v) =>
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
@@ -307,7 +310,7 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
     if (data[i].t - data[i - 1].t <= gapOver) continue;
     const x1 = x(data[i - 1].t + step / 2);
     const x2 = x(data[i].t - step / 2);
-    gaps.push(`<rect class="vnodata" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}" fill="url(#${hatch})"><title>No data: ${esc(data[i - 1].key ?? '')} → ${esc(data[i].key ?? '')}</title></rect>${x2 - x1 >= 56 ? `<text class="vnodata-label" x="${((x1 + x2) / 2).toFixed(1)}" y="${pad.t + 12}" text-anchor="middle">no data</text>` : ''}`);
+    gaps.push(`<rect class="vnodata" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}" fill="url(#${hatch})" data-v="No data" data-l="Not tracked between ${esc(data[i - 1].key ?? '')} and ${esc(data[i].key ?? '')}"/>${x2 - x1 >= 56 ? `<text class="vnodata-label" x="${((x1 + x2) / 2).toFixed(1)}" y="${pad.t + 12}" text-anchor="middle">no data</text>` : ''}`);
   }
 
   const bars = data.map((d) => {
@@ -338,7 +341,7 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
     const levels = (d.events || []).filter((e) => e.type !== 'death');
     const deaths = (d.events || []).filter((e) => e.type === 'death');
     return [[levels, 'vrug-level'], [deaths, 'vrug-death']].filter(([list]) => list.length).map(([list, cls]) =>
-      `<rect class="vrug ${cls}" x="${(x(d.t) - 0.75).toFixed(1)}" y="${base + 5}" width="1.5" height="7"><title>${esc(list.map((e) => e.label).join(' · '))}</title></rect>`);
+      `<rect class="vrug ${cls}" x="${(x(d.t) - 0.75).toFixed(1)}" y="${base + 5}" width="1.5" height="7"/>`);
   }).join('');
 
   // calendar ticks: a short mark on the baseline and a label that never
@@ -353,7 +356,7 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
     return `<line class="vbase" x1="${cx.toFixed(1)}" y1="${base}" x2="${cx.toFixed(1)}" y2="${base + 4}"/><text class="vtick" x="${lx.toFixed(1)}" y="${height - 8}" text-anchor="middle">${esc(tk.label)}</text>`;
   }).join('');
 
-  const marks = data.map((d, i) => `<circle class="vdot" cx="${x(d.t).toFixed(1)}" cy="${y(trend?.[i] ?? d.n).toFixed(1)}" r="0" data-r="0" data-id="${esc(d.t)}" data-key="${esc(d.key ?? '')}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.tip ?? d.key ?? '')}"/>`).join('');
+  const marks = data.map((d, i) => `<circle class="vdot" cx="${x(d.t).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="0" data-r="0" data-col="${i}" data-id="${esc(d.t)}" data-key="${esc(d.key ?? '')}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.tip ?? d.key ?? '')}"/>`).join('');
 
   const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
   const name = `${label ? `${label}: ` : ''}${data.length} columns, ${data[0].key ?? ''} to ${data.at(-1).key ?? ''}, peak ${fmt(peak.n)} on ${peak.key ?? ''}${average != null ? `, average ${fmt(average)}` : ''}${gaps.length ? `, ${gaps.length} span${gaps.length === 1 ? '' : 's'} with no data` : ''}`;
@@ -421,7 +424,7 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf, ticks = tr
     ${grad.defs}
     <path class="varea" fill="url(#${grad.area})" d="${area}"/>
     <path class="vline" stroke="url(#${grad.line})" d="${line}"/>
-    <circle class="vdot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(end.n).toFixed(1)}" r="3.5"><title>${esc(end.key)}: ${fmt(end.n)}</title></circle>
+    ${data.map((d, i) => `<circle class="vdot" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${i === data.length - 1 ? 3.5 : 0}" data-r="${i === data.length - 1 ? 3.5 : 0}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"/>`).join('')}
     ${ticks && roomForBoth ? `<text class="vtick" x="${pad.l}" y="${height - 3}">${esc(start.key)}</text>` : ''}
     ${ticks ? `<text class="vtick" x="${width - pad.r}" y="${height - 3}" text-anchor="end">${esc(end.key)}</text>` : ''}
   </svg>`;
@@ -480,7 +483,7 @@ export function donut(rows, { size = 160, fmt = kk, label = '' } = {}) {
     const frac = d.n / total;
     const dash = Math.max(0.5, frac * circumference - gap);
     const pctShare = Math.round(frac * 100);
-    const seg = `<circle class="vdonut-seg" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgb(var(${d.color}))" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(1)} ${(circumference - dash).toFixed(1)}" stroke-dashoffset="${(-(offset + gap / 2)).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})" data-v="${esc(`${fmt(d.n)} · ${pctShare}%`)}" data-l="${esc(d.key)}"><title>${esc(d.key)}: ${fmt(d.n)} (${pctShare}%)</title></circle>`;
+    const seg = `<circle class="vdonut-seg" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgb(var(${d.color}))" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(1)} ${(circumference - dash).toFixed(1)}" stroke-dashoffset="${(-(offset + gap / 2)).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})" data-v="${esc(`${fmt(d.n)} · ${pctShare}%`)}" data-l="${esc(d.key)}"/>`;
     offset += frac * circumference;
     return seg;
   }).join('');
@@ -489,15 +492,22 @@ export function donut(rows, { size = 160, fmt = kk, label = '' } = {}) {
 
 /**
  * Shared hover layer for every chart panel: a two-line tooltip (value leads,
- * label follows) plus a crosshair that snaps to the nearest point on flow()
- * charts. Any mark carrying data-v/data-l (bars, donut segments, heatmap
- * cells) is its own hit target. Binds once per container (dataset flag) and
- * reads the live marks on every move, so it survives chart re-renders inside
- * the same container (metric/range switches replace the svg, not the wrapper).
+ * label follows). Series charts (flow() dots, columns() anchors) snap to the
+ * point nearest the pointer's x inside the svg being hovered — never from the
+ * stats, legend or controls around it; flow() adds a crosshair and a grown
+ * dot, columns() highlights its column and dims the rest. Any other mark
+ * carrying data-v/data-l (bar rows, donut segments, heatmap cells, no-data
+ * bands) is its own target; the heatmap also takes the nearest cell across
+ * the gaps between cells. The tip is measured and kept inside the viewport,
+ * flipping below the point when there is no room above. A mouse hides it on
+ * leave; a tap pins it until the next tap outside the panel. Binds once per
+ * container and reads the live marks on every event, so it survives chart
+ * re-renders inside the same container.
  */
 export function attachVizHover(container) {
   if (!container || container.dataset.vizHover) return;
   container.dataset.vizHover = '1';
+  if (getComputedStyle(container).position === 'static') container.style.position = 'relative';
   const tip = document.createElement('div');
   tip.className = 'viz-tip';
   tip.hidden = true;
@@ -509,32 +519,71 @@ export function attachVizHover(container) {
   cross.hidden = true;
   container.append(cross, tip);
 
+  const clearMarks = () => {
+    container.querySelectorAll('.vdot').forEach((d) => d.setAttribute('r', d.dataset.r ?? 3));
+    container.querySelectorAll('.is-active').forEach((el) => el.classList.remove('is-active'));
+    container.querySelectorAll('.has-active').forEach((el) => el.classList.remove('has-active'));
+  };
   const reset = () => {
     tip.hidden = true;
     cross.hidden = true;
-    container.querySelectorAll('.vdot').forEach((d) => d.setAttribute('r', d.dataset.r ?? 3));
+    clearMarks();
   };
 
-  const place = (xPx, topPx, box) => {
+  /** Show the tip beside an anchor given in viewport px ({x, top, bottom}). */
+  const show = (value, label, anchor) => {
+    tipValue.textContent = value;
+    tipLabel.textContent = label;
+    tip.style.left = '0px';
+    tip.style.top = '0px';
     tip.hidden = false;
-    tip.style.left = `${Math.min(Math.max(xPx, 40), box.width - 40)}px`;
-    tip.style.top = `${topPx}px`;
+    const box = container.getBoundingClientRect();
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    const edge = 8;
+    // stay inside the container when the tip fits it, else inside the viewport
+    let minLeft = box.left;
+    let maxLeft = box.right - w;
+    if (maxLeft < minLeft) { minLeft = edge; maxLeft = innerWidth - edge - w; }
+    minLeft = Math.max(minLeft, edge);
+    maxLeft = Math.min(maxLeft, innerWidth - edge - w);
+    const left = Math.max(minLeft, Math.min(anchor.x - w / 2, maxLeft));
+    const above = anchor.top - h - 8;
+    const top = above >= edge ? above : anchor.bottom + 8;
+    tip.style.left = `${(left - box.left).toFixed(1)}px`;
+    tip.style.top = `${(top - box.top).toFixed(1)}px`;
   };
 
   const pick = (e) => {
-    const box = container.getBoundingClientRect();
-    // per-mark tips: bars, donut segments, heatmap cells
-    const mark = e.target.closest?.('[data-v]');
-    if (mark && !mark.classList.contains('vdot')) {
-      cross.hidden = true;
-      container.querySelectorAll('.vdot').forEach((d) => d.setAttribute('r', d.dataset.r ?? 3));
-      tipValue.textContent = mark.dataset.v;
-      tipLabel.textContent = mark.dataset.l || '';
-      const r = mark.getBoundingClientRect();
-      return place(e.clientX - box.left, r.top - box.top, box);
+    clearMarks();
+    cross.hidden = true;
+    // heatmap: the nearest cell, so the gaps between cells are not dead zones
+    const grid = e.target.closest?.('.heatmap');
+    let mark = e.target.closest?.('[data-v]');
+    if (!mark && grid) {
+      let best = null;
+      let bestD = 144; // within 12px of a cell centre
+      for (const cell of grid.querySelectorAll('[data-v]')) {
+        const r = cell.getBoundingClientRect();
+        const d = (r.left + r.width / 2 - e.clientX) ** 2 + (r.top + r.height / 2 - e.clientY) ** 2;
+        if (d < bestD) { bestD = d; best = cell; }
+      }
+      mark = best;
     }
-    // nearest-point crosshair for flow() charts
-    const dots = [...container.querySelectorAll('.vdot')];
+    if (mark && !mark.classList.contains('vdot')) {
+      mark.classList.add('is-active');
+      mark.closest('svg')?.classList.add('has-active');
+      const r = (mark.querySelector('.vbar') || mark).getBoundingClientRect();
+      // a bar row anchors at its bar's end; a small mark (heatmap cell) at
+      // itself; a large one (no-data band, donut ring) at the pointer, or the
+      // tip would jump to the far edge of the shape
+      if (mark.classList.contains('vrow')) return show(mark.dataset.v, mark.dataset.l || '', { x: r.right, top: r.top, bottom: r.bottom });
+      if (r.width <= 24 && r.height <= 24) return show(mark.dataset.v, mark.dataset.l || '', { x: r.left + r.width / 2, top: r.top, bottom: r.bottom });
+      return show(mark.dataset.v, mark.dataset.l || '', { x: e.clientX, top: e.clientY - 6, bottom: e.clientY + 6 });
+    }
+    // series charts: only while the pointer is over the chart svg itself
+    const svg = e.target.closest?.('svg');
+    const dots = svg ? [...svg.querySelectorAll('.vdot')] : [];
     if (!dots.length) return reset();
     let best = null;
     let bestDx = Infinity;
@@ -543,36 +592,42 @@ export function attachVizHover(container) {
       const dx = Math.abs(r.left + r.width / 2 - e.clientX);
       if (dx < bestDx) { bestDx = dx; best = d; }
     }
-    if (!best) return reset();
-    dots.forEach((d) => d.setAttribute('r', d === best ? 5 : (d.dataset.r ?? 3)));
-    tipValue.textContent = best.dataset.v || '';
-    tipLabel.textContent = best.dataset.l || '';
-    if (!best.dataset.v) return reset();
-    container.dispatchEvent(new CustomEvent('viz:pick', {
-      bubbles: true,
-      detail: { id: best.dataset.id, key: best.dataset.key, value: Number(best.dataset.value), label: `${best.dataset.l}: ${best.dataset.v}` },
-    }));
+    if (!best?.dataset.v) return reset();
     const dotBox = best.getBoundingClientRect();
-    const dotX = dotBox.left + dotBox.width / 2 - box.left;
-    place(dotX, dotBox.top - box.top, box);
-    // crosshair spans the plot area (data-pt/data-ph on the svg, in viewBox
-    // units) — scale to rendered pixels via the svg's current size
-    const svg = best.ownerSVGElement;
-    const svgBox = svg.getBoundingClientRect();
-    const vbH = svg.viewBox?.baseVal?.height;
-    const k = vbH ? svgBox.height / vbH : 1;
-    const plotH = Number(svg.dataset.ph || 0) * k;
-    if (plotH > 0) {
-      cross.style.left = `${dotX.toFixed(1)}px`;
-      cross.style.top = `${(svgBox.top - box.top + Number(svg.dataset.pt || 0) * k).toFixed(1)}px`;
-      cross.style.height = `${plotH.toFixed(1)}px`;
-      cross.hidden = false;
+    const dotX = dotBox.left + dotBox.width / 2;
+    const dotY = dotBox.top + dotBox.height / 2;
+    const column = best.dataset.col != null ? svg.querySelectorAll('.vcol')[Number(best.dataset.col)] : null;
+    if (column) {
+      column.classList.add('is-active');
+      svg.classList.add('has-active');
+      const r = column.getBoundingClientRect();
+      show(best.dataset.v, best.dataset.l || '', { x: dotX, top: Math.min(r.top, dotY), bottom: Math.max(r.top, dotY) });
+    } else {
+      best.setAttribute('r', 5);
+      show(best.dataset.v, best.dataset.l || '', { x: dotX, top: dotY - 5, bottom: dotY + 5 });
+      // crosshair spans the plot area (data-pt/data-ph on the svg, in viewBox
+      // units) — scale to rendered pixels via the svg's current size
+      const box = container.getBoundingClientRect();
+      const svgBox = svg.getBoundingClientRect();
+      const vbH = svg.viewBox?.baseVal?.height;
+      const k = vbH ? svgBox.height / vbH : 1;
+      const plotH = Number(svg.dataset.ph || 0) * k;
+      if (plotH > 0) {
+        cross.style.left = `${(dotX - box.left).toFixed(1)}px`;
+        cross.style.top = `${(svgBox.top - box.top + Number(svg.dataset.pt || 0) * k).toFixed(1)}px`;
+        cross.style.height = `${plotH.toFixed(1)}px`;
+        cross.hidden = false;
+      }
     }
   };
   container.addEventListener('pointermove', pick);
   container.addEventListener('pointerdown', pick);
-  container.addEventListener('pointerleave', reset);
-  // a resize (phone rotation, devtools) invalidates the tip's inline px
-  // position — it would otherwise render stranded outside the container
+  // a touch "leaves" the moment the finger lifts: only a mouse hides the tip
+  // on leave; a tap keeps it until the next tap outside the panel
+  container.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') reset(); });
+  document.addEventListener('pointerdown', (e) => { if (!container.contains(e.target)) reset(); });
+  // a resize (phone rotation, devtools) or scroll invalidates the tip's
+  // position — it would otherwise render stranded away from its point
   window.addEventListener('resize', reset);
+  window.addEventListener('scroll', () => { if (!tip.hidden) reset(); }, { passive: true });
 }

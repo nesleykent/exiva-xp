@@ -962,14 +962,16 @@ table.grid a:hover { text-decoration: underline; }
 .viz { position: relative; }
 .viz svg { display: block; width: 100%; height: auto; }
 /* shared hover readout (attachVizHover): value leads, label follows */
+/* placed by attachVizHover from its measured size (kept inside the viewport,
+   flipped below the point when there is no room above); long labels wrap */
 .viz-tip {
-  position: absolute; transform: translate(-50%, -130%);
+  position: absolute; width: max-content; max-width: min(280px, calc(100vw - 16px));
   display: grid; gap: 1px; text-align: center;
-  padding: var(--s1) var(--s3); white-space: nowrap; pointer-events: none; z-index: 5;
+  padding: var(--s1) var(--s3); pointer-events: none; z-index: 5;
   background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--stroke));
   border-radius: var(--r-input); box-shadow: var(--shadow-float);
 }
-.viz-tip b { font-size: var(--fs-13); font-variant-numeric: tabular-nums; }
+.viz-tip b { font-size: var(--fs-13); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .viz-tip span { color: rgb(var(--ink-2)); font-size: var(--fs-11); }
 .viz-tip span:empty { display: none; }
 /* crosshair snapped to the nearest point on flow() charts */
@@ -982,9 +984,12 @@ table.grid a:hover { text-decoration: underline; }
 }
 /* the leader bar's fill comes from the url(#...) gradient set on the path
    itself (bars() in viz/svg.js) — this rule must not set a competing fill */
-.viz .vbar:hover { opacity: .85; }
 .viz .vbar-rest { fill: rgba(var(--ink-2), .35); }
-.viz .vbar-rest:hover { fill: rgba(var(--ink-2), .55); }
+/* hover focus: the picked mark stays, its siblings step back */
+.viz .vhit { fill: none; pointer-events: all; }
+.viz .vrow, .viz .vcol, .viz .vdonut-seg { transition: opacity var(--t-hover) var(--e-standard); }
+.viz svg.has-active .vrow:not(.is-active), .viz svg.has-active .vcol:not(.is-active), .viz svg.has-active .vdonut-seg:not(.is-active) { opacity: .4; }
+.hm.is-active { outline: 2px solid rgb(var(--ink)); outline-offset: 1px; }
 .viz .vlabel { fill: rgb(var(--ink)); font-size: var(--fs-12); font-family: var(--f-ui); }
 .viz .vvalue { fill: rgb(var(--ink-2)); font-size: var(--fs-12); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
 .viz .vaxis { stroke: rgb(var(--line)); }
@@ -1004,8 +1009,6 @@ table.grid a:hover { text-decoration: underline; }
    Experience). One loud gradient, everything else quiet: the columns carry the
    hero gradient from url(#...) on the element (no competing CSS fill), the
    trend is primary ink over a surface halo, the reference marks stay neutral. */
-.viz .vcol { transition: opacity var(--t-hover) var(--e-standard); }
-.viz .vcol:hover { opacity: .7; }
 .viz .vtrend, .viz .vtrend-halo { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .viz .vtrend { stroke: rgb(var(--ink)); stroke-width: 2; }
 .viz .vtrend-halo { stroke: rgb(var(--surface-raised)); stroke-width: 5; }

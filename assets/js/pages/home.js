@@ -10,7 +10,7 @@ import { dailyGains, experienceUntilNextLevel, progressWithinLevel, xpPace } fro
 import { baseVocation, judge, vocationFits } from '../engine/rules.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { ICONS, NAV, basisPill, metric } from '../shell.js';
-import { sparkline, chartInto } from '../viz/svg.js';
+import { sparkline, chartInto, attachVizHover } from '../viz/svg.js';
 
 const { stage, table, config } = await boot('index.html', { ledger: true, config: true });
 const [profile, history] = await Promise.all([
@@ -146,6 +146,8 @@ stage.innerHTML = `
 if (gainSeries.length >= 2) {
   chartInto(document.getElementById('home-gain-spark'), (width) => sparkline(gainSeries, { width, height: 34, fmt: compact }));
   chartInto(document.getElementById('home-pace-spark'), (width) => sparkline(paceSeries, { width, height: 34, fmt: compact }));
+  // the card, not the mount: a re-render replaces the mount's contents
+  document.querySelectorAll('.metric-spark').forEach((spark) => attachVizHover(spark.closest('.metric')));
 }
 
 export {};

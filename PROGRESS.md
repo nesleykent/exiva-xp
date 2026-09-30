@@ -41,5 +41,9 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 ## Follow-up 4 (user): revert segmented control height
 - DONE (a51b5d6): removed mobile 44px min-height/width and wrap; restored original overflow-x single row, .exp-month flex, Codex filter layout. Kept hover/focus-inside/dark selected. DO NOT re-enlarge segmented controls.
 
+## Follow-up 5 (user): "hover still bugged for all charts"
+- Repro (real input, `.claude/qa-shots/hovertest.mjs` → `hover-before/`): taps never show a tip (pointerleave after touch); tip off-screen at right edge; tip shows over stats strip/legend; columns marker on trend not column; bars only hit the bar shape; heatmap gaps miss; native <title> tooltips double up.
+- DONE: attachVizHover rewritten + sparkline hover; hovertest `hover-after/<w>-<scheme>/results.json` 17/18 (375) & 16/18 (1280) — misses are intended (stats strip, empty space). Not pushed yet (ask user).
+
 ## Next step
 - DONE. Only the final report remains (chat). Open items are in DESIGN_QA.md → Remaining / Needs decision and AGENTS.md §12 #16.

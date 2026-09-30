@@ -133,7 +133,7 @@ function signed(value, fmt = nf) {
 const highscoreTrends = HIGHSCORE_CATEGORIES.map((s) => {
   const series = history
     .filter((row) => row[s.valueField] != null)
-    .map((row) => ({ key: md(row.date), n: row[s.valueField] }));
+    .map((row) => ({ key: md(row.date), label: `${md(row.date)}, ${row.date.slice(0, 4)}`, n: row[s.valueField] }));
   const values = new Set(series.map((row) => row.n));
   const latestPoint = series.at(-1);
   const previousPoint = series.length > 1 ? series.at(-2) : null;
@@ -388,6 +388,6 @@ stage.innerHTML = `
 document.querySelectorAll('[data-mount]').forEach((el) => chartInto(el, MOUNTS.get(el.dataset.mount)));
 renderDailyXp();
 if (gains.length) bindSegmented('daily-xp-range', (value) => { xpRange = value; renderDailyXp(); });
-document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
+document.querySelectorAll('.viz, .skill-card').forEach((panel) => attachVizHover(panel));
 
 export {};
