@@ -17,7 +17,7 @@ import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapsh
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
-import { flow } from '../assets/js/viz/svg.js';
+import { columns, flow } from '../assets/js/viz/svg.js';
 import { NAV } from '../assets/js/shell.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
 import { currentBuyPrice } from './fetch-imbuement-prices.mjs';
@@ -539,5 +539,14 @@ const linePath = gappedFlow.match(/class="vline"[^>]*d="([^"]+)"/)?.[1] || '';
 assert((linePath.match(/M/g) || []).length === 2 && (gappedFlow.match(/class="vgap"/g) || []).length === 1,
   'a tracker gap must split the daily XP line into two runs with one not-tracked band');
 assert(!markedFlow.includes('class="vgap"'), 'untimed series must not invent gaps');
+const gappedColumns = columns([
+  { t: 1, n: 10, key: 'a' }, { t: 2, n: 20, key: 'b' }, { t: 9, n: 15, key: 'c' }, { t: 10, n: 12, key: 'd' },
+], { gapOver: 1, trend: [10, 15, 15, 13.5], average: 14 });
+const trendPath = gappedColumns.match(/class="vtrend" d="([^"]+)"/)?.[1] || '';
+assert((gappedColumns.match(/class="vcol"/g) || []).length === 4
+  && (gappedColumns.match(/class="vnodata"/g) || []).length === 1
+  && (trendPath.match(/M/g) || []).length === 2
+  && gappedColumns.includes('class="vavg"'),
+  'Daily XP columns must keep one column per tracked day, hatch the untracked span and break the trend across it');
 
 console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('highscores/experience.json')).length} tracked XP day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

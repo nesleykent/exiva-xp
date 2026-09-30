@@ -89,6 +89,37 @@ export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', '
  * no timezone can shift the day.
  */
 
+/**
+ * Calendar ticks for a day-number axis (whole days since 1970-01-01 UTC):
+ * the finest of week, fortnight, month, two months, quarter, half year or
+ * year that fits at most `max` ticks inside [t0, t1]. Week ticks fall on
+ * Mondays ("Jul 6"); month ticks on the 1st, with the year on the first tick
+ * and on each January ("Oct 2025 · Nov · … · Jan 2026").
+ */
+export function dateTicks(t0, t1, max = 6) {
+  const at = (t) => new Date(t * DAY_MS);
+  for (const weeks of [1, 2]) {
+    const first = t0 + ((8 - at(t0).getUTCDay()) % 7);
+    const ticks = [];
+    for (let t = first; t <= t1; t += 7 * weeks) ticks.push({ t, label: `${MONTHS[at(t).getUTCMonth()]} ${at(t).getUTCDate()}` });
+    if (ticks.length && ticks.length <= max) return ticks;
+  }
+  for (const months of [1, 2, 3, 6, 12]) {
+    const start = at(t0);
+    let m = start.getUTCMonth() + (start.getUTCDate() === 1 ? 0 : 1);
+    while (m % months) m += 1;
+    const ticks = [];
+    for (;; m += months) {
+      const t = Math.round(Date.UTC(start.getUTCFullYear(), m, 1) / DAY_MS);
+      if (t > t1) break;
+      const d = at(t);
+      ticks.push({ t, label: ticks.length === 0 || d.getUTCMonth() === 0 ? `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}` : MONTHS[d.getUTCMonth()] });
+    }
+    if (ticks.length && ticks.length <= max) return ticks;
+  }
+  return [];
+}
+
 /** "2026-07-19" → "Jul 19" */
 export function md(iso) {
   const m = String(iso ?? '').match(/^\d{4}-(\d{2})-(\d{2})/);

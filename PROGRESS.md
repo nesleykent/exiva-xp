@@ -31,5 +31,9 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - Plan: svg.js flow() gains time-true `t` x, `gapOver` breaks + 'not tracked' bands, `rail` events under the axis; analytics range segmented 90 days (daily, default) / 1 year / All (weekly avg XP/day, tooltip n tracked days); legend 'Not tracked'. Verify 375/768/1280 both themes + hover, smoke, commit, update DESIGN_QA.
 - DONE: verified (shots `.claude/qa-shots/dxp/grid-*.png`), committed. Character Experience chart intentionally untouched (offer to user).
 
+## Follow-up 2 (user): "still bad. make it more aesthetic like tableau charts"
+- Plan: new `columns()` in viz/svg.js (day/week columns + rolling-average trend + dashed range-average ref line + hatched no-data + tick rug + nice date ticks + hidden vdots for hover), `rollingMean` in lib/stats.js, `dateTicks` in lib/fmt.js, stats strip (mini-metrics) + custom legend in analytics.js. Compare 2 palettes (blue cols+orange trend vs grey cols+gradient trend), pick, log §8 decision (Tableau style supersedes hero-gradient line on this one chart).
+- DONE: blue columns + orange trend (Tableau classic) chosen; verified 320-1280 both themes; §8 row added; shots `.claude/qa-shots/dxp/b-*.png`, `a-375.png`.
+
 ## Next step
 - DONE. Only the final report remains (chat). Open items are in DESIGN_QA.md → Remaining / Needs decision and AGENTS.md §12 #16.

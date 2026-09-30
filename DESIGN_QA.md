@@ -164,6 +164,22 @@ What changed:
 
 Verified at 375, 768 and 1280 in both themes, with a hover tooltip per range, no overflow and no console errors.
 
+## Follow-up 2: Tableau-style Daily XP chart (owner request, 2026-09-30)
+
+The owner's report was: "still bad, make it more aesthetic like Tableau charts". A line and area is the wrong chart for daily gains that are mostly either big hunts or zero, since any line zigzags.
+
+The chart is now the analytic bar + line combo, drawn by a new `columns()` in viz/svg.js:
+
+- **Columns and trend.** One light-blue column per tracked day (per week in 1 year / All), with an orange rolling-average trend (7-day, or 4-week in the long ranges; `rollingMean` in lib/stats.js). The trend needs 4 days or 2 weeks in its window before it draws, and it breaks at gaps.
+- **Reference marks.** A dashed range-average line with a haloed label, and hatched "no data" spans.
+- **Axes.** Calendar ticks at even week or month steps (`dateTicks` in lib/fmt.js, with the year on the first tick and each January), a unit caption, and a tick rug for level-ups.
+- **Stats strip.** Average per tracked day, best day, days tracked out of the span, and level-ups.
+- **Hover.** Snaps to the nearest column. The tooltip gives the date or week, the tracked-day count, the rolling average and the level-ups.
+
+The unused `flow()` event-rail option was removed. Smoke asserts that `columns()` hatches an untracked span and breaks its trend there.
+
+Verified at 320/375/768/1280 in both themes: all three ranges, tooltips, no overflow and no console errors.
+
 ## Removed (restorable from the commit named)
 
 - **Planner filter-bar count** "167 grounds · 189 rows" and **Codex filter-bar count** "833 creatures" (`19900d8`). Each duplicated the "Showing N of M" line directly below it.

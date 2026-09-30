@@ -185,12 +185,10 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
  * When every point carries a numeric `t` (e.g. a day number) the x-axis is
  * time-true, and a step larger than `gapOver` breaks the line and shades the
  * span as "not tracked" instead of drawing across days nobody measured.
- * `rail: true` puts event markers on a strip under the axis, off the line.
  */
-export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty, label = '', gapOver = Infinity, rail = false } = {}) {
+export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty, label = '', gapOver = Infinity } = {}) {
   if (!data.length) return vizEmpty(empty);
-  const hasEvents = data.some((d) => d.events?.length);
-  const pad = { t: 16, r: 16, b: rail && hasEvents ? 38 : 26, l: 46 }; // t/r on the spacing scale; b = axis band (+ event rail), l = tick gutter
+  const pad = { t: 16, r: 16, b: 26, l: 46 }; // t/r on the spacing scale; b = axis band, l = tick gutter
   const max = Math.max(...data.map((d) => d.n), baseline === 'min' ? -Infinity : 1);
   const min = baseline === 'min' ? Math.min(...data.map((d) => d.n)) : 0;
   const { lo, hi, ticks } = niceTicks(min, max);
@@ -241,11 +239,11 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   // on a dense series (the same >48 threshold that hides the dots) full-size
   // event markers merged into a solid band: draw them small and tight instead
   const dense = data.length > 48;
-  const evR = dense || rail ? 2.5 : 5;
+  const evR = dense ? 2.5 : 5;
   const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
-    const cx = rail ? x(i) : x(i) + (eventIndex * evR * 1.6);
-    const cy = rail ? base + 8 : y(d.n) - (evR + 4);
-    const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense || rail ? ' vevent-dense' : ''}`;
+    const cx = x(i) + (eventIndex * evR * 1.6);
+    const cy = y(d.n) - (evR + 4);
+    const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense ? ' vevent-dense' : ''}`;
     return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${evR}"><title>${esc(event.label)}</title></circle>`;
   })).join('');
   const grid = ticks.map((v) =>
@@ -265,6 +263,106 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
   const name = `${label ? `${label}: ` : ''}${data[0].key} ${fmt(data[0].n)} to ${data.at(-1).key} ${fmt(data.at(-1).n)}, peak ${fmt(peak.n)} on ${peak.key}${runs.length > 1 ? `, ${runs.length - 1} untracked gap${runs.length > 2 ? 's' : ''}` : ''}`;
   return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${gaps}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
+}
+
+/**
+ * Time-series columns with a trend line — the analytic bar + line combo:
+ * data = [{t, n, tip?, key?, events?}] where `t` is a day number and `step`
+ * the days each column covers (1 daily, 7 weekly). Each column sits at its
+ * own date; a step past `gapOver` leaves a hatched "no data" band instead
+ * of closing the distance. `trend` (one value or null per point) draws a
+ * line over the columns, `average` a dashed reference line, `ticks`
+ * ([{t, label}], see dateTicks) the calendar axis, and events a tick rug
+ * under it. Invisible .vdot marks let attachVizHover snap to the nearest
+ * column, whose `tip` becomes the tooltip line.
+ */
+export function columns(data, { width = 720, height = 240, fmt = kk, label = '', empty, trend = null, average = null, step = 1, gapOver = 1, ticks = [], unit = '' } = {}) {
+  if (!data.length) return vizEmpty(empty);
+  const hasEvents = data.some((d) => d.events?.length);
+  const pad = { t: 24, r: 16, b: hasEvents ? 40 : 28, l: 46 }; // t = unit caption band, b = axis (+ rug) band
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  const t0 = data[0].t - step / 2;
+  const t1 = data.at(-1).t + step / 2;
+  const x = (t) => pad.l + ((t - t0) / Math.max(t1 - t0, 1)) * w;
+  const top = Math.max(...data.map((d) => d.n), ...(trend || []).filter((v) => v != null), average ?? 0, 1);
+  const { hi, ticks: yTicks } = niceTicks(0, top);
+  const y = (v) => pad.t + h - (v / hi) * h;
+  const base = pad.t + h;
+  const slot = (w / Math.max(t1 - t0, 1)) * step;
+  const colW = Math.max(1, slot * (slot > 6 ? 0.72 : 0.8));
+  const hatch = `viz-hatch-${gradSeq++}`;
+
+  const grid = yTicks.map((v) => `<line class="${v === 0 ? 'vbase' : 'vaxis'}" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
+    <text class="vtick" x="${pad.l - 8}" y="${y(v).toFixed(1)}" text-anchor="end" dominant-baseline="central">${fmt(v)}</text>`).join('');
+  const caption = unit ? `<text class="vunit" x="${pad.l}" y="${pad.t - 12}">${esc(unit)}</text>` : '';
+
+  const gaps = [];
+  for (let i = 1; i < data.length; i++) {
+    if (data[i].t - data[i - 1].t <= gapOver) continue;
+    const x1 = x(data[i - 1].t + step / 2);
+    const x2 = x(data[i].t - step / 2);
+    gaps.push(`<rect class="vnodata" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}" fill="url(#${hatch})"><title>No data: ${esc(data[i - 1].key ?? '')} → ${esc(data[i].key ?? '')}</title></rect>${x2 - x1 >= 56 ? `<text class="vnodata-label" x="${((x1 + x2) / 2).toFixed(1)}" y="${pad.t + 12}" text-anchor="middle">no data</text>` : ''}`);
+  }
+
+  const bars = data.map((d) => {
+    const yTop = y(d.n);
+    return `<rect class="vcol" x="${(x(d.t) - colW / 2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${colW.toFixed(1)}" height="${(base - yTop).toFixed(1)}"/>`;
+  }).join('');
+
+  let trendPath = '';
+  if (trend) {
+    let pen = 'M';
+    for (let i = 0; i < data.length; i++) {
+      if (trend[i] == null || (i && data[i].t - data[i - 1].t > gapOver)) pen = 'M';
+      if (trend[i] == null) continue;
+      trendPath += `${pen}${x(data[i].t).toFixed(1)},${y(trend[i]).toFixed(1)} `;
+      pen = 'L';
+    }
+  }
+  const avgLine = average != null
+    ? `<line class="vavg" x1="${pad.l}" y1="${y(average).toFixed(1)}" x2="${width - pad.r}" y2="${y(average).toFixed(1)}"/>
+      <text class="vavg-label" x="${width - pad.r}" y="${(y(average) - 5).toFixed(1)}" text-anchor="end">avg ${fmt(average)}</text>`
+    : '';
+
+  const rug = data.flatMap((d) => {
+    const levels = (d.events || []).filter((e) => e.type !== 'death');
+    const deaths = (d.events || []).filter((e) => e.type === 'death');
+    return [[levels, 'vrug-level'], [deaths, 'vrug-death']].filter(([list]) => list.length).map(([list, cls]) =>
+      `<rect class="vrug ${cls}" x="${(x(d.t) - 0.75).toFixed(1)}" y="${base + 5}" width="1.5" height="7"><title>${esc(list.map((e) => e.label).join(' · '))}</title></rect>`);
+  }).join('');
+
+  // calendar ticks: a short mark on the baseline and a label that never
+  // clips at the edges or collides with its neighbour
+  let lastRight = -Infinity;
+  const xTicks = ticks.filter((tk) => tk.t >= t0 && tk.t <= t1).map((tk) => {
+    const cx = x(tk.t);
+    const half = tk.label.length * 3.3;
+    const lx = Math.min(Math.max(cx, pad.l + half), width - pad.r - half);
+    if (lx - half < lastRight + 10) return '';
+    lastRight = lx + half;
+    return `<line class="vbase" x1="${cx.toFixed(1)}" y1="${base}" x2="${cx.toFixed(1)}" y2="${base + 4}"/><text class="vtick" x="${lx.toFixed(1)}" y="${height - 8}" text-anchor="middle">${esc(tk.label)}</text>`;
+  }).join('');
+
+  const marks = data.map((d, i) => `<circle class="vdot vdot-col" cx="${x(d.t).toFixed(1)}" cy="${y(trend?.[i] ?? d.n).toFixed(1)}" r="0" data-r="0" data-id="${esc(d.t)}" data-key="${esc(d.key ?? '')}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.tip ?? d.key ?? '')}"/>`).join('');
+
+  const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
+  const name = `${label ? `${label}: ` : ''}${data.length} columns, ${data[0].key ?? ''} to ${data.at(-1).key ?? ''}, peak ${fmt(peak.n)} on ${peak.key ?? ''}${average != null ? `, average ${fmt(average)}` : ''}${gaps.length ? `, ${gaps.length} span${gaps.length === 1 ? '' : 's'} with no data` : ''}`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="${hatch}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="vnodata-hatch" x1="0" y1="0" x2="0" y2="6"/></pattern></defs>
+    ${caption}${gaps.join('')}${grid}${bars}${avgLine}${trendPath ? `<path class="vtrend" d="${trendPath.trim()}"/>` : ''}${rug}${xTicks}${marks}</svg>`;
+}
+
+/** Legend for columns(): the column series, its trend and the reference marks actually drawn. */
+export function columnsLegend({ series, trend, average, noData = false, levels = false, deaths = false }) {
+  return `<ul class="viz-legend">
+    <li><i class="viz-legend-swatch viz-legend-col"></i>${esc(series)}</li>
+    ${trend ? `<li><i class="viz-legend-swatch viz-legend-trend"></i>${esc(trend)}</li>` : ''}
+    ${average ? `<li><i class="viz-legend-swatch viz-legend-avg"></i>${esc(average)}</li>` : ''}
+    ${noData ? '<li><i class="viz-legend-swatch viz-legend-nodata"></i>No data</li>' : ''}
+    ${levels ? '<li><i class="viz-legend-swatch viz-legend-rug"></i>Level-up</li>' : ''}
+    ${deaths ? '<li><i class="viz-legend-swatch viz-legend-rug viz-legend-rug-death"></i>Death</li>' : ''}
+  </ul>`;
 }
 
 /**

@@ -2,11 +2,11 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { DAY_MS, compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
-import { average, tally } from '../lib/stats.js';
+import { DAY_MS, compact, dateTicks, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
+import { average, rollingMean, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
 import { dailyGains } from '../engine/progression.js';
-import { bars, flow, flowLegend, sparkline, attachVizHover, categorical, donut, chartInto, vizEmpty } from '../viz/svg.js';
+import { bars, columns, columnsLegend, flow, sparkline, attachVizHover, categorical, donut, chartInto, vizEmpty } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 import { metric, note, segmentedControl, bindSegmented } from '../shell.js';
@@ -34,50 +34,89 @@ const chartEvents = (date) => {
   return events;
 };
 /*
- * Daily XP gain, plotted by date: tracker gaps (461 gains over 708 days) are
- * shaded "not tracked" instead of drawn across. Two years of daily points
- * turn into a barcode on a phone, so the long ranges show each week's
- * average over the days actually tracked — still XP per day, with the day
- * count in the tooltip — and 90 days keeps every single day.
+ * Daily XP gain — columns per tracked day with a rolling-average trend, a
+ * dashed range average and hatched "no data" spans where the tracker has no
+ * reading (461 gains over 708 days), never drawn across. Two years of days
+ * are unreadable on a phone, so 1 year / All show each week's average over
+ * the days actually tracked: still XP per day, day count in the tooltip.
  */
 const dayNumber = (iso) => Math.round(Date.parse(`${iso}T00:00:00Z`) / DAY_MS);
 const isoOf = (dayNo) => new Date(dayNo * DAY_MS).toISOString().slice(0, 10);
+const longDate = (iso) => `${md(iso)}, ${iso.slice(0, 4)}`;
 const XP_RANGES = [['90', '90 days'], ['365', '1 year'], ['all', 'All']];
 let xpRange = '90';
 
-function dailyXpSeries(range) {
-  if (!gains.length) return [];
+function dailyXpView(range) {
   const lastDay = dayNumber(gains.at(-1).date);
   const picked = range === 'all' ? gains : gains.filter((g) => dayNumber(g.date) > lastDay - Number(range));
-  if (range === '90') {
-    return picked.map((g) => ({ t: dayNumber(g.date), key: md(g.date), label: g.date, n: g.gain, events: chartEvents(g.date) }));
+  const weekly = range !== '90';
+  const levelUps = picked.flatMap((g) => chartEvents(g.date)).filter((e) => e.type === 'level').length;
+  const best = picked.reduce((a, g) => (g.gain > a.gain ? g : a), picked[0]);
+  const stats = {
+    average: average(picked.map((g) => g.gain)),
+    best,
+    tracked: picked.length,
+    span: lastDay - dayNumber(picked[0].date) + 1,
+    levelUps,
+  };
+  let points;
+  if (!weekly) {
+    points = picked.map((g) => ({ t: dayNumber(g.date), n: g.gain, key: md(g.date), date: g.date, events: chartEvents(g.date) }));
+  } else {
+    const weeks = new Map();
+    for (const g of picked) {
+      const d = dayNumber(g.date);
+      const monday = d - ((new Date(d * DAY_MS).getUTCDay() + 6) % 7);
+      if (!weeks.has(monday)) weeks.set(monday, { gains: [], events: [] });
+      weeks.get(monday).gains.push(g.gain);
+      weeks.get(monday).events.push(...chartEvents(g.date));
+    }
+    points = [...weeks].map(([monday, week]) => ({
+      t: monday + 3, n: Math.round(average(week.gains)), key: `week of ${md(isoOf(monday))}`, date: isoOf(monday), days: week.gains.length, events: week.events,
+    }));
   }
-  const weeks = new Map();
-  for (const g of picked) {
-    const d = dayNumber(g.date);
-    const monday = d - ((new Date(d * DAY_MS).getUTCDay() + 6) % 7);
-    if (!weeks.has(monday)) weeks.set(monday, { gains: [], events: [] });
-    weeks.get(monday).gains.push(g.gain);
-    weeks.get(monday).events.push(...chartEvents(g.date));
-  }
-  // a weekly view spans months into another year: 'Sep 29 … Sep 28' is ambiguous
-  return [...weeks].map(([monday, week]) => ({
-    t: monday + 3,
-    key: ym(isoOf(monday)),
-    label: `Week of ${isoOf(monday)} · average of ${nf(week.gains.length)} tracked day${week.gains.length === 1 ? '' : 's'}`,
-    n: Math.round(average(week.gains)),
-    events: week.events,
-  }));
+  const trend = rollingMean(points, weekly ? 28 : 7, weekly ? 2 : 4);
+  points.forEach((p, k) => {
+    const levels = p.events.filter((e) => e.type === 'level').length;
+    p.tip = [
+      weekly ? `Week of ${longDate(p.date)} · ${nf(p.days)} tracked day${p.days === 1 ? '' : 's'}` : longDate(p.date),
+      trend[k] != null ? `${weekly ? '4-week' : '7-day'} avg ${compact(trend[k])}` : '',
+      levels ? `${nf(levels)} level-up${levels === 1 ? '' : 's'}` : '',
+    ].filter(Boolean).join(' · ');
+  });
+  return { weekly, points, trend, stats, gapOver: weekly ? 7 : 1 };
 }
 
 function renderDailyXp() {
   const host = document.getElementById('daily-xp-chart');
-  if (!host) return;
-  const weekly = xpRange !== '90';
-  const series = dailyXpSeries(xpRange);
-  const gapOver = weekly ? 7 : 1;
-  chartInto(host, (width) => flow(series, { label: `Daily XP gain${weekly ? ', weekly average' : ''}`, width, fmt: compact, gapOver, rail: true }));
-  document.getElementById('daily-xp-legend').innerHTML = flowLegend(series, weekly ? 'XP/day, weekly avg' : 'XP/day', compact, { gapOver });
+  if (!host || !gains.length) return;
+  const view = dailyXpView(xpRange);
+  const { stats, points, weekly } = view;
+  document.getElementById('daily-xp-stats').innerHTML = `
+    <span><b class="num">${compact(stats.average)}</b><small>avg per tracked day</small></span>
+    <span><b class="num">${compact(stats.best.gain)}</b><small>best day · ${esc(weekly ? longDate(stats.best.date) : md(stats.best.date))}</small></span>
+    <span><b class="num">${nf(stats.tracked)}<em> / ${nf(stats.span)}</em></b><small>days tracked</small></span>
+    <span><b class="num">${nf(stats.levelUps)}</b><small>level-ups</small></span>`;
+  chartInto(host, (width) => columns(points, {
+    label: `Daily XP gain${weekly ? ', weekly average' : ''}`,
+    width,
+    height: width < 480 ? 220 : 260,
+    fmt: compact,
+    step: weekly ? 7 : 1,
+    gapOver: view.gapOver,
+    trend: view.trend,
+    average: stats.average,
+    unit: weekly ? 'XP per day, weekly average' : 'XP gained per day',
+    ticks: dateTicks(points[0].t, points.at(-1).t, Math.max(2, Math.floor((width - 62) / 88))),
+  }));
+  document.getElementById('daily-xp-legend').innerHTML = columnsLegend({
+    series: weekly ? 'Weekly average' : 'Daily XP',
+    trend: weekly ? '4-week average' : '7-day average',
+    average: 'Range average',
+    noData: points.some((p, k) => k && p.t - points[k - 1].t > view.gapOver),
+    levels: points.some((p) => p.events.some((e) => e.type === 'level')),
+    deaths: points.some((p) => p.events.some((e) => e.type === 'death')),
+  });
 }
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
@@ -327,7 +366,7 @@ stage.innerHTML = `
   </div>
   ${gains.length ? `<section class="section">
     <div class="section-bar"><h2>Daily XP gain</h2>${segmentedControl('daily-xp-range', 'Chart range', XP_RANGES, xpRange)}</div>
-    <div class="panel panel-pad viz"><div class="chart-mount" id="daily-xp-chart"></div><div id="daily-xp-legend"></div></div>
+    <div class="panel panel-pad viz"><div class="mini-metrics dxp-stats" id="daily-xp-stats"></div><div class="chart-mount" id="daily-xp-chart"></div><div id="daily-xp-legend"></div></div>
   </section>` : ''}
   <div class="analytics-duo">
     ${board('Avg XP gain by weekday', weekdayXp, mount('weekday-xp', (width) => bars(weekdayXp, { label: 'Avg XP gain by weekday', width, fmt: compact })))}

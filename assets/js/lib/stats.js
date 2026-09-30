@@ -30,6 +30,23 @@ export function series(values) {
   };
 }
 
+/**
+ * Trailing mean over a time window: for each point of `points` ([{t, n}] in t
+ * order) the mean of the points whose t lies in (t - span, t]. Null until
+ * `minCount` points fall inside, so a trend never claims a pace from one
+ * lonely reading after a tracker gap.
+ */
+export function rollingMean(points, span, minCount = 1) {
+  let lo = 0;
+  let sum = 0;
+  return points.map((p, i) => {
+    sum += p.n;
+    while (points[lo].t <= p.t - span) { sum -= points[lo].n; lo += 1; }
+    const count = i - lo + 1;
+    return count >= minCount ? sum / count : null;
+  });
+}
+
 /** Count occurrences into a sorted [{key, n}] list. */
 export function tally(items, keyOf, weightOf = () => 1) {
   const map = new Map();
