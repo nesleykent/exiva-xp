@@ -102,10 +102,11 @@
 @media (max-width: 700px) {
   /* Reserve room beside the floating GitHub/appearance cluster (.rail-foot,
      ~50px tall) only for the lines that sit next to it: a float on block
-     page heads, the first rows of Home's grid head, the Character hero row.
-     Reserving the whole header squeezed every lede into a ~210px column. */
+     page heads, the first rows of Home's grid head. Reserving the whole
+     header squeezed every lede into a ~210px column. (The Character hero
+     needs none: its ring, not its text, sits beside the cluster.) */
   .page-head::before { content: ''; float: right; width: calc(var(--tap) * 2 + var(--s4)); height: calc(var(--tap) + var(--s2)); }
-  .home-dashboard-head > :not(:last-child), .character-hero { padding-right: calc(var(--tap) * 2 + var(--s4)); }
+  .home-dashboard-head > :not(:last-child) { padding-right: calc(var(--tap) * 2 + var(--s4)); }
   /* Stacked and tighter here; the bar is already static and opaque for every
      width (see the base rule above for why it isn't sticky anywhere). */
   .filter-bar {
