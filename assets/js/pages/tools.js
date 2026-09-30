@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
 import { DAY_MS, gp, hm, kk, nf, pct } from '../lib/fmt.js';
-import { $, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
+import { $, emptyState, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
   effectiveDamage,
@@ -359,9 +359,9 @@ function renderLevelTable() {
 function renderProfit() {
   const snapshot = profitSnapshot(hunts);
   if (!snapshot.totals.hunts) {
-    $('#profit-out').innerHTML = `
-      <p class="dim">Save Hunting Analyser sessions and this becomes a personal profit board by ground, recency and hourly performance.</p>
-      <a class="btn btn-secondary" href="submit.html">Save a hunt</a>`;
+    $('#profit-out').innerHTML = emptyState('No saved hunts yet',
+      'Save Hunting Analyser sessions and this becomes a personal profit board by ground, recency and hourly performance.',
+      '<a class="btn btn-primary" href="submit.html">Save a hunt</a>');
     return;
   }
   const best = snapshot.grounds[0];

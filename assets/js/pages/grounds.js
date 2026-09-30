@@ -10,7 +10,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
-import { $, backLink, ring, pillEl, basisPill, standInTitle, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle, note, metric } from '../shell.js';
+import { $, emptyState, backLink, ring, pillEl, basisPill, standInTitle, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle, note, metric } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
@@ -405,7 +405,7 @@ function render() {
             ${area ? `<span class="pill">${esc(area)}</span>` : ''}
           </div>
         </a>`;
-      }).join('') || '<p class="dim">Nothing matches those filters.</p>'}
+      }).join('') || emptyState('Nothing matches those filters.')}
     </div>
     ${cards.length > state.shown ? `<div class="show-more"><button type="button" class="btn btn-secondary" data-show-more>Show more (${nf(cards.length - state.shown)} left)</button></div>` : ''}`;
   if (state.detailSlug) renderDetail(state.detailSlug);

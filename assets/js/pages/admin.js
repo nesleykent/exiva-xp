@@ -3,7 +3,7 @@
 import { boot } from './_boot.js';
 import { esc, fingerprint } from '../lib/text.js';
 import { kk, nf, day } from '../lib/fmt.js';
-import { $, say, dataTable, note } from '../shell.js';
+import { $, say, dataTable, emptyState, note } from '../shell.js';
 import { assessImport, judge } from '../engine/rules.js';
 import { logbook, writeLogbook } from '../data/sources.js';
 
@@ -86,14 +86,9 @@ function refresh() {
   if (!book.length) {
     ruleFilter = 'all';
     $('#k-rule-filters').innerHTML = '';
-    $('#k-book').innerHTML = `
-      <div class="panel empty-action admin-empty">
-        <div>
-          <h3>No hunts logged yet</h3>
-          <p class="fine dim">Paste a Hunting Analyser session to start building private evidence for your planner and progress views.</p>
-        </div>
-        <a class="btn btn-primary" href="submit.html">Log a hunt</a>
-      </div>`;
+    $('#k-book').innerHTML = emptyState('No hunts logged yet',
+      'Paste a Hunting Analyser session to start building private evidence for your planner and progress views.',
+      '<a class="btn btn-primary" href="submit.html">Log a hunt</a>');
   } else {
     const filters = [
       ['all', 'All'],
@@ -107,14 +102,9 @@ function refresh() {
       </div>`;
 
     if (!visible.length) {
-      $('#k-book').innerHTML = `
-        <div class="panel empty-action admin-empty">
-          <div>
-            <h3>No ${esc(ruleFilter)} hunts</h3>
-            <p class="fine dim">None of the hunts in this browser currently have that rules status.</p>
-          </div>
-          <button type="button" class="btn btn-secondary" data-rule-filter="all">Show all hunts</button>
-        </div>`;
+      $('#k-book').innerHTML = emptyState(`No ${ruleFilter} hunts`,
+        'None of the hunts in this browser currently have that rules status.',
+        '<button type="button" class="btn btn-secondary" data-rule-filter="all">Show all hunts</button>');
     } else {
       dataTable($('#k-book'), {
         cols: [

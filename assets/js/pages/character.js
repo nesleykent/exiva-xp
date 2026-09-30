@@ -351,7 +351,7 @@ function activityHeatmapHtml() {
 
 /** The three latest recorded deaths; the complete table stays in Details. */
 function recentDeathsHtml() {
-  if (!deaths.length) return '<p class="dim">No deaths on record.</p>';
+  if (!deaths.length) return vizEmpty('No deaths on record.');
   return `<ul class="death-list">${deaths.slice(0, 3).map((row) => `
     <li>
       <i class="death-dot" aria-hidden="true"></i>

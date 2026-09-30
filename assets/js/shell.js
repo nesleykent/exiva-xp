@@ -329,6 +329,14 @@ export function dataTable(host, { cols, rows, sortId, sortDir = 'desc', onSort, 
   }
 }
 
+/**
+ * Empty state — the one look for "nothing here yet": a title, one line of
+ * why, and an optional action (`action` is HTML; title and body are escaped).
+ */
+export function emptyState(title, body = '', action = '') {
+  return `<div class="empty-action"><div><h3>${esc(title)}</h3>${body ? `<p>${esc(body)}</p>` : ''}</div>${action}</div>`;
+}
+
 /** Inline notice; `kind` is a status tone: error | warning | success. Text is escaped. */
 export function note(kind, text) {
   return `<div class="note note-${kind}">${esc(text)}</div>`;

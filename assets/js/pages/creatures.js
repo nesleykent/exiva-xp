@@ -3,7 +3,7 @@
 import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
-import { $, backLink, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
+import { $, emptyState, backLink, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
 import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEEDS, TASK_SPEED_LABEL } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
@@ -267,7 +267,7 @@ function render() {
             ${weak.length ? weak.map((w) => pillEl(w.el, `<span class="num">${pct(w.taken)}</span>`)).join('') : '<span class="pill">No weakness</span>'}
           </div>
         </a>`;
-      }).join('') || '<p class="dim">No creatures match.</p>'}
+      }).join('') || emptyState('No creatures match.')}
     </div>`;
 
   $('#codex-count').textContent = `${nf(all.length)} creatures`;

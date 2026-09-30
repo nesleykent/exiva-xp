@@ -253,7 +253,6 @@ table.grid a:hover { text-decoration: underline; }
 .admin-rule-filter { min-height: 40px; padding: 0 0 var(--s2); border: 0; border-bottom: 2px solid transparent; background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-14); font-weight: 600; cursor: pointer; white-space: nowrap; }
 .admin-rule-filter:not([aria-pressed="true"]):hover { color: rgb(var(--ink)); }
 .admin-rule-filter[aria-pressed="true"] { color: rgb(var(--ink)); border-bottom-color: rgb(var(--blue)); }
-.admin-empty { margin-top: var(--s2); }
 
 /* ---------- detail pages ---------- */
 
@@ -798,7 +797,11 @@ table.grid a:hover { text-decoration: underline; }
 .empty-action { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 132px; padding: var(--s5); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
 .empty-action h3, .empty-action p { margin: 0; }
 .empty-action h3 { font-size: var(--fs-18); } /* was the browser's UA default (18.72px), not a token */
-.empty-action p { margin-top: var(--s2); max-width: 58ch; }
+.empty-action p { margin-top: var(--s2); max-width: 58ch; color: rgb(var(--ink-2)); font-size: var(--fs-14); line-height: 18px; }
+/* the action keeps its label on one line (it wrapped to 'Log a / hunt' at 768) */
+.empty-action .btn { flex-shrink: 0; white-space: nowrap; }
+/* inside a result grid the no-match state spans every column, not one cell */
+.tiles > .empty-action { grid-column: 1 / -1; }
 .mini-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
