@@ -57,7 +57,7 @@ function card(c) {
   const total = c.stages.reduce((sum, s) => sum + (Number(s.cost) || 0), 0);
   const stages = c.stages.map((s, i) => `
     <div class="fact"${trackedCharmPoints && Number(s.cost) <= trackedCharmPoints.points ? ' title="within tracked earned points"' : ''}>
-      <b class="num">${nf(s.cost)}</b><span class="fine dim">Stage ${i + 1} · ${s.value}%</span>
+      <b class="num">${nf(s.cost)}</b><span class="fine dim">Stage ${i + 1}</span><span class="fine dim">${s.value}%</span>
     </div>`).join('');
   return `
   <div class="panel panel-pad">
@@ -72,7 +72,7 @@ function card(c) {
       </div>
     </div>
     <p class="fine eyebrow-lede">${esc(c.effect)}</p>
-    <div class="facts" style="grid-template-columns:repeat(3,1fr)">${stages}</div>
+    <div class="facts facts-3">${stages}</div>
     <p class="fine dim dossier-note">Cost in charm points, per upgrade stage. Total to max: ${nf(total)} points · <a href="${esc(c.wikiUrl)}" rel="noopener" target="_blank">TibiaWiki ↗</a></p>
   </div>`;
 }

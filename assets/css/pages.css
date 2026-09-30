@@ -234,7 +234,7 @@ table.grid th, table.grid td { padding: 10px var(--s4); text-align: left; white-
 table.grid th {
   font-size: var(--fs-11); letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
   color: rgb(var(--ink-2)); border-bottom: 1px solid rgb(var(--line));
-  cursor: pointer; user-select: none; position: sticky; top: 0;
+  position: sticky; top: 0;
   background: rgb(var(--surface-raised));
 }
 table.grid th.on { color: rgb(var(--ink)); }
@@ -266,7 +266,9 @@ table.grid a:hover { text-decoration: underline; }
 /* at most four facts per row, so the Codex dossier's eight read 4+4, not 6+2 */
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(max(140px, calc((100% - 3 * var(--s2)) / 4)), 1fr)); gap: var(--s2); }
 .fact { background: rgb(var(--surface-2)); border-radius: var(--r-md); padding: 10px var(--s3); }
-.fact b { display: block; font-size: var(--fs-15); }
+.fact b, .fact > span { display: block; }
+.fact b { font-size: var(--fs-15); }
+.facts-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 /* element meter */
 .meter { display: grid; grid-template-columns: 68px 1fr 44px; gap: var(--s2); align-items: center; font-size: var(--fs-13); }
@@ -1018,17 +1020,17 @@ table.grid a:hover { text-decoration: underline; }
    smaller top gap even when it's also a .section (source order otherwise
    lets the plain .section rule above win) */
 .section.show-more, .section.section-tight { margin-top: var(--s5); }
+/* a dossier's first section sits right under its masthead, or s6 under its KPIs */
+.masthead + .section { margin-top: 0; }
+#detail .metric-row + .section { margin-top: var(--s6); }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
 .section > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
 /* a sub-heading inside a section (e.g. Creature matchups under Battle plan) */
 .section > .section-bar h3 { font-size: var(--fs-16); }
 .section > .section-bar .fine { min-width: 0; overflow-wrap: anywhere; }
-/* invisible tap-padding so header-row action links (e.g. "Open full planner")
-   hit the HIG 44pt minimum without changing their visual size or position */
-.section-bar a.fine {
-  display: inline-flex; align-items: center;
-  min-height: var(--tap); margin: -14px 0;
-}
+
+/* a creature name with its sprite, in dossier tables */
+.critter-link { display: inline-flex; align-items: center; gap: var(--s2); }
 
 /* the "← Planner / ← Codex" control that closes an inline dossier (shell.js backLink) */
 .back-link { padding: 0; border: 0; background: none; color: rgb(var(--ink-2)); font: inherit; cursor: pointer; }

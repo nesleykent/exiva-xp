@@ -234,7 +234,7 @@ function renderDetail(slug) {
     ${metric('Hunts logged', nf(dossier.n))}
   </div>` : ''}
 
-  <section class="section" style="margin-top:${dossier.n ? 'var(--s6)' : '0'}">
+  <section class="section">
     <div class="section-bar"><h2>Requirements</h2></div>
     ${req ? `
     <div class="panel panel-pad">
@@ -316,7 +316,7 @@ function renderDetail(slug) {
 
     dataTable(document.getElementById('ground-matchups'), {
       cols: [
-        { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:var(--s2)">${s.creature.art ? `<img class="critter critter-sm" src="${esc(s.creature.art)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
+        { id: 'name', label: 'Creature', cell: (s) => `<a class="critter-link" href="creatures.html?c=${esc(s.creature.slug)}">${s.creature.art ? `<img class="critter critter-sm" src="${esc(s.creature.art)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
         { id: 'share', label: pop.evidence === 'logged' || pop.evidence === 'logged-wiki' ? 'Logged kill share' : 'Planning weight', num: true, cell: (s) => pop.evidence === 'logged-wiki' && !s.logged ? '<span class="dim">—</span>' : pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },

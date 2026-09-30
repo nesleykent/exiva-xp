@@ -190,7 +190,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  /* one iteration too: an infinite .01ms animation (the skeleton shimmer) cycled
+     thousands of times a second and flickered instead of resting */
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
 
 /* ---------- resets ---------- */

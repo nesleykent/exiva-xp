@@ -457,11 +457,11 @@ function priceInputRow(itemId, name, prices, marketForWorld) {
   const canReset = entry?.source === 'manual' && hasMarketFallback;
   const title = fromMarket ? `${name} — TibiaMarket estimate, edit to use your own price instead` : name;
   return `
-    <label class="imb-price-input${fromMarket ? ' imb-price-input-market' : ''}" title="${esc(title)}">
+    <span class="imb-price-input${fromMarket ? ' imb-price-input-market' : ''}" title="${esc(title)}">
       ${itemIcon(itemId, 'imb-icon-sm')}
       <input type="number" min="0" step="1" data-price-item="${esc(itemId)}" value="${value}" placeholder="${esc(name)}" aria-label="${esc(title)}">
       ${canReset ? `<button type="button" class="imb-copy-btn" data-reset-item="${esc(itemId)}" title="Reset to TibiaMarket price" aria-label="Reset ${esc(name)} to TibiaMarket price">${RESET_ICON}</button>` : ''}
-    </label>`;
+    </span>`;
 }
 
 function marketUpdatedNote(marketForWorld) {
