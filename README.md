@@ -18,14 +18,14 @@ Plain HTML5, CSS and JavaScript modules — no frameworks, no build step, no dep
 
 | Page | What it does |
 | --- | --- |
-| `index.html` | Fast app doorway grouped into the daily loop and reference/record workspaces; dashboard metrics stay on Character instead of repeating on Home |
+| `index.html` | Daily dashboard: compact progression metrics (level, today's XP, pace, XP to next level, charm points), one evidence-backed next-hunt decision, attention items and a shortcut to every other page (the NAV destinations, so desktop-only pages stay reachable on mobile). Never loads the codex or charm catalogue |
 | `character.html` | Night'Flyn's character dashboard: slim identity, current/target/projected progression, one interactive XP chart with level-up/death markers, then task tabs for next hunt, highscores, hunt log and details. Highscores uses one Experience trend plus one complete compact list with no repeated rank cards; the full row history lives on Analytics; planner shortcuts never recommend off-vocation rows |
-| `grounds.html` | Hunt planner. It opens around Night'Flyn's tracked level, then shows one tile per ground with best-effort **area** (nearest city/region), best attack element, task speed and logged evidence. Filter bar: Search (matches ground *or* creature names), Level, Vocation, Hunt type (solo/team), task speed, Playstyle (free text against the loadout column, e.g. "fork" for druids, "arrows" for paladins), and Sort. Sorting happens after grouping into cards, against each card's own aggregate value, so the numbers shown always match what you sorted by. Each ground's curated rows keep tibiapal's vocation-specific **loadout** column verbatim (knight/monk weapon element, paladin ammo/barrage, sorcerer mastery, druid spell/fork playstyle). Selecting a tile opens its dossier inline on the same page (`grounds.html?g=…`, back button/browser-back returns to the filtered list) instead of navigating to a separate page — best-effort **area and access requirements** (city/region, level/quest/premium, sourced from TibiaWiki, always linked and labelled unverified), recommendations, personal/shared stats, population, battle plan, creature matchups |
+| `grounds.html` | Hunt planner. It opens around Night'Flyn's tracked level, then shows one tile per ground with best-effort **area** (nearest city/region), best attack element, task speed and logged evidence. Filter bar: Search (matches ground, creature, area and access text), Party (all/solo/team), Level range, then Exact level, Vocation, Area, Element, Creature type, Playstyle (free text against the loadout column, e.g. "fork" for druids, "arrows" for paladins), and Sort. Sorting happens after grouping into cards, against each card's own aggregate value, so the numbers shown always match what you sorted by. Each ground's curated rows keep tibiapal's vocation-specific **loadout** column verbatim (knight/monk weapon element, paladin ammo/barrage, sorcerer mastery, druid spell/fork playstyle). Selecting a tile opens its dossier inline on the same page (`grounds.html?g=…`, back button/browser-back returns to the filtered list) instead of navigating to a separate page — best-effort **area and access requirements** (city/region, level/quest/premium, sourced from TibiaWiki, always linked and labelled unverified), recommendations, personal/shared stats, population, battle plan, creature matchups |
 | `tools.html` | Character tools: stamina calculator, TibiaTools-style element damage sandbox, imbuement price calculator, level-target/days-to-goal calculator, and profit tracker from saved analyser sessions |
-| `creatures.html` | Codex explorer — search, difficulty and class filters, sortable by name/HP/XP/charm points; used to answer which creatures matter for Night'Flyn's hunts, tasks and charms. Selecting a tile opens its dossier inline on the same page (`creatures.html?c=…`, back button/browser-back returns to the filtered list) — official artwork, lore and behaviour (TibiaData), stats, task speed, location-specific kills/hour or kills/lap observations, summon/convince costs, resistance meters, damage ranking, battle plan, loot, habitats (linked to grounds), Charm data, and the kill count from your saved analyser logs (an honest floor, not the Bestiary counter) |
+| `creatures.html` | Codex explorer — search, difficulty, class and task-speed filters, sortable by name/HP/XP; used to answer which creatures matter for Night'Flyn's hunts, tasks and charms. Selecting a tile opens its dossier inline on the same page (`creatures.html?c=…`, back button/browser-back returns to the filtered list) — official artwork, lore and behaviour (TibiaData), stats, task speed, location-specific kills/hour or kills/lap observations, summon/convince costs, resistance meters, damage ranking, battle plan, loot, habitats (linked to grounds), Charm data, and the kill count from your saved analyser logs (an honest floor, not the Bestiary counter) |
 | `charms.html` | Personal charm intelligence: "Charms for your hunts" ranks elemental charms by expected proc damage over the saved kill log, the tracked charm-point budget marks affordable stages (earned-points caveat), and the full catalogue (Cyclopedia-sourced): elemental damage charms grouped by element, other Major charms, and Minor charms — cost per upgrade stage, effect text, and a link to the source page. Creature/ground recommendations open the selected charm first through query-backed route state, without fragment navigation |
-| `submit.html` | The four-step analyser flow: paste, locate, read combat strategy, save to the private logbook |
-| `analytics.html` | Pure-SVG progression and performance boards: daily XP gain, tracked highscores, top XP/profit targets, busiest grounds, hunts over time, most-killed creatures, most-looted items, vocation split |
+| `submit.html` | The four-step analyser flow — Paste → Read → Location → Confirm — saving to the private logbook |
+| `analytics.html` | Pure-SVG progression and performance boards: daily XP gain, average XP gain by weekday, profit share by ground, this week vs last week, tracked highscores, top XP/profit targets, busiest grounds, hunts over time, most-killed creatures, most-looted items, vocation split |
 | `admin.html` | Logbook tools: local hunt review, rule checks, duplicate sweep, JSON/CSV/Excel export, JSON import |
 
 ## Character Hub Scope
@@ -35,17 +35,19 @@ Exiva XP is one Night'Flyn interface, not a generic public directory. Current im
 ## Layout
 
 ```
-*.html                     eleven thin pages sharing one shell
+*.html                     nine thin pages sharing one shell
 config.ini                 the tracked character's name — world/vocation resolve from TibiaData automatically
 assets/
   css/base.css             fonts, tokens (light + dark), app shell
   css/pages.css            page components
   fonts/                   Optimistic VF + Instagram Sans (from the design system)
   js/
-    lib/                   fmt.js · text.js · stats.js · config.js (browser config.ini reader)
-    engine/                analyser.js · codex.js · strategy.js
-                           locator.js · ledger.js · rules.js  (game logic, Node-safe)
+    lib/                   fmt.js · text.js · stats.js · timezones.js · config.js (browser config.ini reader)
+    engine/                analyser.js · codex.js · strategy.js · locator.js · ledger.js
+                           rules.js · progression.js · planning.js · highscores.js
+                           imbuements.js  (game logic, Node-safe)
     data/sources.js        dataset loaders + 8 submission backends
+    data/imbuement-prices.js  per-world manual imbuement prices over the market prefill
     viz/svg.js             hand-rolled SVG charts
     shell.js               chrome + shared DOM fragments
     pages/                 one controller per page
@@ -55,7 +57,7 @@ data/
   bestiary.json            generated TibiaDraptor Cyclopedia creature reference
   codex-extra.json         TibiaData enrichment: artwork, lore, behaviour, loot, summon data
   creature-tasks.json      owner-curated task speed + workbook route-rate observations
-  charms.json              the Charm catalogue (read-only, sourced from TibiaWiki)
+  charms.json              the Charm catalogue (read-only, the same Cyclopedia export as bestiary.json)
   grounds.json             curated entries from tibiapal.com/hunting (read-only)
   grounds-xp-legacy.json   generated — raw XP/h and profit/h stand-ins for druid grounds tibiapal hasn't rated yet, from its retired Mage table (provenance kept in the data and in hover text)
   ground-creatures.json    generated — TibiaWiki hunting-place creature rosters
@@ -65,6 +67,7 @@ data/
   character.json           generated daily — Night'Flyn profile, highscore ranks, death log
   highscores/              generated daily — one history file per TibiaData highscore category; experience includes older imported backfill
   character-snapshot.json  generated daily — highscore staleness guard and same-day rerun guard
+  imbuement-art.json       generated — TibiaWiki imbuement and item icons
   imbuement-prices.json    generated a few times daily — {world: {itemId: {price, source, basis, observedAt, updatedAt}}} TibiaMarket prefill for Gentebra
 pipeline/
   config.mjs               reads config.ini — the tracked character for every script below
@@ -75,6 +78,8 @@ pipeline/
   enrich-art.mjs           validate artwork URLs, fill gaps from TibiaWiki (fandom)
   enrich-access.mjs        best-effort ground access notes from TibiaWiki (rebuilds fully)
   enrich-ground-creatures.mjs explicit TibiaWiki creature rosters (rebuilds fully)
+  enrich-imbuement-art.mjs  TibiaWiki imbuement/item icons (incremental)
+  fetch-druid-xp.mjs       druid raw XP/h + profit/h stand-ins from tibiapal's retired Mage table
   track-character.mjs      hourly Night'Flyn TibiaData highscore crawl (ported from tibia-xp-history, extended across all current highscore categories)
   fetch-imbuement-prices.mjs  TibiaMarket price prefill for Gentebra imbuement items (30-day sparse-market fallback; skips items fetched within 4h)
   imbuement-market-ids.mjs    item slug → TibiaMarket numeric item_id pins used by fetch-imbuement-prices.mjs
@@ -111,7 +116,7 @@ Data precedence is strict: `raw` is never altered; curated files are read-only; 
 
 ## The ledger
 
-Hunts group by ground × vocation × party-mode × level tier (8–49, 50–99, 100–149, 150–199, 200–299, 300–399, 400–599, 600+). Groups carry avg / median / min / max / σ for raw XP/h, loot/h and profit/h (loot and balance ÷ duration), sample count and recency. Rows are labelled by basis — **Curated** → **Blended** (first logged evidence arrives; curated values shown, logged stats attached) → **Logged** (5+ hunts; logged averages take over). Trust is a pure function of sample count: 1–4 Very low, 5–19 Low, 20–49 Medium, 50–99 High, 100+ Very high.
+Hunts group by ground × vocation × party-mode × level tier (8–49, 50–99, 100–149, 150–199, 200–299, 300–399, 400–599, 600+). Groups carry avg / median / min / max / σ for raw XP/h, loot/h and profit/h (loot and balance ÷ duration), sample count and recency. Rows move through three bases — **Curated** → **Blended** (first logged evidence arrives; curated values shown, logged stats attached) → **Logged** (5+ hunts; logged averages take over). Only Blended and Logged carry a badge; Curated is the unmarked default. Trust is a pure function of sample count: 1–4 Very low, 5–19 Low, 20–49 Medium, 50–99 High, 100+ Very high.
 
 ## Creature & combat intelligence
 
@@ -133,13 +138,13 @@ Artwork comes entirely from [TibiaWiki](https://tibia.fandom.com), not TibiaData
 
 ## Ground access requirements and area
 
-There's no structured API for hunting-ground access requirements or their broader area, so `pipeline/enrich-access.mjs` best-effort-resolves each curated ground to its TibiaWiki article and reads: the infobox's `city` field (or the first `near` link, skipping self-references) as the ground's **area** — e.g. "Ankrahmun" for Cobra Bastion — and the intro prose for a minimum level, a linked Quest name (using the wikilink's actual page title, never a display alias — aliases like "permission" or "task to kill them" aren't quest names) and a Premium Account mention. Area shows as an informational label on both the hunt planner tiles and the ground dossier's Requirements panel (not a filter). A ground only gets an entry when at least one of these was found; every entry carries the wiki page it came from, and the UI always labels this "unverified — confirm in-game" and links the source. Re-running the script rebuilds `data/access.json` from scratch. Current coverage: 259 of 410 grounds carry a signal, 244 with an area.
+There's no structured API for hunting-ground access requirements or their broader area, so `pipeline/enrich-access.mjs` best-effort-resolves each curated ground to its TibiaWiki article and reads: the infobox's `city` field (or the first `near` link, skipping self-references) as the ground's **area** — e.g. "Ankrahmun" for Cobra Bastion — and the intro prose for a minimum level, a linked Quest name (using the wikilink's actual page title, never a display alias — aliases like "permission" or "task to kill them" aren't quest names) and a Premium Account mention. Area shows on the hunt planner tiles and the ground dossier's Requirements panel and is also a planner filter; a ground's resolved hunting-place `city` (from `data/ground-creatures.json`) takes precedence over this inferred area. A ground only gets an entry when at least one of these was found; every entry carries the wiki page it came from, and the UI always labels this "unverified — confirm in-game" and links the source. Re-running the script rebuilds `data/access.json` from scratch. Current coverage: 259 of 410 grounds carry a signal, 244 with an area.
 
 Many curated names are just the creature that spawns there ("Bashmu", "Werelions", "Falcons"), with no separate location article to read a city/near field from — for these, TibiaWiki genuinely has no structured place data to extract, and the panel correctly shows "no requirement found" rather than guessing. Two matching safeguards keep the fuzzy resolution honest: (1) when a whole-phrase search fails, each individual word is retried as its own exact-title search and every candidate is actually fetched — not just title-matched — so a wrong-but-plausible word (e.g. "Wyrms" from "Elder Wyrms Drefia") gets skipped in favour of the real one ("Drefia") once its page turns out to have nothing usable; (2) a candidate page is only trusted if its infobox is actually `Hunt` or `Geography` — early versions accepted any page whose intro text happened to mention a "Quest" link or level number, which let creature pages (e.g. "Nightmare", matched from "Nightmare Scions Krailos") leak in irrelevant lore-text signals.
 
 ## Ground creature rosters
 
-`pipeline/enrich-ground-creatures.mjs` rebuilds `data/ground-creatures.json` from TibiaWiki's `Category:Hunting Places`. It fetches every article's wikitext, reads canonical `CreatureList` templates (or exact creature links in short articles that have no list), drops bosses and other names absent from the Cyclopedia Bestiary, and resolves the planner's tactical aliases only through exact/strong titles, previously resolved Wiki access pages, or reviewed alias rules. Number and direction guards keep Warzone 2 away from Warzone 1 and Upper Roshamuul away from Lower Roshamuul. Section-aware parsing keeps Book World chapters, Hive subareas, Banuta's ape floors and the Fire/Energy/Ice Library populations separate. Floor aliases stay unresolved when TibiaWiki only publishes an article-wide list. Current coverage is 330 of 410 planner grounds.
+`pipeline/enrich-ground-creatures.mjs` rebuilds `data/ground-creatures.json` from TibiaWiki's `Category:Hunting Places`. It fetches every article's wikitext, reads canonical `CreatureList` templates (or exact creature links in short articles that have no list), drops bosses and other names absent from the Cyclopedia Bestiary, and resolves the planner's tactical aliases only through exact/strong titles, previously resolved Wiki access pages, or reviewed alias rules. Number and direction guards keep Warzone 2 away from Warzone 1 and Upper Roshamuul away from Lower Roshamuul. Section-aware parsing keeps Book World chapters, Hive subareas, Banuta's ape floors and the Fire/Energy/Ice Library populations separate. Floor aliases stay unresolved when TibiaWiki only publishes an article-wide list. Current coverage is 341 of 410 planner grounds.
 
 The runtime merges logged analyser kills with the TibiaWiki roster whenever both exist: saved kills weight the battle advice, while the full respawn remains visible and mobs absent from the loaded sessions show no logged kill share. Without a log it uses the equal-weight Wiki roster, then falls back only to creatures explicitly named by the ground label. The old broad Bestiary-habitat similarity fallback was removed: labels such as “Yalahar”, “Drefia”, “Banuta” and “Ingol” describe regions containing many unrelated spawns, so an unresolved ground now honestly shows no trustworthy population instead of fabricating a matchup. Each dossier links the exact source article.
 

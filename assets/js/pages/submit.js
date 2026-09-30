@@ -7,7 +7,7 @@ import { $, say, pillEl, meters, note } from '../shell.js';
 import { readAnalyser, isAnalyser } from '../engine/analyser.js';
 import { locateHunt } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
-import { judge, VOCATIONS } from '../engine/rules.js';
+import { judge, LIMITS, VOCATIONS } from '../engine/rules.js';
 import { backend, logbook } from '../data/sources.js';
 
 const { stage, codex, grounds, hunts } = await boot('submit.html', { codex: true, grounds: true, hunts: true });
@@ -59,7 +59,7 @@ renderStepper();
 $('#go').addEventListener('click', () => {
   const session = readAnalyser($('#paste').value);
   if (!isAnalyser(session)) {
-    $('#read-note').innerHTML = note('red', 'No XP, loot or kill data found — that does not look like a hunting analyser.');
+    $('#read-note').innerHTML = note('error', 'No XP, loot or kill data found — that does not look like a hunting analyser.');
     $('#flow').innerHTML = '';
     displaySteps = ['paste', 'review', 'where', 'confirm'];
     reachedKeys = ['paste'];
@@ -138,7 +138,7 @@ function renderFlow(session) {
         <div class="fact"><b class="num">${nf(session.kills.length)}</b><span class="fine dim">Creatures</span></div>
         <div class="fact"><b class="num">${nf(session.drops.length)}</b><span class="fine dim">Item types</span></div>
       </div>
-      ${located.unknown.length ? note('amber', `Not in the codex: ${located.unknown.map((u) => u.name).join(', ')} — kept in your submission, excluded from intelligence.`) : ''}
+      ${located.unknown.length ? note('warning', `Not in the codex: ${located.unknown.map((u) => u.name).join(', ')} — kept in this log, excluded from intelligence.`) : ''}
     </div>
     ${battle ? `
     <div class="step-head" style="margin-top:var(--s5)"><h2>Your battle read</h2></div>
@@ -179,12 +179,12 @@ function renderFlow(session) {
         <label class="lbl lbl-wide"><span class="eyebrow">Ground *</span><input type="text" id="h-ground" list="ground-names" required></label>
         <datalist id="ground-names">${[...grounds.directory].sort((a, b) => a.name.localeCompare(b.name)).map((g) => `<option value="${esc(g.name)}">`).join('')}</datalist>
         <label class="lbl"><span class="eyebrow" id="h-voc-label">Vocation (solo) *</span><select id="h-voc" required><option value="">Pick…</option>${[...VOCATIONS].sort().map((v) => `<option>${v}</option>`).join('')}</select></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Level *</span><input type="number" id="h-level" min="8" max="2000" required></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Level *</span><input type="number" id="h-level" min="${LIMITS.level[0]}" max="${LIMITS.level[1]}" required></label>
         <label class="lbl"><span class="eyebrow">Hunt type</span><select id="h-party"><option value="">Solo</option><option value="party">Team hunt</option></select></label>
         <label class="lbl"><span class="eyebrow">World</span><input type="text" id="h-world" placeholder="Optional"></label>
       </div>
       <div id="verdict" role="status" aria-live="polite"></div>
-      <div style="margin-top:var(--s4)"><button type="submit" class="btn btn-primary btn-lg" id="publish">Save hunt</button></div>
+      <div style="margin-top:var(--s4)"><button type="submit" class="btn btn-primary btn-lg" id="save-hunt">Save hunt</button></div>
     </form>
     ${stepFooter('confirm')}
   </section>`;
@@ -208,7 +208,7 @@ function renderFlow(session) {
   }
 
   const huntForm = $('#hunt-form');
-  const publishButton = $('#publish');
+  const saveButton = $('#save-hunt');
   const syncVocationRequirement = () => {
     const solo = $('#h-party').value !== 'party';
     $('#h-voc').required = solo;
@@ -247,27 +247,27 @@ function renderFlow(session) {
 
     const verdict = judge(hunt, [...hunts, ...logbook()]);
     $('#verdict').innerHTML = [
-      ...verdict.faults.map((f) => note('red', f)),
-      ...verdict.flags.map((f) => note('amber', f)),
+      ...verdict.faults.map((f) => note('error', f)),
+      ...verdict.flags.map((f) => note('warning', f)),
     ].join('');
     if (!verdict.ok) return;
 
     saving = true;
     huntForm.setAttribute('aria-busy', 'true');
-    publishButton.disabled = true;
-    publishButton.textContent = 'Saving…';
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving…';
     try {
       const result = await backend().send(hunt);
       if (result.followUp) window.open(result.followUp, '_blank', 'noopener');
-      $('#verdict').innerHTML += note(result.ok ? 'green' : 'amber', result.message);
+      $('#verdict').innerHTML += note(result.ok ? 'success' : 'warning', result.message);
       say(result.ok ? 'Hunt saved to your logbook.' : result.message);
     } catch (err) {
-      $('#verdict').innerHTML += note('red', `Saving failed: ${err.message}`);
+      $('#verdict').innerHTML += note('error', `Saving failed: ${err.message}`);
     } finally {
       saving = false;
       huntForm.removeAttribute('aria-busy');
-      publishButton.disabled = false;
-      publishButton.textContent = 'Save hunt';
+      saveButton.disabled = false;
+      saveButton.textContent = 'Save hunt';
     }
   });
 

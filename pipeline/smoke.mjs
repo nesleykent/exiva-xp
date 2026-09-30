@@ -7,17 +7,18 @@
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { isAnalyser, readAnalyser } from '../assets/js/engine/analyser.js';
-import { assessImport, judge } from '../assets/js/engine/rules.js';
+import { assessImport, baseVocation, DUPLICATE_ANALYSER, judge, vocationFits } from '../assets/js/engine/rules.js';
 import { armorSpots, Codex, ELEMENT_CHARM, TASK_SPEEDS } from '../assets/js/engine/codex.js';
 import { locateHunt, nameCreatures, population } from '../assets/js/engine/locator.js';
 import { readBattle } from '../assets/js/engine/strategy.js';
 import { buildLedger, groundDossier } from '../assets/js/engine/ledger.js';
-import { baseValue, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel } from '../assets/js/engine/progression.js';
+import { baseValue, dailyGains, experienceForLevel, levelForExperience, experienceUntilNextLevel, nextBaseBreakpointLevel, nextMilestoneLevel, progressWithinLevel, xpPace } from '../assets/js/engine/progression.js';
 import { charmAdvice, effectiveDamage, formatStamina, parseStamina, profitSnapshot, staminaProjection, staminaRecoveryPlan } from '../assets/js/engine/planning.js';
 import { HIGHSCORE_CATEGORIES } from '../assets/js/engine/highscores.js';
 import { calculateImbuement, calculateTier, getAcquisitionOptions, GOLD_TOKEN_ITEM, imbuementById, IMBUEMENTS, selectCheapestOption } from '../assets/js/engine/imbuements.js';
 import { normalizeGrounds } from '../assets/js/data/sources.js';
 import { flow } from '../assets/js/viz/svg.js';
+import { NAV } from '../assets/js/shell.js';
 import { IMBUEMENT_MARKET_IDS } from './imbuement-market-ids.mjs';
 import { currentBuyPrice } from './fetch-imbuement-prices.mjs';
 import { CHARACTER } from './config.mjs';
@@ -170,6 +171,11 @@ const hunt = {
 const verdict = judge(hunt, []);
 assert(verdict.ok, `rules rejected a clean hunt: ${verdict.faults.join('; ')}`);
 assert(!judge({ ...hunt, id: 't2' }, [hunt]).ok, 'duplicate slipped through');
+assert(judge({ ...hunt, id: 't3' }, [hunt]).faults.includes(DUPLICATE_ANALYSER), 'duplicate analyser must carry the shared import-duplicate fault');
+assert(baseVocation('Elder Druid') === 'Druid' && baseVocation('Exalted Monk') === 'Monk' && baseVocation('Royal Paladin') === 'Paladin' && baseVocation('None') === '',
+  'baseVocation must resolve every promoted title to its base vocation');
+assert(vocationFits('Druid', 'Druid') && vocationFits(null, 'Druid') && vocationFits('Knight', '') && !vocationFits('Sorcerer', 'Druid'),
+  'vocationFits must keep team rows and exclude other vocations');
 const soloWithoutVocation = judge({ ...hunt, id: 'solo-no-vocation', vocation: null }, []);
 assert(soloWithoutVocation.faults.includes('Vocation is required for a solo hunt.'),
   'solo hunts must retain vocation evidence');
@@ -281,6 +287,19 @@ assert(progressWithinLevel(465, experienceForLevel(465)) === 0, 'progressWithinL
 assert(Math.abs(progressWithinLevel(465, (experienceForLevel(465) + experienceForLevel(466)) / 2) - 50) < 1e-9,
   'progressWithinLevel drifted at the midpoint between levels');
 assert(nextMilestoneLevel(465) === 500 && nextMilestoneLevel(500) === 550, 'nextMilestoneLevel should advance to the next 50-level marker');
+const gapHistory = [
+  { date: '2026-07-01', experience: 100 },
+  { date: '2026-07-02', experience: 160 },
+  { date: '2026-07-10', experience: 9_000 },
+  { date: '2026-07-11', experience: 8_990 },
+  { date: '2026-07-12', experience: 9_090 },
+];
+const gapGains = dailyGains(gapHistory);
+assert(gapGains.length === 3 && gapGains.every((g) => g.date !== '2026-07-10'),
+  'dailyGains must skip a tracker gap instead of crediting it to one day');
+assert(gapGains[1].gain === 0 && gapGains[2].gain === 100, 'dailyGains must clamp a negative delta to zero');
+assert(xpPace(gapGains).xp === 53 && xpPace(gapGains).days === 3 && xpPace(gapGains, 1).xp === 100 && xpPace([]) === null,
+  'xpPace must average the last N gap-free gains (rest days included)');
 const baseAt465 = baseValue(465);
 const nextBaseAt465 = nextBaseBreakpointLevel(465);
 assert(Number.isFinite(baseAt465) && nextBaseAt465 > 465, 'base value breakpoint calculation failed');
@@ -477,8 +496,10 @@ assert(homeController.includes("boot('index.html', { ledger: true, config: true 
 assert(!homeController.includes('loadCodex') && !homeController.includes('loadCharms'),
   'Home dashboard must not pull the multi-megabyte codex or charm catalogue');
 for (const route of ['analytics.html', 'creatures.html', 'charms.html', 'admin.html']) {
-  assert(homeController.includes(`'${route}'`), `${route} must remain reachable from the mobile Home dashboard`);
+  assert(NAV.some(([href, , , mobile]) => href === route && !mobile), `${route} must stay a desktop-only NAV destination`);
 }
+assert(homeController.includes("NAV.filter(([href]) => href !== 'index.html')"),
+  'Home shortcuts must list every NAV destination so desktop-only pages remain reachable from the mobile Home dashboard');
 assert(groundsController.includes('id="f" role="search"') &&
   groundsController.includes("$('#f').addEventListener('submit', (e) => e.preventDefault())"),
   'Planner live filters must keep Enter from submitting and losing filter state');

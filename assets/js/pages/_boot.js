@@ -1,6 +1,6 @@
 /** Shared page bootstrap: mount chrome and load only each page's declared data. */
 
-import { mountShell, $ } from '../shell.js';
+import { mountShell, $, note } from '../shell.js';
 import { backend, loadCodex, loadGrounds } from '../data/sources.js';
 import { buildLedger } from '../engine/ledger.js';
 import { loadConfig } from '../lib/config.js';
@@ -32,7 +32,7 @@ export async function boot(page, {
       table: ledger ? buildLedger(loadedGrounds.entries, loadedHunts) : [],
     };
   } catch (err) {
-    stage.innerHTML = `<div class="note note-red">Could not load the datasets (${err.message}). If you opened the file directly, serve the folder over HTTP instead.</div>`;
+    stage.innerHTML = note('error', `Could not load the datasets (${err.message}). If you opened the file directly, serve the folder over HTTP instead.`);
     throw err;
   }
 }

@@ -2,12 +2,14 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
+import { DAY_MS, compact, nf, kk, hm, day, md, ym } from '../lib/fmt.js';
 import { average, tally } from '../lib/stats.js';
 import { hourly } from '../engine/ledger.js';
-import { bars, flow, flowLegend, sparkline, attachVizHover, categorical, donut, chartInto } from '../viz/svg.js';
+import { dailyGains } from '../engine/progression.js';
+import { bars, flow, flowLegend, sparkline, attachVizHover, categorical, donut, chartInto, vizEmpty } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory } from '../data/sources.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
+import { metric, note } from '../shell.js';
 
 const { stage, hunts, table, config } = await boot('analytics.html', { ledger: true, config: true });
 const [history, profile] = await Promise.all([
@@ -18,12 +20,8 @@ const characterName = profile?.name || config.name;
 
 const label = (r) => [r.ground, r.vocation || 'Party', r.levelText].filter(Boolean).join(' · ');
 const latest = history.at(-1) || null;
-const previous = history.at(-2) || null;
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-// Tracker gaps (see AGENTS.md) leave adjacent rows more than a day apart;
-// attributing that whole span's XP delta to a single day would fabricate a
-// spike out of weeks of real progress, so gaps are skipped entirely here.
-const isConsecutiveDay = (a, b) => (new Date(b.date) - new Date(a.date)) === ONE_DAY_MS;
+// gap-free only: a tracker gap never becomes one fabricated spike day
+const gains = dailyGains(history);
 const deaths = profile?.deaths || [];
 const chartEvents = (date) => {
   const events = [];
@@ -35,27 +33,17 @@ const chartEvents = (date) => {
   });
   return events;
 };
-const dailyXp = [];
-for (let i = 1; i < history.length; i++) {
-  if (!isConsecutiveDay(history[i - 1], history[i])) continue;
-  dailyXp.push({ key: md(history[i].date), label: history[i].date, n: Math.max(0, history[i].experience - history[i - 1].experience), events: chartEvents(history[i].date) });
-}
+const dailyXp = gains.map((g) => ({ key: md(g.date), label: g.date, n: g.gain, events: chartEvents(g.date) }));
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
-for (let i = 1; i < history.length; i++) {
-  if (!isConsecutiveDay(history[i - 1], history[i])) continue;
-  const gain = Math.max(0, history[i].experience - history[i - 1].experience);
-  const day = new Date(`${history[i].date}T00:00:00Z`).getUTCDay();
-  weekdayBuckets[day].gains.push(gain);
-}
+for (const g of gains) weekdayBuckets[new Date(`${g.date}T00:00:00Z`).getUTCDay()].gains.push(g.gain);
 const weekdayXp = weekdayBuckets
   .filter((row) => row.gains.length)
   .map((row) => ({ key: `${row.name} (${nf(row.gains.length)}d)`, n: average(row.gains) }));
 
 function signed(value, fmt = nf) {
-  if (value == null || !Number.isFinite(value)) return '<span class="dim">-</span>';
-  if (value === 0) return `<span class="dim">${fmt(value)}</span>`;
-  return `<span class="${value > 0 ? 'ok' : 'bad'}">${value > 0 ? '+' : ''}${fmt(value)}</span>`;
+  if (value == null || !Number.isFinite(value)) return '<span class="dim">—</span>';
+  return `<em class="metric-delta ${value > 0 ? 'up' : value < 0 ? 'down' : 'even'}">${value > 0 ? '+' : ''}${fmt(value)}</em>`;
 }
 
 const highscoreTrends = HIGHSCORE_CATEGORIES.map((s) => {
@@ -91,7 +79,7 @@ function highscoreTrendCard(s) {
         <span><b class="num">${signed(s.trackedDelta)}</b><small>Tracked delta</small></span>
       </div>
       <div class="sparkline">
-        ${s.moving ? mount(`hs-${s.valueField}`, (width) => sparkline(s.series, { width, fmt: nf })) : '<p class="viz-empty">No trend drawn until this metric has at least two distinct values.</p>'}
+        ${s.moving ? mount(`hs-${s.valueField}`, (width) => sparkline(s.series, { width, fmt: nf })) : vizEmpty('No trend drawn until this metric has at least two distinct values.')}
       </div>
     </article>`;
 }
@@ -133,8 +121,7 @@ const totalProfit = hunts.some((hunt) => hunt.balance != null)
 const totalHuntXp = hunts.some((hunt) => hunt.xpRaw != null)
   ? hunts.reduce((sum, hunt) => sum + (hunt.xpRaw || 0), 0)
   : null;
-const lastGain = latest && previous && isConsecutiveDay(previous, latest)
-  ? Math.max(0, latest.experience - previous.experience) : null;
+const lastGain = latest && gains.at(-1)?.date === latest.date ? gains.at(-1).gain : null;
 
 /**
  * Charts mount into placeholder divs after the page renders (chartInto), so
@@ -165,7 +152,7 @@ const profitByGround = tally(
 function profitShareBoard(data) {
   if (!data.length) return '';
   // fixed-order categorical assignment from viz/svg.js — never cycled; the
-  // tail past six grounds folds into one grey "Other" row
+  // tail past the five brand hues folds into one grey "Other" row
   const rows = categorical(data);
   const total = rows.reduce((sum, d) => sum + d.n, 0);
   const legend = rows.map((d) => `
@@ -186,8 +173,7 @@ function profitShareBoard(data) {
 
 // ---------------------------------------------------------------- this week vs last week
 
-const ONE_DAY = 24 * 60 * 60 * 1000;
-const addDays = (dateStr, n) => new Date(new Date(`${dateStr}T00:00:00Z`).getTime() + n * ONE_DAY).toISOString().slice(0, 10);
+const addDays = (dateStr, n) => new Date(new Date(`${dateStr}T00:00:00Z`).getTime() + n * DAY_MS).toISOString().slice(0, 10);
 const isoWeekStart = (dateStr) => addDays(dateStr, -((new Date(`${dateStr}T00:00:00Z`).getUTCDay() + 6) % 7));
 
 const todayKey = day(new Date().toISOString());
@@ -195,15 +181,11 @@ const thisWeekStart = isoWeekStart(todayKey);
 const lastWeekStart = addDays(thisWeekStart, -7);
 // Comparing a partial "this week" against a full prior week would overstate
 // a shortfall, so the prior week is windowed to the same elapsed day count.
-const elapsedDays = Math.min(7, Math.round((new Date(`${todayKey}T00:00:00Z`) - new Date(`${thisWeekStart}T00:00:00Z`)) / ONE_DAY) + 1);
+const elapsedDays = Math.min(7, Math.round((new Date(`${todayKey}T00:00:00Z`) - new Date(`${thisWeekStart}T00:00:00Z`)) / DAY_MS) + 1);
 const thisWeekDates = Array.from({ length: elapsedDays }, (_, i) => addDays(thisWeekStart, i));
 const lastWeekDates = Array.from({ length: elapsedDays }, (_, i) => addDays(lastWeekStart, i));
 
-const dailyGainByDate = new Map();
-for (let i = 1; i < history.length; i++) {
-  if (!isConsecutiveDay(history[i - 1], history[i])) continue;
-  dailyGainByDate.set(history[i].date, Math.max(0, history[i].experience - history[i - 1].experience));
-}
+const dailyGainByDate = new Map(gains.map((g) => [g.date, g.gain]));
 
 // A window's XP total is only honest when every day in it has a real,
 // gap-free tracked delta (see the daily-XP gap comment above) — one missing
@@ -267,7 +249,7 @@ function weekComparisonBoard() {
     return `
       <section class="section">
         <div class="section-bar"><h2>This week vs last week</h2></div>
-        <div class="note note-amber">Not enough data yet — this comparison needs tracked history or logged hunts reaching back into last week (${lastWeek.start} to ${lastWeek.end}).</div>
+        ${note('warning', `Not enough data yet — this comparison needs tracked history or logged hunts reaching back into last week (${lastWeek.start} to ${lastWeek.end}).`)}
       </section>`;
   }
   return `
@@ -292,11 +274,11 @@ stage.innerHTML = `
     <h1>Analytics</h1>
     <p class="dim">Progression and hunt performance, with ${esc(characterName)}'s tracker and ${nf(hunts.length)} saved analyser session${hunts.length === 1 ? '' : 's'} kept distinct.</p>
   </header>
-  <div class="pulse-row">
-    <div class="panel pulse"><div class="eyebrow">Sessions</div><div class="big num">${nf(hunts.length)}</div><div class="fine dim">${meanMinutes != null ? `${hm(meanMinutes)} average` : `${nf(history.length)} tracked days`}</div></div>
-    <div class="panel pulse"><div class="eyebrow">Avg XP / hour</div><div class="big num">${meanXp != null ? compact(meanXp) : '—'}</div><div class="fine dim">from saved analysers</div></div>
-    <div class="panel pulse"><div class="eyebrow">Total profit</div><div class="big num">${totalProfit != null ? compact(totalProfit) : '—'}</div><div class="fine dim">${meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet'}</div></div>
-    <div class="panel pulse"><div class="eyebrow">Total hunt XP</div><div class="big num">${totalHuntXp != null ? compact(totalHuntXp) : '—'}</div><div class="fine dim">${lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only'}</div></div>
+  <div class="metric-row">
+    ${metric('Sessions', nf(hunts.length), meanMinutes != null ? `${hm(meanMinutes)} average` : `${nf(history.length)} tracked days`)}
+    ${metric('Avg XP / hour', compact(meanXp), 'from saved analysers')}
+    ${metric('Total profit', compact(totalProfit), meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet')}
+    ${metric('Total hunt XP', compact(totalHuntXp), lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only')}
   </div>
   ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { width, fmt: compact })) + flowLegend(dailyXp, 'XP/day', compact))}
   <div class="analytics-duo">
@@ -315,7 +297,7 @@ stage.innerHTML = `
   ${board('Most killed creatures', topKills, mount('top-kills', (width) => bars(topKills, { width, fmt: nf })))}
   ${board('Most looted items', topDrops, mount('top-drops', (width) => bars(topDrops, { width, fmt: nf })))}
   ${board('Hunts by vocation', byVocation, mount('by-vocation', (width) => bars(byVocation, { width, fmt: nf })))}
-  ${hunts.length ? '' : '<section class="section"><div class="note note-amber">Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.</div></section>'}`;
+  ${hunts.length ? '' : `<section class="section">${note('warning', 'Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.')}</section>`}`;
 document.querySelectorAll('[data-mount]').forEach((el) => chartInto(el, MOUNTS.get(el.dataset.mount)));
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
 

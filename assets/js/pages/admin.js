@@ -15,7 +15,7 @@ const FIELDS = ['id', 'loggedAt', 'ground', 'vocation', 'level', 'party', 'world
 stage.innerHTML = `
   <header class="page-head">
     <h1>Logbook</h1>
-    <p class="dim" style="max-width:64ch">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
+    <p class="dim">Manage the hunt logbook stored in <em>this</em> browser: review analyser sessions, sweep duplicates, export backups and import older logs. Shared/public moderation can still happen on GitHub later.</p>
   </header>
   <section class="section section-tight">
     <div class="section-bar"><h2>Local logbook</h2><span class="fine dim" id="k-count"></span></div>
@@ -58,7 +58,7 @@ function clearUndo() {
 function offerUndo(message, snapshot) {
   undoSnapshot = snapshot;
   $('#k-undo').innerHTML = `
-    <div class="note note-amber admin-undo">
+    <div class="note note-warning admin-undo">
       <span>${esc(message)}</span>
       <button type="button" class="btn btn-tertiary" data-undo>Undo</button>
     </div>`;
@@ -239,10 +239,10 @@ $('#k-import').addEventListener('change', async (e) => {
       .map((row) => `Row ${(row.index ?? 0) + 1}: ${row.faults.join(' ')}`)
       .join(' · ');
     const truncated = report.rejected.length > 10 ? ' Showing the first 10 rejection reasons.' : '';
-    $('#k-io').innerHTML = note(report.rejected.length ? 'amber' : 'green', `${summary}${reasons ? ` ${reasons}` : ''}${truncated}`);
+    $('#k-io').innerHTML = note(report.rejected.length ? 'warning' : 'success', `${summary}${reasons ? ` ${reasons}` : ''}${truncated}`);
     refresh();
   } catch (err) {
-    $('#k-io').innerHTML = note('red', `Import failed: ${err.message}`);
+    $('#k-io').innerHTML = note('error', `Import failed: ${err.message}`);
   } finally {
     e.target.value = '';
   }

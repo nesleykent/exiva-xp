@@ -13,20 +13,8 @@
  */
 
 import { readFileSync } from 'node:fs';
-
-function parseIni(text) {
-  const sections = {};
-  let section = null;
-  for (const rawLine of text.split('\n')) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith(';') || line.startsWith('#')) continue;
-    const sectionMatch = line.match(/^\[(.+)\]$/);
-    if (sectionMatch) { section = sectionMatch[1].trim(); sections[section] = {}; continue; }
-    const kv = line.match(/^([^=]+)=(.*)$/);
-    if (kv && section) sections[section][kv[1].trim()] = kv[2].trim();
-  }
-  return sections;
-}
+import { parseIni } from '../assets/js/lib/config.js';
+import { baseVocation } from '../assets/js/engine/rules.js';
 
 const CONFIG_PATH = new URL('../config.ini', import.meta.url);
 const CHARACTER_JSON_PATH = new URL('../data/character.json', import.meta.url);
@@ -37,15 +25,11 @@ const API = 'https://dev.tibiadata.com/v4';
 
 // TibiaData's highscore URLs take a lowercase, unpromoted, plural vocation
 // slug (knights/paladins/sorcerers/druids/monks); the character endpoint
-// reports the promoted title (e.g. "Elder Druid"), which always contains
-// the base name.
-const VOCATION_SLUGS = { knight: 'knights', paladin: 'paladins', sorcerer: 'sorcerers', druid: 'druids', monk: 'monks' };
-
+// reports the promoted title (e.g. "Elder Druid").
 function vocationSlug(vocationTitle) {
-  const norm = (vocationTitle || '').toLowerCase();
-  const base = Object.keys(VOCATION_SLUGS).find((b) => norm.includes(b));
+  const base = baseVocation(vocationTitle);
   if (!base) throw new Error(`Could not resolve a highscores vocation slug from TibiaData's "${vocationTitle}"`);
-  return VOCATION_SLUGS[base];
+  return `${base.toLowerCase()}s`;
 }
 
 function readJson(path) {

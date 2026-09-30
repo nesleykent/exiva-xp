@@ -10,7 +10,8 @@
  * before that file exists (e.g. a fresh fork's first deploy).
  */
 
-function parseIni(text) {
+/** Minimal INI reader: `[section]` headers and `key = value` lines; `;`/`#` comments. Shared with pipeline/config.mjs. */
+export function parseIni(text) {
   const sections = {};
   let section = null;
   for (const rawLine of text.split('\n')) {

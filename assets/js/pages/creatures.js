@@ -3,11 +3,13 @@
 import { boot, param } from './_boot.js';
 import { esc, fold, slug } from '../lib/text.js';
 import { nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
+import { $, backLink, ring, pillEl, segmentedControl, bindSegmented, meters, note, dataTable } from '../shell.js';
 import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_SPEEDS, TASK_SPEED_LABEL } from '../engine/codex.js';
 import { nearestGround } from '../engine/locator.js';
 
 const PAGE_TITLE = 'Creature codex · Exiva XP';
+const PAGE_SIZE = 8;
+const PAGE_STEP = 24;
 const { stage, codex, grounds, hunts } = await boot('creatures.html', { codex: true, grounds: true, hunts: true });
 
 const families = [...new Set(codex.creatures.map((c) => c.family).filter(Boolean))].sort();
@@ -15,7 +17,7 @@ const tiers = [...new Set(codex.creatures.map((c) => c.tier).filter(Boolean))].s
 const familyCounts = codex.creatures.reduce((counts, creature) => counts.set(creature.family, (counts.get(creature.family) || 0) + 1), new Map());
 const commonFamilies = [...families].sort((a, b) => familyCounts.get(b) - familyCounts.get(a)).slice(0, 3);
 
-const state = { q: '', tier: '', family: '', taskSpeed: '', sort: 'name', shown: 8, detailSlug: param('c') || null };
+const state = { q: '', tier: '', family: '', taskSpeed: '', sort: 'name', shown: PAGE_SIZE, detailSlug: param('c') || null };
 
 const SORTS = {
   name: ['Name', (c) => c.name, 'asc'],
@@ -59,10 +61,9 @@ function renderDetail(creatureSlug) {
   const detail = $('#detail');
 
   const c = codex.creature(creatureSlug);
-  const backLink = `<p><button type="button" class="dim" id="detail-back" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">← Codex</button></p>`;
 
   if (!c) {
-    detail.innerHTML = `${backLink}${note('red', 'No such creature in the codex.')}`;
+    detail.innerHTML = `${backLink('Codex')}${note('error', 'No such creature in the codex.')}`;
     $('#detail-back').addEventListener('click', () => closeDetail());
     return;
   }
@@ -102,7 +103,7 @@ function renderDetail(creatureSlug) {
     .map((item) => `<span class="pill">${esc(item)}</span>`);
 
   detail.innerHTML = `
-  ${backLink}
+  ${backLink('Codex')}
   <header class="masthead">
     ${c.art
       ? `<span class="art-disc"><img class="critter critter-lg" src="${esc(c.art)}" alt="${esc(c.name)}" onerror="this.parentElement.remove()"></span>`
@@ -247,12 +248,12 @@ function render() {
   $('#out').hidden = detailOpen;
 
   $('#out').innerHTML = `
-    <p class="fine dim count-line">Showing ${nf(Math.min(all.length, state.detailSlug ? 8 : state.shown))} of ${nf(all.length)} creatures</p>
+    <p class="fine dim count-line">Showing ${nf(Math.min(all.length, state.shown))} of ${nf(all.length)} creatures</p>
     <div class="tiles codex-grid">
-      ${all.slice(0, state.detailSlug ? 8 : state.shown).map((c) => {
+      ${all.slice(0, state.shown).map((c) => {
         const weak = weakSpots(c).slice(0, 3);
         return `
-        <a class="panel tile${c.slug === state.detailSlug ? ' is-selected' : ''}" href="creatures.html?c=${esc(c.slug)}" data-creature-slug="${esc(c.slug)}">
+        <a class="panel tile" href="creatures.html?c=${esc(c.slug)}" data-creature-slug="${esc(c.slug)}">
           <div class="tile-top">
             ${c.art
               ? `<span class="art-disc"><img class="critter" src="${esc(c.art)}" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>`
@@ -272,6 +273,7 @@ function render() {
   $('#codex-count').textContent = `${nf(all.length)} creatures`;
 
   const more = $('#more');
+  // #more sits outside #out, so an open dossier has to hide it explicitly
   more.hidden = !!state.detailSlug || all.length <= state.shown;
   // The wrapper carries the button's top margin, so leaving it behind would
   // still push the dossier down by a blank row.
@@ -281,24 +283,24 @@ function render() {
   else $('#detail').innerHTML = '';
 }
 
-$('#c-q').addEventListener('input', (e) => { state.q = e.target.value; state.shown = 8; render(); });
+$('#c-q').addEventListener('input', (e) => { state.q = e.target.value; state.shown = PAGE_SIZE; render(); });
 bindSegmented('c-family-all', (value) => {
   state.family = value;
-  state.shown = 8;
+  state.shown = PAGE_SIZE;
   $('#c-family').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.value === state.family)));
   render();
 });
 $('#c-filter').addEventListener('submit', (e) => e.preventDefault());
-bindSegmented('c-tier', (value) => { state.tier = value; state.shown = 8; render(); });
+bindSegmented('c-tier', (value) => { state.tier = value; state.shown = PAGE_SIZE; render(); });
 bindSegmented('c-family', (value) => {
   state.family = value;
   $('#c-family-all').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.value === value)));
-  state.shown = 8;
+  state.shown = PAGE_SIZE;
   render();
 });
-bindSegmented('c-task-speed', (value) => { state.taskSpeed = value; state.shown = 8; render(); });
-bindSegmented('c-sort', (value) => { state.sort = value; state.shown = 8; render(); });
-$('#more').addEventListener('click', () => { state.shown += 24; render(); });
+bindSegmented('c-task-speed', (value) => { state.taskSpeed = value; state.shown = PAGE_SIZE; render(); });
+bindSegmented('c-sort', (value) => { state.sort = value; state.shown = PAGE_SIZE; render(); });
+$('#more').addEventListener('click', () => { state.shown += PAGE_STEP; render(); });
 $('#out').addEventListener('click', (e) => {
   const tile = e.target.closest('[data-creature-slug]');
   if (!tile || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;

@@ -18,6 +18,19 @@ export const LIMITS = {
 export const VOCATIONS = ['Knight', 'Paladin', 'Monk', 'Sorcerer', 'Druid'];
 
 /**
+ * The base vocation behind a TibiaData title — a promoted title always
+ * contains its base name ("Elder Druid" → Druid, "Exalted Monk" → Monk).
+ * '' when the title names none.
+ */
+export function baseVocation(title) {
+  const text = String(title || '').toLowerCase();
+  return VOCATIONS.find((v) => text.includes(v.toLowerCase())) || '';
+}
+
+/** A row with no vocation is a team/any-vocation row, and an unknown base vocation fits every row. */
+export const vocationFits = (rowVocation, base) => !rowVocation || !base || rowVocation === base;
+
+/**
  * Elements each vocation's own spell arsenal can actually deal, ordered by
  * how central they are to that vocation's identity. Confirmed against
  * TibiaWiki: Sorcerer is fire/energy/death (Energy Wave, Rage of the Skies);
@@ -37,10 +50,13 @@ export const VOCATION_ELEMENTS = {
   Druid: ['ice', 'earth'],
 };
 
+/** The one fault an import treats as "already have it" rather than "invalid". */
+export const DUPLICATE_ANALYSER = 'This exact analyser has already been logged.';
+
 const NON_NEGATIVE = ['xpRawRate', 'xpRate', 'loot', 'supplies', 'damage', 'damageRate', 'healing', 'healingRate', 'minutes'];
 
 /**
- * @param {object} hunt submission record
+ * @param {object} hunt hunt record
  * @param {Array<object>} book already-accepted hunts (duplicate check)
  * @returns {{ok: boolean, faults: string[], flags: string[]}}
  */
@@ -49,7 +65,7 @@ export function judge(hunt, book = []) {
   const flags = [];
 
   if (!hunt || typeof hunt !== 'object') {
-    return { ok: false, faults: ['Submission is not an object.'], flags };
+    return { ok: false, faults: ['Hunt is not an object.'], flags };
   }
 
   if (hunt.xpRawRate == null) faults.push('No Raw XP/h — the analyser must contain Raw XP Gain or Raw XP/h.');
@@ -72,7 +88,7 @@ export function judge(hunt, book = []) {
   } else {
     const fp = fingerprint(hunt.raw);
     if (book.some((b) => b.id !== hunt.id && fingerprint(b.raw || '') === fp)) {
-      faults.push('This exact analyser has already been submitted.');
+      faults.push(DUPLICATE_ANALYSER);
     }
   }
 
@@ -94,7 +110,7 @@ export function judge(hunt, book = []) {
 }
 
 /**
- * Applies the normal submission contract to a JSON import before it can enter
+ * Applies the normal save contract to a JSON import before it can enter
  * the local logbook. Existing IDs and repeated analyser text are reported as
  * duplicates; structurally or mechanically invalid rows are rejected.
  */
@@ -125,7 +141,7 @@ export function assessImport(incoming, book = []) {
     }
 
     const verdict = judge(hunt, checked);
-    const analyserDuplicate = verdict.faults.length === 1 && verdict.faults[0] === 'This exact analyser has already been submitted.';
+    const analyserDuplicate = verdict.faults.length === 1 && verdict.faults[0] === DUPLICATE_ANALYSER;
     if (analyserDuplicate) {
       duplicates.push({ index, id: hunt.id, reason: verdict.faults[0] });
       return;

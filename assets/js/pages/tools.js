@@ -2,7 +2,7 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { gp, hm, kk, nf, pct } from '../lib/fmt.js';
+import { DAY_MS, gp, hm, kk, nf, pct } from '../lib/fmt.js';
 import { $, pillEl, ring, say, sortMenu, bindSortMenu } from '../shell.js';
 import { ELEMENTS, ELEMENT_NAME, elementOrder } from '../engine/codex.js';
 import {
@@ -10,9 +10,12 @@ import {
   formatStamina,
   parseStamina,
   profitSnapshot,
+  STAMINA_BONUS_START,
+  STAMINA_MAX,
   staminaProjection,
 } from '../engine/planning.js';
-import { experienceForLevel, experienceUntilNextLevel } from '../engine/progression.js';
+import { dailyGains, experienceForLevel, experienceUntilNextLevel, xpPace } from '../engine/progression.js';
+import { LIMITS } from '../engine/rules.js';
 import {
   calculateImbuement,
   formatShoppingList,
@@ -20,6 +23,7 @@ import {
   imbuementById,
   IMBUEMENTS,
   sortImbuements,
+  TIER_ORDER,
 } from '../engine/imbuements.js';
 import { loadWorldPrices, mergeMarketPrices, saveItemPrice } from '../data/imbuement-prices.js';
 import { loadCharacter, loadCharacterHistory, loadImbuementArt, loadImbuementPrices } from '../data/sources.js';
@@ -34,21 +38,13 @@ const [profile, history, imbuementArt, marketPrices] = await Promise.all([
 const characterName = profile?.name || config.name;
 
 const latest = history.at(-1) || {};
-const characterLevel = profile?.level ?? latest.level ?? 465;
+// null when neither the profile nor the history knows it — never a stand-in level
+const characterLevel = profile?.level ?? latest.level ?? null;
+const levelSeed = (offset) => (characterLevel != null ? Math.max(1, characterLevel + offset) : '');
 const characterExperience = latest.experience ?? null;
 
-// Recent daily pace, same gap-aware approach as the character dashboard: a
-// tracker gap (backfill sources drop out for weeks at a time) leaves rows
-// more than a day apart, so that span's gain is excluded instead of being
-// counted as one fabricated spike day.
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const dailyGains = history.slice(1).map((row, i) => {
-  const prev = history[i];
-  const consecutiveDay = (new Date(row.date) - new Date(prev.date)) === ONE_DAY_MS;
-  return consecutiveDay ? Math.max(0, row.experience - prev.experience) : null;
-}).filter((gain) => gain != null);
-const recentGains = dailyGains.slice(-7);
-const avgDailyXp = recentGains.length ? Math.round(recentGains.reduce((a, b) => a + b, 0) / recentGains.length) : null;
+// Recent daily pace, the same gap-aware series the character dashboard uses.
+const avgDailyXp = xpPace(dailyGains(history))?.xp ?? null;
 const defaultCreature = codex.identify('Girtablilu Warrior')?.creature ||
   codex.creatures.find((c) => c.hp > 5000) ||
   codex.creatures[0];
@@ -70,19 +66,19 @@ const IMB_WORLD = profile?.world || config.world;
 stage.innerHTML = `
   <header class="page-head">
     <h1>Character tools</h1>
-    <p class="dim" style="max-width:66ch">Practical ${esc(characterName)} tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
+    <p class="dim">Practical ${esc(characterName)} tools for stamina planning, element choice and profit, using the same character files and analyser sessions that power the hub.</p>
   </header>
 
-  <div class="tool-grid" style="margin-top:var(--s5)">
+  <div class="tool-grid">
     <section class="panel panel-pad tool-card" id="stamina-tool">
       <div class="tool-head">
         <h2>Stamina calculator</h2>
         <span class="fine dim">usage and recovery</span>
       </div>
       <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Current</span><input id="stamina-current" type="text" value="39:00" inputmode="numeric"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Current</span><input id="stamina-current" type="text" value="${formatStamina(STAMINA_BONUS_START)}" inputmode="numeric"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Hunt time</span><input id="stamina-session" type="text" value="2:00" inputmode="numeric"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Target</span><input id="stamina-target" type="text" value="42:00" inputmode="numeric"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target</span><input id="stamina-target" type="text" value="${formatStamina(STAMINA_MAX)}" inputmode="numeric"></label>
       </div>
       <div class="tool-result" id="stamina-out" role="status" aria-live="polite" aria-atomic="true"></div>
       <p class="fine dim">Offline regeneration: no regen for the first 10 minutes, then 3 min per stamina minute up to 39:00 and twice that (6 min) for the 39:00–42:00 bonus hours — 39:00 → 42:00 takes 18h10m offline.</p>
@@ -122,8 +118,8 @@ stage.innerHTML = `
         <span class="fine dim">exp, hunting time and days-to-goal at ${esc(characterName)}'s recent pace</span>
       </div>
       <div class="tool-fields">
-        <label class="lbl lbl-narrow"><span class="eyebrow">Starting level</span><input id="level-start" type="number" min="1" max="2000" value="${characterLevel}"></label>
-        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="level-target" type="number" min="2" max="2001" value="${characterLevel + 10}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Starting level</span><input id="level-start" type="number" min="1" max="${LIMITS.level[1]}" value="${levelSeed(0)}"></label>
+        <label class="lbl lbl-narrow"><span class="eyebrow">Target level</span><input id="level-target" type="number" min="2" max="${LIMITS.level[1] + 1}" value="${levelSeed(10)}"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Exp per hour</span><input id="level-exp-hour" type="number" min="0" value="" placeholder="optional"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Hours per day</span><input id="level-hours-day" type="number" min="0" max="24" step="0.5" value="" placeholder="optional"></label>
         <label class="lbl lbl-narrow"><span class="eyebrow">Avg daily exp</span><input id="level-pace" type="number" min="0" value="${avgDailyXp ?? ''}" placeholder="${avgDailyXp == null ? 'no pace data' : ''}"></label>
@@ -133,8 +129,8 @@ stage.innerHTML = `
       <details class="tool-disclosure">
         <summary>Level &amp; experience table</summary>
         <div class="tool-fields">
-          <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="2000" value="${Math.max(1, characterLevel - 2)}"></label>
-          <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="2001" value="${characterLevel + 20}"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">From level</span><input id="level-table-from" type="number" min="1" max="${LIMITS.level[1]}" value="${levelSeed(-2)}"></label>
+          <label class="lbl lbl-narrow"><span class="eyebrow">To level</span><input id="level-table-to" type="number" min="2" max="${LIMITS.level[1] + 1}" value="${levelSeed(20)}"></label>
         </div>
         <div class="tool-result" id="level-table-out"></div>
       </details>
@@ -169,7 +165,6 @@ function numberInput(id) {
   return Number.isFinite(value) ? value : 0;
 }
 
-const FULL_STAMINA = 42 * 60;
 
 /** "17 hours and 28 minutes" — spelled out, the way the sentence reads. */
 function spokenDuration(minutes) {
@@ -191,7 +186,7 @@ const clock = (date) => new Intl.DateTimeFormat('en-GB', {
 function whenReady(from, ready) {
   const dayGap = Math.round(
     (new Date(ready.getFullYear(), ready.getMonth(), ready.getDate())
-      - new Date(from.getFullYear(), from.getMonth(), from.getDate())) / 86_400_000,
+      - new Date(from.getFullYear(), from.getMonth(), from.getDate())) / DAY_MS,
   );
   const date = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(ready);
   const named = dayGap === 0 ? 'today, ' : dayGap === 1 ? 'tomorrow, ' : 'on ';
@@ -216,7 +211,7 @@ function renderStamina() {
   const plan = staminaProjection(current, session, target);
   const now = new Date();
   const ready = new Date(now.getTime() + plan.recovery.readyInMinutes * 60_000);
-  const goal = target >= FULL_STAMINA ? 'full stamina' : `${formatStamina(target)} stamina`;
+  const goal = target >= STAMINA_MAX ? 'full stamina' : `${formatStamina(target)} stamina`;
   const resting = plan.recovery.readyInMinutes > 0;
 
   $('#stamina-out').innerHTML = `
@@ -266,7 +261,7 @@ function renderDamage() {
   $('#damage-out').innerHTML = `
     <div class="tool-creature-line">
       ${creature.art ? `<img class="critter" src="${esc(creature.art)}" alt="">` : ring(creature.name, { quiet: true })}
-      <div><b>${esc(creature.name)}</b><span class="fine dim">HP ${nf(creature.hp)} · creature mitigation ${creature.mitigation ?? '-'}</span></div>
+      <div><b>${esc(creature.name)}</b><span class="fine dim">HP ${nf(creature.hp)} · creature mitigation ${creature.mitigation ?? '—'}</span></div>
     </div>
     <div class="tool-kpis">
       <span><b>${kk(result.hit)}</b><small>expected hit</small></span>
@@ -276,7 +271,7 @@ function renderDamage() {
     <div class="tile-tags">
       ${pillEl(element, pct(taken))}
       ${best ? `<span class="pill">Best: ${esc(ELEMENT_NAME[best.el])} ${pct(best.taken)}</span>` : ''}
-      <span class="pill">Level ${nf(characterLevel)} base value ${nf(result.base)}</span>
+      ${characterLevel != null ? `<span class="pill">Level ${nf(characterLevel)} base value ${nf(result.base)}</span>` : ''}
     </div>`;
 }
 
@@ -309,7 +304,7 @@ function renderLevelTarget() {
   const dailyPace = plannedDaily ?? (trackedPace > 0 ? trackedPace : null);
   const huntMinutes = expPerHour > 0 ? (needed / expPerHour) * 60 : null;
   const days = dailyPace != null ? Math.ceil(needed / dailyPace) : null;
-  const eta = days != null ? new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10) : null;
+  const eta = days != null ? new Date(Date.now() + days * DAY_MS).toISOString().slice(0, 10) : null;
   $('#level-out').innerHTML = `
     <div class="tool-kpis">
       <span><b>${kk(needed)}</b><small>exp to level ${nf(target)}</small></span>
@@ -351,7 +346,7 @@ function renderLevelTable() {
       <table class="grid">
         <thead><tr><th>Level</th><th class="num">Total exp</th><th class="num">Exp to next level</th></tr></thead>
         <tbody>
-          ${rows.map((row) => `<tr${row.level === characterLevel ? ' style="background:rgba(var(--overlay), var(--overlay-a))"' : ''}>
+          ${rows.map((row) => `<tr${row.level === characterLevel ? ' class="is-current"' : ''}>
             <td>${row.level === characterLevel ? `<b>${nf(row.level)}</b> <span class="fine dim">(you)</span>` : nf(row.level)}</td>
             <td class="num">${nf(row.total)}</td>
             <td class="num">${nf(row.toNext)}</td>
@@ -572,7 +567,7 @@ function closeTierComparisons() {
 
 function renderModalTiers(imb, world) {
   const calc = calculateImbuement(imb, imbPrices(world));
-  $('#imb-tier-cards').innerHTML = ['basic', 'intricate', 'powerful']
+  $('#imb-tier-cards').innerHTML = TIER_ORDER
     .map((tierId) => tierCardHtml(imb, tierId, calc[tierId])).join('');
   $('#imb-tier-cards').querySelectorAll('[data-copy-tier]').forEach((btn) => {
     btn.addEventListener('click', async () => {
@@ -610,15 +605,15 @@ function openImbuementModal(id) {
   const items = imb.tiers.powerful.items;
   const modal = $('#imb-modal');
   modal.innerHTML = `
-    <div class="panel panel-pad" style="max-width:760px;display:grid;gap:var(--s4)">
+    <div class="panel panel-pad">
       <div class="tool-head">
         <div>
-          <h2 id="imb-modal-title" style="margin:0">${esc(imb.name)}</h2>
+          <h2 id="imb-modal-title">${esc(imb.name)}</h2>
           <span class="fine dim" id="imb-modal-effect">${esc(imb.effect)}</span>
         </div>
         <button type="button" class="btn btn-tertiary btn-sm" id="imb-modal-close">Close</button>
       </div>
-      ${!imb.verified ? '<span class="pill pill-warning" style="width:fit-content">Unverified quantities — confirm at the imbuing shrine.</span>' : ''}
+      ${!imb.verified ? '<span class="pill pill-warning imb-card-badge">Unverified quantities — confirm at the imbuing shrine.</span>' : ''}
       <div class="tool-result-grid" id="imb-tier-cards"></div>
       <div>
         <div class="tool-head">

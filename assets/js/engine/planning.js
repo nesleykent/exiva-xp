@@ -7,12 +7,16 @@ import { baseValue } from './progression.js';
 
 export const clampNumber = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 
+/** Stamina ceiling and the start of the bonus hours, in minutes (TibiaWiki, Stamina). */
+export const STAMINA_MAX = 42 * 60;
+export const STAMINA_BONUS_START = 39 * 60;
+
 export function parseStamina(text) {
   const m = String(text || '').trim().match(/^(\d{1,2})(?::(\d{1,2}))?$/);
   if (!m) return null;
   if (m[2] != null && Number(m[2]) > 59) return null;
   const minutes = Number(m[1]) * 60 + Number(m[2] || 0);
-  return Number.isFinite(minutes) ? clampNumber(minutes, 0, 42 * 60) : null;
+  return Number.isFinite(minutes) ? clampNumber(minutes, 0, STAMINA_MAX) : null;
 }
 
 export function formatStamina(minutes) {
@@ -32,9 +36,9 @@ export function formatStamina(minutes) {
 export function staminaRecoveryPlan(currentMinutes, targetMinutes, {
   regularRate = 3,
   bonusRate = 6,
-  bonusStart = 39 * 60,
+  bonusStart = STAMINA_BONUS_START,
   startupDelay = 10,
-  max = 42 * 60,
+  max = STAMINA_MAX,
 } = {}) {
   const current = clampNumber(currentMinutes, 0, max);
   const target = clampNumber(targetMinutes, 0, max);
@@ -66,9 +70,9 @@ export function staminaRecoveryPlan(currentMinutes, targetMinutes, {
 }
 
 export function staminaProjection(currentMinutes, huntMinutes, targetMinutes, options = {}) {
-  const current = clampNumber(currentMinutes, 0, 42 * 60);
-  const spent = clampNumber(huntMinutes, 0, 42 * 60);
-  const afterHunt = clampNumber(current - spent, 0, 42 * 60);
+  const current = clampNumber(currentMinutes, 0, STAMINA_MAX);
+  const spent = clampNumber(huntMinutes, 0, STAMINA_MAX);
+  const afterHunt = clampNumber(current - spent, 0, STAMINA_MAX);
   return {
     current,
     spent,

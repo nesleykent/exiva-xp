@@ -284,22 +284,25 @@ export function sparkline(data, { width = 220, height = 58, fmt = nf, ticks = tr
  * fold so a real category never wears it.
  */
 export const CATEGORICAL = ['--brand-rose', '--brand-magenta', '--brand-purple', '--brand-orange', '--brand-yellow'];
-const OTHER_COLOR = '--c-physical';
+// the same de-emphasis grey bars() gives non-leader rows — an element token
+// (--c-*) would claim this neutral bucket is elemental data
+const OTHER_COLOR = '--ink-2';
 
 /**
- * Assign categorical colours in fixed order, capped at `max` slots — the tail
- * folds into one grey "Other" row instead of cycling hues (a reused hue would
- * make two categories indistinguishable). Returns [{key, n, color, other?}].
- * Expects `data` already sorted descending by `n` (e.g. via lib/stats.js's
- * `tally()`) — this takes the first `max - 1` rows as-is, so an unsorted
- * caller would fold a larger value into "Other" while a smaller one keeps
- * a colour slot.
+ * Assign categorical colours in fixed order, one slot per CATEGORICAL hue —
+ * the tail folds into one grey "Other" row instead of cycling hues (a reused
+ * hue would make two categories indistinguishable). Returns
+ * [{key, n, color, other?}]. Expects `data` already sorted descending by `n`
+ * (e.g. via lib/stats.js's `tally()`) — this keeps the first rows as-is, so
+ * an unsorted caller would fold a larger value into "Other" while a smaller
+ * one keeps a colour slot.
  */
-export function categorical(data, max = 6) {
-  const rows = data.length > max
-    ? [...data.slice(0, max - 1), {
-      key: `Other (${data.length - (max - 1)} more)`,
-      n: data.slice(max - 1).reduce((sum, d) => sum + d.n, 0),
+export function categorical(data) {
+  const slots = CATEGORICAL.length;
+  const rows = data.length > slots
+    ? [...data.slice(0, slots), {
+      key: `Other (${data.length - slots} more)`,
+      n: data.slice(slots).reduce((sum, d) => sum + d.n, 0),
       other: true,
     }]
     : data;

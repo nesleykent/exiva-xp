@@ -1,31 +1,25 @@
 /** Charms — the full Charm catalogue (Major/Minor), from the game's own Cyclopedia data. */
 
-import { mountShell, $, pillEl } from '../shell.js';
+import { boot, param } from './_boot.js';
+import { metric, note, pillEl } from '../shell.js';
 import { esc } from '../lib/text.js';
 import { kk, nf } from '../lib/fmt.js';
 import { charmAdvice } from '../engine/planning.js';
-import { backend, loadCharms, loadCharacterHistory, loadCodex } from '../data/sources.js';
+import { loadCharms, loadCharacterHistory } from '../data/sources.js';
 
-mountShell('charms.html');
-const stage = $('#stage');
-
+// started before boot so they download alongside boot's own codex + hunts
+const pending = Promise.all([loadCharms(), loadCharacterHistory()]);
+const { stage, codex, hunts } = await boot('charms.html', { codex: true, hunts: true });
 let charms;
 let history;
-let codex;
-let hunts;
 try {
-  [charms, history, codex, hunts] = await Promise.all([
-    loadCharms(),
-    loadCharacterHistory(),
-    loadCodex(),
-    backend().read(),
-  ]);
+  [charms, history] = await pending;
 } catch (err) {
-  stage.innerHTML = `<div class="note note-red">Could not load the charm catalogue (${err.message}).</div>`;
+  stage.innerHTML = note('error', `Could not load the charm catalogue (${err.message}).`);
   throw err;
 }
 
-const selectedSlug = new URLSearchParams(location.search).get('charm');
+const selectedSlug = param('charm');
 const selectedCharm = charms.find((charm) => charm.slug === selectedSlug) || null;
 const withoutSelected = (list) => list.filter((charm) => charm !== selectedCharm);
 const elemental = withoutSelected(charms.filter((c) => c.element));
@@ -51,7 +45,7 @@ function adviceCard(row) {
     <div class="tile-top tile-top-gap">
       <div>
         <div class="name">${esc(row.charm.name)}</div>
-        <div class="tile-tags" style="margin-top:6px">${pillEl(row.charm.element)}</div>
+        <div class="tile-tags">${pillEl(row.charm.element)}</div>
       </div>
     </div>
     <div class="fact"><b class="num">${kk(row.total)}</b><span class="fine dim">expected proc damage</span></div>
@@ -71,7 +65,7 @@ function card(c) {
       ${c.image ? `<span class="art-disc"><img class="critter" src="${esc(c.image)}" alt="" loading="lazy" onerror="this.parentElement.remove()"></span>` : ''}
       <div>
         <div class="name">${esc(c.name)}</div>
-        <div class="tile-tags" style="margin-top:6px">
+        <div class="tile-tags">
           <span class="pill">${esc(c.tier)}</span>
           ${c.element ? pillEl(c.element) : ''}
         </div>
@@ -86,14 +80,14 @@ function card(c) {
 stage.innerHTML = `
   <header class="page-head">
     <h1>Charms</h1>
-    <p class="dim" style="max-width:64ch">Plan charm spending from tracked earned points, then match elemental charms to the creatures you actually hunt. Spending and assignments remain private in the Cyclopedia. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
+    <p class="dim">Plan charm spending from tracked earned points, then match elemental charms to the creatures you actually hunt. Spending and assignments remain private in the Cyclopedia. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
   </header>
 
-  <div class="pulse-row">
-    <div class="panel pulse"><div class="eyebrow">Earned points</div><div class="big num">${trackedCharmPoints ? nf(trackedCharmPoints.points) : '—'}</div><div class="fine dim">${trackedCharmPoints ? `tracked ${esc(trackedCharmPoints.date)}` : 'no highscore value yet'}</div></div>
-    <div class="panel pulse"><div class="eyebrow">Major charms</div><div class="big num">${nf(charms.filter((charm) => charm.tier === 'Major').length)}</div><div class="fine dim">catalogued upgrades</div></div>
-    <div class="panel pulse"><div class="eyebrow">Elemental charms</div><div class="big num">${nf(charms.filter((charm) => charm.element).length)}</div><div class="fine dim">damage options</div></div>
-    <div class="panel pulse"><div class="eyebrow">Hunt evidence</div><div class="big num">${nf(hunts.length)}</div><div class="fine dim">private analyser sessions</div></div>
+  <div class="metric-row">
+    ${metric('Earned points', nf(trackedCharmPoints?.points), trackedCharmPoints ? `tracked ${esc(trackedCharmPoints.date)}` : 'no highscore value yet')}
+    ${metric('Major charms', nf(charms.filter((charm) => charm.tier === 'Major').length), 'catalogued upgrades')}
+    ${metric('Elemental charms', nf(charms.filter((charm) => charm.element).length), 'damage options')}
+    ${metric('Hunt evidence', nf(hunts.length), 'private analyser sessions')}
   </div>
   <p class="fine dim dossier-note">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
 

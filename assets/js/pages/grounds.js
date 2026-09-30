@@ -10,15 +10,17 @@
 import { boot, param } from './_boot.js';
 import { esc, fold } from '../lib/text.js';
 import { kk, nf, pct } from '../lib/fmt.js';
-import { $, ring, pillEl, basisPill, standInTitle, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle } from '../shell.js';
-import { ELEMENTS, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
+import { $, backLink, ring, pillEl, basisPill, standInTitle, sortMenu, bindSortMenu, segmentedControl, bindSegmented, trustMeter, dataTable, meters, seriesTitle, note, metric } from '../shell.js';
+import { ELEMENTS, ELEMENT_NAME, TASK_SPEEDS, TASK_SPEED_LABEL, elementOrder, armorSpots } from '../engine/codex.js';
 import { population } from '../engine/locator.js';
 import { readBattle } from '../engine/strategy.js';
 import { groundDossier, trustOf } from '../engine/ledger.js';
-import { VOCATIONS, VOCATION_ELEMENTS } from '../engine/rules.js';
+import { LIMITS, VOCATIONS, VOCATION_ELEMENTS, baseVocation, vocationFits } from '../engine/rules.js';
 import { loadAccess, loadCharacter } from '../data/sources.js';
 
 const PAGE_TITLE = 'Hunt planner · Exiva XP';
+const PAGE_SIZE = 6;
+const PAGE_STEP = 18;
 const { stage, codex, grounds, hunts, table, config } = await boot('grounds.html', { codex: true, ledger: true, config: true });
 const [access, profile] = await Promise.all([
   loadAccess().catch(() => ({ grounds: {} })),
@@ -26,9 +28,7 @@ const [access, profile] = await Promise.all([
 ]);
 const characterName = profile?.name || config.name;
 const characterLevel = profile?.level ?? null;
-// Tibia's promoted title ("Elder Druid") always contains its base vocation
-// name — match the same way character.js's isVocationCompatible does.
-const characterVocation = VOCATIONS.find((v) => (profile?.vocation || '').toLowerCase().includes(v.toLowerCase())) || '';
+const characterVocation = baseVocation(profile?.vocation);
 /**
  * A ground's area comes from its resolved hunting place's own `city` when we
  * have one — `Infobox Hunt` states it outright. access.json's area is a
@@ -45,7 +45,7 @@ const areaOptions = [...new Set([...areaBySlug.keys()].map(areaOf).filter(Boolea
 
 const state = {
   q: '', level: characterLevel, vocation: characterVocation, mode: '', playstyle: '', area: '', element: '', family: '', sort: 'xpRawRate', dir: 'desc',
-  levelBand: 'tracked', detailSlug: param('g') || null, shown: 6,
+  levelBand: 'tracked', detailSlug: param('g') || null, shown: PAGE_SIZE,
 };
 
 const PARTY_OPTIONS = [['', 'All'], ['solo', 'Solo'], ['party', 'Team']];
@@ -101,8 +101,7 @@ function filteredRows() {
     if (state.levelBand === '250-400' && (r.level == null || r.level < 250 || r.level > 400)) return false;
     if (state.levelBand === '400-plus' && (r.level == null || r.level < 400)) return false;
     if (state.levelBand === 'custom' && state.level != null && (r.level == null || r.level > state.level)) return false;
-    // a row with no vocation is a party/any-vocation row — never exclude those
-    if (state.vocation && r.vocation && r.vocation !== state.vocation) return false;
+    if (!vocationFits(r.vocation, state.vocation)) return false;
     if (state.mode === 'solo' && r.party) return false;
     if (state.mode === 'party' && !r.party) return false;
     if (state.playstyle && !fold(r.gear || '').includes(fold(state.playstyle))) return false;
@@ -160,7 +159,7 @@ function bestAttackElement(attackOrder, vocation) {
 stage.innerHTML = `
   <header id="planner-head" class="page-head">
     <h1>Hunt planner</h1>
-    <p class="dim" style="max-width:60ch">Pick a ground matched to ${esc(characterName)}'s level, vocation and party size. Curated values seed the list and your analyser logs sharpen it over time.</p>
+    <p class="dim">Pick a ground matched to ${esc(characterName)}'s level, vocation and party size. Curated values seed the list and your analyser logs sharpen it over time.</p>
   </header>
   <form class="filter-bar filter-compact" id="f" role="search">
     <div class="filter-compact-head">
@@ -172,10 +171,10 @@ stage.innerHTML = `
       <div class="filter-segment"><span class="eyebrow">Level range</span>${segmentedControl('f-level-band', 'Level range', LEVEL_OPTIONS, state.levelBand)}</div>
     </div>
     <div class="advanced-filters" id="f-more">
-      <label class="lbl"><span class="eyebrow">Exact level</span><input type="number" id="f-level" min="8" max="2000" placeholder="Any" value="${characterLevel ?? ''}"></label>
+      <label class="lbl"><span class="eyebrow">Exact level</span><input type="number" id="f-level" min="${LIMITS.level[0]}" max="${LIMITS.level[1]}" placeholder="Any" value="${characterLevel ?? ''}"></label>
       <label class="lbl"><span class="eyebrow">Vocation</span><select id="f-voc"><option value=""${characterVocation ? '' : ' selected'}>All</option>${[...VOCATIONS].sort().map((v) => `<option${v === characterVocation ? ' selected' : ''}>${v}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Area</span><select id="f-area"><option value="">All</option>${areaOptions.map((area) => `<option>${esc(area)}</option>`).join('')}</select></label>
-      <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${esc(el)}</option>`).join('')}</select></label>
+      <label class="lbl"><span class="eyebrow">Element</span><select id="f-element"><option value="">All</option>${ELEMENTS.map((el) => `<option value="${esc(el)}">${ELEMENT_NAME[el]}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Creature type</span><select id="f-family"><option value="">All</option>${familyOptions().map((family) => `<option>${esc(family)}</option>`).join('')}</select></label>
       <label class="lbl"><span class="eyebrow">Playstyle</span><input type="search" id="f-playstyle" placeholder="e.g. forked, arrows"></label>
       <label class="lbl"><span class="eyebrow">Sort</span>${sortMenu('f-sort', SORTS, state.sort)}</label>
@@ -195,8 +194,8 @@ function renderDetail(slug) {
       : null);
 
   if (!ground) {
-    detail.innerHTML = `<p><button type="button" class="dim" id="detail-back" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">← Hunt planner</button></p>
-      <div class="note note-red">Unknown ground. It may exist under a different name — try the search above.</div>`;
+    detail.innerHTML = `${backLink('Hunt planner')}
+      ${note('error', 'Unknown ground. It may exist under a different name — try the search above.')}`;
     $('#detail-back').addEventListener('click', () => closeDetail());
     return;
   }
@@ -210,7 +209,7 @@ function renderDetail(slug) {
   const req = access.grounds?.[ground.slug] || null;
 
   detail.innerHTML = `
-  <p><button type="button" class="dim" id="detail-back" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">← Hunt planner</button></p>
+  ${backLink('Hunt planner')}
   <header class="masthead">
     ${ring(ground.name, { quiet: !dossier.n })}
     <div>
@@ -229,11 +228,11 @@ function renderDetail(slug) {
   </header>
 
   ${dossier.n ? `
-  <div class="pulse-row">
-    <div class="panel pulse"><div class="big num" title="${esc(seriesTitle(dossier.xpRawRate))}">${kk(dossier.xpRawRate.avg)}</div><div class="eyebrow">Avg raw XP/h</div></div>
-    <div class="panel pulse"><div class="big num" title="${esc(seriesTitle(dossier.lootRate))}">${kk(dossier.lootRate.avg)}</div><div class="eyebrow">Avg loot/h</div></div>
-    <div class="panel pulse"><div class="big num" title="${esc(seriesTitle(dossier.profitRate))}">${kk(dossier.profitRate.avg)}</div><div class="eyebrow">Avg profit/h</div></div>
-    <div class="panel pulse"><div class="big num">${nf(dossier.n)}</div><div class="eyebrow">Hunts logged</div></div>
+  <div class="metric-row">
+    ${metric('Avg raw XP/h', kk(dossier.xpRawRate.avg), '', { title: seriesTitle(dossier.xpRawRate) })}
+    ${metric('Avg loot/h', kk(dossier.lootRate.avg), '', { title: seriesTitle(dossier.lootRate) })}
+    ${metric('Avg profit/h', kk(dossier.profitRate.avg), '', { title: seriesTitle(dossier.profitRate) })}
+    ${metric('Hunts logged', nf(dossier.n))}
   </div>` : ''}
 
   <section class="section" style="margin-top:${dossier.n ? 'var(--s6)' : '0'}">
@@ -282,7 +281,7 @@ function renderDetail(slug) {
 
   const battleHost = document.getElementById('ground-battle');
   if (!battle) {
-    battleHost.innerHTML = '<section class="section"><div class="note note-amber">No trustworthy population data: nothing is logged here, TibiaWiki has no resolved hunting-place roster, and the ground name does not identify a Bestiary creature.</div></section>';
+    battleHost.innerHTML = `<section class="section">${note('warning', 'No trustworthy population data: nothing is logged here, TibiaWiki has no resolved hunting-place roster, and the ground name does not identify a Bestiary creature.')}</section>`;
   } else {
     const creatures = pop.set
       .map((s) => ({ ...s, share: s.n / (battle.mass || 1) }))
@@ -318,7 +317,7 @@ function renderDetail(slug) {
 
     dataTable(document.getElementById('ground-matchups'), {
       cols: [
-        { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:var(--s2)">${s.creature.art ? `<img class="critter" src="${esc(s.creature.art)}" alt="" loading="lazy" style="width:28px;height:28px" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
+        { id: 'name', label: 'Creature', cell: (s) => `<a href="creatures.html?c=${esc(s.creature.slug)}" style="display:inline-flex;align-items:center;gap:var(--s2)">${s.creature.art ? `<img class="critter critter-sm" src="${esc(s.creature.art)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${esc(s.creature.name)}</a>` },
         { id: 'share', label: pop.evidence === 'logged' || pop.evidence === 'logged-wiki' ? 'Logged kill share' : 'Planning weight', num: true, cell: (s) => pop.evidence === 'logged-wiki' && !s.logged ? '<span class="dim">—</span>' : pct(s.share * 100) },
         { id: 'hp', label: 'HP', num: true, cell: (s) => nf(s.creature.hp) },
         { id: 'xp', label: 'XP', num: true, cell: (s) => nf(s.creature.xp) },
@@ -364,10 +363,9 @@ function render() {
     const va = val(a); const vb = val(b);
     return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * dir;
   });
-  const selectedCard = state.detailSlug ? cards.find((card) => card.slug === state.detailSlug) : null;
-  const visibleCards = state.detailSlug
-    ? [selectedCard, ...cards.filter((card) => card !== selectedCard)].filter(Boolean).slice(0, 3)
-    : cards.slice(0, state.shown);
+  const visibleCards = cards.slice(0, state.shown);
+  // "Top XP" marks the single XP leader by value, whatever the chosen sort
+  const topXpSlug = cards.reduce((top, card) => (card.bestXp != null && (!top || card.bestXp > top.bestXp) ? card : top), null)?.slug;
 
   // An open dossier is the whole page: the planner's own header, filter bar
   // and card grid come off the top so it starts at its "← Hunt planner"
@@ -382,14 +380,14 @@ function render() {
   $('#out').innerHTML = `
     <p class="fine dim count-line">Showing ${nf(visibleCards.length)} of ${nf(cards.length)} matching grounds</p>
     <div class="tiles planner-grid">
-      ${visibleCards.map((g, index) => {
+      ${visibleCards.map((g) => {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = areaOf(g.slug);
         const creatures = [...(ix?.get(g.slug)?.names || [])].slice(0, 3);
         const fastestTask = TASK_SPEEDS.find((speed) => ix?.get(g.slug)?.taskSpeeds.has(speed));
         return `
-        <a class="panel tile planner-card${g.slug === state.detailSlug ? ' is-selected' : ''}" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
-          ${index === 0 ? '<span class="badge badge-highlight tile-rank">Top XP</span>' : ''}
+        <a class="panel tile planner-card" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">
+          ${g.slug === topXpSlug ? '<span class="badge badge-highlight tile-rank">Top XP</span>' : ''}
           <div class="planner-card-head">
             <div class="name">${esc(g.name)}</div>
             <span class="fine dim">Level ${nf(g.minLevel)}+</span>
@@ -409,17 +407,17 @@ function render() {
         </a>`;
       }).join('') || '<p class="dim">Nothing matches those filters.</p>'}
     </div>
-    ${!state.detailSlug && cards.length > state.shown ? `<div style="text-align:center;margin-top:var(--s5)"><button type="button" class="btn btn-secondary" data-show-more>Show more (${nf(cards.length - state.shown)} left)</button></div>` : ''}`;
+    ${cards.length > state.shown ? `<div class="show-more"><button type="button" class="btn btn-secondary" data-show-more>Show more (${nf(cards.length - state.shown)} left)</button></div>` : ''}`;
   if (state.detailSlug) renderDetail(state.detailSlug);
   else $('#detail').innerHTML = '';
 }
 
 const bind = (id, prop, map = (v) => v) => {
-  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); state.shown = 6; render(); });
+  $(id).addEventListener('input', (e) => { state[prop] = map(e.target.value); state.shown = PAGE_SIZE; render(); });
 };
 $('#f').addEventListener('submit', (e) => e.preventDefault());
 bind('#f-q', 'q');
-$('#f-level').addEventListener('input', (e) => { state.level = e.target.value ? +e.target.value : null; state.levelBand = 'custom'; state.shown = 6; $('#f-level-band').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', 'false')); render(); });
+$('#f-level').addEventListener('input', (e) => { state.level = e.target.value ? +e.target.value : null; state.levelBand = 'custom'; state.shown = PAGE_SIZE; $('#f-level-band').querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', 'false')); render(); });
 bind('#f-voc', 'vocation');
 bind('#f-area', 'area');
 bind('#f-element', 'element');
@@ -428,14 +426,14 @@ bind('#f-playstyle', 'playstyle');
 bindSortMenu('f-sort', (key) => {
   state.sort = key;
   state.dir = SORTS[key]?.[2] || 'desc';
-  state.shown = 6;
+  state.shown = PAGE_SIZE;
   render();
 });
-bindSegmented('f-party', (value) => { state.mode = value; state.shown = 6; render(); });
-bindSegmented('f-level-band', (value) => { state.levelBand = value; state.shown = 6; render(); });
+bindSegmented('f-party', (value) => { state.mode = value; state.shown = PAGE_SIZE; render(); });
+bindSegmented('f-level-band', (value) => { state.levelBand = value; state.shown = PAGE_SIZE; render(); });
 $('#out').addEventListener('click', (e) => {
   if (e.target.closest('[data-show-more]')) {
-    state.shown += 18;
+    state.shown += PAGE_STEP;
     render();
     return;
   }

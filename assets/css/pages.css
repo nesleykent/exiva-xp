@@ -5,15 +5,18 @@
 .home-dashboard-head { display: grid; gap: var(--s2); }
 .home-dashboard-head h1 { width: fit-content; }
 .home-dashboard-head p { margin: 0; color: rgb(var(--ink-2)); }
-.home-dashboard-head .eyebrow { letter-spacing: 1px; }
-.home-metric-grid, .pulse-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s6); margin-top: var(--s6); }
-.home-metric, .pulse { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; padding: var(--s4); }
-/* explicit weight — .home-metric's <b> and .dashboard-metric's <b> inherit
-   bold from the tag itself, but .pulse .big is a plain <div> (analytics.js/
-   charms.js), so it rendered at regular weight until this was explicit */
-.home-metric > b, .pulse .big { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; }
-.home-metric > b em { margin-left: 2px; color: rgb(var(--ink-2)); font-size: var(--fs-14); font-style: normal; font-weight: 600; }
-.home-metric > small { font-size: var(--fs-12); line-height: 16px; }
+.home-metric-grid, .metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s6); margin-top: var(--s6); }
+
+/* KPI card — shell.js metric(), the one card every page's headline numbers
+   use: eyebrow label, value, optional .fine.dim detail line and sparkline.
+   Chrome (surface/border/radius) comes from .panel. */
+.metric { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; padding: var(--s4); }
+.metric > b, .metric-value-row > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.metric b em { margin-left: 2px; color: rgb(var(--ink-2)); font-size: var(--fs-14); font-style: normal; font-weight: 600; }
+/* compact tier (Character's point-stat cards); doubled class so it outranks
+   the ≤700px .metric step below */
+.metric.metric-sm { gap: var(--s1); padding: var(--s4); }
+.metric.metric-sm > b { font-size: var(--fs-18); line-height: 24px; letter-spacing: normal; }
 .home-next-hunt, .home-attention { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s6); padding: var(--s6); }
 .home-card-kicker { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
 .home-card-kicker p, .home-next-hunt h2, .home-next-hunt > p, .home-attention > p { margin: 0; }
@@ -35,23 +38,6 @@
 .home-shortcuts a:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 .home-shortcuts svg { width: 18px; height: 18px; }
 
-/* feed cards */
-.feed { display: flex; flex-direction: column; gap: var(--s5); }
-.post { overflow: hidden; }
-.post-head { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) var(--s4); }
-.post-head .ring { width: 40px; height: 40px; }
-.post-head .ring > .ring-core { width: 34px; height: 34px; font-size: var(--fs-13); }
-.post-head .who { display: grid; }
-.post-head .who b { font-size: var(--fs-14); }
-.post-hero {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1px; background: rgb(var(--line));
-  border-block: 1px solid rgb(var(--line));
-}
-.post-hero .cell { background: rgb(var(--surface-2)); padding: var(--s4); text-align: center; }
-.post-hero .cell b { display: block; font-size: var(--fs-18); letter-spacing: -.3px; }
-.post-body { padding: var(--s3) var(--s4) var(--s4); display: grid; gap: 6px; }
-
 /* ---------- explore grid + filter bar ---------- */
 
 /* Deliberately NOT sticky, at any width. On Planner and Codex this bar
@@ -70,14 +56,6 @@
   background: rgb(var(--surface-raised));
   border: 1px solid rgb(var(--line)); border-radius: var(--r-input);
 }
-
-/* .filter-more wraps every field except Search. On desktop it's `contents` —
-   invisible to layout, its children are plain flex items of .filter-bar, so
-   nothing above 700px changes. Below 700px it collapses behind a toggle
-   button instead of packing 2-per-row, since even a packed grid still
-   pushed the first result past the fold on real phones. */
-.filter-toggle { display: none; }
-.filter-more { display: contents; }
 
 .segmented { display: inline-flex; max-width: 100%; padding: 2px; overflow-x: auto; background: rgb(var(--surface-2)); border-radius: var(--r-input); scrollbar-width: none; }
 .segmented::-webkit-scrollbar { display: none; }
@@ -99,7 +77,6 @@
 @media (max-width: 1000px) {
   .advanced-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.tile.is-selected { border-color: rgb(var(--blue)); box-shadow: 0 0 0 1px rgb(var(--blue)); }
 .tile-rank { position: absolute; top: -9px; right: var(--s3); }
 .planner-card { position: relative; display: grid; gap: var(--s3); }
 .planner-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
@@ -112,25 +89,8 @@
   .filter-bar {
     flex-direction: column; align-items: stretch; gap: var(--s2); margin: var(--s4) 0; padding: var(--s3);
   }
-  .filter-toggle {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    min-height: var(--tap); padding: 0 var(--s4);
-    background: rgb(var(--surface-btn2)); color: rgb(var(--ink));
-    border: 0; border-radius: var(--r-input);
-    font-size: var(--fs-13); font-weight: 600; cursor: pointer;
-    transition: background var(--t-hover) var(--e-standard);
-  }
-  .filter-toggle:hover { background: rgb(var(--surface-btn2-hover)); }
-  .filter-toggle .chevron { transition: transform var(--t-hover) var(--e-standard); }
-  .filter-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
   .filter-compact-head { align-items: stretch; flex-direction: column; }
   .advanced-filters { grid-template-columns: minmax(0, 1fr); }
-  .filter-more { display: none; grid-template-columns: 1fr 1fr; gap: var(--s2); }
-  .filter-more.open { display: grid; }
-  .filter-more .lbl, .filter-more .lbl-narrow { min-width: 0; width: auto; }
-  .filter-more .lbl > input, .filter-more .lbl > select, .filter-more .lbl > .sort-menu,
-  .filter-more .lbl-narrow > input, .filter-more .lbl-narrow > select { min-width: 0; width: 100%; }
-  .filter-more > *:last-child { grid-column: 1 / -1; }
 }
 
 .count-line { margin: 0 0 var(--s3); }
@@ -147,28 +107,28 @@
 .tile-stats { display: flex; gap: var(--s5); }
 .tile-stats .stat b { display: block; font-size: var(--fs-16); }
 .tile-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.name + .tile-tags { margin-top: 6px; }
 
 /* Badge — the source Badge component verbatim (the "LIVE" pattern): solid
    tone fill, white 11px/700 uppercase, 4px radius. Reserved for genuine
    STATUS indicators only: basis (Curated/Logged/Blended), admin's
    rules-check (Faulted/Flagged/Clean), evidence provenance. The neutral
-   fill is the fixed 38,38,38 primary-icon value in both appearances —
-   tone colours never theme-swap. */
+   fill (--neutral-fixed) and the tone fills never theme-swap. */
 .badge {
   display: inline-flex; align-items: center; gap: var(--s1);
   padding: 3px 7px; border-radius: var(--r-sm);
   font-size: var(--fs-11); line-height: 13px; font-weight: 700;
   letter-spacing: .5px; text-transform: uppercase;
-  color: rgb(var(--white-fixed)); background: rgb(38, 38, 38);
+  color: rgb(var(--white-fixed)); background: rgb(var(--neutral-fixed));
   white-space: nowrap;
 }
 .badge-success { background: rgb(var(--green)); }
 .badge-info { background: rgb(var(--blue)); }
 .badge-error { background: rgb(var(--red)); }
 /* the source Badge has no caution tone — the brand gradient's orange stop
-   is the sanctioned extension (it is already the fire data colour) */
-.badge-warning { background: rgb(var(--c-fire)); }
-/* second gradient-as-data-colour exception (see AGENTS.md §5, matching the
+   is the sanctioned extension (AGENTS.md §5); never the --c-fire data token */
+.badge-warning { background: rgb(var(--brand-orange)); }
+/* third gradient-as-data-colour exception (see AGENTS.md §5, matching the
    reference mockup): the single top-ranked item in a list, never a status */
 .badge-highlight { background: var(--grad-hero); }
 
@@ -185,7 +145,7 @@
   background: rgb(var(--wash)); color: rgb(var(--ink));
   white-space: nowrap;
 }
-/* element badges carry their element as a tone, exactly like the semantic
+/* element pills carry their element as a tone, exactly like the semantic
    tones below tint theirs: a soft wash of the element colour. Text stays
    ink for contrast (holy yellow and ice blue are unreadable as text
    colours in light mode). No dot — the source Badge has no such part. */
@@ -193,10 +153,9 @@
 /* semantic tones, not colour names — matches the source Badge component's
    tone system (a fixed vocabulary of meanings, not literal hues) */
 .pill-info { background: rgba(var(--blue), .12); color: rgb(var(--blue)); }
-.pill-success { background: rgba(var(--green), .14); color: rgb(0, 130, 20); }
-[data-appearance="dark"] .pill-success { color: rgb(var(--green)); }
+.pill-success { background: rgba(var(--green), .14); color: rgb(var(--ink-success)); }
 .pill-error { background: rgba(var(--red), .12); color: rgb(var(--red)); }
-.pill-warning { background: rgba(var(--c-fire), .14); color: rgb(var(--c-fire)); }
+.pill-warning { background: rgba(var(--brand-orange), .14); color: rgb(var(--ink-warning)); }
 
 .el-physical { --el: var(--c-physical); }
 .el-earth { --el: var(--c-earth); }
@@ -212,6 +171,7 @@
   image-rendering: pixelated; flex-shrink: 0;
 }
 .critter-lg { width: 84px; height: 84px; }
+.critter-sm { width: 28px; height: 28px; }
 .imb-icon {
   width: 32px; height: 32px; object-fit: contain;
   image-rendering: pixelated; flex-shrink: 0;
@@ -244,9 +204,10 @@ table.grid th {
 table.grid th.on { color: rgb(var(--ink)); }
 table.grid td { border-bottom: 1px solid rgb(var(--line)); }
 table.grid tr:last-child td { border-bottom: 0; }
-table.grid tbody tr:hover { background: rgba(var(--overlay), var(--overlay-a)); }
+table.grid tbody tr:hover, table.grid tr.is-current { background: rgba(var(--overlay), var(--overlay-a)); }
 table.grid .num { text-align: right; }
 table.grid a { color: rgb(var(--blue)); font-weight: 600; }
+.sheet + .count-line { margin-top: var(--s2); }
 .admin-transfer-actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .admin-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); }
 .admin-rule-filters { display: flex; gap: var(--s5); overflow-x: auto; margin-bottom: var(--s4); border-bottom: 1px solid rgb(var(--line)); scrollbar-width: none; }
@@ -254,8 +215,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .admin-rule-filter { min-height: 40px; padding: 0 0 var(--s2); border: 0; border-bottom: 2px solid transparent; background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-14); font-weight: 600; cursor: pointer; white-space: nowrap; }
 .admin-rule-filter[aria-pressed="true"] { color: rgb(var(--ink)); border-bottom-color: rgb(var(--blue)); }
 .admin-empty { margin-top: var(--s2); }
-.ok { color: rgb(var(--green)); font-weight: 600; }
-.bad { color: rgb(var(--red)); font-weight: 600; }
 
 /* ---------- detail pages ---------- */
 
@@ -270,7 +229,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--s2); }
 .fact { background: rgb(var(--surface-2)); border-radius: var(--r-md); padding: 10px var(--s3); }
 .fact b { display: block; font-size: var(--fs-15); }
-.fact .meta-line { display: block; }
 
 /* element meter */
 .meter { display: grid; grid-template-columns: 68px 1fr 44px; gap: var(--s2); align-items: center; font-size: var(--fs-13); }
@@ -323,7 +281,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 @media (max-width: 520px) { .stepper-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
 /* keeps the last step's circle clear of the floating GitHub/appearance
    cluster (.rail-foot, fixed top-right) — focusing a later step's heading
-   can scroll a short flow right under it; same reserve as .character-profile. */
+   can scroll a short flow right under it; same reserve as #stage > header. */
 @media (max-width: 700px) { .stepper-list { padding-right: calc(var(--tap) * 2 + var(--s2)); } }
 
 .step-nav { display: flex; justify-content: space-between; gap: var(--s3); margin-top: var(--s4); }
@@ -343,11 +301,9 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .guess .pct { margin-left: auto; font-weight: 700; font-size: var(--fs-15); }
 
 .note { border-radius: var(--r-md); padding: var(--s3) var(--s4); font-size: var(--fs-14); margin: var(--s2) 0; }
-.note-red { background: rgba(var(--red), .08); color: rgb(var(--red)); }
-.note-amber { background: rgba(var(--c-fire), .1); color: rgb(160, 80, 0); }
-[data-appearance="dark"] .note-amber { color: rgb(var(--c-fire)); }
-.note-green { background: rgba(var(--green), .1); color: rgb(0, 130, 20); }
-[data-appearance="dark"] .note-green { color: rgb(var(--green)); }
+.note-error { background: rgba(var(--red), .08); color: rgb(var(--red)); }
+.note-warning { background: rgba(var(--brand-orange), .1); color: rgb(var(--ink-warning)); }
+.note-success { background: rgba(var(--green), .1); color: rgb(var(--ink-success)); }
 
 .form-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .paste-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--s3); margin-top: var(--s3); }
@@ -361,6 +317,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 /* ---------- character tools ---------- */
 
 .tool-grid {
+  margin-top: var(--s5);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--s4);
@@ -369,9 +326,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .tool-card {
   display: grid;
   gap: var(--s4);
-}
-.tool-wide {
-  grid-column: 1 / -1;
 }
 .tool-disclosure { border-top: 1px solid rgb(var(--line)); padding-top: var(--s3); }
 .tool-disclosure summary { color: rgb(var(--blue)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
@@ -475,15 +429,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   background: rgba(var(--overlay), var(--overlay-a));
   box-shadow: var(--shadow-card);
 }
-.tool-mini-card .tile-top {
-  min-height: 56px;
-}
-.tool-creatures {
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .tool-columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -504,14 +449,15 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   max-height: 96vh;
   overflow: auto;
   color: rgb(var(--ink));
-  animation: modal-settle var(--t-hover) var(--e-confident);
+  animation: page-settle var(--t-hover) var(--e-confident);
 }
 #imb-modal::backdrop {
   background: rgba(0, 0, 0, .5);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
-@keyframes modal-settle { from { opacity: 0; transform: scale(.96); } }
-#imb-modal .panel {
+#imb-modal > .panel {
+  display: grid;
+  gap: var(--s4);
   box-shadow: var(--shadow-float);
 }
 .imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--line)); cursor: pointer; }
@@ -545,7 +491,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
-.imb-card-price svg { width: 14px; height: 14px; }
 .imb-card-badge {
   width: fit-content;
 }
@@ -632,7 +577,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: var(--fs-16);
   font-variant-numeric: tabular-nums;
 }
-.imb-tier-total b svg { width: 14px; height: 14px; }
 .imb-tier-total-right {
   display: flex;
   align-items: center;
@@ -663,7 +607,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   gap: var(--s1);
 }
 .imb-compare-row strong { font-variant-numeric: tabular-nums; }
-.imb-compare-row strong svg { width: 12px; height: 12px; }
 .imb-compare-row em { color: rgb(var(--red)); font-style: normal; font-weight: 700; }
 .imb-tier-pop p { margin: var(--s3) 0 0; padding: var(--s2); text-align: center; background: rgb(var(--surface-2)); border-radius: var(--r-sm); }
 /* IconButton "ghost" variant verbatim: transparent, fully circular, hover-only wash */
@@ -712,9 +655,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   align-items: center;
   gap: var(--s6);
   flex-wrap: wrap;
-  padding: 0;
-  background: transparent;
-  border-color: transparent;
 }
 .hero-identity { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: var(--s2); }
 .character-hero .ring { width: 96px; height: 96px; flex: 0 0 96px; }
@@ -726,29 +666,18 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: var(--fs-14);
   line-height: 18px;
 }
-/* spacing between sections comes from .character-page's flex gap, not here */
-.progression-overview > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); flex-wrap: wrap; }
-.progression-overview > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
 .dashboard-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--s6);
 }
-/* card chrome (surface/border/radius) comes from the shared .panel class,
-   same composition as .home-metric/.pulse — .dashboard-metric only adds
-   this component's own layout, so a .panel change (hover shadow, dark-mode
-   surface) reaches every KPI card the same way */
-.dashboard-metric { display: grid; gap: var(--s2); padding: var(--s4); min-width: 0; }
-.dashboard-metric > b, .dashboard-metric .metric-value-row > b { font-size: var(--fs-28); font-weight: 700; line-height: 1; letter-spacing: -.3px; overflow-wrap: anywhere; }
-.dashboard-metric > b.dashboard-date { font-size: clamp(23px, 3vw, 34px); }
-.dashboard-metric > small { color: rgb(var(--ink-2)); font-size: var(--fs-12); line-height: 16px; }
 /* featured KPI card — value and its sparkline share one baseline-aligned row,
    matching the reference (spark sits top-right of the number, no axis labels) */
 .metric-value-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s3); }
 .metric-value-row .metric-spark { margin: 0; width: 96px; flex: 0 0 96px; }
-.metric-delta { font-style: normal; font-weight: 700; font-size: var(--fs-12); }
-.metric-delta.up { color: rgb(0, 130, 20); }
-[data-appearance="dark"] .metric-delta.up { color: rgb(var(--green)); }
+/* the one signed-delta vocabulary (Character KPIs, Progress deltas); size comes from its context */
+.metric-delta { font-style: normal; font-weight: 700; }
+.metric-delta.up { color: rgb(var(--ink-success)); }
 .metric-delta.down { color: rgb(var(--red)); }
 .metric-delta.even { color: rgb(var(--ink-2)); }
 .metric-spark { margin-top: 2px; }
@@ -792,68 +721,20 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .pace-message { display: grid; gap: var(--s1); min-width: 0; }
 .pace-message > b { font-size: var(--fs-17); line-height: 22px; }
 .pace-down .pace-message > b { color: rgb(var(--red)); }
-.pace-up .pace-message > b { color: rgb(0, 130, 20); }
-[data-appearance="dark"] .pace-up .pace-message > b { color: rgb(var(--green)); }
+.pace-up .pace-message > b { color: rgb(var(--ink-success)); }
 .pace-support { display: flex; align-items: center; flex-shrink: 0; }
 .pace-support > span { display: grid; gap: 2px; min-width: 100px; padding-left: var(--s4); border-left: 1px solid rgb(var(--line)); }
 .pace-support b { font-size: var(--fs-17); line-height: 21px; }
 .pace-support small { color: rgb(var(--ink-2)); font-size: var(--fs-11); line-height: 13px; }
-.progression-chart { margin-top: var(--s3); }
 .character-level-progress { display: grid; gap: var(--s2); width: min(360px, 100%); margin-top: var(--s1); }
 .character-level-progress > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); font-size: var(--fs-12); font-weight: 600; }
 .character-level-progress .track { height: 6px; overflow: hidden; border-radius: var(--r-pill); background: rgb(var(--wash)); }
 .character-level-progress .track i { display: block; height: 100%; border-radius: inherit; background: var(--grad-hero); }
 .character-level-progress small { color: rgb(var(--ink-2)); font-size: var(--fs-11); }
-.character-next-strip { margin-top: var(--s6); }
-.chart-foot { display: flex; justify-content: flex-end; margin-top: var(--s3); }
-.chart-foot a { display: inline-flex; align-items: center; min-height: var(--tap); margin: -14px 0; }
-.character-deep-dive { margin-top: var(--s6); }
-.character-tabs-wrap { overflow-x: auto; border: 1px solid rgb(var(--line)); border-radius: var(--r-input) var(--r-input) 0 0; scrollbar-width: none; }
-.character-tabs-wrap::-webkit-scrollbar { display: none; }
-.character-tabs {
-  display: flex;
-  min-width: max-content;
-  background: rgb(var(--surface-raised));
-}
-.character-tabs button {
-  flex: 1 0 140px; min-height: 52px; padding: 0 var(--s5);
-  border: 0; border-bottom: 2px solid transparent;
-  background: transparent; color: rgb(var(--ink));
-  font: inherit; font-weight: 600; cursor: pointer;
-}
-.character-tabs button:hover { background: rgba(var(--overlay), var(--overlay-a)); }
-.character-tabs button[aria-selected="true"] { border-bottom-color: rgb(var(--blue)); color: rgb(var(--blue)); }
-.character-tab-panel { padding: var(--s5); border: 1px solid rgb(var(--line)); border-top: 0; border-radius: 0 0 var(--r-input) var(--r-input); }
-.character-tab-panel[hidden] { display: none; }
 .empty-action { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 132px; padding: var(--s5); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
 .empty-action h3, .empty-action p { margin: 0; }
 .empty-action h3 { font-size: var(--fs-18); } /* was the browser's UA default (18.72px), not a token */
 .empty-action p { margin-top: var(--s2); max-width: 58ch; }
-.hunt-summary, .event-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); margin-bottom: var(--s4); }
-.hunt-summary > span, .event-summary > span { display: grid; gap: 2px; padding: var(--s4); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
-.hunt-summary b, .event-summary b { font-size: var(--fs-18); line-height: 24px; overflow-wrap: anywhere; }
-.hunt-summary small, .event-summary small { color: rgb(var(--ink-2)); font-size: var(--fs-11); line-height: 13px; }
-.chart-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: var(--s4);
-  align-items: stretch;
-}
-.chart-inspector {
-  display: grid;
-  align-content: start;
-  gap: var(--s3);
-  padding: var(--s4);
-  border: 1px solid rgb(var(--line));
-  border-radius: var(--r-input);
-  background: rgb(var(--surface-2));
-}
-.inspector-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s2);
-}
 .mini-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
@@ -874,44 +755,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   font-size: var(--fs-11);
   line-height: 13px;
 }
-.profile-panel { display: grid; gap: var(--s4); }
-.profile-groups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--s4);
-}
-.profile-group h3 {
-  margin-bottom: var(--s2);
-  font-size: var(--fs-14);
-  line-height: 18px;
-}
-.profile-group dl {
-  display: grid;
-  gap: var(--s2);
-}
-.profile-group div {
-  display: grid;
-  grid-template-columns: minmax(88px, .4fr) minmax(0, 1fr);
-  gap: var(--s3);
-  align-items: baseline;
-}
-.profile-group dt {
-  color: rgb(var(--ink-2));
-  font-size: var(--fs-11);
-  line-height: 13px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.profile-group dd {
-  min-width: 0;
-  font-size: var(--fs-13);
-  line-height: 18px;
-  overflow-wrap: anywhere;
-}
-.projection-tools { margin-top: var(--s3); }
-.character-tab-panel .projection-tools { margin-top: 0; }
-.projection-tools + .empty-action { margin-top: var(--s4); }
-.section-subhead.first { margin-top: 0; }
 .skill-card {
   display: grid;
   gap: var(--s3);
@@ -945,8 +788,6 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 /* 145px min so all six point-stat cards sit on one row at the canvas width
    (the reference keeps them in a single row); wraps responsively below that */
 .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: var(--s4); }
-.stat-card { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
-.stat-card > b { font-size: var(--fs-18); line-height: 24px; font-variant-numeric: tabular-nums; }
 
 /* Experience panel — title + year segmented on one row, month segmented full
    width below, then the single XP-gained area chart and its legend. */
@@ -962,7 +803,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .next-hunts-item { display: flex; flex-direction: column; align-items: center; gap: var(--s2); width: 76px; flex-shrink: 0; text-align: center; }
 .next-hunts-ring {
   width: 64px; height: 64px; border-radius: var(--r-circle); padding: 2.5px; box-sizing: border-box;
-  background: conic-gradient(from 210deg, rgb(var(--brand-yellow)), rgb(var(--brand-orange)), rgb(var(--brand-rose)), rgb(var(--brand-magenta)), rgb(var(--brand-purple)), rgb(var(--brand-yellow)));
+  background: var(--grad-story);
 }
 .next-hunts-ring > span {
   width: 100%; height: 100%; box-sizing: border-box; border-radius: var(--r-circle);
@@ -986,48 +827,13 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   height: auto;
   display: block;
 }
-/* .vline/.vdot/.vtick are shared with .viz (pages.css, viz section) and with
-   .metric-spark (KPI-card sparklines, home.js/character.js) — one
-   declaration each so the three chart contexts can't drift apart. Kept as
-   its own selector rather than folded into .sparkline's chain: .sparkline's
-   base rule sets a 58px min-height + grid centring for the larger featured-
-   trend layout, which would force a KPI card's compact 34px mark taller. */
-
-/* one featured metric (full trend card) beside a compact list for the rest —
-   the old equal-weight card grid made the one card with a real trend look
-   like a rendering bug next to five that had none */
-.skill-feature-row {
-  display: grid;
-  grid-template-columns: minmax(280px, 1.1fr) minmax(240px, .9fr);
-  gap: var(--s3);
-  align-items: start;
-}
-.skill-feature { display: grid; gap: var(--s4); padding: var(--s5); }
-.skill-feature .skill-card-head h3 { font-size: var(--fs-17); line-height: 21px; }
-.skill-feature .skill-card-head > b { font-size: var(--fs-28); line-height: 28px; }
-.sparkline-lg { min-height: 84px; }
-.hs-list-wrap { display: grid; gap: var(--s2); }
-.hs-list-wrap > h3 { margin: 0; }
-.hs-list { padding: 0 var(--s4); }
-.hs-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s3);
-  padding: var(--s3) 0;
-}
-.hs-row + .hs-row { border-top: 1px solid rgb(var(--line)); }
-.hs-row-label { display: grid; gap: 2px; min-width: 0; }
-.hs-row-label b { font-size: var(--fs-14); }
-.hs-row-value { display: grid; gap: 2px; text-align: right; flex-shrink: 0; }
-.hs-row-value b { font-size: var(--fs-15); }
 
 @media (max-width: 700px) {
   .codex-grid, .planner-grid { grid-template-columns: minmax(0, 1fr); }
   .home-metric-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s5); }
-  .pulse-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: var(--s5); }
-  .home-metric, .pulse { padding: var(--s3); }
-  .home-metric > b, .pulse .big { font-size: var(--fs-24); }
+  .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: var(--s5); }
+  .metric { padding: var(--s3); }
+  .metric > b, .metric-value-row > b { font-size: var(--fs-24); }
   .home-next-hunt, .home-attention { padding: var(--s4); margin-top: var(--s4); }
   .home-hunt-stats { grid-template-columns: 1fr; }
   .home-card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1042,41 +848,16 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   .tool-fields .lbl.lbl-wide,
   .tool-fields .lbl.lbl-narrow { width: 100%; }
   .tool-fields .lbl > input,
-  .tool-fields .lbl > select,
-  .tool-fields .lbl.lbl-wide > input,
-  .tool-fields .lbl.lbl-narrow > input,
-  .tool-fields .lbl.lbl-narrow > select { min-width: 0; width: 100%; }
+.tool-fields .lbl > select,
+.tool-fields .lbl.lbl-wide > input,
+.tool-fields .lbl.lbl-narrow > input { min-width: 0; width: 100%; }
   .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
-  /* padding and value size now match every other KPI card's mobile step
-     (.home-metric/.pulse below) instead of their own separate values */
-  .dashboard-metric { padding: var(--s3); }
-  .dashboard-metric > b { font-size: var(--fs-24); }
-  .dashboard-metric > b.dashboard-date { font-size: var(--fs-14); line-height: 18px; white-space: nowrap; }
-  .dashboard-metric > small { font-size: var(--fs-11); line-height: 13px; }
   .pace-band { align-items: stretch; flex-direction: column; padding: var(--s4); }
   .pace-support { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pace-support > span { min-width: 0; padding: 0 var(--s2); }
   .pace-support > span:first-child { padding-left: 0; border-left: 0; }
-  .projection-tools .tool-fields { flex-direction: column; align-items: stretch; }
-  .character-tab-panel { padding: var(--s4); }
   .empty-action { align-items: stretch; flex-direction: column; }
   .empty-action .btn { width: 100%; }
-  .chart-shell {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .chart-inspector {
-    padding: var(--s3);
-  }
-  .profile-groups,
-  .skill-feature-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .skill-feature .skill-card-head { display: grid; }
-  .skill-feature .skill-card-head > b { text-align: left; }
-  .profile-group div {
-    grid-template-columns: 1fr;
-    gap: 1px;
-  }
   .donut-board { justify-content: center; }
   .donut-legend { min-width: 0; flex-basis: 100%; }
 }
@@ -1124,7 +905,7 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .viz-legend { display: flex; flex-wrap: wrap; gap: var(--s4); list-style: none; margin: var(--s3) 0 0; padding: 0; font-size: var(--fs-12); color: rgb(var(--ink-2)); }
 .viz-legend li { display: flex; align-items: center; gap: var(--s1); }
 .viz-legend b { color: rgb(var(--ink)); font-weight: 700; }
-.viz-legend-line { width: 16px; height: 3px; border-radius: var(--r-pill); background: var(--grad-hero); }
+.viz-legend-swatch.viz-legend-line { width: 16px; height: 3px; border-radius: var(--r-pill); background: var(--grad-hero); }
 .viz-legend-level { background: rgb(var(--green)); }
 .viz-legend-death { background: rgb(var(--red)); }
 .donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }
@@ -1135,26 +916,17 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .donut-legend span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .donut-legend b { margin-left: auto; flex-shrink: 0; font-size: var(--fs-13); }
 .donut-legend small { flex-shrink: 0; width: 34px; color: rgb(var(--ink-2)); font-size: var(--fs-11); text-align: right; }
-/* same shape as .viz-legend-swatch (pages.css, viz section) — kept as one
+/* same shape as .viz-legend-swatch (.viz-legend-line reshapes it above) — kept as one
    declaration so the two legend dots can't drift apart in size/radius */
 .donut-swatch, .viz-legend-swatch { width: 10px; height: 10px; flex-shrink: 0; border-radius: var(--r-circle); }
 
-.chart-controls { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); margin-bottom: var(--s3); flex-wrap: wrap; }
-.chart-control-groups { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
-/* these use .btn-sm (24px); bump back to the base 28px — dense but still a
-   comfortable tap target for a chart's primary metric/range controls */
-.chart-controls .btn { min-height: 28px; }
-.chart-button-group { display: flex; gap: var(--s2); flex-wrap: wrap; }
-.chart-controls .btn[aria-pressed="true"] { background: rgb(var(--ink)); border-color: rgb(var(--ink)); color: rgb(var(--surface)); }
-
-/* one page-header pattern — the h1 previously carried per-page inline styles */
+/* one page-header pattern — the h1 and its lede previously carried per-page inline styles */
 .page-head { padding: var(--s2) 0 var(--s1); }
+.page-head > p { max-width: 64ch; }
 .page-head-roomy { padding-bottom: var(--s5); }
 
 /* chartInto() placeholder — fills its slot so the chart measures a true width */
 .chart-mount { width: 100%; min-width: 0; }
-.chart-title { margin: 0 0 var(--s1); }
-.chart-note { margin: 0; }
 .panel-eyebrow { margin: 0 0 var(--s3); }
 
 .section { margin-top: var(--s8); }
@@ -1164,18 +936,18 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
 .section.show-more, .section.section-tight { margin-top: var(--s5); }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
 .section > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
-.section-subhead { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin: var(--s5) 0 var(--s2); flex-wrap: wrap; }
-.section-subhead h3 { font-size: var(--fs-15); }
-.section > .section-bar .fine,
-.section-subhead .fine { min-width: 0; overflow-wrap: anywhere; }
+.section > .section-bar .fine { min-width: 0; overflow-wrap: anywhere; }
 /* invisible tap-padding so header-row action links (e.g. "Open full planner")
    hit the HIG 44pt minimum without changing their visual size or position */
-.section-bar a.fine, .section-subhead a.fine {
+.section-bar a.fine {
   display: inline-flex; align-items: center;
   min-height: var(--tap); margin: -14px 0;
 }
 
-/* skeleton shimmer */
+/* the "← Planner / ← Codex" control that closes an inline dossier (shell.js backLink) */
+.back-link { padding: 0; border: 0; background: none; color: rgb(var(--ink-2)); font: inherit; cursor: pointer; }
+
+/* skeleton shimmer — the page shells' placeholder until the controller renders */
 .ghost {
   border-radius: var(--r-input);
   background: linear-gradient(90deg, rgb(var(--surface-2)) 25%, rgb(var(--wash)) 50%, rgb(var(--surface-2)) 75%);
@@ -1183,3 +955,5 @@ table.grid a { color: rgb(var(--blue)); font-weight: 600; }
   animation: ghost 1.3s var(--e-standard) infinite;
 }
 @keyframes ghost { to { background-position: -200% 0; } }
+.ghost-head { height: 56px; margin-bottom: var(--s4); }
+.ghost-body { height: 340px; }

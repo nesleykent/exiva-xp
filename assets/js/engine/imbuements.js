@@ -19,7 +19,7 @@ export const GOLD_TOKEN_ITEM = 'gold-token';
 
 const TOKEN_COST = { basic: 2, intricate: 4, powerful: 6 };
 const TOKEN_HYBRID_SOURCE = { intricate: 'basic', powerful: ['intricate', 'basic'] };
-const TIER_ORDER = ['basic', 'intricate', 'powerful'];
+export const TIER_ORDER = ['basic', 'intricate', 'powerful'];
 // Reference calculator parity: base price + 100% success fee.
 export const IMBUING_FEES = { basic: 15000, intricate: 55000, powerful: 250000 };
 

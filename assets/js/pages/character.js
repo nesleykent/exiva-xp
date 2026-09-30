@@ -4,17 +4,19 @@
  */
 
 import { boot } from './_boot.js';
-import { esc } from '../lib/text.js';
-import { compact, kk, nf, day, md } from '../lib/fmt.js';
+import { esc, initials } from '../lib/text.js';
+import { DAY_MS, MONTHS, compact, gp, kk, nf, day, md, pct } from '../lib/fmt.js';
+import { average } from '../lib/stats.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
   formatDateInTimezone,
 } from '../lib/timezones.js';
-import { $, ring } from '../shell.js';
-import { flow, flowLegend, sparkline, attachVizHover, chartInto } from '../viz/svg.js';
+import { $, metric, ring } from '../shell.js';
+import { flow, flowLegend, sparkline, attachVizHover, chartInto, vizEmpty } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
-import { experienceUntilNextLevel, progressWithinLevel } from '../engine/progression.js';
+import { dailyGains, experienceUntilNextLevel, progressWithinLevel, xpPace } from '../engine/progression.js';
+import { baseVocation, vocationFits } from '../engine/rules.js';
 import { HIGHSCORE_CATEGORIES } from '../engine/highscores.js';
 
 const { stage, table, config } = await boot('character.html', { ledger: true, config: true });
@@ -33,20 +35,15 @@ const historyNote = latest && profileLevel != null && trackedLevel != null && pr
   ? `Profile shows level ${nf(profileLevel)}; last recorded update shows level ${nf(trackedLevel)} on ${latest.date}`
   : 'Updated automatically';
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const gains = dailyGains(history);
+const gainByDate = new Map(gains.map((g) => [g.date, g.gain]));
 const historyRows = history.map((row, i) => {
   const prev = history[i - 1] || null;
-  // A tracker gap (see AGENTS.md, backfill sources drop out for weeks at a
-  // time) leaves adjacent rows more than a day apart; treating that span's
-  // whole XP delta as this row's "gain" would fabricate a single-day spike
-  // out of weeks of real progress, so gain is null across a gap. levelDelta
-  // stays a raw delta regardless — the table showing it always shows both
-  // rows' dates too, so a multi-level jump reads honestly as one.
-  const consecutiveDay = prev && (new Date(row.date) - new Date(prev.date)) === ONE_DAY_MS;
-  const gain = consecutiveDay ? Math.max(0, row.experience - prev.experience) : null;
+  // gain is null across a tracker gap (see dailyGains); levelDelta stays a
+  // raw delta regardless, so a multi-level jump across a gap reads as one.
   return {
     ...row,
-    gain,
+    gain: gainByDate.get(row.date) ?? null,
     levelDelta: prev ? row.level - prev.level : null,
     rankDelta: prev && row.rank != null && prev.rank != null ? row.rank - prev.rank : null,
     xpToNext: experienceUntilNextLevel(row.level, row.experience),
@@ -54,17 +51,12 @@ const historyRows = history.map((row, i) => {
   };
 });
 
-const gains = historyRows.filter((row) => row.gain != null).map((row) => ({ key: row.date.slice(5), n: row.gain }));
-
 // Level-up log, derived from the daily rows: every day the tracked level rose.
 const levelUpsChronological = historyRows
   .filter((row) => row.levelDelta > 0)
   .map((row) => ({ date: row.date, level: row.level, step: row.levelDelta }));
 
-// Default prediction pace: mean of the last 7 recorded daily gains (zeros
-// count because rest days are part of the real pace).
-const recentGains = gains.slice(-7).map((g) => g.n);
-const avgDailyXp = recentGains.length ? Math.round(recentGains.reduce((a, b) => a + b, 0) / recentGains.length) : null;
+const pace = xpPace(gains);
 
 /** Earliest recorded value of a highscore field; the delta window is the whole history. */
 function firstKnown(field) {
@@ -80,12 +72,12 @@ function highscoreSeries(field) {
 
 const deaths = [...(profile?.deaths || [])].reverse();
 const myHunts = logbook();
-const characterVocation = profile?.vocation || '';
+const characterVocation = baseVocation(profile?.vocation);
 const compatibleRows = level == null ? [] : table.filter((r) =>
   r.xpRawRate != null
   && r.level != null
   && r.level <= level
-  && isVocationCompatible(r.vocation, characterVocation));
+  && vocationFits(r.vocation, characterVocation));
 const grounds4me = [...new Map(
   compatibleRows
     .sort((a, b) => b.xpRawRate - a.xpRawRate)
@@ -129,26 +121,9 @@ function fmtDateOnly(iso) {
   return iso ? formatDateInTimezone(iso, timezone) : null;
 }
 
-function norm(value) {
-  return String(value || '').toLowerCase().replace(/[^a-z]/g, '');
-}
-
-function isVocationCompatible(rowVocation, profileVocation) {
-  if (!rowVocation) return true;
-  const row = norm(rowVocation);
-  const character = norm(profileVocation);
-  if (!row || !character) return true;
-  if (row === character) return true;
-  if (character.includes('druid')) return row.includes('druid');
-  if (character.includes('sorcerer')) return row.includes('sorcerer') || row === 'mage';
-  if (character.includes('knight')) return row.includes('knight');
-  if (character.includes('paladin')) return row.includes('paladin');
-  return row === character;
-}
-
 const chartYears = [...new Set(historyRows.map((row) => row.date.slice(0, 4)))].sort();
 const monthsInYear = (year) => [...new Set(historyRows.filter((row) => row.date.startsWith(year)).map((row) => row.date.slice(5, 7)))].sort();
-const MONTH_NAME = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' };
+const monthName = (monthKey) => MONTHS[Number(monthKey) - 1];
 
 /**
  * Experience chart data — one "XP gained" series, matching the reference.
@@ -174,24 +149,19 @@ function experienceChartData(year, month) {
         if (deaths.some((death) => String(death.time || '').slice(0, 7) === `${year}-${monthKey}`)) {
           events.push({ type: 'death', label: 'Death' });
         }
-        return { id: `${year}-${monthKey}`, key: MONTH_NAME[monthKey], label: `${MONTH_NAME[monthKey]} ${year}`, n: byMonth.get(monthKey), events };
+        return { id: `${year}-${monthKey}`, key: monthName(monthKey), label: `${monthName(monthKey)} ${year}`, n: byMonth.get(monthKey), events };
       }),
     };
   }
   const inMonth = inYear.filter((row) => row.date.slice(5, 7) === month && row.gain != null);
   return {
-    note: `Daily XP gained in ${MONTH_NAME[month]} ${year}`,
+    note: `Daily XP gained in ${monthName(month)} ${year}`,
     data: inMonth.map((row) => chartPoint(row, row.gain)),
   };
 }
 
-function avg(values) {
-  const clean = values.filter((value) => Number.isFinite(value));
-  return clean.length ? clean.reduce((sum, value) => sum + value, 0) / clean.length : null;
-}
-
 function gainAverage(days) {
-  return avg(historyRows.slice(-days).map((row) => row.gain).filter((gain) => gain != null));
+  return average(historyRows.slice(-days).map((row) => row.gain).filter((gain) => gain != null));
 }
 
 function chartEvents(date) {
@@ -234,12 +204,8 @@ function skillCardHtml(row) {
 }
 
 function statCardHtml(row) {
-  return `
-    <article class="panel stat-card">
-      <span class="eyebrow">${esc(STAT_LABEL[row.key] || row.label)}</span>
-      <b class="num">${nf(row.value)}</b>
-      <small class="dim">${row.rank != null ? `#${nf(row.rank)} worldwide` : esc(row.kind)}</small>
-    </article>`;
+  return metric(STAT_LABEL[row.key] || row.label, nf(row.value),
+    row.rank != null ? `#${nf(row.rank)} worldwide` : esc(row.kind), { size: 'sm' });
 }
 
 function nextHuntsHtml() {
@@ -248,7 +214,7 @@ function nextHuntsHtml() {
     <div class="next-hunts" role="list">
       ${grounds4me.slice(0, 8).map((row) => `
         <a class="next-hunts-item" role="listitem" href="grounds.html?g=${esc(row.groundSlug)}">
-          <span class="next-hunts-ring"><span>${esc((row.ground || '').slice(0, 2).toUpperCase())}</span></span>
+          <span class="next-hunts-ring"><span>${esc(initials(row.ground))}</span></span>
           <small>${esc(row.ground)}</small>
         </a>`).join('')}
     </div>`;
@@ -278,10 +244,10 @@ const STAT_LABEL = {
 const statRows = STAT_ORDER.map((key) => highscoreRows.find((row) => row.key === key)).filter(Boolean);
 
 const deathCutoff = latest ? new Date(`${latest.date}T00:00:00Z`) : new Date();
-const deaths30 = deaths.filter((row) => deathCutoff - new Date(row.time) < 30 * ONE_DAY_MS).length;
+const deaths30 = deaths.filter((row) => deathCutoff - new Date(row.time) < 30 * DAY_MS).length;
 const deathsPrev30 = deaths.filter((row) => {
   const age = deathCutoff - new Date(row.time);
-  return age >= 30 * ONE_DAY_MS && age < 60 * ONE_DAY_MS;
+  return age >= 30 * DAY_MS && age < 60 * DAY_MS;
 }).length;
 const deathsDelta = deaths.length ? deaths30 - deathsPrev30 : null;
 
@@ -331,31 +297,16 @@ const metricDelta = (text, tone) => (text == null ? '' : `<em class="metric-delt
 function progressionOverviewHtml() {
   return `
     <div class="dashboard-metrics" aria-label="Progression at a glance">
-      <article class="panel dashboard-metric dashboard-metric-featured">
-        <span class="eyebrow">Total experience</span>
-        <div class="metric-value-row">
-          <b class="num">${experience != null ? compact(experience) : '-'}</b>
-          ${totalXpSpark.length >= 2 ? '<div class="metric-spark" id="xp-total-spark"></div>' : ''}
-        </div>
-        <small>${monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote)}</small>
-      </article>
-      <article class="panel dashboard-metric">
-        <span class="eyebrow">XP / day pace</span>
-        <b class="num">${avgDailyXp != null ? compact(avgDailyXp) : '-'}</b>
-        <small>${insight ? `${metricDelta(`${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%`, insight.tone)} vs 30-day average` : (recentGains.length ? `${nf(recentGains.length)} recent recorded days` : 'Not enough pace data yet')}</small>
-      </article>
-      <article class="panel dashboard-metric">
-        <span class="eyebrow">Profit / hour</span>
-        <b class="num">${profitRate ? `${kk(profitRate.rate)} gp` : '-'}</b>
-        <small>${profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet'}</small>
-      </article>
-      <article class="panel dashboard-metric">
-        <span class="eyebrow">Deaths</span>
-        <b class="num">${nf(deaths30)}</b>
-        <small>${deathsDelta == null ? 'No deaths on record'
+      ${metric('Total experience', compact(experience),
+    monthGain != null ? `${metricDelta(`+${compact(monthGain)}`, 'up')} this month` : esc(historyNote),
+    { sparkId: totalXpSpark.length >= 2 ? 'xp-total-spark' : null, sparkInline: true })}
+      ${metric('XP / day pace', compact(pace?.xp),
+    insight ? `${metricDelta(`${insight.deltaPct > 0 ? '+' : ''}${insight.deltaPct}%`, insight.tone)} vs 30-day average` : (pace ? `${nf(pace.days)} recent recorded days` : 'Not enough pace data yet'))}
+      ${metric('Profit / hour', profitRate ? gp(profitRate.rate) : '—',
+    profitRate ? `across ${nf(profitRate.n)} logged hunt${profitRate.n === 1 ? '' : 's'}` : 'No logged hunts yet')}
+      ${metric('Deaths', nf(deaths30), deathsDelta == null ? 'No deaths on record'
     : deathsDelta === 0 ? 'even with the prior 30 days'
-      : `${metricDelta(`${deathsDelta > 0 ? '+' : ''}${nf(deathsDelta)}`, deathsDelta > 0 ? 'down' : 'up')} last 30 days`}</small>
-      </article>
+      : `${metricDelta(`${deathsDelta > 0 ? '+' : ''}${nf(deathsDelta)}`, deathsDelta > 0 ? 'down' : 'up')} last 30 days`)}
     </div>`;
 }
 
@@ -365,7 +316,7 @@ function progressionOverviewHtml() {
  * cell, never as zero — thresholds are quartiles of the real positive gains.
  */
 function activityHeatmapHtml() {
-  if (!latest || historyRows.length < 14) return '<p class="viz-empty">Not enough tracked days yet.</p>';
+  if (!latest || historyRows.length < 14) return vizEmpty('Not enough tracked days yet.');
   const gainByDate = new Map(historyRows.map((row) => [row.date, row.gain]));
   const positives = historyRows.map((row) => row.gain).filter((gain) => gain > 0).sort((a, b) => a - b);
   const quart = (p) => positives.length ? positives[Math.min(positives.length - 1, Math.floor(p * positives.length))] : Infinity;
@@ -373,16 +324,16 @@ function activityHeatmapHtml() {
   const levelOf = (gain) => (gain <= 0 ? 0 : gain <= t1 ? 1 : gain <= t2 ? 2 : gain <= t3 ? 3 : 4);
   const end = new Date(`${latest.date}T00:00:00Z`);
   const endWeekday = (end.getUTCDay() + 6) % 7;
-  const start = new Date(end.getTime() - (25 * 7 + endWeekday) * ONE_DAY_MS);
+  const start = new Date(end.getTime() - (25 * 7 + endWeekday) * DAY_MS);
   const weeks = [];
   for (let w = 0; w < 26; w++) {
-    const first = new Date(start.getTime() + w * 7 * ONE_DAY_MS);
-    const prev = new Date(first.getTime() - 7 * ONE_DAY_MS);
+    const first = new Date(start.getTime() + w * 7 * DAY_MS);
+    const prev = new Date(first.getTime() - 7 * DAY_MS);
     const label = w === 0 || first.getUTCMonth() !== prev.getUTCMonth()
-      ? first.toLocaleDateString('en', { month: 'short', timeZone: 'UTC' }) : '';
+      ? MONTHS[first.getUTCMonth()] : '';
     const cells = [];
     for (let d = 0; d < 7; d++) {
-      const dayDate = new Date(start.getTime() + (w * 7 + d) * ONE_DAY_MS);
+      const dayDate = new Date(start.getTime() + (w * 7 + d) * DAY_MS);
       if (dayDate > end) { cells.push('<i class="hm hm-void"></i>'); continue; }
       const key = dayDate.toISOString().slice(0, 10);
       const gain = gainByDate.get(key);
@@ -424,7 +375,7 @@ stage.innerHTML = `
       <p class="character-profile-line">${esc(profile?.vocation || 'Character')} · ${esc(profile?.world || config.world)}${level != null ? ` · Level ${nf(level)}` : ''}</p>
       ${trackedLevel != null && experience != null ? `
       <div class="character-level-progress">
-        <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${levelProgressPct.toFixed(0)}%</b></div>
+        <div><span>Level ${nf(trackedLevel)} → ${nf(trackedLevel + 1)}</span><b class="num">${pct(levelProgressPct)}</b></div>
         <span class="track"><i style="width:${levelProgressPct.toFixed(2)}%"></i></span>
         <small>${nf(experienceUntilNextLevel(trackedLevel, experience))} XP remaining</small>
       </div>` : ''}
@@ -507,7 +458,7 @@ function renderMonthSeg() {
   const months = monthsInYear(xpState.year);
   host.innerHTML = [
     `<button type="button" data-month="all" aria-pressed="${String(xpState.month === 'all')}">All</button>`,
-    ...months.map((month) => `<button type="button" data-month="${month}" aria-pressed="${String(month === xpState.month)}">${MONTH_NAME[month]}</button>`),
+    ...months.map((month) => `<button type="button" data-month="${month}" aria-pressed="${String(month === xpState.month)}">${monthName(month)}</button>`),
   ].join('');
 }
 

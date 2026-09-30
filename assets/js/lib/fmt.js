@@ -1,5 +1,8 @@
 /** Number & duration parsing/formatting. Node-safe (no DOM). */
 
+/** One calendar day in milliseconds. */
+export const DAY_MS = 86_400_000;
+
 /** "1,234,567" | "1.5kk" | "2k" | "3.2m" | "12 345" → number | null */
 export function toNumber(input) {
   if (input == null) return null;
@@ -77,7 +80,7 @@ export function day(iso) {
   return Number.isNaN(d.getTime()) ? '—' : d.toISOString().slice(0, 10);
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /**
  * Chart-axis date labels. Tooltips, tables and the inspector keep the site's

@@ -26,6 +26,8 @@ These are rebuilt by pipeline scripts and committed:
 - `access.json` - best-effort TibiaWiki access and area notes.
 - `ledger.json` - derived shared-hunt ledger cache.
 - `shared-hunts.json` - optional approved shared hunt evidence.
+- `imbuement-art.json` - TibiaWiki imbuement and item icon URLs, resolved and
+  HEAD-validated by `pipeline/enrich-imbuement-art.mjs`.
 - `imbuement-prices.json` - TibiaMarket price observations for the configured
   world. `observedAt` is the source row's timestamp; `updatedAt` is when the
   pipeline fetched it. Sparse items may use the newest sell observation in a

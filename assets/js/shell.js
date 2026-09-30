@@ -4,14 +4,14 @@
  */
 
 import { esc, initials } from './lib/text.js';
-import { kk, pct } from './lib/fmt.js';
+import { kk, nf, pct } from './lib/fmt.js';
 import { ELEMENT_NAME } from './engine/codex.js';
 import { SITE } from './data/sources.js';
 
 // ---------------------------------------------------------------- icons
 
-const stroke = (d, extra = '') =>
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}${extra}</svg>`;
+const stroke = (d) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
 export const ICONS = {
   home: stroke('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>'),
@@ -25,11 +25,10 @@ export const ICONS = {
   gem: stroke('<path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20M9 3 6 9l6 12M15 3l3 6-6 12"/>'),
   moon: stroke('<path d="M20 14A8.5 8.5 0 0 1 10 4a8 8 0 1 0 10 10Z"/>'),
   github: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.33.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.02 10.02 0 0 0 22 12c0-5.52-4.48-10-10-10Z"/></svg>',
-  sun: stroke('<circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.3" y1="5.3" x2="7" y2="7"/><line x1="17" y1="17" x2="18.7" y2="18.7"/><line x1="18.7" y1="5.3" x2="17" y2="7"/><line x1="7" y1="17" x2="5.3" y2="18.7"/>'),
 };
 
 const GLYPH = `<svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="xg" x1="0" y1="1" x2="1" y2="0">
-  <stop offset="0%" stop-color="#FFD600"/><stop offset="35%" stop-color="#FF0169"/><stop offset="100%" stop-color="#7638FA"/></linearGradient></defs>
+  <stop offset="0%" style="stop-color:var(--grad-yellow)"/><stop offset="35%" style="stop-color:var(--grad-rose)"/><stop offset="100%" style="stop-color:var(--grad-purple)"/></linearGradient></defs>
   <rect x="2" y="2" width="28" height="28" rx="9" fill="none" stroke="url(#xg)" stroke-width="2.6"/>
   <path d="M10 21.5 16 9l6 12.5" fill="none" stroke="url(#xg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="16" cy="17.2" r="1.6" fill="url(#xg)"/></svg>`;
@@ -39,7 +38,7 @@ const GLYPH = `<svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient
 /* 4th field: true = also a mobile tab-bar destination. The tab bar holds
    exactly the five daily-loop surfaces (Instagram keeps five too); every
    other page stays in the desktop sidebar and on the home workspace grid. */
-const NAV = [
+export const NAV = [
   ['index.html', 'Home', 'home', true],
   ['character.html', 'Character', 'user', true],
   ['grounds.html', 'Planner', 'compass', true],
@@ -53,6 +52,11 @@ const NAV = [
 
 const LOOK_KEY = 'exiva:appearance';
 
+/* storage can throw (blocked site data, private windows); the choice then lasts this page view */
+function readLook() {
+  try { return localStorage.getItem(LOOK_KEY) || 'auto'; } catch { return 'auto'; }
+}
+
 function applyLook(mode) {
   const dark = mode === 'dark' || (mode !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.appearance = dark ? 'dark' : 'light';
@@ -60,7 +64,7 @@ function applyLook(mode) {
 
 /** Build the rail and wire appearance. `active` = current page file. */
 export function mountShell(active) {
-  applyLook(localStorage.getItem(LOOK_KEY) || 'auto');
+  applyLook(readLook());
 
   document.querySelector('[data-skip-stage]')?.addEventListener('click', () => {
     const stage = document.getElementById('stage');
@@ -90,7 +94,7 @@ export function mountShell(active) {
 
   rail.querySelector('#look-flip').addEventListener('click', () => {
     const now = document.documentElement.dataset.appearance === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(LOOK_KEY, now);
+    try { localStorage.setItem(LOOK_KEY, now); } catch { /* see readLook */ }
     applyLook(now);
   });
 }
@@ -111,8 +115,31 @@ export function say(message, ms = 3000) {
 
 // ---------------------------------------------------------------- fragments
 
+/** "← Label" control that closes an inline dossier (Planner, Codex); controllers bind #detail-back. */
+export function backLink(label) {
+  return `<p><button type="button" class="back-link" id="detail-back">← ${esc(label)}</button></p>`;
+}
+
 export function ring(name, { quiet = false, cls = '' } = {}) {
   return `<span class="ring ${quiet ? 'ring-quiet' : ''} ${cls}"><span class="ring-core">${esc(initials(name))}</span></span>`;
+}
+
+/**
+ * KPI card — the one headline-number card every page uses. `value` and
+ * `detail` are HTML (callers escape their own text). `sparkId` adds a
+ * sparkline mount below the value, or beside it with `sparkInline`;
+ * `title` is hover text for the value; `size: 'sm'` is the compact tier.
+ */
+export function metric(label, value, detail = '', { sparkId = null, sparkInline = false, title = '', size = '' } = {}) {
+  const spark = sparkId ? `<div class="metric-spark" id="${esc(sparkId)}"></div>` : '';
+  const figure = `<b class="num"${title ? ` title="${esc(title)}"` : ''}>${value}</b>`;
+  return `
+    <article class="panel metric${size ? ` metric-${size}` : ''}">
+      <span class="eyebrow">${esc(label)}</span>
+      ${sparkInline ? `<div class="metric-value-row">${figure}${spark}</div>` : figure}
+      ${detail ? `<small class="fine dim">${detail}</small>` : ''}
+      ${sparkInline ? '' : spark}
+    </article>`;
 }
 
 export function pillEl(el, extra = '') {
@@ -143,7 +170,7 @@ const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="curren
  * Sort control markup — a button that opens an anchored menu with a
  * checkmark on the current choice (Apple HIG's pattern for a small
  * mutually-exclusive option set), not a native <select>. `sorts` is an
- * object of `id -> [label, ...]` (grounds.js/creatures.js's SORTS table).
+ * object of `id -> [label, ...]` (grounds.js's SORTS table).
  */
 export function sortMenu(id, sorts, selected) {
   return `
@@ -274,7 +301,7 @@ export function dataTable(host, { cols, rows, sortId, sortDir = 'desc', onSort, 
   host.innerHTML = `<div class="panel sheet"><table class="grid">
     <thead><tr>${cols.map((c) => `<th class="${c.num ? 'num ' : ''}${sortId === c.id ? 'on' : ''}" data-col="${esc(c.id)}" scope="col">${esc(c.label)}${sortId === c.id ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}</th>`).join('')}</tr></thead>
     <tbody></tbody></table></div>
-    <p class="fine dim count-line" style="margin-top:var(--s2)">${rows.length.toLocaleString('en-US')} rows</p>`;
+    <p class="fine dim count-line">${nf(rows.length)} rows</p>`;
 
   const tbody = host.querySelector('tbody');
   let at = 0;
@@ -302,6 +329,7 @@ export function dataTable(host, { cols, rows, sortId, sortDir = 'desc', onSort, 
   }
 }
 
+/** Inline notice; `kind` is a status tone: error | warning | success. Text is escaped. */
 export function note(kind, text) {
   return `<div class="note note-${kind}">${esc(text)}</div>`;
 }

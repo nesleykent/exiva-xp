@@ -47,7 +47,7 @@
 
   /* RGB-triple twins of the --grad-* hex stops, for contexts that need
      rgb(var(--x)) composability (donut segments, chart legend swatches) —
-     the site's second gradient-as-data-colour exception (AGENTS.md §5),
+     the categorical brand-hue set (AGENTS.md §5),
      for non-elemental categorical groupings (grounds, sources), never
      elemental data (--c-* stays reserved for that). */
   --brand-rose: 255, 1, 105;
@@ -67,7 +67,7 @@
   /* the source's --ig-secondary-button (button fill) is a shade lighter than
      --ig-highlight-background/--wash in light mode (250 vs 239) though they
      collapse to the same value in dark (38); kept distinct so real buttons
-     (.btn-secondary, .filter-toggle) don't borrow the badge/skeleton tone. */
+     (.btn-secondary) don't borrow the badge/skeleton tone. */
   --surface-btn2: 250, 250, 250;
   --surface-btn2-hover: 219, 219, 219;
   --line: 219, 219, 219;
@@ -86,6 +86,11 @@
      in light mode (245 vs 239) */
   --tertiary-border: 219, 219, 219;
   --tertiary-hover: 245, 245, 245;
+  /* status tones used as TEXT: the fixed --green and warning orange are too
+     light to read on a light surface, so light mode darkens them; dark mode
+     uses the fixed tones themselves. Fills and washes keep the fixed tones. */
+  --ink-success: 0, 130, 20;
+  --ink-warning: 160, 80, 0;
 
   /* fixed semantics — never theme-swap, matching the source's --web-always-* */
   --blue: 0, 149, 246;
@@ -93,6 +98,8 @@
   --red: 237, 73, 86;
   --green: 88, 195, 34;
   --white-fixed: 255, 255, 255;
+  /* the source Badge's neutral fill: the primary-icon value, fixed in both appearances */
+  --neutral-fixed: 38, 38, 38;
 
   /* element accents (data colour only) — aliased to the fixed/brand tokens
      above wherever the design system already reused that hue (fire=orange,
@@ -125,7 +132,7 @@
   --shadow-float: 0 0 10px rgba(0,0,0,.2);
   --shadow-dropdown: 0 0 10px rgba(0,0,0,.2);
 
-  /* type scale — sizes actually in use across the app, named after the source's paired system-N tokens */
+  /* type scale — named after the source's paired system-N tokens */
   --fs-10: 10px; --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px;
   --fs-15: 15px; --fs-16: 16px; --fs-17: 17px; --fs-18: 18px; --fs-20: 20px;
   --fs-22: 22px; --fs-24: 24px; --fs-26: 26px; --fs-28: 28px; --fs-32: 32px;
@@ -164,6 +171,8 @@
   --overlay-a: .1;
   --tertiary-border: 54, 54, 54;
   --tertiary-hover: 38, 38, 38;
+  --ink-success: var(--green);
+  --ink-warning: var(--brand-orange);
   color-scheme: dark;
 }
 
@@ -222,7 +231,7 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
   font-weight: 700; font-size: var(--fs-26); line-height: normal; letter-spacing: -.5px;
   white-space: nowrap;
 }
-.wordmark img, .wordmark svg { width: 30px; height: 30px; flex-shrink: 0; }
+.wordmark svg { width: 30px; height: 30px; flex-shrink: 0; }
 .wordmark svg { display: none; }
 
 .rail-nav { display: flex; flex-direction: column; gap: var(--s1); flex: 1; }
@@ -323,11 +332,8 @@ main.stage {
 .btn-tertiary:hover { background: rgb(var(--tertiary-hover)); }
 .btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }
 .btn[disabled] { opacity: .3; cursor: default; }
-/* .btn-sm/.btn-lg previously repeated the base .btn spec verbatim — both
-   size tiers were dead. .chart-controls .btn's own min-height:28px override
-   (below) now does real work: it keeps that dense control row at the base
-   size instead of inheriting .btn-sm's smaller one. */
-.btn-sm { min-height: 24px; padding: 4px var(--s2); font-size: var(--fs-11); line-height: 13px; }
+/* size tiers vary height, padding and type only — never shape */
+.btn-sm { min-height: 24px; padding: var(--s1) var(--s2); font-size: var(--fs-11); line-height: 13px; }
 .btn-lg { min-height: var(--tap); padding: var(--s3) var(--s5); font-size: var(--fs-14); line-height: 18px; }
 
 /* Utility card — the standalone design uses the quiet separator tone around
@@ -340,8 +346,6 @@ main.stage {
 }
 .panel-pad { padding: var(--s6); }
 
-.hairline { border: 0; border-top: 1px solid rgb(var(--line)); margin: var(--s5) 0; }
-
 .eyebrow {
   font-size: var(--fs-11); line-height: 13px; font-weight: 600;
   letter-spacing: 1px; text-transform: uppercase;
@@ -352,7 +356,8 @@ main.stage {
 .fine { font-size: var(--fs-12); line-height: 16px; }
 .num { font-variant-numeric: tabular-nums; }
 
-input[type="text"], input[type="search"], input[type="number"], select, textarea {
+/* the sort-menu button shares the field chrome so a menu reads as a field */
+input[type="text"], input[type="search"], input[type="number"], select, textarea, .sort-menu-btn {
   font-family: var(--f-ui); font-size: var(--fs-14);
   color: rgb(var(--ink));
   background: rgb(var(--surface-2));
@@ -362,13 +367,12 @@ input[type="text"], input[type="search"], input[type="number"], select, textarea
 textarea { width: 100%; font-family: var(--f-mono); font-size: var(--fs-12); line-height: 1.5; resize: vertical; }
 
 label.lbl { display: grid; gap: var(--s1); }
-label.lbl > .eyebrow { font-weight: 600; }
 /* every filter field shares one width so a row of controls lines up evenly;
    lbl-wide/lbl-narrow are the only sanctioned exceptions (free text search,
    short numeric inputs) — never set width via inline style on a .lbl field. */
 label.lbl > input, label.lbl > select { min-width: 160px; width: 100%; box-sizing: border-box; }
-label.lbl.lbl-wide > input, label.lbl.lbl-wide > select { min-width: 220px; }
-label.lbl.lbl-narrow > input, label.lbl.lbl-narrow > select { min-width: 96px; width: 96px; }
+label.lbl.lbl-wide > input { min-width: 220px; }
+label.lbl.lbl-narrow > input { min-width: 96px; width: 96px; }
 label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; }
 
 /* Sort control — Apple HIG's menu pattern for a small mutually-exclusive
@@ -379,10 +383,7 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
 .sort-menu { position: relative; }
 .sort-menu-btn {
   display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
-  width: 100%; font-family: var(--f-ui); font-size: var(--fs-14); text-align: left; cursor: pointer;
-  color: rgb(var(--ink)); background: rgb(var(--surface-2));
-  border: 1px solid rgb(var(--stroke)); border-radius: var(--r-input);
-  padding: 10px var(--s3); min-height: 36px;
+  width: 100%; text-align: left; cursor: pointer;
 }
 .sort-menu-btn:hover { background: rgba(var(--overlay), calc(var(--overlay-a) * 2)); }
 .sort-menu-btn[aria-expanded="true"] { border-color: rgb(var(--line-strong)); }
@@ -393,8 +394,7 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   position: absolute; top: calc(100% + var(--s1)); left: 0; right: 0; z-index: 20;
   padding: 6px; margin: 0;
   background: rgb(var(--surface-raised)); border: 1px solid rgb(var(--stroke));
-  /* --shadow-dropdown (not -float) — this is an anchored menu list, the
-     exact case the source's tighter, darker dropdown shadow is for. */
+  /* --shadow-dropdown: the anchored-menu role (same value as the other shadow tokens) */
   border-radius: var(--r-lg); box-shadow: var(--shadow-dropdown);
 }
 .sort-menu-item {

@@ -5,11 +5,11 @@
 
 import { boot } from './_boot.js';
 import { esc } from '../lib/text.js';
-import { compact, kk, nf, md } from '../lib/fmt.js';
-import { experienceUntilNextLevel, progressWithinLevel } from '../engine/progression.js';
-import { judge } from '../engine/rules.js';
+import { compact, kk, nf, md, pct } from '../lib/fmt.js';
+import { dailyGains, experienceUntilNextLevel, progressWithinLevel, xpPace } from '../engine/progression.js';
+import { baseVocation, judge, vocationFits } from '../engine/rules.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
-import { ICONS, basisPill } from '../shell.js';
+import { ICONS, NAV, basisPill, metric } from '../shell.js';
 import { sparkline, chartInto } from '../viz/svg.js';
 
 const { stage, table, config } = await boot('index.html', { ledger: true, config: true });
@@ -22,7 +22,6 @@ const characterName = profile?.name || config.name;
 const level = profile?.level ?? history.at(-1)?.level ?? null;
 const vocation = profile?.vocation || '';
 const latest = history.at(-1) || null;
-const previous = history.at(-2) || null;
 const capturedAtLabel = latest?.capturedAt
   ? new Intl.DateTimeFormat('en-GB', {
     timeZone: 'America/Sao_Paulo',
@@ -34,22 +33,14 @@ const capturedAtText = capturedAtLabel
   ? `as of ${capturedAtLabel.year}-${capturedAtLabel.month}-${capturedAtLabel.day} at ${capturedAtLabel.hour}:${capturedAtLabel.minute} BRT`
   : null;
 const book = logbook();
-const consecutiveLatest = latest && previous
-  && (new Date(latest.date) - new Date(previous.date)) === 86_400_000;
-const latestGain = consecutiveLatest ? Math.max(0, latest.experience - previous.experience) : null;
 // gap-free daily gains, dated — the same series backs both the pace figure
 // and its sparkline, so the trend line never shows a number the average
 // didn't also use
-const gainSeries = history.slice(1).map((row, index) => {
-  const prior = history[index];
-  return (new Date(row.date) - new Date(prior.date)) === 86_400_000
-    ? { key: md(row.date), n: Math.max(0, row.experience - prior.experience) }
-    : null;
-}).filter((g) => g != null).slice(-14);
-const recentGains = gainSeries.slice(-7).map((g) => g.n);
-const avgDailyXp = recentGains.length
-  ? Math.round(recentGains.reduce((sum, gain) => sum + gain, 0) / recentGains.length)
-  : null;
+const gains = dailyGains(history);
+const consecutiveLatest = latest != null && gains.at(-1)?.date === latest.date;
+const latestGain = consecutiveLatest ? gains.at(-1).gain : null;
+const gainSeries = gains.slice(-14).map((g) => ({ key: md(g.date), n: g.gain }));
+const pace = xpPace(gains);
 // a trailing 3-day rolling average of the same real gains — genuinely
 // distinct from the raw daily series above, not just the same shape twice
 const paceSeries = gainSeries.map((g, i, arr) => {
@@ -59,24 +50,9 @@ const paceSeries = gainSeries.map((g, i, arr) => {
 const xpToNext = latest ? experienceUntilNextLevel(latest.level, latest.experience) : null;
 const levelProgress = latest ? progressWithinLevel(latest.level, latest.experience) : null;
 
-function norm(value) {
-  return String(value || '').toLowerCase().replace(/[^a-z]/g, '');
-}
-
-function vocationMatches(rowVocation) {
-  if (!rowVocation) return true;
-  const row = norm(rowVocation);
-  const current = norm(vocation);
-  if (!row || !current) return true;
-  if (current.includes('druid')) return row.includes('druid');
-  if (current.includes('sorcerer')) return row.includes('sorcerer') || row === 'mage';
-  if (current.includes('knight')) return row.includes('knight');
-  if (current.includes('paladin')) return row.includes('paladin');
-  return row === current;
-}
-
+const base = baseVocation(vocation);
 const nextHunt = table
-  .filter((row) => row.xpRawRate != null && row.level != null && row.level <= level && vocationMatches(row.vocation))
+  .filter((row) => row.xpRawRate != null && row.level != null && row.level <= level && vocationFits(row.vocation, base))
   .sort((a, b) => b.xpRawRate - a.xpRawRate)[0] || null;
 
 let charmPoints = null;
@@ -103,28 +79,11 @@ if (profile?.level != null && latest?.level != null && profile.level !== latest.
   attention.push({ text: `The live profile is level ${nf(profile.level)} while the last history row is level ${nf(latest.level)}.`, label: 'Details', href: 'character.html' });
 }
 if (!latest) attention.push({ text: 'No experience history is available yet.', label: 'Character', href: 'character.html' });
-if (!attention.length) attention.push({ text: `Character tracking is current through ${esc(latest.date)}.`, label: 'Open profile', href: 'character.html' });
+if (!attention.length) attention.push({ text: `Character tracking is current through ${latest.date}.`, label: 'Open profile', href: 'character.html' });
 
-const shortcuts = [
-  ['character.html', 'Character', ICONS.user],
-  ['grounds.html', 'Planner', ICONS.compass],
-  ['submit.html', 'Log a hunt', ICONS.plus],
-  ['tools.html', 'Tools', ICONS.tools],
-  ['analytics.html', 'Analytics', ICONS.chart],
-  ['creatures.html', 'Codex', ICONS.book],
-  ['charms.html', 'Charms', ICONS.gem],
-  ['admin.html', 'Logbook', ICONS.shield],
-];
-
-function metric(label, value, detail, { extra = '', sparkId } = {}) {
-  return `
-    <article class="panel home-metric">
-      <span class="eyebrow">${esc(label)}</span>
-      <b class="num">${value}</b>
-      <small class="dim">${detail}${extra}</small>
-      ${sparkId ? `<div class="metric-spark" id="${sparkId}"></div>` : ''}
-    </article>`;
-}
+// every destination except Home itself, in sidebar order — the desktop-only
+// pages (Codex, Charms, Progress, Logbook) stay reachable on mobile this way
+const shortcuts = NAV.filter(([href]) => href !== 'index.html');
 
 const today = new Intl.DateTimeFormat('en-US', {
   weekday: 'long',
@@ -140,9 +99,9 @@ stage.innerHTML = `
   </header>
 
   <section class="home-metric-grid" aria-label="Character at a glance">
-    ${metric('Current level', level != null ? nf(level) : '—', levelProgress != null ? `${levelProgress.toFixed(0)}% through this level` : 'Waiting for exact experience')}
+    ${metric('Current level', level != null ? nf(level) : '—', levelProgress != null ? `${pct(levelProgress)} through this level` : 'Waiting for exact experience')}
     ${metric("Today's XP", latestGain != null ? `+${compact(latestGain)}` : '—', consecutiveLatest ? esc(capturedAtText || `tracked on ${latest.date}`) : 'No consecutive-day reading', { sparkId: gainSeries.length >= 2 ? 'home-gain-spark' : null })}
-    ${metric('XP pace', avgDailyXp != null ? `${compact(avgDailyXp)}<em>/day</em>` : '—', recentGains.length ? `average of ${nf(recentGains.length)} recorded days` : 'Not enough consecutive days', { sparkId: gainSeries.length >= 2 ? 'home-pace-spark' : null })}
+    ${metric('XP pace', pace ? `${compact(pace.xp)}<em>/day</em>` : '—', pace ? `average of ${nf(pace.days)} recorded days` : 'Not enough consecutive days', { sparkId: gainSeries.length >= 2 ? 'home-pace-spark' : null })}
     ${metric(`Level ${level != null ? nf(level + 1) : ''}`, xpToNext != null ? compact(xpToNext) : '—', 'XP remaining')}
     ${metric('Charm points', charmPoints != null ? nf(charmPoints) : '—', charmPoints != null ? 'earned points; spending is private' : 'No tracked highscore value')}
   </section>
@@ -180,7 +139,7 @@ stage.innerHTML = `
   <section class="home-shortcuts-section">
     <p class="eyebrow">Shortcuts</p>
     <div class="home-shortcuts">
-      ${shortcuts.map(([href, label, icon]) => `<a href="${href}">${icon}<span>${esc(label)}</span></a>`).join('')}
+      ${shortcuts.map(([href, label, icon]) => `<a href="${href}">${ICONS[icon]}<span>${esc(label)}</span></a>`).join('')}
     </div>
   </section>`;
 

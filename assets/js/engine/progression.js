@@ -7,6 +7,9 @@
  * Shared by the character tracker pipeline and the hub's progression UI.
  */
 
+import { DAY_MS } from '../lib/fmt.js';
+import { average } from '../lib/stats.js';
+
 export const experienceForLevel = (level) =>
   (50 / 3) * (level ** 3 - 6 * level ** 2 + 17 * level - 12);
 
@@ -44,3 +47,27 @@ export const nextBaseBreakpointLevel = (level) => {
   const step = stepSize(level);
   return level + step - ((level + 1000) % step);
 };
+
+/**
+ * Gap-aware daily XP gains from tracked history rows ({date, experience}).
+ * A tracker gap (backfill sources drop out for weeks at a time) leaves
+ * adjacent rows more than a day apart; crediting that span's whole delta to
+ * one day would fabricate a spike out of weeks of real progress, so only a
+ * row exactly one day after its predecessor yields a gain.
+ */
+export function dailyGains(history) {
+  const gains = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i - 1];
+    const row = history[i];
+    if (new Date(row.date) - new Date(prev.date) !== DAY_MS) continue;
+    gains.push({ date: row.date, gain: Math.max(0, row.experience - prev.experience) });
+  }
+  return gains;
+}
+
+/** Mean of the last `window` gap-free daily gains — rest days count, since they are part of the real pace. */
+export function xpPace(gains, window = 7) {
+  const recent = gains.slice(-window);
+  return recent.length ? { xp: Math.round(average(recent.map((g) => g.gain))), days: recent.length } : null;
+}
