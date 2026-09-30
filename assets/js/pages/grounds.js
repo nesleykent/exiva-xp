@@ -164,7 +164,6 @@ stage.innerHTML = `
   <form class="filter-bar filter-compact" id="f" role="search">
     <div class="filter-compact-head">
       <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="f-q" placeholder="Ground, creature or area"></label>
-      <span class="fine dim" id="filter-count"></span>
     </div>
     <div class="filter-compact-groups">
       <div class="filter-segment"><span class="eyebrow">Party</span>${segmentedControl('f-party', 'Party size', PARTY_OPTIONS, state.mode)}</div>
@@ -381,7 +380,6 @@ function render() {
   $('#f').hidden = detailOpen;
   $('#out').hidden = detailOpen;
 
-  $('#filter-count').textContent = `${nf(cards.length)} grounds · ${nf(rows.length)} rows`;
   $('#out').innerHTML = `
     <p class="fine dim count-line">Showing ${nf(visibleCards.length)} of ${nf(cards.length)} matching grounds</p>
     <div class="tiles planner-grid">

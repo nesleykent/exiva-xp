@@ -314,7 +314,9 @@ table.grid a:hover { text-decoration: underline; }
 .stepper-item:last-child::after { display: none; }
 .stepper-item.is-done::after { background: rgb(var(--ink)); }
 .stepper-btn { display: flex; align-items: center; gap: var(--s2); min-height: var(--tap); background: none; border: 0; padding: var(--s1) 0; font: inherit; color: rgb(var(--ink-2)); cursor: pointer; }
-.stepper-btn[disabled] { cursor: default; opacity: .3; }
+/* upcoming steps stay legible in ink-2 on their own circle — at reduced
+   opacity they all but vanished in dark mode */
+.stepper-btn[disabled] { cursor: default; }
 .stepper-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--r-circle); background: rgb(var(--surface-2)); color: rgb(var(--ink-2)); font-size: var(--fs-13); font-weight: 700; flex-shrink: 0; }
 .stepper-item.is-done .stepper-num { background: rgb(var(--ink)); color: rgb(var(--surface)); }
 .stepper-item.is-active .stepper-num { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }

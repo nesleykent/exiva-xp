@@ -83,6 +83,11 @@ stage.innerHTML = `
     <p class="dim">Plan charm spending from tracked earned points, then match elemental charms to the creatures you actually hunt. Spending and assignments remain private in the Cyclopedia. <a href="https://tibia.fandom.com/wiki/Charms" target="_blank" rel="noopener">Source ↗</a></p>
   </header>
 
+  ${selectedCharm ? `<section class="section section-tight">
+    <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>
+    <div class="tiles">${card(selectedCharm)}</div>
+  </section>` : ''}
+
   <div class="metric-row">
     ${metric('Earned points', nf(trackedCharmPoints?.points), trackedCharmPoints ? `tracked ${esc(trackedCharmPoints.date)}` : 'no highscore value yet')}
     ${metric('Major charms', nf(charms.filter((charm) => charm.tier === 'Major').length), 'catalogued upgrades')}
@@ -91,10 +96,6 @@ stage.innerHTML = `
   </div>
   <p class="fine dim dossier-note">Earned points are an upper bound: the public highscore cannot see points already spent.</p>
 
-  ${selectedCharm ? `<section class="section">
-    <div class="section-bar"><h2>Selected charm</h2><a class="btn btn-tertiary" href="charms.html">All charms</a></div>
-    <div class="tiles">${card(selectedCharm)}</div>
-  </section>` : ''}
 
   <section class="section">
     <div class="section-bar"><h2>Charms for your hunts</h2><span class="fine dim">elemental Major charms · per-attack expectation (maxed trigger chance × 5% of initial HP) weighted by your logged kills</span></div>

@@ -33,7 +33,9 @@ stage.innerHTML = `
   <div class="steps" id="steps">
     <section class="step panel panel-pad" id="step-paste" data-step="paste">
       <div class="step-head"><h2 id="paste-heading" tabindex="-1">Paste your analyser</h2></div>
-      <textarea id="paste" rows="12" aria-labelledby="paste-heading" aria-describedby="paste-help" placeholder="Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
+      <textarea id="paste" rows="12" aria-labelledby="paste-heading" aria-describedby="paste-help" placeholder="Example — paste your own session here:
+
+Session data: From 2026-07-01, 20:00:00 to 2026-07-01, 22:30:00
 Session: 02:30h
 Raw XP Gain: 3,412,500
 XP Gain: 4,095,000
@@ -47,7 +49,7 @@ Looted Items:
   1024x gold coin"></textarea>
       <div class="paste-actions">
         <button type="button" class="btn btn-primary" id="go">Read analyser</button>
-        <span class="fine dim">Backend: ${esc(backend().label)}</span>
+        <span class="fine dim">Saves to: ${esc(backend().label)}</span>
       </div>
       <div id="read-note" role="status" aria-live="polite"></div>
     </section>

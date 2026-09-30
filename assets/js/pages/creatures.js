@@ -39,7 +39,6 @@ stage.innerHTML = `
   <form class="filter-bar filter-compact" id="c-filter" role="search">
     <div class="filter-compact-head">
       <label class="lbl lbl-wide"><span class="eyebrow">Search</span><input type="search" id="c-q" placeholder="Creature name"></label>
-      <span class="fine dim" id="codex-count"></span>
     </div>
     <div class="filter-compact-groups">
       <div class="filter-segment"><span class="eyebrow">Difficulty</span>${segmentedControl('c-tier', 'Difficulty', TIER_OPTIONS, state.tier)}</div>
@@ -275,7 +274,6 @@ function render() {
       }).join('') || emptyState('No creatures match.')}
     </div>`;
 
-  $('#codex-count').textContent = `${nf(all.length)} creatures`;
 
   const more = $('#more');
   // #more sits outside #out, so an open dossier has to hide it explicitly
