@@ -300,4 +300,4 @@ When continuing implementation:
     - **Progress "Best targets."** These boards rank every vocation.
     - **Dossier battle advice.** It is population-wide, not vocation-scoped ("Lead with Holy" for a Druid).
     - **Tooltip-only data.** Charm affordability and KPI spread are only visible on hover.
-    - **Time-true charts.** `flow()` spaces points by index, so tracker gaps collapse.
+    - **Time-true charts.** Progress "Daily XP gain" is now time-true with not-tracked bands (owner request, 2026-09-30). Character's Experience chart still spaces by index; convert it too?

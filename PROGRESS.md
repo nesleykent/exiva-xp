@@ -26,5 +26,10 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - `assets/css/base.css`, `assets/css/pages.css` — cycles 1-5
 - `DESIGN_QA.md`, `PROGRESS.md` — docs
 
+## Follow-up task (user, 2026-09-30): "daily xp chart need to be fixed"
+- Target: Progress "Daily XP gain" (analytics.js). Findings: 461 daily points index-spaced; 8 untracked gaps (~247d, biggest 2025-01-17→05-04 106d, 2026-02-28→05-07 67d) drawn as if adjacent; 134 level-up dots on the line; unreadable at 375.
+- Plan: svg.js flow() gains time-true `t` x, `gapOver` breaks + 'not tracked' bands, `rail` events under the axis; analytics range segmented 90 days (daily, default) / 1 year / All (weekly avg XP/day, tooltip n tracked days); legend 'Not tracked'. Verify 375/768/1280 both themes + hover, smoke, commit, update DESIGN_QA.
+- DONE: verified (shots `.claude/qa-shots/dxp/grid-*.png`), committed. Character Experience chart intentionally untouched (offer to user).
+
 ## Next step
 - DONE. Only the final report remains (chat). Open items are in DESIGN_QA.md → Remaining / Needs decision and AGENTS.md §12 #16.

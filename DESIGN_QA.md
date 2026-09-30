@@ -146,6 +146,24 @@ Evidence and full source pointers for every item are in `.claude/qa-shots/critiq
 
 Before/after pairs for the largest changes are in `.claude/qa-shots/compare/`.
 
+## Follow-up: Daily XP gain chart (owner request, 2026-09-30)
+
+The owner's report was "Daily XP chart needs to be fixed". Progress's chart had two problems:
+
+- **Unreadable:** 461 daily points drawn index-spaced read as a barcode at 375 px, with 134 level-up dots stacked on the line.
+- **Dishonest:** 8 tracker gaps (~247 days, the largest 106 and 67 days) were drawn as straight lines, as if those days were adjacent.
+
+What changed:
+
+- **`flow()`** takes an optional per-point `t`. With it the x-axis is time-true, and a step past `gapOver` breaks the line and shades the span "not tracked", with a tooltip and a legend entry.
+- **Event rail.** `rail: true` moves event markers onto a strip under the axis.
+- **Dots** show only when points sit at least 10 px apart.
+- **Axis ticks** are picked at even steps of time.
+- **Range control** (segmented): 90 days, the default, shows every day; 1 year and All show each week's average over its tracked days. The unit stays XP/day, and the tooltip names the tracked-day count. Weekly axes carry the year.
+- **Smoke** asserts that a gap splits the line and gets one band, and that untimed series never invent gaps.
+
+Verified at 375, 768 and 1280 in both themes, with a hover tooltip per range, no overflow and no console errors.
+
 ## Removed (restorable from the commit named)
 
 - **Planner filter-bar count** "167 grounds · 189 rows" and **Codex filter-bar count** "833 creatures" (`19900d8`). Each duplicated the "Showing N of M" line directly below it.
@@ -178,5 +196,5 @@ Owner calls, not guessed. Each needs a decision before code changes.
 - **Dossier battle advice is population-wide:** "Lead with Holy" for a Druid. Should it be vocation-scoped? (F-22)
 - **Tooltip-only data.** Stand-in provenance, charm affordability and the KPI spread are hover-only. Stand-in provenance is owner-directed to be a tooltip. (F-21)
 - **Codex class filters.** The top-3 "Class" and the 20-option "Every class" are two controls for one state, and Sort is segmented. Both tie to §12 #4 and to the filter-collapse question above. (M-14, F-14)
-- **Time-true charts.** `flow()` spaces points by index, so tracker gaps collapse. Plotting by date is a chart-semantics change. (F-18)
+- **Time-true charts.** Done for Progress "Daily XP gain" after the owner asked (2026-09-30, see below). Character's Experience chart still spaces its monthly points by index, so Feb → May reads as one step. (F-18)
 - Already open in AGENTS.md §12: radius contract (#1), spacing half-step tokens (#9), stray breakpoints (#9).

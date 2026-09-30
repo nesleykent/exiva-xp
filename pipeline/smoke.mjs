@@ -530,5 +530,14 @@ const markedFlow = flow([
 ]);
 assert(markedFlow.includes('vevent-level') && markedFlow.includes('vevent-death'),
   'progression chart must render both level-up and death markers');
+// a time-true series never draws across days nobody measured (§3.2): the line
+// breaks and the span is shaded; untimed series keep one continuous path
+const gappedFlow = flow([
+  { key: 'a', t: 1, n: 10 }, { key: 'b', t: 2, n: 20 }, { key: 'c', t: 9, n: 15 }, { key: 'd', t: 10, n: 12 },
+], { gapOver: 1 });
+const linePath = gappedFlow.match(/class="vline"[^>]*d="([^"]+)"/)?.[1] || '';
+assert((linePath.match(/M/g) || []).length === 2 && (gappedFlow.match(/class="vgap"/g) || []).length === 1,
+  'a tracker gap must split the daily XP line into two runs with one not-tracked band');
+assert(!markedFlow.includes('class="vgap"'), 'untimed series must not invent gaps');
 
 console.log(`engine ok: ${codex.size} creatures / ${grounds.entries.length} entries / ${table.length} ledger rows / ${charms.length} charms${access ? ` / ${Object.keys(access.grounds).length} ground access notes` : ''}${character ? ` / ${Object.keys(data('highscores/experience.json')).length} tracked XP day(s) of ${CHARACTER.name}` : ''} / ${IMBUEMENTS.length} imbuements`);

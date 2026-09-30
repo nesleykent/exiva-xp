@@ -999,6 +999,9 @@ table.grid a:hover { text-decoration: underline; }
 .viz .vevent-level { fill: rgb(var(--green)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .viz .vevent-death { fill: rgb(var(--red)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .viz .vevent-dense { stroke-width: 1; }
+/* a span with no tracker reading on a time-true chart: shaded, never drawn across */
+.viz .vgap { fill: rgba(var(--ink-2), .1); }
+.viz .vgap-label { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); }
 .viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
 .viz-legend { display: flex; flex-wrap: wrap; gap: var(--s4); list-style: none; margin: var(--s3) 0 0; padding: 0; font-size: var(--fs-12); color: rgb(var(--ink-2)); }
 .viz-legend li { display: flex; align-items: center; gap: var(--s1); }
@@ -1006,6 +1009,7 @@ table.grid a:hover { text-decoration: underline; }
 .viz-legend-swatch.viz-legend-line { width: 16px; height: 3px; border-radius: var(--r-pill); background: var(--grad-hero); }
 .viz-legend-level { background: rgb(var(--green)); }
 .viz-legend-death { background: rgb(var(--red)); }
+.viz-legend-swatch.viz-legend-gap { border-radius: var(--r-xs); background: rgba(var(--ink-2), .2); }
 .donut-board { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }
 /* fixed 160px — matches the svg's own viewBox, so donut text renders at token size */
 .donut-chart svg { width: 160px; height: 160px; flex-shrink: 0; }

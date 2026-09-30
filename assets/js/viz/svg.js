@@ -177,55 +177,85 @@ export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk,
 }
 
 /**
- * Time series line + area: data = [{key, n, id?, label?, events?}] in order.
+ * Time series line + area: data = [{key, n, id?, label?, events?, t?}] in order.
  * `key` is the short axis label; `label` (default: key) is the tooltip line.
  * `baseline: 'min'` anchors the y-axis at the series minimum instead of 0 —
  * for cumulative series (total XP) whose interesting movement is far above
  * zero; rate-style series keep the honest zero baseline.
+ * When every point carries a numeric `t` (e.g. a day number) the x-axis is
+ * time-true, and a step larger than `gapOver` breaks the line and shades the
+ * span as "not tracked" instead of drawing across days nobody measured.
+ * `rail: true` puts event markers on a strip under the axis, off the line.
  */
-export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty, label = '' } = {}) {
+export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt = kk, axisFmt = fmt, empty, label = '', gapOver = Infinity, rail = false } = {}) {
   if (!data.length) return vizEmpty(empty);
-  const pad = { t: 16, r: 16, b: 26, l: 46 }; // t/r on the spacing scale; b = axis band, l = tick gutter
+  const hasEvents = data.some((d) => d.events?.length);
+  const pad = { t: 16, r: 16, b: rail && hasEvents ? 38 : 26, l: 46 }; // t/r on the spacing scale; b = axis band (+ event rail), l = tick gutter
   const max = Math.max(...data.map((d) => d.n), baseline === 'min' ? -Infinity : 1);
   const min = baseline === 'min' ? Math.min(...data.map((d) => d.n)) : 0;
   const { lo, hi, ticks } = niceTicks(min, max);
   const span = Math.max(hi - lo, 1);
   const w = width - pad.l - pad.r;
   const h = height - pad.t - pad.b;
-  const x = (i) => pad.l + (data.length === 1 ? w / 2 : (i / (data.length - 1)) * w);
-  const y = (v) => pad.t + h - ((v - lo) / span) * h;
   const last = data.length - 1;
+  const timed = data.every((d) => Number.isFinite(d.t));
+  const at = (i) => (timed ? data[i].t : i);
+  const t0 = at(0);
+  const tSpan = at(last) - t0;
+  const x = (i) => pad.l + (tSpan === 0 ? w / 2 : ((at(i) - t0) / tSpan) * w);
+  const y = (v) => pad.t + h - ((v - lo) / span) * h;
+  const base = pad.t + h;
 
-  const pts = data.map((d, i) => `${x(i).toFixed(1)},${y(d.n).toFixed(1)}`);
-  const line = `M${pts.join(' L')}`;
-  const area = `${line} L${x(last).toFixed(1)},${pad.t + h} L${x(0).toFixed(1)},${pad.t + h} Z`;
+  // contiguous runs; a jump in t past gapOver starts a new one
+  const runs = [[0]];
+  for (let i = 1; i <= last; i++) {
+    if (timed && at(i) - at(i - 1) > gapOver) runs.push([]);
+    runs.at(-1).push(i);
+  }
+  const pt = (i) => `${x(i).toFixed(1)},${y(data[i].n).toFixed(1)}`;
+  const line = runs.map((run) => `M${run.map(pt).join(' L')}`).join(' ');
+  const area = runs.map((run) => `M${x(run[0]).toFixed(1)},${base} L${run.map(pt).join(' L')} L${x(run.at(-1)).toFixed(1)},${base} Z`).join(' ');
+  const gaps = runs.slice(1).map((run) => {
+    const x1 = x(run[0] - 1);
+    const x2 = x(run[0]);
+    const note = x2 - x1 >= 64
+      ? `<text class="vgap-label" x="${((x1 + x2) / 2).toFixed(1)}" y="${pad.t + 10}" text-anchor="middle">not tracked</text>`
+      : '';
+    return `<rect class="vgap" x="${x1.toFixed(1)}" y="${pad.t}" width="${(x2 - x1).toFixed(1)}" height="${h}"><title>Not tracked: ${esc(data[run[0] - 1].label ?? data[run[0] - 1].key)} → ${esc(data[run[0]].label ?? data[run[0]].key)}</title></rect>${note}`;
+  }).join('');
+  const lonely = new Set(runs.filter((run) => run.length === 1).map((run) => run[0]));
+
   // past 48 points the dot row reads as noise — hide the marks and let the
   // hover layer surface the nearest one (data-r is each dot's resting size).
   // The current/last point stays visible regardless — the reference mockup
-  // always marks "you are here" with a small solid dot at the line's end.
-  const dotR = data.length > 48 ? 0 : 3;
+  // always marks "you are here" with a small solid dot at the line's end —
+  // and so does a point with no neighbour, which draws no line at all.
+  // ...and so do they when points sit closer than a dot's own ring (a 48-week
+  // year on a phone chart turned the line into a string of beads)
+  const dotR = data.length > 48 || w / Math.max(1, last) < 10 ? 0 : 3;
   const dots = data.map((d, i) => {
-    const r = i === last ? Math.max(dotR, 3) : dotR;
+    const r = i === last ? Math.max(dotR, 3) : lonely.has(i) ? Math.max(dotR, 2) : dotR;
     const cls = i === last ? 'vdot vdot-current' : 'vdot';
-    return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${dotR}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`;
+    return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${r}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`;
   }).join('');
   // on a dense series (the same >48 threshold that hides the dots) full-size
   // event markers merged into a solid band: draw them small and tight instead
   const dense = data.length > 48;
-  const evR = dense ? 2.5 : 5;
+  const evR = dense || rail ? 2.5 : 5;
   const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
-    const cx = x(i) + (eventIndex * evR * 1.6);
-    const cy = y(d.n) - (evR + 4);
-    const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense ? ' vevent-dense' : ''}`;
+    const cx = rail ? x(i) : x(i) + (eventIndex * evR * 1.6);
+    const cy = rail ? base + 8 : y(d.n) - (evR + 4);
+    const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense || rail ? ' vevent-dense' : ''}`;
     return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${evR}"><title>${esc(event.label)}</title></circle>`;
   })).join('');
   const grid = ticks.map((v) =>
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
       <text class="vtick" x="${pad.l - 6}" y="${y(v).toFixed(1)}" text-anchor="end" dominant-baseline="central">${axisFmt(v)}</text>`).join('');
-  // a narrow chart carries three date labels, a wide one four
-  const xIdx = [...new Set(data.length >= 8 && width >= 520
-    ? [0, Math.round(last / 3), Math.round((2 * last) / 3), last]
-    : [0, last >> 1, last])];
+  // a narrow chart carries three date labels, a wide one four — chosen at even
+  // steps of time (not of index) on a time-true axis, so they never bunch up
+  const slots = data.length >= 8 && width >= 520 ? 4 : 3;
+  const nearest = (target) => data.reduce((best, _, i) => (Math.abs(at(i) - target) < Math.abs(at(best) - target) ? i : best), 0);
+  const xIdx = [...new Set(Array.from({ length: slots }, (_, k) => (k === 0 ? 0 : k === slots - 1 ? last : nearest(t0 + (tSpan * k) / (slots - 1)))))];
   // edge labels anchor inward so they never clip at the viewBox
   const anchor = (i) => (i === 0 ? 'start' : i === last ? 'end' : 'middle');
   const marks = xIdx.map((i) =>
@@ -233,8 +263,8 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
   const grad = flowGradientDefs();
 
   const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
-  const name = `${label ? `${label}: ` : ''}${data[0].key} ${fmt(data[0].n)} to ${data.at(-1).key} ${fmt(data.at(-1).n)}, peak ${fmt(peak.n)} on ${peak.key}`;
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
+  const name = `${label ? `${label}: ` : ''}${data[0].key} ${fmt(data[0].n)} to ${data.at(-1).key} ${fmt(data.at(-1).n)}, peak ${fmt(peak.n)} on ${peak.key}${runs.length > 1 ? `, ${runs.length - 1} untracked gap${runs.length > 2 ? 's' : ''}` : ''}`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">${grad.defs}${gaps}${grid}<path class="varea" fill="url(#${grad.area})" d="${area}"/><path class="vline" stroke="url(#${grad.line})" d="${line}"/>${dots}${events}${marks}</svg>`;
 }
 
 /**
@@ -242,15 +272,17 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
  * keys only when the series actually carries those event types — an unused
  * key would promise markers the data never shows.
  */
-export function flowLegend(data, seriesLabel, fmt = kk) {
+export function flowLegend(data, seriesLabel, fmt = kk, { gapOver = Infinity } = {}) {
   if (!data.length) return '';
   const last = data.at(-1);
   const hasLevel = data.some((d) => (d.events || []).some((e) => e.type === 'level'));
   const hasDeath = data.some((d) => (d.events || []).some((e) => e.type === 'death'));
+  const hasGap = data.some((d, i) => i && Number.isFinite(d.t) && d.t - data[i - 1].t > gapOver);
   return `<ul class="viz-legend">
     <li><i class="viz-legend-swatch viz-legend-line"></i>${esc(seriesLabel)} <b class="num">${fmt(last.n)}</b></li>
     ${hasLevel ? '<li><i class="viz-legend-swatch viz-legend-level"></i>Level-up</li>' : ''}
     ${hasDeath ? '<li><i class="viz-legend-swatch viz-legend-death"></i>Death</li>' : ''}
+    ${hasGap ? '<li><i class="viz-legend-swatch viz-legend-gap"></i>Not tracked</li>' : ''}
   </ul>`;
 }
 
