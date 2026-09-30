@@ -131,6 +131,20 @@ Evidence and full source pointers for every item are in `.claude/qa-shots/critiq
 | 20 | `11ace93` | Inline styles moved to classes (`.facts-3`, `.critter-link`, dossier section spacing). Charm stages on two lines. Dead `th` pointer cursor and `.section-bar a.fine` removed. Reduced motion runs one iteration. Price rows no longer nest two controls in one `<label>`. | Charm facts "Stage 1 / 5%"; dossier spacing unchanged. |
 | 21 | `b95cf6c` | `decodeEntities()` in lib/text.js, applied where the engine reads cached loot and at capture in `enrich-codex`. Smoke asserts it. Planner cards use Bestiary display names. | Dragon dossier "dragon's tails"; cards "Naga Warrior · Naga Archer · Makara". |
 | (M-17) | `6014fc1` | Home KPIs are two-up on phones like every other KPI row. | 320/375: Next hunt is on the first screen. |
+| (regressions caught in review) | `eb25803`, `53b36fd` | The scoped header reserve had also narrowed Character's level bar, so it was removed from `.character-hero`. The Tools KPI pairing had broken the one-row layout wide cards already had, so a container query on `.tool-card` restores three-across at ≥400 px card width. | After shots: Character bar full width. Tools KPIs 1 row at 768/1280 and 2 rows at 375/1440 (narrow cards). |
+
+## Done criteria (after set: 96 captures, `.claude/qa-shots/after/report.json`)
+
+| Criterion | Result |
+| --- | --- |
+| No horizontal overflow at 375/768/1280/1440, both themes | 0 of 96 captures overflow (320 px also checked on the pages that changed). |
+| All text on the type scale | No off-scale rendered size (13.33, 17 and 22 are gone). No weight 900. Spacing uses `--s*`, except the documented 2/6/10 px half-steps (§12 #9). |
+| Consistent hover/focus/active/disabled | Every interactive component in the state matrix has hover, a visible focus ring, pressed, and a non-hover disabled state (critique-code.md §1, cycles 4 and 12). |
+| No console errors; tests pass | 0 console errors or warnings in 96 captures. `node pipeline/smoke.mjs` and `node --check` pass on every touched file. |
+| No high-severity item left outside "Needs decision" | Issues 1–5 (all High) are done. What remains is Low or listed under Needs decision. |
+| Mobile targets ≥ 44 px | Undersized items at 375: 278 → 6. The 6 are table/pill links and number-only steps with an invisible 44 px hit halo. Links inside sentences are WCAG-exempt. |
+
+Before/after pairs for the largest changes are in `.claude/qa-shots/compare/`.
 
 ## Removed (restorable from the commit named)
 
