@@ -110,6 +110,14 @@ Evidence and full source pointers for every item are in `.claude/qa-shots/critiq
 
 ## Done
 
+| # | Commit | What changed at the source | Verified |
+| --- | --- | --- | --- |
+| 1 | `b25e52d` | Figures `white-space: nowrap`. The inline sparkline shrinks, then wraps below the value. Highscore values wrap under their label. Character KPIs go 2-up ≤1000 px. | Character and Progress at 320/375/768/1280, both themes. No overflow (one 10 px overflow found at 1280 on the first try and fixed before commit). |
+| 2 | `27fa48f` | ≤700 px: stage gutters 16 px, `.panel-pad` 16 px. The utility-cluster reserve is a float beside the page head's first lines (Home: its first rows; Character: the hero). Two `!important`s removed. | 11 states at 320/375. Planner lede goes from 5 lines to 4 at full width, "400+" is no longer clipped, and Tools card titles fit one line. |
+| 3 | `9c27c37` | New `--ink-info`/`--ink-error` text tones (light 0,100,183 / 196,30,48; dark 64,172,255 / 255,105,115). `--ink-success` nudged to 0,122,18. Every text use of `--blue`/`--red` is routed to them. Prose links get the info tone and an underline; `a.pill` gets a link cue. | Every text/surface pair ≥4.5:1 in both themes (`contrast.mjs`). Dossier links are visible. |
+| 4 (+15) | `065aff9` | Focus rings inside scrollers use `outline-offset: -2px`. Sort-menu focus keeps the ring. The current rail/tab icon gets a 2.4 stroke. Buttons: pressed state (`opacity .7`), destructive hover, no hover while disabled. Segmented, rule filters, back link, attention link and disclosures get hovers. Stepper disabled opacity is .3. | Keyboard Tab on Planner at 375 dark: ring fully visible, compass bolder. |
+| 5 | `cca57a5` | ≤700 px: fields and the sort button at 16 px (no iOS zoom). Segmented, Home shortcuts, back link, attention link and summary reach ≥44 px. Link pills, table links and number-only steps get an invisible 44 px hit halo. | Undersized mobile targets 87 → 11. The 11 are halo'd pill/table links that the box measurement can't see. |
+
 ## Remaining
 
 ## Needs decision

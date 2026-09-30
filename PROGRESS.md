@@ -7,10 +7,11 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - Baseline `.claude/qa-shots/before/` — 12 states × 375/768/1280/1440 × light/dark (96 png + full jpg + report.json). No overflow, no console errors.
 - Contrast `.claude/qa-shots/contrast.mjs`: light blue text 3.17, pill-info 2.76, red text 3.69, ink-2 on surface-2 4.34.
 - Critiques on disk: `.claude/qa-shots/critique-mobile.md`, `critique-code.md`. Desktop critic died with quota — do desktop review inline (do NOT relaunch).
-- `DESIGN_QA.md` drafted: method, inventory, target scales. Issue list still empty.
+- `DESIGN_QA.md` complete: inventory, target scales, 21 ranked issues, Needs decision (commit 46a8daa).
+- Cycles done (DESIGN_QA #): 1 figures b25e52d · 2 gutters 27fa48f · 3 text tones+links 9c27c37 · 4 states (+#15 buttons) 065aff9 · 5 mobile targets+16px fields cca57a5. After-shots `.claude/qa-shots/after-cN`.
+- NOTE: browser pane caches CSS — force `fetch(u,{cache:'reload'})` then reload before judging. Preview server must be running (harness exits 2 if not).
 
 ## Remaining
-1. Inline desktop review (1280/1440 light full jpgs) → merge with the two critiques → ranked issue list in `DESIGN_QA.md`.
 2. Fix loop, one issue class per commit (smoke + node --check + re-shoot affected pages to `.claude/qa-shots/after/`), update `DESIGN_QA.md` + this file after each.
 3. Final report.
 
@@ -20,7 +21,8 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - AGENTS.md binding: tokens only, §5 UI rules, §12 = owner decisions.
 
 ## Files changed
-- `PROGRESS.md`, `DESIGN_QA.md` (new, uncommitted)
+- `assets/css/base.css`, `assets/css/pages.css` — cycles 1-5
+- `DESIGN_QA.md`, `PROGRESS.md` — docs
 
 ## Next step
-- Read `critique-mobile.md` and `critique-code.md`, review desktop shots inline, write ranked issue list into `DESIGN_QA.md`, commit docs, then start fix cycle 1 (Character KPI break + dashboard grid).
+- Cycle 6 = DESIGN_QA #6 grid orphans (metric-row/home-metric-grid ≤1100 2-col + odd last spans; stat-cards 3-col; codex auto-fill 240 + PAGE_SIZE 12; tool-kpis 3-col; home-hunt-stats keep 3-col). Then #7 scrollers, #8 dark states, #9 tools grid, #10 type.
