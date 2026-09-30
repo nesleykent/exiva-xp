@@ -8,7 +8,7 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - Contrast `.claude/qa-shots/contrast.mjs`: light blue text 3.17, pill-info 2.76, red text 3.69, ink-2 on surface-2 4.34.
 - Critiques on disk: `.claude/qa-shots/critique-mobile.md`, `critique-code.md`. Desktop critic died with quota — do desktop review inline (do NOT relaunch).
 - `DESIGN_QA.md` complete: inventory, target scales, 21 ranked issues, Needs decision (commit 46a8daa).
-- Cycles done (DESIGN_QA #): 1 figures b25e52d · 2 gutters 27fa48f · 3 text tones+links 9c27c37 · 4 states (+#15 buttons) 065aff9 · 5 mobile targets+16px fields cca57a5. After-shots `.claude/qa-shots/after-cN`.
+- Cycles done (DESIGN_QA #): 1 figures b25e52d · 2 gutters 27fa48f · 3 text tones+links 9c27c37 · 4 states (+#15 buttons) 065aff9 · 5 mobile targets+16px fields cca57a5 · 6 grid orphans 67219ae · 7 scrollers 197a7d4 · 8 dark tracks/selected 651af70 · 9 tools grid 8233bcd · 10 type scale 8425afe. After-shots `.claude/qa-shots/after-cN`.
 - NOTE: browser pane caches CSS — force `fetch(u,{cache:'reload'})` then reload before judging. Preview server must be running (harness exits 2 if not).
 
 ## Remaining
@@ -25,4 +25,4 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - `DESIGN_QA.md`, `PROGRESS.md` — docs
 
 ## Next step
-- Cycle 6 = DESIGN_QA #6 grid orphans (metric-row/home-metric-grid ≤1100 2-col + odd last spans; stat-cards 3-col; codex auto-fill 240 + PAGE_SIZE 12; tool-kpis 3-col; home-hunt-stats keep 3-col). Then #7 scrollers, #8 dark states, #9 tools grid, #10 type.
+- Cycle 11 = DESIGN_QA #11 empty states: `emptyState()` fragment in shell.js → `.empty-action` everywhere (charms.js:101, admin.js:~90/111, tools.js:~363, character.js:354 deaths, grounds.js:408 + creatures.js:270 no-results outside the grid); `.empty-action .btn {flex-shrink:0; white-space:nowrap}`. Then #12 focus loss, #13 names/headings/live region, #14 charts, #16 selects, #17 counts, #18 log copy, #19 charms deep link, #20 hygiene, #21 loot entities. Final: full after capture (`run-all.sh after --full`), DESIGN_QA Done table rows 6-10+, report.
