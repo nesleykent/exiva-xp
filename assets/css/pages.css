@@ -906,7 +906,9 @@ table.grid a:hover { text-decoration: underline; }
 
 @media (max-width: 700px) {
   .codex-grid, .planner-grid { grid-template-columns: minmax(0, 1fr); }
-  .home-metric-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s5); }
+  /* two-up like every other page's KPI row (the ≤1000px rule spans an odd last
+     card): a one-column stack pushed Home's Next hunt below the first screen */
+  .home-metric-grid { gap: var(--s2); margin-top: var(--s5); }
   .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); margin-top: var(--s5); }
   .metric { padding: var(--s3); }
   .metric > b, .metric-value-row > b { font-size: var(--fs-24); }
