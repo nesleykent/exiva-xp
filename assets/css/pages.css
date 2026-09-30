@@ -1006,21 +1006,23 @@ table.grid a:hover { text-decoration: underline; }
 /* a span with no tracker reading on a time-true chart: shaded, never drawn across */
 .viz .vgap { fill: rgba(var(--ink-2), .1); }
 .viz .vgap-label { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); }
-/* columns(): the analytic bar + line combo (Progress Daily XP gain). Columns
-   are a quiet tint of the action blue so the trend line reads first; the
-   dashed average and the hatched no-data bands stay neutral. */
-.viz .vcol { fill: rgba(var(--blue), .42); transition: fill var(--t-hover) var(--e-standard); }
-.viz .vcol:hover { fill: rgba(var(--blue), .75); }
-.viz .vtrend { fill: none; stroke: rgb(var(--brand-orange)); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+/* columns(): the analytic bar + line combo (Progress Daily XP gain, Character
+   Experience). One loud gradient, everything else quiet: the columns carry the
+   hero gradient from url(#...) on the element (no competing CSS fill), the
+   trend is primary ink over a surface halo, the reference marks stay neutral. */
+.viz .vcol { transition: opacity var(--t-hover) var(--e-standard); }
+.viz .vcol:hover { opacity: .7; }
+.viz .vtrend, .viz .vtrend-halo { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.viz .vtrend { stroke: rgb(var(--ink)); stroke-width: 2; }
+.viz .vtrend-halo { stroke: rgb(var(--surface-raised)); stroke-width: 5; }
 .viz .vbase { stroke: rgb(var(--line-strong)); }
 .viz .vavg { stroke: rgb(var(--ink-2)); stroke-width: 1; stroke-dasharray: 4 4; }
 .viz .vavg-label, .viz .vunit, .viz .vnodata-label { fill: rgb(var(--ink-2)); font-size: var(--fs-11); font-family: var(--f-ui); font-variant-numeric: tabular-nums; }
-/* a surface-coloured halo keeps reference labels legible where they cross columns */
-.viz .vavg-label, .viz .vnodata-label { paint-order: stroke; stroke: rgb(var(--surface-raised)); stroke-width: 3px; stroke-linejoin: round; }
+/* a surface-coloured halo keeps the no-data label legible over its hatching */
+.viz .vnodata-label { paint-order: stroke; stroke: rgb(var(--surface-raised)); stroke-width: 3px; stroke-linejoin: round; }
 .viz .vnodata-hatch { stroke: rgba(var(--ink-2), .28); stroke-width: 1.5; }
 .viz .vrug-level { fill: rgb(var(--green)); }
 .viz .vrug-death { fill: rgb(var(--red)); }
-.viz .vdot-col { fill: rgb(var(--brand-orange)); }
 .viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
 .viz-legend { display: flex; flex-wrap: wrap; gap: var(--s4); list-style: none; margin: var(--s3) 0 0; padding: 0; font-size: var(--fs-12); color: rgb(var(--ink-2)); }
 .viz-legend li { display: flex; align-items: center; gap: var(--s1); }
@@ -1028,8 +1030,8 @@ table.grid a:hover { text-decoration: underline; }
 .viz-legend-swatch.viz-legend-line { width: 16px; height: 3px; border-radius: var(--r-pill); background: var(--grad-hero); }
 .viz-legend-level { background: rgb(var(--green)); }
 .viz-legend-death { background: rgb(var(--red)); }
-.viz-legend-swatch.viz-legend-col { border-radius: var(--r-xs); background: rgba(var(--blue), .42); }
-.viz-legend-swatch.viz-legend-trend { width: 16px; height: 3px; border-radius: var(--r-pill); background: rgb(var(--brand-orange)); }
+.viz-legend-swatch.viz-legend-col { border-radius: var(--r-xs); background: var(--grad-hero); }
+.viz-legend-swatch.viz-legend-trend { width: 16px; height: 2px; border-radius: var(--r-pill); background: rgb(var(--ink)); }
 .viz-legend-swatch.viz-legend-avg { width: 16px; height: 0; border-radius: 0; border-top: 1px dashed rgb(var(--ink-2)); }
 .viz-legend-swatch.viz-legend-nodata { border-radius: var(--r-xs); background: repeating-linear-gradient(45deg, rgba(var(--ink-2), .35) 0 1.5px, transparent 1.5px 4px); }
 .viz-legend-swatch.viz-legend-rug { width: 2px; height: 10px; border-radius: 0; background: rgb(var(--green)); }

@@ -275,6 +275,10 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
  * ([{t, label}], see dateTicks) the calendar axis, and events a tick rug
  * under it. Invisible .vdot marks let attachVizHover snap to the nearest
  * column, whose `tip` becomes the tooltip line.
+ * Colour follows the Instagram design system — one loud gradient, everything
+ * else quiet: the columns are the data and wear the hero gradient, swept
+ * rose → purple along the time axis (the same sweep flow() gives its line);
+ * the trend is drawn in primary ink over a surface halo so it reads on top.
  */
 export function columns(data, { width = 720, height = 240, fmt = kk, label = '', empty, trend = null, average = null, step = 1, gapOver = 1, ticks = [], unit = '' } = {}) {
   if (!data.length) return vizEmpty(empty);
@@ -292,6 +296,7 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
   const slot = (w / Math.max(t1 - t0, 1)) * step;
   const colW = Math.max(1, slot * (slot > 6 ? 0.72 : 0.8));
   const hatch = `viz-hatch-${gradSeq++}`;
+  const sweep = `viz-grad-col-${gradSeq++}`;
 
   const grid = yTicks.map((v) => `<line class="${v === 0 ? 'vbase' : 'vaxis'}" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>
     <text class="vtick" x="${pad.l - 8}" y="${y(v).toFixed(1)}" text-anchor="end" dominant-baseline="central">${fmt(v)}</text>`).join('');
@@ -307,7 +312,7 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
 
   const bars = data.map((d) => {
     const yTop = y(d.n);
-    return `<rect class="vcol" x="${(x(d.t) - colW / 2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${colW.toFixed(1)}" height="${(base - yTop).toFixed(1)}"/>`;
+    return `<rect class="vcol" fill="url(#${sweep})" x="${(x(d.t) - colW / 2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${colW.toFixed(1)}" height="${(base - yTop).toFixed(1)}"/>`;
   }).join('');
 
   let trendPath = '';
@@ -320,9 +325,13 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
       pen = 'L';
     }
   }
+  // the average's value sits in the caption band above the plot, keyed by a
+  // dashed stub — at the end of the line itself it landed on the last columns
+  const avgText = average != null ? `avg ${fmt(average)}` : '';
   const avgLine = average != null
     ? `<line class="vavg" x1="${pad.l}" y1="${y(average).toFixed(1)}" x2="${width - pad.r}" y2="${y(average).toFixed(1)}"/>
-      <text class="vavg-label" x="${width - pad.r}" y="${(y(average) - 5).toFixed(1)}" text-anchor="end">avg ${fmt(average)}</text>`
+      <line class="vavg" x1="${(width - pad.r - avgText.length * 6.2 - 22).toFixed(1)}" y1="${pad.t - 16}" x2="${(width - pad.r - avgText.length * 6.2 - 6).toFixed(1)}" y2="${pad.t - 16}"/>
+      <text class="vavg-label" x="${width - pad.r}" y="${pad.t - 12}" text-anchor="end">${avgText}</text>`
     : '';
 
   const rug = data.flatMap((d) => {
@@ -344,13 +353,14 @@ export function columns(data, { width = 720, height = 240, fmt = kk, label = '',
     return `<line class="vbase" x1="${cx.toFixed(1)}" y1="${base}" x2="${cx.toFixed(1)}" y2="${base + 4}"/><text class="vtick" x="${lx.toFixed(1)}" y="${height - 8}" text-anchor="middle">${esc(tk.label)}</text>`;
   }).join('');
 
-  const marks = data.map((d, i) => `<circle class="vdot vdot-col" cx="${x(d.t).toFixed(1)}" cy="${y(trend?.[i] ?? d.n).toFixed(1)}" r="0" data-r="0" data-id="${esc(d.t)}" data-key="${esc(d.key ?? '')}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.tip ?? d.key ?? '')}"/>`).join('');
+  const marks = data.map((d, i) => `<circle class="vdot" cx="${x(d.t).toFixed(1)}" cy="${y(trend?.[i] ?? d.n).toFixed(1)}" r="0" data-r="0" data-id="${esc(d.t)}" data-key="${esc(d.key ?? '')}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.tip ?? d.key ?? '')}"/>`).join('');
 
   const peak = data.reduce((a, d) => (d.n > a.n ? d : a), data[0]);
   const name = `${label ? `${label}: ` : ''}${data.length} columns, ${data[0].key ?? ''} to ${data.at(-1).key ?? ''}, peak ${fmt(peak.n)} on ${peak.key ?? ''}${average != null ? `, average ${fmt(average)}` : ''}${gaps.length ? `, ${gaps.length} span${gaps.length === 1 ? '' : 's'} with no data` : ''}`;
   return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(name)}" data-pt="${pad.t}" data-ph="${h}" xmlns="http://www.w3.org/2000/svg">
-    <defs><pattern id="${hatch}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="vnodata-hatch" x1="0" y1="0" x2="0" y2="6"/></pattern></defs>
-    ${caption}${gaps.join('')}${grid}${bars}${avgLine}${trendPath ? `<path class="vtrend" d="${trendPath.trim()}"/>` : ''}${rug}${xTicks}${marks}</svg>`;
+    <defs><pattern id="${hatch}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="vnodata-hatch" x1="0" y1="0" x2="0" y2="6"/></pattern>
+      <linearGradient id="${sweep}" gradientUnits="userSpaceOnUse" x1="${pad.l}" y1="0" x2="${width - pad.r}" y2="0">${heroStops()}</linearGradient></defs>
+    ${caption}${gaps.join('')}${grid}${bars}${avgLine}${trendPath ? `<path class="vtrend-halo" d="${trendPath.trim()}"/><path class="vtrend" d="${trendPath.trim()}"/>` : ''}${rug}${xTicks}${marks}</svg>`;
 }
 
 /** Legend for columns(): the column series, its trend and the reference marks actually drawn. */

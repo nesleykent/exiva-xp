@@ -35,5 +35,8 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - Plan: new `columns()` in viz/svg.js (day/week columns + rolling-average trend + dashed range-average ref line + hatched no-data + tick rug + nice date ticks + hidden vdots for hover), `rollingMean` in lib/stats.js, `dateTicks` in lib/fmt.js, stats strip (mini-metrics) + custom legend in analytics.js. Compare 2 palettes (blue cols+orange trend vs grey cols+gradient trend), pick, log §8 decision (Tableau style supersedes hero-gradient line on this one chart).
 - DONE: blue columns + orange trend (Tableau classic) chosen; verified 320-1280 both themes; §8 row added; shots `.claude/qa-shots/dxp/b-*.png`, `a-375.png`.
 
+## Follow-up 3 (user): "yes [convert Character] but now you lose the site design-system colours" + "gray is not part of the system check instagram design system"
+- DONE: IG DS manual/02-color.md checked (scratchpad clone). columns() = hero-gradient sweep columns, ink trend + halo, avg value in caption band. Character Experience chart converted (year=months, month=days). Verified both pages 320-1280 both themes. Open Q: bars() grey rows (§12 #16).
+
 ## Next step
 - DONE. Only the final report remains (chat). Open items are in DESIGN_QA.md → Remaining / Needs decision and AGENTS.md §12 #16.

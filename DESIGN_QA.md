@@ -180,6 +180,27 @@ The unused `flow()` event-rail option was removed. Smoke asserts that `columns()
 
 Verified at 320/375/768/1280 in both themes: all three ranges, tooltips, no overflow and no console errors.
 
+## Follow-up 3: design-system colours (owner, 2026-09-30)
+
+The owner's reports were "now you lose the site design-system colours" and "grey is not part of the system, check Instagram design system". The design system's colour manual (`nesleykent/instagram-design-system`, `manual/02-color.md`) says: one loud gradient, everything else quiet. Its greys are chrome (text, separators, strokes), never data.
+
+`columns()` now draws:
+
+- **Columns** in the hero gradient, swept rose → purple along the time axis.
+- **The trend** in primary ink (black in light mode, near-white in dark) over a surface halo.
+- **The average** as a dashed chrome line, with its value in the caption band so it never lands on a column.
+- **Hatched no-data spans and a level-up/death tick rug** in the system's fixed success and error tones.
+
+Character's Experience chart moved to the same component:
+
+- **A year** shows one column per tracked month. March and April 2026 are now a hatched gap, where they used to be a normal Feb → May step.
+- **A month** shows one column per tracked day, with a 7-day trend.
+- **Tooltips** give tracked-day counts.
+
+The dead `chartPoint` helper is removed. Verified on both pages at 320/375/768/1280 in both themes: no overflow, no console errors, smoke passes.
+
+Open: `bars()` non-leader rows are still grey (§5 exception 2), which is an owner call and is listed in §12 #16.
+
 ## Removed (restorable from the commit named)
 
 - **Planner filter-bar count** "167 grounds · 189 rows" and **Codex filter-bar count** "833 creatures" (`19900d8`). Each duplicated the "Showing N of M" line directly below it.

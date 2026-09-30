@@ -5,15 +5,15 @@
 
 import { boot } from './_boot.js';
 import { esc, initials } from '../lib/text.js';
-import { DAY_MS, MONTHS, compact, gp, kk, nf, day, md, pct } from '../lib/fmt.js';
-import { average } from '../lib/stats.js';
+import { DAY_MS, MONTHS, compact, dateTicks, gp, kk, nf, day, md, pct } from '../lib/fmt.js';
+import { average, rollingMean } from '../lib/stats.js';
 import {
   DEFAULT_TIMEZONE,
   TIMEZONE_STORAGE_KEY,
   formatDateInTimezone,
 } from '../lib/timezones.js';
 import { $, metric, ring } from '../shell.js';
-import { flow, flowLegend, sparkline, attachVizHover, chartInto, vizEmpty } from '../viz/svg.js';
+import { columns, columnsLegend, sparkline, attachVizHover, chartInto, vizEmpty } from '../viz/svg.js';
 import { loadCharacter, loadCharacterHistory, logbook } from '../data/sources.js';
 import { dailyGains, experienceUntilNextLevel, progressWithinLevel, xpPace } from '../engine/progression.js';
 import { baseVocation, vocationFits } from '../engine/rules.js';
@@ -130,33 +130,66 @@ const monthName = (monthKey) => MONTHS[Number(monthKey) - 1];
  * A whole year aggregates to monthly totals (a smooth ~12-point area); a
  * single month shows its daily gains. Level-up and death markers ride along.
  */
+/*
+ * Experience chart data in the columns() shape: a year shows one column per
+ * tracked month (placed at mid-month, so a month the tracker missed leaves a
+ * hatched gap instead of Feb running straight into May); a month shows one
+ * column per tracked day under a 7-day trend.
+ */
+const dayNumber = (iso) => Math.round(Date.parse(`${iso}T00:00:00Z`) / DAY_MS);
+const longDate = (iso) => `${md(iso)}, ${iso.slice(0, 4)}`;
+
 function experienceChartData(year, month) {
   const inYear = historyRows.filter((row) => row.date.startsWith(year));
   if (month === 'all') {
     const byMonth = new Map();
     for (const row of inYear) {
+      if (row.gain == null) continue;
       const key = row.date.slice(5, 7);
-      byMonth.set(key, (byMonth.get(key) || 0) + (row.gain || 0));
+      if (!byMonth.has(key)) byMonth.set(key, { gain: 0, days: 0, events: [] });
+      const entry = byMonth.get(key);
+      entry.gain += row.gain;
+      entry.days += 1;
+      entry.events.push(...chartEvents(row.date));
     }
-    const months = [...byMonth.keys()].sort();
+    const points = [...byMonth.keys()].sort().map((monthKey) => {
+      const entry = byMonth.get(monthKey);
+      const levels = entry.events.filter((e) => e.type === 'level').length;
+      return {
+        t: dayNumber(`${year}-${monthKey}-15`),
+        n: entry.gain,
+        key: monthName(monthKey),
+        events: entry.events,
+        tip: [`${monthName(monthKey)} ${year}`, `${nf(entry.days)} tracked day${entry.days === 1 ? '' : 's'}`, levels ? `${nf(levels)} level-up${levels === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · '),
+      };
+    });
     return {
-      note: `Monthly XP gained across ${year}`,
-      data: months.map((monthKey) => {
-        const events = [];
-        if (inYear.some((row) => row.date.slice(5, 7) === monthKey && row.levelDelta > 0)) {
-          events.push({ type: 'level', label: 'Levelled up' });
-        }
-        if (deaths.some((death) => String(death.time || '').slice(0, 7) === `${year}-${monthKey}`)) {
-          events.push({ type: 'death', label: 'Death' });
-        }
-        return { id: `${year}-${monthKey}`, key: monthName(monthKey), label: `${monthName(monthKey)} ${year}`, n: byMonth.get(monthKey), events };
-      }),
+      points,
+      step: 30,
+      gapOver: 45,
+      trend: null,
+      unit: 'XP gained per month',
+      series: 'XP gained per month',
+      averageLabel: 'Monthly average',
+      ticks: () => points.map((p) => ({ t: p.t, label: p.key })),
     };
   }
   const inMonth = inYear.filter((row) => row.date.slice(5, 7) === month && row.gain != null);
+  const points = inMonth.map((row) => ({ t: dayNumber(row.date), n: row.gain, key: md(row.date), date: row.date, events: chartEvents(row.date) }));
+  const trend = rollingMean(points, 7, 4);
+  points.forEach((p, k) => {
+    const levels = p.events.filter((e) => e.type === 'level').length;
+    p.tip = [longDate(p.date), trend[k] != null ? `7-day avg ${compact(trend[k])}` : '', levels ? `${nf(levels)} level-up${levels === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ');
+  });
   return {
-    note: `Daily XP gained in ${monthName(month)} ${year}`,
-    data: inMonth.map((row) => chartPoint(row, row.gain)),
+    points,
+    step: 1,
+    gapOver: 1,
+    trend,
+    unit: 'XP gained per day',
+    series: 'XP gained per day',
+    averageLabel: 'Month average',
+    ticks: (width) => dateTicks(points[0].t, points.at(-1).t, Math.max(2, Math.floor((width - 62) / 88))),
   };
 }
 
@@ -172,11 +205,6 @@ function chartEvents(date) {
     events.push({ type: 'death', label: row.reason || `Died at level ${nf(row.level)}` });
   });
   return events;
-}
-
-function chartPoint(row, n) {
-  // short axis label; the canonical ISO date rides along for the tooltip
-  return { id: row.date, key: md(row.date), label: row.date, n, events: chartEvents(row.date) };
 }
 
 function sampledSeries(series, maxPoints = 40) {
@@ -465,9 +493,30 @@ function renderMonthSeg() {
 function renderXpChart() {
   const chart = $('#xp-chart');
   if (!chart) return;
-  const selected = experienceChartData(xpState.year, xpState.month);
-  chartInto(chart, (width) => flow(selected.data, { label: 'Experience gained', width, baseline: 'zero', fmt: compact, empty: 'Not enough rows for this chart yet.' }));
-  $('#xp-chart-legend').innerHTML = flowLegend(selected.data, 'XP gained', compact);
+  const view = experienceChartData(xpState.year, xpState.month);
+  const { points } = view;
+  const mean = points.length ? average(points.map((p) => p.n)) : null;
+  chartInto(chart, (width) => columns(points, {
+    label: `Experience gained, ${xpState.month === 'all' ? xpState.year : `${monthName(xpState.month)} ${xpState.year}`}`,
+    width,
+    height: width < 480 ? 220 : 240,
+    fmt: compact,
+    step: view.step,
+    gapOver: view.gapOver,
+    trend: view.trend,
+    average: mean,
+    unit: view.unit,
+    ticks: points.length ? view.ticks(width) : [],
+    empty: 'Not enough rows for this chart yet.',
+  }));
+  $('#xp-chart-legend').innerHTML = points.length ? columnsLegend({
+    series: view.series,
+    trend: view.trend ? '7-day average' : '',
+    average: view.averageLabel,
+    noData: points.some((p, k) => k && p.t - points[k - 1].t > view.gapOver),
+    levels: points.some((p) => p.events.some((e) => e.type === 'level')),
+    deaths: points.some((p) => p.events.some((e) => e.type === 'death')),
+  }) : '';
   attachVizHover(chart.closest('.viz'));
   $('#xp-year')?.querySelectorAll('[data-year]').forEach((btn) => {
     btn.setAttribute('aria-pressed', String(btn.dataset.year === xpState.year));
