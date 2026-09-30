@@ -494,4 +494,8 @@ if ($('#xp-chart')) {
   renderMonthSeg();
   renderXpChart();
 }
+
+// the heatmap reads oldest → newest; on a narrow panel open it at today, not April
+const heatmap = stage.querySelector('.heatmap');
+if (heatmap) heatmap.scrollLeft = heatmap.scrollWidth;
 export {};
