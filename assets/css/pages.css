@@ -371,18 +371,24 @@ table.grid a:hover { text-decoration: underline; }
 .tool-disclosure summary:hover { text-decoration: underline; }
 .tool-disclosure summary { color: rgb(var(--ink-info)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .tool-disclosure .tool-fields { margin-top: var(--s3); }
+/* the imbuement calculator lists 23 cards: in one grid column it stood
+   ~1,300px tall beside empty space and pushed Profit a screen below its
+   neighbours. It goes last and full width, where its cards sit 3-4 across. */
 #level-tool { order: 3; }
-#imbuement-tool { order: 4; }
-#profit-tool { order: 5; }
+#profit-tool { order: 4; }
+#imbuement-tool { order: 5; grid-column: 1 / -1; }
 /* Reuses .filter-bar for its field layout only — inside a tool card it needs
    no surface of its own. The position/backdrop resets it used to carry went
    with the sticky bar itself. */
 #imb-filter-bar { margin: 0; padding: 0; border: 0; background: transparent; }
+/* the subtitle drops below the title when both don't fit, instead of the
+   two squeezing each other into three-line columns */
 .tool-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--s3);
+  gap: var(--s1) var(--s3);
 }
 .tool-head h2 {
   font-size: var(--fs-18);
