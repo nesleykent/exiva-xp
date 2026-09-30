@@ -872,6 +872,16 @@ table.grid a:hover { text-decoration: underline; }
   .home-shortcuts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
   .home-shortcuts a { min-width: 0; border-radius: var(--r-md); }
   .admin-rule-filter { min-height: var(--tap); }
+  /* the rest of the 44pt contract: controls outside the shared primitives */
+  .segmented button, .home-shortcuts a { min-height: var(--tap); }
+  .segmented button { min-width: var(--tap); }
+  .back-link, .home-attention-list a { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .tool-disclosure summary { line-height: var(--tap); }
+  /* inline link chips keep their visual size; an invisible halo takes the hit */
+  a.pill, table.grid a, .stepper-btn { position: relative; }
+  a.pill::after, table.grid a::after { content: ''; position: absolute; inset: calc((100% - var(--tap)) / 2) 0; }
+  /* a number-only step (labels hidden ≤520px) is 26px wide: widen the hit, not the connector gaps */
+  .stepper-btn::after { content: ''; position: absolute; inset: 0 calc((100% - var(--tap)) / 2); }
   #imb-tier-cards { grid-template-columns: 1fr; }
   .tool-grid { grid-template-columns: minmax(0, 1fr); }
   .tool-fields .lbl,

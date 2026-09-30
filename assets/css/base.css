@@ -440,6 +440,10 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   .btn,
   input[type="text"], input[type="search"], input[type="number"], select, textarea,
   .sort-menu-btn, .sort-menu-item { min-height: var(--tap); }
+  /* iOS Safari zooms the page into any field under 16px on focus and leaves
+     it zoomed; the Log a hunt paste box (12px) zoomed to ~133% */
+  input[type="text"], input[type="search"], input[type="number"], select, textarea,
+  .sort-menu-btn { font-size: var(--fs-16); }
 }
 
 /* gradient text — whole-word treatment only */
