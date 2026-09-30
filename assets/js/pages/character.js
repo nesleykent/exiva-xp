@@ -466,7 +466,7 @@ function renderXpChart() {
   const chart = $('#xp-chart');
   if (!chart) return;
   const selected = experienceChartData(xpState.year, xpState.month);
-  chartInto(chart, (width) => flow(selected.data, { width, baseline: 'zero', fmt: compact, empty: 'Not enough rows for this chart yet.' }));
+  chartInto(chart, (width) => flow(selected.data, { label: 'Experience gained', width, baseline: 'zero', fmt: compact, empty: 'Not enough rows for this chart yet.' }));
   $('#xp-chart-legend').innerHTML = flowLegend(selected.data, 'XP gained', compact);
   attachVizHover(chart.closest('.viz'));
   $('#xp-year')?.querySelectorAll('[data-year]').forEach((btn) => {

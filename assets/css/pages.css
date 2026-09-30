@@ -982,6 +982,7 @@ table.grid a:hover { text-decoration: underline; }
 .viz .vevent { pointer-events: none; }
 .viz .vevent-level { fill: rgb(var(--green)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
 .viz .vevent-death { fill: rgb(var(--red)); stroke: rgb(var(--surface-raised)); stroke-width: 2; }
+.viz .vevent-dense { stroke-width: 1; }
 .viz .vdonut-total { fill: rgb(var(--ink)); font-size: var(--fs-14); font-weight: 700; font-family: var(--f-ui); }
 .viz-legend { display: flex; flex-wrap: wrap; gap: var(--s4); list-style: none; margin: var(--s3) 0 0; padding: 0; font-size: var(--fs-12); color: rgb(var(--ink-2)); }
 .viz-legend li { display: flex; align-items: center; gap: var(--s1); }

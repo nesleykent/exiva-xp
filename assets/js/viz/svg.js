@@ -141,10 +141,14 @@ function niceTicks(min, max, n = 4) {
  */
 export function bars(data, { width = 720, rowH = 22, gap = 10, labelW, fmt = kk, empty, label = '' } = {}) {
   if (!data.length) return vizEmpty(empty);
-  // the label column keeps its share of a narrow chart instead of a fixed
-  // 290px that would swallow the whole lane on a phone
-  labelW ??= Math.max(120, Math.min(290, Math.round(width * 0.4)));
-  const labelChars = Math.max(14, Math.floor(labelW / 6.5));
+  // the label column fits the longest label (≈7px per 12px glyph) up to 40%
+  // of the chart: short labels (weekdays) leave the bars a wide lane, and a
+  // long one is clipped to what the column holds — 6.5px/char overran it,
+  // cutting the first glyph off ("Jpper Rosh…") at phone width
+  const CHAR_W = 7;
+  const longest = Math.max(...data.map((d) => String(d.key).length));
+  labelW ??= Math.max(56, Math.min(290, Math.round(width * 0.4), longest * CHAR_W + 8));
+  const labelChars = Math.max(6, Math.floor((labelW - 8) / CHAR_W));
   const height = data.length * (rowH + gap) + gap;
   const top = Math.max(...data.map((d) => d.n), 1);
   // the leader is whichever row actually holds the max value, not row 0 —
@@ -205,11 +209,15 @@ export function flow(data, { width = 720, height = 210, baseline = 'zero', fmt =
     const cls = i === last ? 'vdot vdot-current' : 'vdot';
     return `<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.n).toFixed(1)}" r="${r}" data-r="${dotR}" data-id="${esc(d.id ?? d.key)}" data-key="${esc(d.key)}" data-value="${esc(d.n)}" data-v="${esc(fmt(d.n))}" data-l="${esc(d.label ?? d.key)}"><title>${esc(d.label ?? d.key)}: ${fmt(d.n)}</title></circle>`;
   }).join('');
+  // on a dense series (the same >48 threshold that hides the dots) full-size
+  // event markers merged into a solid band: draw them small and tight instead
+  const dense = data.length > 48;
+  const evR = dense ? 2.5 : 5;
   const events = data.flatMap((d, i) => (d.events || []).map((event, eventIndex) => {
-    const cx = x(i) + (eventIndex * 8);
-    const cy = y(d.n) - 9;
-    const cls = event.type === 'death' ? 'vevent-death' : 'vevent-level';
-    return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"><title>${esc(event.label)}</title></circle>`;
+    const cx = x(i) + (eventIndex * evR * 1.6);
+    const cy = y(d.n) - (evR + 4);
+    const cls = `${event.type === 'death' ? 'vevent-death' : 'vevent-level'}${dense ? ' vevent-dense' : ''}`;
+    return `<circle class="vevent ${cls}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${evR}"><title>${esc(event.label)}</title></circle>`;
   })).join('');
   const grid = ticks.map((v) =>
     `<line class="vaxis" x1="${pad.l}" y1="${y(v).toFixed(1)}" x2="${width - pad.r}" y2="${y(v).toFixed(1)}"/>

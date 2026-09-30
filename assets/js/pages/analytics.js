@@ -33,7 +33,9 @@ const chartEvents = (date) => {
   });
   return events;
 };
-const dailyXp = gains.map((g) => ({ key: md(g.date), label: g.date, n: g.gain, events: chartEvents(g.date) }));
+// past a year the axis needs the year, or 'Oct 23 · Nov 4 · Sep 30' reads out of order
+const multiYear = gains.length > 1 && Date.parse(gains.at(-1).date) - Date.parse(gains[0].date) > 365 * DAY_MS;
+const dailyXp = gains.map((g) => ({ key: multiYear ? ym(g.date) : md(g.date), label: g.date, n: g.gain, events: chartEvents(g.date) }));
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const weekdayBuckets = WEEKDAYS.map((name) => ({ name, gains: [] }));
 for (const g of gains) weekdayBuckets[new Date(`${g.date}T00:00:00Z`).getUTCDay()].gains.push(g.gain);
@@ -280,9 +282,9 @@ stage.innerHTML = `
     ${metric('Total profit', compact(totalProfit), meanProfit != null ? `${compact(meanProfit)}/h average` : 'no profit evidence yet')}
     ${metric('Total hunt XP', compact(totalHuntXp), lastGain != null ? `${compact(lastGain)} latest daily gain` : 'saved sessions only')}
   </div>
-  ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { width, fmt: compact })) + flowLegend(dailyXp, 'XP/day', compact))}
+  ${board('Daily XP gain', dailyXp, mount('daily-xp', (width) => flow(dailyXp, { label: 'Daily XP gain', width, fmt: compact })) + flowLegend(dailyXp, 'XP/day', compact))}
   <div class="analytics-duo">
-    ${board('Avg XP gain by weekday', weekdayXp, mount('weekday-xp', (width) => bars(weekdayXp, { width, fmt: compact })))}
+    ${board('Avg XP gain by weekday', weekdayXp, mount('weekday-xp', (width) => bars(weekdayXp, { label: 'Avg XP gain by weekday', width, fmt: compact })))}
     ${profitShareBoard(profitByGround)}
   </div>
   ${weekComparisonBoard()}
@@ -290,13 +292,13 @@ stage.innerHTML = `
     <div class="section-bar"><h2>Tracked highscores</h2><span class="fine dim">each category gets its own scale and readiness state</span></div>
     <div class="skill-grid">${highscoreTrends.map(highscoreTrendCard).join('')}</div>
   </section>` : ''}
-  ${board('Best XP targets', topXp, mount('top-xp', (width) => bars(topXp, { width, fmt: compact })))}
-  ${board('Best profit targets', topProfit, mount('top-profit', (width) => bars(topProfit, { width })))}
-  ${board('Busiest grounds', busiest, mount('busiest', (width) => bars(busiest, { width, fmt: nf })))}
-  ${board('Hunts logged over time', perMonth, mount('per-month', (width) => flow(perMonth, { width, fmt: nf })))}
-  ${board('Most killed creatures', topKills, mount('top-kills', (width) => bars(topKills, { width, fmt: nf })))}
-  ${board('Most looted items', topDrops, mount('top-drops', (width) => bars(topDrops, { width, fmt: nf })))}
-  ${board('Hunts by vocation', byVocation, mount('by-vocation', (width) => bars(byVocation, { width, fmt: nf })))}
+  ${board('Best XP targets', topXp, mount('top-xp', (width) => bars(topXp, { label: 'Best XP targets', width, fmt: compact })))}
+  ${board('Best profit targets', topProfit, mount('top-profit', (width) => bars(topProfit, { label: 'Best profit targets', width })))}
+  ${board('Busiest grounds', busiest, mount('busiest', (width) => bars(busiest, { label: 'Busiest grounds', width, fmt: nf })))}
+  ${board('Hunts logged over time', perMonth, mount('per-month', (width) => flow(perMonth, { label: 'Hunts logged over time', width, fmt: nf })))}
+  ${board('Most killed creatures', topKills, mount('top-kills', (width) => bars(topKills, { label: 'Most killed creatures', width, fmt: nf })))}
+  ${board('Most looted items', topDrops, mount('top-drops', (width) => bars(topDrops, { label: 'Most looted items', width, fmt: nf })))}
+  ${board('Hunts by vocation', byVocation, mount('by-vocation', (width) => bars(byVocation, { label: 'Hunts by vocation', width, fmt: nf })))}
   ${hunts.length ? '' : `<section class="section">${note('warning', 'Personal hunt boards light up after the first analyser is saved. XP and highscore tracking already run from the character history.')}</section>`}`;
 document.querySelectorAll('[data-mount]').forEach((el) => chartInto(el, MOUNTS.get(el.dataset.mount)));
 document.querySelectorAll('.viz').forEach((panel) => attachVizHover(panel));
