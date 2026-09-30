@@ -255,6 +255,10 @@ h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px;
 }
 .rail-item:hover { background: rgba(var(--overlay), var(--overlay-a)); }
 .rail-item[aria-current="page"] { font-weight: 700; }
+/* the label that carries the bold is hidden on the icon rail and tab bar, so
+   the current destination also gets the heavier icon stroke (the source tab
+   bar marks its active tab by icon weight) */
+.rail-item[aria-current="page"] svg { stroke-width: 2.4; }
 .rail-item svg { width: 26px; height: 26px; flex-shrink: 0; }
 
 .rail-foot { display: flex; flex-direction: column; gap: var(--s1); }
@@ -335,16 +339,19 @@ main.stage {
   transition: background var(--t-hover) var(--e-standard);
 }
 .btn-primary { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
-.btn-primary:hover { background: rgb(var(--blue-press)); }
+.btn-primary:not([disabled]):hover { background: rgb(var(--blue-press)); }
 .btn-secondary { background: rgb(var(--surface-btn2)); color: rgb(var(--ink)); }
-.btn-secondary:hover { background: rgb(var(--surface-btn2-hover)); }
+.btn-secondary:not([disabled]):hover { background: rgb(var(--surface-btn2-hover)); }
 /* solid elevated fill (--ig-tertiary-button-background), not transparent —
    on the page background (not inside a panel) transparent let the raw page
    colour show through instead of reading as a raised button; --icon matches
    --ig-tertiary-button-text exactly in both appearances (38/light, 245/dark) */
 .btn-tertiary { background: rgb(var(--surface-raised)); color: rgb(var(--icon)); border: 1px solid rgb(var(--tertiary-border)); }
-.btn-tertiary:hover { background: rgb(var(--tertiary-hover)); }
+.btn-tertiary:not([disabled]):hover { background: rgb(var(--tertiary-hover)); }
 .btn-destructive { background: rgb(var(--red)); color: rgb(var(--white-fixed)); }
+.btn-destructive:not([disabled]):hover { filter: brightness(.92); }
+/* one pressed state for every tier; hover never recolours a disabled button */
+.btn:not([disabled]):active { opacity: .7; }
 .btn[disabled] { opacity: .3; cursor: default; }
 /* size tiers vary height, padding and type only — never shape */
 .btn-sm { min-height: 24px; padding: var(--s1) var(--s2); font-size: var(--fs-11); line-height: 13px; }
@@ -417,7 +424,10 @@ label.lbl > .sort-menu { min-width: 160px; width: 100%; box-sizing: border-box; 
   padding: 10px; border: 0; border-radius: var(--r-input);
   background: transparent; color: rgb(var(--ink)); font-family: var(--f-ui); font-size: var(--fs-14); text-align: left; cursor: pointer;
 }
-.sort-menu-item:hover, .sort-menu-item:focus-visible { outline: none; background: rgba(var(--overlay), var(--overlay-a)); }
+.sort-menu-item:hover, .sort-menu-item:focus-visible { background: rgba(var(--overlay), var(--overlay-a)); }
+/* keyboard focus keeps the ring (drawn inside, the list clips nothing) so it
+   stays distinct from pointer hover */
+.sort-menu-item:focus-visible { outline-offset: -2px; }
 .sort-menu-item .check { width: 16px; height: 16px; flex-shrink: 0; color: rgb(var(--blue)); visibility: hidden; }
 .sort-menu-item[aria-checked="true"] .check { visibility: visible; }
 

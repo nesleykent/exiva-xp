@@ -31,6 +31,7 @@
 .home-attention-list > div { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); min-height: 48px; border-top: 1px solid rgb(var(--line)); }
 .home-attention-list > div:first-child { border-top: 0; }
 .home-attention-list a { color: rgb(var(--ink-info)); font-weight: 600; white-space: nowrap; }
+.home-attention-list a:hover { text-decoration: underline; }
 .home-shortcuts-section { display: grid; gap: var(--s3); margin-top: var(--s6); }
 .home-shortcuts-section > p { margin: 0; }
 .home-shortcuts { display: flex; flex-wrap: wrap; gap: var(--s3); }
@@ -63,6 +64,11 @@
 /* --shadow was referenced here but never defined anywhere in the codebase —
    rgba(var(--shadow), .12) silently resolved to an invalid, ignored value,
    so the pressed segment's shadow never actually rendered */
+.segmented button:not([aria-pressed="true"]):hover { color: rgb(var(--ink)); }
+/* controls inside overflow scrollers (.segmented, the admin rule strip, the
+   next-hunts tray) draw their focus ring inside — the default 2px offset was
+   clipped away by the scroller */
+.segmented button:focus-visible, .admin-rule-filter:focus-visible, .next-hunts-item:focus-visible { outline-offset: -2px; }
 .segmented button[aria-pressed="true"] { background: rgb(var(--surface-raised)); color: rgb(var(--ink)); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
 .filter-compact { display: grid; gap: var(--s4); }
 .filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
@@ -223,6 +229,7 @@ table.grid a:hover { text-decoration: underline; }
 .admin-rule-filters { display: flex; gap: var(--s5); overflow-x: auto; margin-bottom: var(--s4); border-bottom: 1px solid rgb(var(--line)); scrollbar-width: none; }
 .admin-rule-filters::-webkit-scrollbar { display: none; }
 .admin-rule-filter { min-height: 40px; padding: 0 0 var(--s2); border: 0; border-bottom: 2px solid transparent; background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-14); font-weight: 600; cursor: pointer; white-space: nowrap; }
+.admin-rule-filter:not([aria-pressed="true"]):hover { color: rgb(var(--ink)); }
 .admin-rule-filter[aria-pressed="true"] { color: rgb(var(--ink)); border-bottom-color: rgb(var(--blue)); }
 .admin-empty { margin-top: var(--s2); }
 
@@ -282,7 +289,7 @@ table.grid a:hover { text-decoration: underline; }
 .stepper-item:last-child::after { display: none; }
 .stepper-item.is-done::after { background: rgb(var(--ink)); }
 .stepper-btn { display: flex; align-items: center; gap: var(--s2); min-height: var(--tap); background: none; border: 0; padding: var(--s1) 0; font: inherit; color: rgb(var(--ink-2)); cursor: pointer; }
-.stepper-btn[disabled] { cursor: default; opacity: .4; }
+.stepper-btn[disabled] { cursor: default; opacity: .3; }
 .stepper-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--r-circle); background: rgb(var(--surface-2)); color: rgb(var(--ink-2)); font-size: var(--fs-13); font-weight: 700; flex-shrink: 0; }
 .stepper-item.is-done .stepper-num { background: rgb(var(--ink)); color: rgb(var(--surface)); }
 .stepper-item.is-active .stepper-num { background: rgb(var(--blue)); color: rgb(var(--white-fixed)); }
@@ -338,6 +345,7 @@ table.grid a:hover { text-decoration: underline; }
   gap: var(--s4);
 }
 .tool-disclosure { border-top: 1px solid rgb(var(--line)); padding-top: var(--s3); }
+.tool-disclosure summary:hover { text-decoration: underline; }
 .tool-disclosure summary { color: rgb(var(--ink-info)); font-size: var(--fs-13); font-weight: 600; cursor: pointer; }
 .tool-disclosure .tool-fields { margin-top: var(--s3); }
 #level-tool { order: 3; }
@@ -580,6 +588,7 @@ table.grid a:hover { text-decoration: underline; }
 }
 .imb-total-label { font-weight: 700; }
 .imb-total-info svg { width: 15px; height: 15px; color: rgb(var(--ink-2)); }
+.imb-total-info[aria-expanded="true"] svg { color: rgb(var(--ink)); }
 .imb-tier-total b {
   display: inline-flex;
   align-items: center;
@@ -967,6 +976,7 @@ table.grid a:hover { text-decoration: underline; }
 
 /* the "← Planner / ← Codex" control that closes an inline dossier (shell.js backLink) */
 .back-link { padding: 0; border: 0; background: none; color: rgb(var(--ink-2)); font: inherit; cursor: pointer; }
+.back-link:hover { color: rgb(var(--ink)); }
 
 /* skeleton shimmer — the page shells' placeholder until the controller renders */
 .ghost {
