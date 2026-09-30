@@ -65,6 +65,8 @@ assert(su2026.every((creature) => creature.resistances?.length === 7 && creature
   'SU2026 creatures must retain complete Cyclopedia combat fields');
 const codex = new Codex(bestiary, extra, taskData);
 assert(codex.size === 833, `codex size drifted from the SU2026 Bestiary: ${codex.size}`);
+assert(codex.creatures.every((creature) => creature.lootList.every((item) => !/&(#\d+|[a-z]+);/i.test(item) && item === item.trim())),
+  'loot names must reach views decoded and trimmed (TibiaData sends dragon&#39;s tails)');
 const taskCreatures = codex.creatures.filter((creature) => creature.taskSpeed);
 const taskRates = codex.creatures.flatMap((creature) => creature.taskRates);
 assert(taskCreatures.length === 131 && TASK_SPEEDS.every((speed) => taskCreatures.some((creature) => creature.taskSpeed === speed)),

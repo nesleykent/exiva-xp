@@ -9,6 +9,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { decodeEntities } from '../assets/js/lib/text.js';
 
 const API = 'https://api.tibiadata.com/v4/creature/';
 const CONCURRENCY = 4;
@@ -57,7 +58,7 @@ async function lookup(name, attempt = 0) {
       summonMana: c.be_summoned ? c.summoned_mana : null,
       convinceMana: c.be_convinced ? c.convinced_mana : null,
       seeInvisible: !!c.see_invisible,
-      loot: c.is_lootable ? (c.loot_list || []) : [],
+      loot: c.is_lootable ? (c.loot_list || []).map((item) => decodeEntities(item).trim()) : [],
     };
   } catch (err) {
     if (attempt < 2) {

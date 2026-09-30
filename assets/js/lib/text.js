@@ -10,6 +10,19 @@ export function fold(s) {
     .trim();
 }
 
+/**
+ * Decode the HTML character references TibiaData leaves in its strings
+ * ("dragon&#39;s tails"), so views can escape the text exactly once.
+ */
+const NAMED_ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0' };
+export function decodeEntities(s) {
+  return String(s ?? '').replace(/&(#\d+|#x[0-9a-f]+|[a-z]+);/gi, (whole, ref) => {
+    if (ref[0] !== '#') return NAMED_ENTITIES[ref.toLowerCase()] ?? whole;
+    const code = ref[1] === 'x' || ref[1] === 'X' ? parseInt(ref.slice(2), 16) : parseInt(ref.slice(1), 10);
+    return Number.isFinite(code) ? String.fromCodePoint(code) : whole;
+  });
+}
+
 export function slug(s) {
   return fold(s).replace(/['\s]+/g, '-').replace(/-+/g, '-');
 }

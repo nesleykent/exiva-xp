@@ -72,6 +72,8 @@ function intel() {
       intelCache.set(g.slug, {
         attackOrder: battle?.order || null,
         names: new Set(pop.set.map((s) => s.creature.key)),
+        // search matches the folded keys; cards show the Bestiary's own names
+        displayNames: [...new Set(pop.set.map((s) => s.creature.name))],
         families: new Set(pop.set.map((s) => s.creature.family).filter(Boolean)),
         tiers: new Set(pop.set.map((s) => s.creature.tier).filter(Boolean)),
         rarities: new Set(pop.set.map((s) => s.creature.rarity).filter(Boolean)),
@@ -386,7 +388,7 @@ function render() {
       ${visibleCards.map((g) => {
         const attackEl = bestAttackElement(ix?.get(g.slug)?.attackOrder, state.vocation);
         const area = areaOf(g.slug);
-        const creatures = [...(ix?.get(g.slug)?.names || [])].slice(0, 3);
+        const creatures = (ix?.get(g.slug)?.displayNames || []).slice(0, 3);
         const fastestTask = TASK_SPEEDS.find((speed) => ix?.get(g.slug)?.taskSpeeds.has(speed));
         return `
         <a class="panel tile planner-card" href="grounds.html?g=${esc(g.slug)}" data-ground-slug="${esc(g.slug)}">

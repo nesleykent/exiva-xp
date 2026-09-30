@@ -6,7 +6,7 @@
  * Node-safe.
  */
 
-import { fold, slug, depluralize, closeness } from '../lib/text.js';
+import { fold, slug, depluralize, closeness, decodeEntities } from '../lib/text.js';
 
 export const ELEMENTS = ['physical', 'earth', 'fire', 'energy', 'ice', 'holy', 'death'];
 
@@ -82,7 +82,8 @@ export class Codex {
         c.art = x.image || null;
         c.lore = x.description || null;
         c.behaviour = x.behaviour || null;
-        c.lootList = x.loot || [];
+        // cached TibiaData loot still carries HTML references (&#39;) and trailing spaces
+        c.lootList = (x.loot || []).map((item) => decodeEntities(item).trim());
         c.summonMana = x.summonMana ?? null;
         c.convinceMana = x.convinceMana ?? null;
         c.paralysable = x.paralysable ?? null;
