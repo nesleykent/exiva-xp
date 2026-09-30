@@ -86,6 +86,12 @@
      in light mode (245 vs 239) */
   --tertiary-border: 219, 219, 219;
   --tertiary-hover: 245, 245, 245;
+  /* app extensions for surfaces that sit ON a raised panel: dark mode's
+     --surface-2/--wash/--surface-raised are within 5 levels of each other,
+     so a pressed segment (darker than its track) and empty meter/heatmap
+     tracks vanished there. Light values equal the tones they replace. */
+  --surface-selected: 255, 255, 255;
+  --track: 239, 239, 239;
   /* status/link tones used as TEXT: the fixed --blue, --red, --green and
      warning orange fall below WCAG AA (4.5:1) as text on light surfaces and
      their own washes, so light mode darkens them; dark mode lifts blue and
@@ -174,6 +180,8 @@
   --overlay-a: .1;
   --tertiary-border: 54, 54, 54;
   --tertiary-hover: 38, 38, 38;
+  --surface-selected: 54, 54, 54;
+  --track: 54, 54, 54;
   --ink-info: 64, 172, 255;
   --ink-error: 255, 105, 115;
   --ink-success: var(--green);

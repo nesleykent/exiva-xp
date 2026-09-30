@@ -77,7 +77,7 @@
    next-hunts tray) draw their focus ring inside — the default 2px offset was
    clipped away by the scroller */
 .segmented button:focus-visible, .admin-rule-filter:focus-visible, .next-hunts-item:focus-visible { outline-offset: -2px; }
-.segmented button[aria-pressed="true"] { background: rgb(var(--surface-raised)); color: rgb(var(--ink)); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
+.segmented button[aria-pressed="true"] { background: rgb(var(--surface-selected)); color: rgb(var(--ink)); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
 .filter-compact { display: grid; gap: var(--s4); }
 .filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
 .filter-compact-groups { display: flex; align-items: end; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
@@ -214,7 +214,7 @@ a.pill:hover { background: rgba(var(--blue), .2); text-decoration-color: current
 /* trust meter (confidence) */
 .trust { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-12); color: rgb(var(--ink-2)); }
 .trust .seg { display: inline-flex; gap: 2px; }
-.trust .seg i { width: 10px; height: 4px; border-radius: var(--r-xs); background: rgb(var(--wash)); }
+.trust .seg i { width: 10px; height: 4px; border-radius: var(--r-xs); background: rgb(var(--track)); }
 .trust .seg i.on { background: rgb(var(--green)); }
 
 /* ---------- data table ---------- */
@@ -273,7 +273,7 @@ table.grid a:hover { text-decoration: underline; }
 /* element meter */
 .meter { display: grid; grid-template-columns: 68px 1fr 44px; gap: var(--s2); align-items: center; font-size: var(--fs-13); }
 .meter + .meter { margin-top: var(--s2); }
-.meter .lane { height: 7px; border-radius: var(--r-pill); background: rgb(var(--surface-2)); position: relative; overflow: visible; }
+.meter .lane { height: 7px; border-radius: var(--r-pill); background: rgb(var(--track)); position: relative; overflow: visible; }
 .meter .lane > .fill { position: absolute; inset: 0 auto 0 0; border-radius: var(--r-pill); background: rgb(var(--el, var(--ink-2))); }
 .meter .lane > .baseline { position: absolute; top: -3px; bottom: -3px; width: 1px; background: rgb(var(--line-strong)); }
 .meter .val { text-align: right; color: rgb(var(--ink-2)); }
@@ -464,7 +464,7 @@ table.grid a:hover { text-decoration: underline; }
   display: grid;
   gap: var(--s3);
   padding: var(--s4);
-  border: 1px solid rgb(var(--line));
+  border: 1px solid rgb(var(--stroke)); /* nested in a panel: --line vanishes in dark */
   border-radius: var(--r-input);
   background: rgb(var(--surface-raised));
   transition: background var(--t-hover) var(--e-standard), box-shadow var(--t-hover) var(--e-standard);
@@ -504,7 +504,7 @@ table.grid a:hover { text-decoration: underline; }
   gap: var(--s4);
   box-shadow: var(--shadow-float);
 }
-.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--line)); cursor: pointer; }
+.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--stroke)); cursor: pointer; }
 .imb-card-head {
   display: flex;
   justify-content: space-between;
@@ -562,7 +562,7 @@ table.grid a:hover { text-decoration: underline; }
 .imb-tier-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(var(--line));
+  border: 1px solid rgb(var(--stroke)); /* nested in a panel: --line vanishes in dark */
   border-radius: var(--r-input);
   position: relative;
   overflow: visible;
@@ -744,7 +744,7 @@ table.grid a:hover { text-decoration: underline; }
 .hm-week { display: flex; flex-direction: column; gap: var(--s1); position: relative; padding-top: var(--s4); }
 .hm-month { position: absolute; top: 0; left: 0; height: 14px; font-size: var(--fs-11); line-height: 13px; color: rgb(var(--ink-2)); white-space: nowrap; }
 /* 11px data cells — sized so 26 tracked weeks fit a panel, not a spacing token */
-.hm { width: 11px; height: 11px; border-radius: var(--r-sm); background: rgb(var(--wash)); flex-shrink: 0; }
+.hm { width: 11px; height: 11px; border-radius: var(--r-sm); background: rgb(var(--track)); flex-shrink: 0; }
 .hm-void { background: transparent; }
 .hm-null { background: transparent; border: 1px dashed rgb(var(--line-strong)); box-sizing: border-box; }
 /* purple intensity ramp — the reference's Hunting-activity heatmap uses
@@ -781,7 +781,7 @@ table.grid a:hover { text-decoration: underline; }
 .pace-support small { color: rgb(var(--ink-2)); font-size: var(--fs-11); line-height: 13px; }
 .character-level-progress { display: grid; gap: var(--s2); width: min(360px, 100%); margin-top: var(--s1); }
 .character-level-progress > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); font-size: var(--fs-12); font-weight: 600; }
-.character-level-progress .track { height: 6px; overflow: hidden; border-radius: var(--r-pill); background: rgb(var(--wash)); }
+.character-level-progress .track { height: 6px; overflow: hidden; border-radius: var(--r-pill); background: rgb(var(--track)); }
 .character-level-progress .track i { display: block; height: 100%; border-radius: inherit; background: var(--grad-hero); }
 .character-level-progress small { color: rgb(var(--ink-2)); font-size: var(--fs-11); }
 .empty-action { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 132px; padding: var(--s5); background: rgb(var(--surface-2)); border-radius: var(--r-input); }
