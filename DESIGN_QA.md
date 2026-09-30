@@ -117,8 +117,36 @@ Evidence and full source pointers for every item are in `.claude/qa-shots/critiq
 | 3 | `9c27c37` | New `--ink-info`/`--ink-error` text tones (light 0,100,183 / 196,30,48; dark 64,172,255 / 255,105,115). `--ink-success` nudged to 0,122,18. Every text use of `--blue`/`--red` is routed to them. Prose links get the info tone and an underline; `a.pill` gets a link cue. | Every text/surface pair ≥4.5:1 in both themes (`contrast.mjs`). Dossier links are visible. |
 | 4 (+15) | `065aff9` | Focus rings inside scrollers use `outline-offset: -2px`. Sort-menu focus keeps the ring. The current rail/tab icon gets a 2.4 stroke. Buttons: pressed state (`opacity .7`), destructive hover, no hover while disabled. Segmented, rule filters, back link, attention link and disclosures get hovers. Stepper disabled opacity is .3. | Keyboard Tab on Planner at 375 dark: ring fully visible, compass bolder. |
 | 5 | `cca57a5` | ≤700 px: fields and the sort button at 16 px (no iOS zoom). Segmented, Home shortcuts, back link, attention link and summary reach ≥44 px. Link pills, table links and number-only steps get an invisible 44 px hit halo. | Undersized mobile targets 87 → 11. The 11 are halo'd pill/table links that the box measurement can't see. |
+| 6 | `67219ae` | KPI rows: `minmax(150px)` (Home fits 5 at 1280), 2-up below 1000 px with an odd last card spanning. Character stats 3+3 at tablet width. `.facts` capped at 4 columns. Codex tiles auto-fill at 240 px, opening at 12. Tools KPIs pair up with a spanning odd cell. | Home, Character, Codex, dossiers, Charms, Tools and Progress at 768/1280, both themes. No orphan rows, no overflow. |
+| 7 | `197a7d4` | `.segmented` wraps instead of scrolling behind a hidden scrollbar. The Codex "Every class"/"Task speed" sets take a full filter row. `.sheet` tables get scroll-edge shadows. The heatmap opens at its newest week. | Planner "400+" and Codex Medium/Trivial are no longer clipped. At 375 the heatmap shows September. |
+| 8 | `651af70` | New `--surface-selected` (pressed segment) and `--track` (meter lanes, trust segments, heatmap cells, level track); light values equal what they replace. Cards nested in a panel use the `--stroke` border. | At 1280 dark, the pressed segment sits lighter than its track and empty lanes are visible. |
+| 9 | `8233bcd` | Tools: Profit follows Level target, and the imbuement calculator spans the last row (cards 3–4 across). `.tool-head` subtitles wrap below their titles. | Tools at 1280 goes from ~3,050 to 2,160 px tall. |
+| 10 | `8425afe` | `.imb-card` inherits its font at 14 px (was UA 13.33). `b, strong` are 700 (no 900). `.prose` replaces two inline paragraph styles. Section h3 is 16. 17→18 and 22→20. Invalid `<div>` inside `<button>` replaced with spans. | The type census on the affected pages has only scale sizes and weights 400/600/700. |
+| 11 | `732d111` | `emptyState()` in shell.js is one treatment everywhere; its CTA never wraps. No-results spans the grid. Recent deaths uses `vizEmpty`. | Charms 768 "Log a hunt" on one line; the Planner no-match state is full-width. |
+| 12 | `1c15545` | Focus: dossier h1 on open, the tile on close, the first new card after Show more, Undo after a Logbook delete, and the successor card after the imbuement dialog. | Planner: open → H1, close → same tile, more → index 6. Tools dialog verified in a visible headless page (the pane's hidden tab never fires `close`). |
+| 13 | `b338dac` | Rail labels are visually hidden rather than `display:none` (the wordmark has a name). The next-hunts tray is a `<ul>`. `bars()`/`flow()` carry `aria-label` data summaries. Home/Character eyebrow titles are `<h2>`. The stamina clock tick is silent. Tools errors use `note('error')` with `aria-invalid`. Stamina fields drop `inputmode=numeric` (no ":" key). | Heading outline on every page. `iconButtonsNoName` is empty at 768. |
+| 14 | `96ee2a0` | `bars()` label column fits the longest label at 7 px/glyph (≤40%). Dense `flow()` series get small events. The multi-year Daily XP axis shows month + year. Board titles become chart names. | Progress at 375: whole labels, a readable line, "Oct 2024 · Nov 2025 · Sep 2026". |
+| 16 | `1741fae` | Fields share a 20 px line box (42 px everywhere). `select` draws the sort menu's chevron from two `--ink-2` gradient strokes. | Planner 768 light/dark: inputs, selects and sort all measure 42 px. |
+| 17–19 | `19900d8` | In-bar result counts removed; `dataTable` counts only above 10 rows. `?charm=` opens on the selected card. The Log example is labelled as one. "Backend:" → "Saves to:". Upcoming steps stay legible in dark. | Charms deep link at 375 shows the card first. |
+| 20 | `11ace93` | Inline styles moved to classes (`.facts-3`, `.critter-link`, dossier section spacing). Charm stages on two lines. Dead `th` pointer cursor and `.section-bar a.fine` removed. Reduced motion runs one iteration. Price rows no longer nest two controls in one `<label>`. | Charm facts "Stage 1 / 5%"; dossier spacing unchanged. |
+| 21 | `b95cf6c` | `decodeEntities()` in lib/text.js, applied where the engine reads cached loot and at capture in `enrich-codex`. Smoke asserts it. Planner cards use Bestiary display names. | Dragon dossier "dragon's tails"; cards "Naga Warrior · Naga Archer · Makara". |
+| (M-17) | `6014fc1` | Home KPIs are two-up on phones like every other KPI row. | 320/375: Next hunt is on the first screen. |
 
-## Remaining
+## Removed (restorable from the commit named)
+
+- **Planner filter-bar count** "167 grounds · 189 rows" and **Codex filter-bar count** "833 creatures" (`19900d8`). Each duplicated the "Showing N of M" line directly below it.
+- **`dataTable` "N rows" footer** on tables of 10 rows or fewer (`19900d8`). It restated a count the section bar already gives, or one visible at a glance.
+- **Dead CSS** `.section-bar a.fine` and the `th` pointer cursor (`11ace93`). No element matched the first; no table is sortable.
+
+## Remaining (deliberately left, lower priority)
+
+- **Codex filter stack on phones is tall.** Wrapping made all 20 classes visible, but "Every class" now takes about six rows at 375. The fix depends on the filter-collapse decision below.
+- **Table row dividers in dark mode** (`--line` 38 on raised 33) remain faint. Part of the dark token-spacing decision below.
+- **Admin duplicate rows and some dossier margins** still carry token-valued inline styles (`admin.js`, `grounds.js` facts, `tools.js` 6 px note).
+- **Home copy.** "Open hunt planner" opens the ground's dossier. "Log a hunt" appears three times above the tab bar (M-14/F-25). Both are copy/IA calls.
+- **Log a hunt Confirm step.** Save sits in the form while Back has its own row (F-25).
+- **Semantics.** `.back-link` is a `<button>` that `pushState`s. A link would allow open-in-new-tab (F-28).
+- **Inline pill/table links** measure 20–28 px by box. They carry an invisible 44 px hit halo, which `report.json` cannot see.
 
 ## Needs decision
 

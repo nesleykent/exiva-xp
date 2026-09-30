@@ -8,7 +8,7 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - Contrast `.claude/qa-shots/contrast.mjs`: light blue text 3.17, pill-info 2.76, red text 3.69, ink-2 on surface-2 4.34.
 - Critiques on disk: `.claude/qa-shots/critique-mobile.md`, `critique-code.md`. Desktop critic died with quota — do desktop review inline (do NOT relaunch).
 - `DESIGN_QA.md` complete: inventory, target scales, 21 ranked issues, Needs decision (commit 46a8daa).
-- Cycles done (DESIGN_QA #): 1 figures b25e52d · 2 gutters 27fa48f · 3 text tones+links 9c27c37 · 4 states (+#15 buttons) 065aff9 · 5 mobile targets+16px fields cca57a5 · 6 grid orphans 67219ae · 7 scrollers 197a7d4 · 8 dark tracks/selected 651af70 · 9 tools grid 8233bcd · 10 type scale 8425afe · 11 empty states 732d111 · 12 focus survives re-render 1c15545 · 13 names/headings/live region b338dac.
+- Cycles done (DESIGN_QA #): 1 figures b25e52d · 2 gutters 27fa48f · 3 text tones+links 9c27c37 · 4 states (+#15 buttons) 065aff9 · 5 mobile targets+16px fields cca57a5 · 6 grid orphans 67219ae · 7 scrollers 197a7d4 · 8 dark tracks/selected 651af70 · 9 tools grid 8233bcd · 10 type scale 8425afe · 11 empty states 732d111 · 12 focus survives re-render 1c15545 · 13 names/headings/live region b338dac · 14 charts 96ee2a0 · 16 selects 1741fae · 17-19 counts/deeplink/log copy 19900d8 · 20 hygiene 11ace93 · 21 loot/names b95cf6c · M-17 home 2-up 6014fc1. DESIGN_QA Done/Removed/Remaining written; AGENTS §9 entry + §12 #16 added.
 - `.claude/qa-shots/evaljs.mjs <url> <jsfile>` runs JS in a VISIBLE headless page (the browser pane is `visibilityState: hidden`, so dialog `close` events never fire there). After-shots `.claude/qa-shots/after-cN`.
 - NOTE: browser pane caches CSS — force `fetch(u,{cache:'reload'})` then reload before judging. Preview server must be running (harness exits 2 if not).
 
@@ -26,4 +26,4 @@ Checkpoint ledger. Read first after any interruption. NO MORE AGENTS — work in
 - `DESIGN_QA.md`, `PROGRESS.md` — docs
 
 ## Next step
-- Cycle 14 = #14 charts: svg.js bars() label width (~7.5px/char, cap 40%, labels above bars <420px), flow() thin event markers when data>48, analytics year-bearing keys when span>365d. Then #16 selects (appearance:none + chevron), #17 redundant counts, #18 log copy/placeholder, #19 charms deep link order, #20 hygiene (inline styles, dead th cursor, reduced-motion iteration), #21 loot entities (view-level decode? pipeline). Final: full `after/` capture, DESIGN_QA Done rows 6+, report.
+- Full after capture running → `.claude/qa-shots/after/` (96). Then: verify done criteria from `after/report.json` (overflow 0, console 0, font sizes on scale, small targets), add a 'Done criteria' section to DESIGN_QA.md, make before/after comparison crops for the final report, commit, write final report in chat.
