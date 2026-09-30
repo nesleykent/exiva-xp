@@ -46,8 +46,8 @@ stage.innerHTML = `
       <div class="filter-segment"><span class="eyebrow">Sort</span>${segmentedControl('c-sort', 'Sort creatures', SORT_OPTIONS, state.sort)}</div>
     </div>
     <div class="advanced-filters" id="c-more">
-      <div class="filter-segment filter-segment-wide"><span class="eyebrow">Every class</span>${segmentedControl('c-family-all', 'Every creature class', FAMILY_FILTER_OPTIONS, state.family)}</div>
-      <div class="filter-segment filter-segment-wide"><span class="eyebrow">Task speed</span>${segmentedControl('c-task-speed', 'Task speed', TASK_FILTER_OPTIONS, state.taskSpeed)}</div>
+      <div class="filter-segment"><span class="eyebrow">Every class</span>${segmentedControl('c-family-all', 'Every creature class', FAMILY_FILTER_OPTIONS, state.family)}</div>
+      <div class="filter-segment"><span class="eyebrow">Task speed</span>${segmentedControl('c-task-speed', 'Task speed', TASK_FILTER_OPTIONS, state.taskSpeed)}</div>
     </div>
   </form>
   <div id="out"></div>

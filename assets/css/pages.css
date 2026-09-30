@@ -64,9 +64,8 @@
   border: 1px solid rgb(var(--line)); border-radius: var(--r-input);
 }
 
-/* options wrap onto a second row rather than scroll: a hidden scrollbar with
-   no edge cue clipped '400+', 'Medium' and most of the Codex class list */
-.segmented { display: inline-flex; flex-wrap: wrap; gap: 2px 0; max-width: 100%; padding: 2px; background: rgb(var(--surface-2)); border-radius: var(--r-input); }
+.segmented { display: inline-flex; max-width: 100%; padding: 2px; overflow-x: auto; background: rgb(var(--surface-2)); border-radius: var(--r-input); scrollbar-width: none; }
+.segmented::-webkit-scrollbar { display: none; }
 .segmented button { min-height: 30px; padding: 0 var(--s3); border: 0; border-radius: calc(var(--r-input) - 2px); background: transparent; color: rgb(var(--ink-2)); font: inherit; font-size: var(--fs-12); font-weight: 600; white-space: nowrap; cursor: pointer; }
 /* --shadow was referenced here but never defined anywhere in the codebase —
    rgba(var(--shadow), .12) silently resolved to an invalid, ignored value,
@@ -80,11 +79,7 @@
 .filter-compact { display: grid; gap: var(--s4); }
 .filter-compact-head { display: flex; align-items: end; justify-content: space-between; gap: var(--s4); }
 .filter-compact-groups { display: flex; align-items: end; flex-wrap: wrap; gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
-.filter-segment { display: grid; align-content: start; gap: var(--s2); min-width: 0; }
-/* long option sets (the Codex's twenty classes, six task speeds) take the
-   whole filter row, their track only as wide as the options */
-.advanced-filters .filter-segment-wide { grid-column: 1 / -1; }
-.advanced-filters .filter-segment-wide .segmented { width: fit-content; }
+.filter-segment { display: grid; gap: var(--s2); min-width: 0; }
 .advanced-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4); padding-top: var(--s4); border-top: 1px solid rgb(var(--line)); }
 .advanced-filters .filter-segment { min-width: 0; }
 .advanced-filters .filter-segment .segmented { width: 100%; }
@@ -882,7 +877,7 @@ table.grid a:hover { text-decoration: underline; }
    width below, then the single XP-gained area chart and its legend. */
 .exp-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s4); }
 .exp-title { margin: 0; }
-.exp-month { margin-bottom: var(--s4); }
+.exp-month { display: flex; margin-bottom: var(--s4); max-width: 100%; }
 .exp-legend { margin-top: var(--s3); }
 
 /* "Next hunts" story-tray — a horizontally scrolling row of ground shortcuts,
@@ -934,8 +929,7 @@ table.grid a:hover { text-decoration: underline; }
   .home-shortcuts a { min-width: 0; border-radius: var(--r-md); }
   .admin-rule-filter { min-height: var(--tap); }
   /* the rest of the 44pt contract: controls outside the shared primitives */
-  .segmented button, .home-shortcuts a { min-height: var(--tap); }
-  .segmented button { min-width: var(--tap); }
+  .home-shortcuts a { min-height: var(--tap); }
   .back-link, .home-attention-list a { display: inline-flex; align-items: center; min-height: var(--tap); }
   .tool-disclosure summary { line-height: var(--tap); }
   /* inline link chips keep their visual size; an invisible halo takes the hit */
