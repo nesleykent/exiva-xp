@@ -8,7 +8,7 @@ import { weakSpots, elementOrder, armorSpots, ELEMENT_NAME, ELEMENT_CHARM, TASK_
 import { nearestGround } from '../engine/locator.js';
 
 const PAGE_TITLE = 'Creature codex · Exiva XP';
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12; // fills whole rows at 2, 3 and 4 columns
 const PAGE_STEP = 24;
 const { stage, codex, grounds, hunts } = await boot('creatures.html', { codex: true, grounds: true, hunts: true });
 

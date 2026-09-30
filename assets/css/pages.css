@@ -5,7 +5,14 @@
 .home-dashboard-head { display: grid; gap: var(--s2); }
 .home-dashboard-head h1 { width: fit-content; }
 .home-dashboard-head p { margin: 0; color: rgb(var(--ink-2)); }
-.home-metric-grid, .metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s6); margin-top: var(--s6); }
+.home-metric-grid, .metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s6); margin-top: var(--s6); }
+/* below the full sidebar a KPI row can't hold 4-5 cards, and auto-fit left a
+   single card stranded (Home 3+2 / 4+1, four-card rows 3+1): two per row,
+   and an odd last card takes the whole row instead of half of it */
+@media (max-width: 1000px) {
+  .home-metric-grid, .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :is(.home-metric-grid, .metric-row) > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 
 /* KPI card — shell.js metric(), the one card every page's headline numbers
    use: eyebrow label, value, optional .fine.dim detail line and sparkline.
@@ -107,7 +114,7 @@
 .count-line { margin: 0 0 var(--s3); }
 
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--s4); }
-.codex-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.codex-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 .planner-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tile { display: flex; flex-direction: column; gap: var(--s3); padding: var(--s4); transition: box-shadow var(--t-hover) var(--e-standard); }
 .tile:hover { box-shadow: var(--shadow-card); }
@@ -243,7 +250,8 @@ table.grid a:hover { text-decoration: underline; }
 .duo { display: grid; gap: var(--s4); grid-template-columns: 1fr; }
 @media (min-width: 880px) { .duo { grid-template-columns: 1fr 1fr; } }
 
-.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--s2); }
+/* at most four facts per row, so the Codex dossier's eight read 4+4, not 6+2 */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(max(140px, calc((100% - 3 * var(--s2)) / 4)), 1fr)); gap: var(--s2); }
 .fact { background: rgb(var(--surface-2)); border-radius: var(--r-md); padding: 10px var(--s3); }
 .fact b { display: block; font-size: var(--fs-15); }
 
@@ -387,11 +395,14 @@ table.grid a:hover { text-decoration: underline; }
   line-height: 1.5;
 }
 .stamina-plan b { font-weight: 600; }
+/* tool KPIs come in threes and fours: two per row with an odd last cell
+   spanning, so a three never leaves one cell stranded beside a gap */
 .tool-kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--s2);
 }
+.tool-kpis > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 .tool-kpis > span {
   display: grid;
   gap: 2px;
@@ -818,6 +829,8 @@ table.grid a:hover { text-decoration: underline; }
 /* 145px min so all six point-stat cards sit on one row at the canvas width
    (the reference keeps them in a single row); wraps responsively below that */
 .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: var(--s4); }
+/* six cards: 4+2 at tablet width becomes 3+3 */
+@media (min-width: 701px) and (max-width: 1000px) { .stat-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* Experience panel — title + year segmented on one row, month segmented full
    width below, then the single XP-gained area chart and its legend. */
@@ -865,7 +878,6 @@ table.grid a:hover { text-decoration: underline; }
   .metric { padding: var(--s3); }
   .metric > b, .metric-value-row > b { font-size: var(--fs-24); }
   .home-next-hunt, .home-attention { padding: var(--s4); margin-top: var(--s4); }
-  .home-hunt-stats { grid-template-columns: 1fr; }
   .home-card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .home-card-actions .btn { width: 100%; padding-inline: var(--s2); }
   .home-attention-list > div { align-items: flex-start; padding: var(--s3) 0; }
