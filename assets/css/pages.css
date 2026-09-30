@@ -431,6 +431,15 @@ table.grid a:hover { text-decoration: underline; }
   gap: var(--s2);
 }
 .tool-kpis > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+/* a card wide enough keeps a three-KPI result on one row (as it was at
+   desktop width); only narrow cards pair up. Sized by the card, not the
+   viewport: the same card is narrow in a three-column grid at 1440 and wide
+   in a two-column grid at 1280. */
+.tool-card { container-type: inline-size; }
+@container (min-width: 400px) {
+  .tool-kpis:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tool-kpis:has(> :nth-child(3):last-child) > :last-child { grid-column: auto; }
+}
 .tool-kpis > span {
   display: grid;
   gap: 2px;
