@@ -219,6 +219,9 @@ a { color: inherit; text-decoration: none; }
 :where(p, li) a:not([class]):hover { text-decoration-color: currentColor; }
 button { font-family: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; }
+/* the UA's `bolder` turned a <b> inside 600-weight text (pills, the level
+   progress row) into 900; bold is one weight */
+b, strong { font-weight: 700; }
 h1 { font-family: var(--f-wordmark); font-size: var(--fs-26); line-height: 28px; letter-spacing: -.26px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

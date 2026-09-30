@@ -278,6 +278,10 @@ table.grid a:hover { text-decoration: underline; }
 .meter .lane > .baseline { position: absolute; top: -3px; bottom: -3px; width: 1px; background: rgb(var(--line-strong)); }
 .meter .val { text-align: right; color: rgb(var(--ink-2)); }
 
+/* running descriptive text (Codex lore, behaviour): one measure and leading */
+.prose { max-width: 72ch; margin: 0; font-size: var(--fs-15); line-height: 22px; }
+.prose-lede { margin-bottom: var(--s5); }
+
 .tips { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: var(--fs-14); line-height: 18px; }
 
 /* Shared dossier micro-patterns (creatures.js / grounds.js / charms.js /
@@ -510,7 +514,8 @@ table.grid a:hover { text-decoration: underline; }
   gap: var(--s4);
   box-shadow: var(--shadow-float);
 }
-.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--stroke)); cursor: pointer; }
+/* a <button>: without its own font it rendered at the UA's 13.33px */
+.imb-card { display: grid; gap: var(--s2); text-align: left; width: 100%; border: 1px solid rgb(var(--stroke)); color: inherit; font: inherit; font-size: var(--fs-14); cursor: pointer; }
 .imb-card-head {
   display: flex;
   justify-content: space-between;
@@ -523,7 +528,7 @@ table.grid a:hover { text-decoration: underline; }
   gap: var(--s3);
   min-width: 0;
 }
-.imb-card-id > div {
+.imb-card-id > span {
   display: grid;
   min-width: 0;
 }
@@ -778,12 +783,12 @@ table.grid a:hover { text-decoration: underline; }
   background: rgb(var(--surface-2));
 }
 .pace-message { display: grid; gap: var(--s1); min-width: 0; }
-.pace-message > b { font-size: var(--fs-17); line-height: 22px; }
+.pace-message > b { font-size: var(--fs-18); line-height: 24px; }
 .pace-down .pace-message > b { color: rgb(var(--ink-error)); }
 .pace-up .pace-message > b { color: rgb(var(--ink-success)); }
 .pace-support { display: flex; align-items: center; flex-shrink: 0; }
 .pace-support > span { display: grid; gap: 2px; min-width: 100px; padding-left: var(--s4); border-left: 1px solid rgb(var(--line)); }
-.pace-support b { font-size: var(--fs-17); line-height: 21px; }
+.pace-support b { font-size: var(--fs-18); line-height: 24px; }
 .pace-support small { color: rgb(var(--ink-2)); font-size: var(--fs-11); line-height: 13px; }
 .character-level-progress { display: grid; gap: var(--s2); width: min(360px, 100%); margin-top: var(--s1); }
 .character-level-progress > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); font-size: var(--fs-12); font-weight: 600; }
@@ -834,8 +839,8 @@ table.grid a:hover { text-decoration: underline; }
 .skill-card-head > div { min-width: 0; }
 .skill-card-head > b {
   flex-shrink: 0;
-  font-size: var(--fs-22);
-  line-height: 26px;
+  font-size: var(--fs-20);
+  line-height: 24px;
   white-space: nowrap;
   text-align: right;
 }
@@ -1009,6 +1014,8 @@ table.grid a:hover { text-decoration: underline; }
 .section.show-more, .section.section-tight { margin-top: var(--s5); }
 .section > .section-bar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
 .section > .section-bar h2 { font-size: var(--fs-20); letter-spacing: -.3px; }
+/* a sub-heading inside a section (e.g. Creature matchups under Battle plan) */
+.section > .section-bar h3 { font-size: var(--fs-16); }
 .section > .section-bar .fine { min-width: 0; overflow-wrap: anywhere; }
 /* invisible tap-padding so header-row action links (e.g. "Open full planner")
    hit the HIG 44pt minimum without changing their visual size or position */

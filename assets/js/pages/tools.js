@@ -425,13 +425,13 @@ function imbCardHtml(imb, prices) {
   const cheapest = calc.cheapest;
   return `
     <button type="button" class="tool-mini-card imb-card" data-imb="${esc(imb.id)}">
-      <div class="imb-card-head">
-        <div class="imb-card-id">
+      <span class="imb-card-head">
+        <span class="imb-card-id">
           ${imbIcon(imb)}
-          <div><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></div>
-        </div>
+          <span><b>${esc(imb.name)}</b><span class="fine dim">${esc(imb.effect)}</span></span>
+        </span>
         <span class="imb-card-price ${!cheapest ? 'dim' : ''}">${!cheapest ? '—' : `${imbCompact(cheapest.total)} gp`}</span>
-      </div>
+      </span>
     </button>`;
 }
 

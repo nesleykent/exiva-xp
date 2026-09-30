@@ -310,7 +310,7 @@ function renderDetail(slug) {
         </div>
       </div>
       <div class="section section-tight">
-        <div class="section-bar"><h3 style="font-size:var(--fs-16)">Creature matchups</h3><span class="fine dim">${nf(pop.set.length)} creatures</span></div>
+        <div class="section-bar"><h3>Creature matchups</h3><span class="fine dim">${nf(pop.set.length)} creatures</span></div>
         <div id="ground-matchups"></div>
       </div>
     </section>`;

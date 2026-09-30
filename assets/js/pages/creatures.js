@@ -122,7 +122,7 @@ function renderDetail(creatureSlug) {
     </div>
   </header>
 
-  ${c.lore ? `<p style="max-width:72ch; font-size:var(--fs-15); line-height:22px; margin:0 0 var(--s5)">${esc(c.lore)}</p>` : ''}
+  ${c.lore ? `<p class="prose prose-lede">${esc(c.lore)}</p>` : ''}
 
   <div class="facts" style="margin-bottom:var(--s4)">
     <div class="fact"><b class="num">${nf(c.hp)}</b><span class="fine dim">Hitpoints</span></div>
@@ -162,7 +162,7 @@ function renderDetail(creatureSlug) {
   ${c.behaviour ? `
   <section class="section">
     <div class="section-bar"><h2>Behaviour</h2></div>
-    <p class="dim" style="max-width:72ch; margin:0">${esc(c.behaviour)}</p>
+    <p class="prose dim">${esc(c.behaviour)}</p>
   </section>` : ''}
 
   ${lootPills.length ? `
