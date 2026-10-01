@@ -585,17 +585,19 @@ export function attachVizHover(container) {
     const svg = e.target.closest?.('svg');
     const dots = svg ? [...svg.querySelectorAll('.vdot')] : [];
     if (!dots.length) return reset();
+    // hover points are invisible r=0 circles: WebKit reports an empty 0,0 box
+    // for those, so read their centre from cx/cy through the svg's screen
+    // matrix instead of getBoundingClientRect()
+    const ctm = svg.getScreenCTM();
+    const at = (d) => new DOMPoint(d.cx.baseVal.value, d.cy.baseVal.value).matrixTransform(ctm);
     let best = null;
     let bestDx = Infinity;
     for (const d of dots) {
-      const r = d.getBoundingClientRect();
-      const dx = Math.abs(r.left + r.width / 2 - e.clientX);
+      const dx = Math.abs(at(d).x - e.clientX);
       if (dx < bestDx) { bestDx = dx; best = d; }
     }
     if (!best?.dataset.v) return reset();
-    const dotBox = best.getBoundingClientRect();
-    const dotX = dotBox.left + dotBox.width / 2;
-    const dotY = dotBox.top + dotBox.height / 2;
+    const { x: dotX, y: dotY } = at(best);
     const column = best.dataset.col != null ? svg.querySelectorAll('.vcol')[Number(best.dataset.col)] : null;
     if (column) {
       column.classList.add('is-active');
