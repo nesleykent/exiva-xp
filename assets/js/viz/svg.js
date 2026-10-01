@@ -492,17 +492,15 @@ export function donut(rows, { size = 160, fmt = kk, label = '' } = {}) {
 
 /**
  * Shared hover layer for every chart panel: a two-line tooltip (value leads,
- * label follows). Series charts (flow() dots, columns() anchors) snap to the
- * point nearest the pointer's x inside the svg being hovered — never from the
- * stats, legend or controls around it; flow() adds a crosshair and a grown
- * dot, columns() highlights its column and dims the rest. Any other mark
- * carrying data-v/data-l (bar rows, donut segments, heatmap cells, no-data
- * bands) is its own target; the heatmap also takes the nearest cell across
- * the gaps between cells. The tip is measured and kept inside the viewport,
- * flipping below the point when there is no room above. A mouse hides it on
- * leave; a tap pins it until the next tap outside the panel. Binds once per
- * container and reads the live marks on every event, so it survives chart
- * re-renders inside the same container.
+ * label follows). Deliberately geometry-only so every engine agrees: a chart
+ * svg is hit-tested by its own box, and each mark's position is read from its
+ * attributes (cx / x,width / y,height in viewBox units) scaled by that box —
+ * never from bounding boxes of individual svg shapes (WebKit reports an empty
+ * box for the invisible r=0 hover points). Series points (.vdot) snap by x;
+ * bar rows (.vrow > .vhit) by y; no-data bands (.vnodata/.vgap) by x span;
+ * HTML marks (heatmap cells) by their own box. The picked column/row is
+ * highlighted and its siblings dimmed. A mouse hides the tip on leave; a tap
+ * keeps it until the next tap outside the panel.
  */
 export function attachVizHover(container) {
   if (!container || container.dataset.vizHover) return;
@@ -514,122 +512,112 @@ export function attachVizHover(container) {
   const tipValue = document.createElement('b');
   const tipLabel = document.createElement('span');
   tip.append(tipValue, tipLabel);
-  const cross = document.createElement('div');
-  cross.className = 'viz-cross';
-  cross.hidden = true;
-  container.append(cross, tip);
+  container.append(tip);
+
+  const num = (el, name) => Number(el.getAttribute(name)) || 0;
+  const inside = (r, x, y) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
 
   const clearMarks = () => {
-    container.querySelectorAll('.vdot').forEach((d) => d.setAttribute('r', d.dataset.r ?? 3));
+    container.querySelectorAll('.vdot').forEach((d) => d.setAttribute('r', d.getAttribute('data-r') ?? 3));
     container.querySelectorAll('.is-active').forEach((el) => el.classList.remove('is-active'));
     container.querySelectorAll('.has-active').forEach((el) => el.classList.remove('has-active'));
   };
-  const reset = () => {
-    tip.hidden = true;
-    cross.hidden = true;
-    clearMarks();
-  };
+  const reset = () => { tip.hidden = true; clearMarks(); };
 
-  /** Show the tip beside an anchor given in viewport px ({x, top, bottom}). */
-  const show = (value, label, anchor) => {
+  /** Show the tip centred above (or below) a viewport point. */
+  const show = (value, label, x, top, bottom) => {
     tipValue.textContent = value;
-    tipLabel.textContent = label;
+    tipLabel.textContent = label || '';
     tip.style.left = '0px';
     tip.style.top = '0px';
     tip.hidden = false;
     const box = container.getBoundingClientRect();
     const w = tip.offsetWidth;
     const h = tip.offsetHeight;
-    const edge = 8;
-    // stay inside the container when the tip fits it, else inside the viewport
-    let minLeft = box.left;
-    let maxLeft = box.right - w;
-    if (maxLeft < minLeft) { minLeft = edge; maxLeft = innerWidth - edge - w; }
-    minLeft = Math.max(minLeft, edge);
-    maxLeft = Math.min(maxLeft, innerWidth - edge - w);
-    const left = Math.max(minLeft, Math.min(anchor.x - w / 2, maxLeft));
-    const above = anchor.top - h - 8;
-    const top = above >= edge ? above : anchor.bottom + 8;
+    const left = Math.max(8, Math.min(x - w / 2, innerWidth - 8 - w));
+    const y = top - h - 8 >= 8 ? top - h - 8 : bottom + 8;
     tip.style.left = `${(left - box.left).toFixed(1)}px`;
-    tip.style.top = `${(top - box.top).toFixed(1)}px`;
+    tip.style.top = `${(y - box.top).toFixed(1)}px`;
+  };
+
+  const pickSvg = (svg, r, cx, cy) => {
+    const vb = svg.viewBox.baseVal;
+    const kx = r.width / (vb?.width || r.width);
+    const ky = r.height / (vb?.height || r.height);
+    const toX = (v) => r.left + v * kx;
+    const toY = (v) => r.top + v * ky;
+    // no-data bands first: hovering a gap explains it
+    for (const band of svg.querySelectorAll('.vnodata, .vgap')) {
+      const x1 = toX(num(band, 'x'));
+      if (cx >= x1 && cx <= x1 + num(band, 'width') * kx) {
+        band.classList.add('is-active');
+        return show(band.getAttribute('data-v'), band.getAttribute('data-l'), cx, cy - 6, cy + 6);
+      }
+    }
+    // bar rows: the row band under the pointer
+    const rows = [...svg.querySelectorAll('.vrow')];
+    if (rows.length) {
+      const row = rows.find((g) => {
+        const hit = g.querySelector('.vhit');
+        const y1 = toY(num(hit, 'y'));
+        return cy >= y1 && cy <= y1 + num(hit, 'height') * ky;
+      });
+      if (!row) return reset();
+      row.classList.add('is-active');
+      svg.classList.add('has-active');
+      const hit = row.querySelector('.vhit');
+      const y1 = toY(num(hit, 'y'));
+      return show(row.getAttribute('data-v'), row.getAttribute('data-l'), cx, y1, y1 + num(hit, 'height') * ky);
+    }
+    // series points: nearest by x
+    let best = null;
+    let bestDx = Infinity;
+    for (const d of svg.querySelectorAll('.vdot')) {
+      const dx = Math.abs(toX(num(d, 'cx')) - cx);
+      if (dx < bestDx) { bestDx = dx; best = d; }
+    }
+    if (!best || !best.getAttribute('data-v')) return reset();
+    const px = toX(num(best, 'cx'));
+    const py = toY(num(best, 'cy'));
+    const col = best.getAttribute('data-col');
+    if (col != null) {
+      svg.querySelectorAll('.vcol')[Number(col)]?.classList.add('is-active');
+      svg.classList.add('has-active');
+    } else {
+      best.setAttribute('r', 5);
+    }
+    return show(best.getAttribute('data-v'), best.getAttribute('data-l'), px, py - 5, py + 5);
   };
 
   const pick = (e) => {
     clearMarks();
-    cross.hidden = true;
-    // heatmap: the nearest cell, so the gaps between cells are not dead zones
-    const grid = e.target.closest?.('.heatmap');
-    let mark = e.target.closest?.('[data-v]');
-    if (!mark && grid) {
-      let best = null;
-      let bestD = 144; // within 12px of a cell centre
-      for (const cell of grid.querySelectorAll('[data-v]')) {
-        const r = cell.getBoundingClientRect();
-        const d = (r.left + r.width / 2 - e.clientX) ** 2 + (r.top + r.height / 2 - e.clientY) ** 2;
-        if (d < bestD) { bestD = d; best = cell; }
-      }
-      mark = best;
+    const cx = e.clientX;
+    const cy = e.clientY;
+    for (const svg of container.querySelectorAll('svg')) {
+      const r = svg.getBoundingClientRect();
+      if (r.width && inside(r, cx, cy)) return pickSvg(svg, r, cx, cy);
     }
-    if (mark && !mark.classList.contains('vdot')) {
-      mark.classList.add('is-active');
-      mark.closest('svg')?.classList.add('has-active');
-      const r = (mark.querySelector('.vbar') || mark).getBoundingClientRect();
-      // a bar row anchors at its bar's end; a small mark (heatmap cell) at
-      // itself; a large one (no-data band, donut ring) at the pointer, or the
-      // tip would jump to the far edge of the shape
-      if (mark.classList.contains('vrow')) return show(mark.dataset.v, mark.dataset.l || '', { x: r.right, top: r.top, bottom: r.bottom });
-      if (r.width <= 24 && r.height <= 24) return show(mark.dataset.v, mark.dataset.l || '', { x: r.left + r.width / 2, top: r.top, bottom: r.bottom });
-      return show(mark.dataset.v, mark.dataset.l || '', { x: e.clientX, top: e.clientY - 6, bottom: e.clientY + 6 });
-    }
-    // series charts: only while the pointer is over the chart svg itself
-    const svg = e.target.closest?.('svg');
-    const dots = svg ? [...svg.querySelectorAll('.vdot')] : [];
-    if (!dots.length) return reset();
-    // hover points are invisible r=0 circles: WebKit reports an empty 0,0 box
-    // for those, so read their centre from cx/cy through the svg's screen
-    // matrix instead of getBoundingClientRect()
-    const ctm = svg.getScreenCTM();
-    const at = (d) => new DOMPoint(d.cx.baseVal.value, d.cy.baseVal.value).matrixTransform(ctm);
+    // HTML marks (heatmap cells): the cell under, or nearest to, the pointer
     let best = null;
-    let bestDx = Infinity;
-    for (const d of dots) {
-      const dx = Math.abs(at(d).x - e.clientX);
-      if (dx < bestDx) { bestDx = dx; best = d; }
+    let bestD = 144;
+    for (const cell of container.querySelectorAll('[data-v]')) {
+      if (cell.namespaceURI !== 'http://www.w3.org/1999/xhtml') continue;
+      const r = cell.getBoundingClientRect();
+      const d = (r.left + r.width / 2 - cx) ** 2 + (r.top + r.height / 2 - cy) ** 2;
+      if (d < bestD) { bestD = d; best = cell; }
     }
-    if (!best?.dataset.v) return reset();
-    const { x: dotX, y: dotY } = at(best);
-    const column = best.dataset.col != null ? svg.querySelectorAll('.vcol')[Number(best.dataset.col)] : null;
-    if (column) {
-      column.classList.add('is-active');
-      svg.classList.add('has-active');
-      const r = column.getBoundingClientRect();
-      show(best.dataset.v, best.dataset.l || '', { x: dotX, top: Math.min(r.top, dotY), bottom: Math.max(r.top, dotY) });
-    } else {
-      best.setAttribute('r', 5);
-      show(best.dataset.v, best.dataset.l || '', { x: dotX, top: dotY - 5, bottom: dotY + 5 });
-      // crosshair spans the plot area (data-pt/data-ph on the svg, in viewBox
-      // units) — scale to rendered pixels via the svg's current size
-      const box = container.getBoundingClientRect();
-      const svgBox = svg.getBoundingClientRect();
-      const vbH = svg.viewBox?.baseVal?.height;
-      const k = vbH ? svgBox.height / vbH : 1;
-      const plotH = Number(svg.dataset.ph || 0) * k;
-      if (plotH > 0) {
-        cross.style.left = `${(dotX - box.left).toFixed(1)}px`;
-        cross.style.top = `${(svgBox.top - box.top + Number(svg.dataset.pt || 0) * k).toFixed(1)}px`;
-        cross.style.height = `${plotH.toFixed(1)}px`;
-        cross.hidden = false;
-      }
-    }
+    if (!best) return reset();
+    best.classList.add('is-active');
+    const r = best.getBoundingClientRect();
+    return show(best.getAttribute('data-v'), best.getAttribute('data-l'), r.left + r.width / 2, r.top, r.bottom);
   };
+
   container.addEventListener('pointermove', pick);
   container.addEventListener('pointerdown', pick);
-  // a touch "leaves" the moment the finger lifts: only a mouse hides the tip
-  // on leave; a tap keeps it until the next tap outside the panel
+  container.addEventListener('mousemove', pick);
   container.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') reset(); });
+  container.addEventListener('mouseleave', reset);
   document.addEventListener('pointerdown', (e) => { if (!container.contains(e.target)) reset(); });
-  // a resize (phone rotation, devtools) or scroll invalidates the tip's
-  // position — it would otherwise render stranded away from its point
   window.addEventListener('resize', reset);
   window.addEventListener('scroll', () => { if (!tip.hidden) reset(); }, { passive: true });
 }

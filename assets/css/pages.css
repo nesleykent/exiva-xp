@@ -974,8 +974,6 @@ table.grid a:hover { text-decoration: underline; }
 .viz-tip b { font-size: var(--fs-13); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .viz-tip span { color: rgb(var(--ink-2)); font-size: var(--fs-11); }
 .viz-tip span:empty { display: none; }
-/* crosshair snapped to the nearest point on flow() charts */
-.viz-cross { position: absolute; width: 1px; background: rgb(var(--line-strong)); pointer-events: none; z-index: 4; }
 /* standard chart empty state — one look wherever a chart has no rows yet */
 .viz-empty {
   display: grid; place-items: center; min-height: 140px;
