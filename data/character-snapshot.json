@@ -9,8 +9,8 @@
     "name": "Ke vinho",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 3004,
-    "value": 451278728373
+    "level": 3005,
+    "value": 451352333389
    },
    {
     "rank": 2,
@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2645,
-    "value": 307836866429
+    "value": 307873916429
    },
    {
     "rank": 3,
@@ -26,15 +26,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2374,
-    "value": 222588248526
+    "value": 222635177039
    },
    {
     "rank": 4,
     "name": "Restlin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2312,
-    "value": 205672071423
+    "level": 2313,
+    "value": 205743476895
    },
    {
     "rank": 5,
@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2243,
-    "value": 187708415918
+    "value": 187734665918
    },
    {
     "rank": 6,
@@ -57,8 +57,8 @@
     "name": "Jack Black Sabbath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2150,
-    "value": 165372363569
+    "level": 2151,
+    "value": 165495204755
    },
    {
     "rank": 8,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1762,
-    "value": 90893132787
+    "value": 90919382787
    },
    {
     "rank": 14,
@@ -114,15 +114,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1713,
-    "value": 83603493906
+    "value": 83612079895
    },
    {
     "rank": 15,
     "name": "Gilby",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1692,
-    "value": 80567701969
+    "level": 1693,
+    "value": 80694810743
    },
    {
     "rank": 16,
@@ -130,7 +130,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1678,
-    "value": 78470921155
+    "value": 78471528693
    },
    {
     "rank": 17,
@@ -145,8 +145,8 @@
     "name": "Maasz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1648,
-    "value": 74370170979
+    "level": 1649,
+    "value": 74470449445
    },
    {
     "rank": 19,
@@ -154,7 +154,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1633,
-    "value": 72428772289
+    "value": 72431483318
    },
    {
     "rank": 20,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1617,
-    "value": 70254472032
+    "value": 70255607972
    },
    {
     "rank": 21,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1513,
-    "value": 57589241873
+    "value": 57597827862
    },
    {
     "rank": 25,
@@ -218,15 +218,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1486,
-    "value": 54473201443
+    "value": 54573579313
    },
    {
     "rank": 28,
     "name": "Wingcat",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1472,
-    "value": 53028002428
+    "level": 1473,
+    "value": 53051538261
    },
    {
     "rank": 29,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1460,
-    "value": 51730357343
+    "value": 51732307343
    },
    {
     "rank": 30,
@@ -306,7 +306,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1316,
-    "value": 37812987970
+    "value": 37821926909
    },
    {
     "rank": 39,
@@ -330,7 +330,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1279,
-    "value": 34723141320
+    "value": 34725091320
    },
    {
     "rank": 42,
@@ -346,7 +346,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1269,
-    "value": 33949609490
+    "value": 33955901187
    },
    {
     "rank": 44,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1251,
-    "value": 32520100038
+    "value": 32520122909
    },
    {
     "rank": 47,
@@ -402,7 +402,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1225,
-    "value": 30532559273
+    "value": 30535603186
    }
   ],
   "highscore_page": {
