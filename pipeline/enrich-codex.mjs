@@ -1,6 +1,6 @@
 /**
  * Enrich the codex with TibiaData (https://docs.tibiadata.com — GET
- * /v4/creature/{race}): official artwork, description, behaviour,
+ * /v5/creature/{race}): official artwork, description, behaviour,
  * summon/convince costs, paralysability, invisibility sense and loot lists.
  * Writes data/codex-extra.json keyed by creature slug. Re-run any time to
  * refresh; creatures TibiaData doesn't know are skipped, not failed.
@@ -11,7 +11,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { decodeEntities } from '../assets/js/lib/text.js';
 
-const API = 'https://api.tibiadata.com/v4/creature/';
+const API = 'https://api.tibiadata.com/v5/creature/';
 const CONCURRENCY = 4;
 
 const slug = (s) => String(s).toLowerCase().normalize('NFD')
@@ -40,6 +40,9 @@ async function lookup(name, attempt = 0) {
     const res = await fetch(API + encodeURIComponent(name.toLowerCase()), {
       headers: { 'User-Agent': 'exiva-xp-enrich (github.com/nesleykent/exiva-xp)' },
     });
+    // v5 answers an unknown creature with 404 (v4 used a 502), so it is
+    // skipped at once instead of being retried as an outage.
+    if (res.status === 404) return null;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const body = await res.json();
     if (body.information?.status?.http_code !== 200 && !body.creature?.name) return null;
@@ -94,6 +97,6 @@ await Promise.all(Array.from({ length: CONCURRENCY }, async () => {
 
 writeFileSync(
   new URL('../data/codex-extra.json', import.meta.url),
-  JSON.stringify({ source: 'api.tibiadata.com/v4', fetchedAt: new Date().toISOString(), creatures: extra }, null, 1),
+  JSON.stringify({ source: 'api.tibiadata.com/v5', fetchedAt: new Date().toISOString(), creatures: extra }, null, 1),
 );
 console.log(`Done: ${found}/${names.length} new, ${Object.keys(extra).length} total enriched → data/codex-extra.json`);

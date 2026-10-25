@@ -1,7 +1,7 @@
 /**
  * Daily character tracker for the character configured in config.ini — the same mechanism as
  * tibia-xp-history's get-xp-data.mjs (github.com/mathiasbynens/tibia-xp-history):
- * the TibiaData v4 highscores expose each ranked character's exact
+ * the TibiaData v5 highscores expose each ranked character's exact
  * experience, so a crawl of the world+vocation pages until the character
  * appears yields {rank, level, experience}. The history key follows Tibia's
  * daily boundary: 10:00 Europe/Berlin server save time (CET or CEST). A
@@ -24,7 +24,7 @@ import { CHARACTER } from './config.mjs';
 const { name: NAME, world: WORLD, vocation: VOCATION } = CHARACTER;
 // Public api.tibiadata.com keeps highscores in "restriction mode"; the dev
 // instance serves them — and is what the reference project queries too.
-const API = 'https://dev.tibiadata.com/v4';
+const API = 'https://dev.tibiadata.com/v5';
 const HISTORY_PATHS = Object.fromEntries(HIGHSCORE_CATEGORIES.map(({ category }) => [
   category,
   new URL(`../data/highscores/${category}.json`, import.meta.url),

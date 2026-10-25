@@ -21,7 +21,7 @@ const CHARACTER_JSON_PATH = new URL('../data/character.json', import.meta.url);
 // Public api.tibiadata.com keeps highscores in "restriction mode" but the
 // character endpoint works fine there too — the dev instance is only
 // strictly needed for highscores, kept here just for one consistent host.
-const API = 'https://dev.tibiadata.com/v4';
+const API = 'https://dev.tibiadata.com/v5';
 
 // TibiaData's highscore URLs take a lowercase, unpromoted, plural vocation
 // slug (knights/paladins/sorcerers/druids/monks); the character endpoint
