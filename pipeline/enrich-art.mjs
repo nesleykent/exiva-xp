@@ -27,7 +27,7 @@ const names = (bestiary.data || []).map((c) => c.name);
 const extraUrl = new URL('../data/codex-extra.json', import.meta.url);
 let extraFile;
 try { extraFile = JSON.parse(readFileSync(extraUrl, 'utf8')); }
-catch { extraFile = { source: 'api.tibiadata.com/v4', creatures: {} }; }
+catch { extraFile = { source: 'api.tibiadata.com/v5', creatures: {} }; }
 const extra = extraFile.creatures;
 
 // ---- pass 1: drop dead/unusable image URLs -------------------------------
