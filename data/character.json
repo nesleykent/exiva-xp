@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-27T14:23:46.784Z",
+ "updatedAt": "2026-10-27T20:03:25.638Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
@@ -7,8 +7,8 @@
  "level": 549,
  "world": "Gentebra",
  "residence": "Thais",
- "achievementPoints": 723,
- "lastLogin": "2026-10-27T12:52:07Z",
+ "achievementPoints": 728,
+ "lastLogin": "2026-10-27T19:06:33Z",
  "accountStatus": "Premium Account",
  "accountCreated": "2003-08-01T22:04:00Z",
  "loyaltyTitle": "Warrior of Tibia",
@@ -20,12 +20,12 @@
   }
  ],
  "highscoreRanks": {
-  "achievements": 81,
+  "achievements": 80,
   "axefighting": 190,
   "bosspoints": 288,
   "bountypoints": 43,
   "charmpoints": 156,
-  "clubfighting": 500,
+  "clubfighting": 501,
   "distancefighting": null,
   "dromescore": 153,
   "experience": 249,
@@ -39,12 +39,12 @@
   "weeklytasks": 3
  },
  "skillRanks": {
-  "achievements": 81,
+  "achievements": 80,
   "axefighting": 190,
   "bosspoints": 288,
   "bountypoints": 43,
   "charmpoints": 156,
-  "clubfighting": 500,
+  "clubfighting": 501,
   "distancefighting": null,
   "dromescore": 153,
   "fishing": 3,
