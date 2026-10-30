@@ -18,15 +18,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2648,
-    "value": 308965854354
+    "value": 309029521697
    },
    {
     "rank": 3,
     "name": "Hiro Teensina",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2381,
-    "value": 224573156518
+    "level": 2382,
+    "value": 224752241660
    },
    {
     "rank": 4,
@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2244,
-    "value": 187917544731
+    "value": 187918546870
    },
    {
     "rank": 6,
@@ -66,7 +66,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2018,
-    "value": 136692069574
+    "value": 136705858264
    },
    {
     "rank": 9,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1773,
-    "value": 92636116558
+    "value": 92636116730
    },
    {
     "rank": 13,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1763,
-    "value": 91097536834
+    "value": 91098316906
    },
    {
     "rank": 14,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1701,
-    "value": 81802891593
+    "value": 81803255418
    },
    {
     "rank": 16,
@@ -146,15 +146,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1655,
-    "value": 75288418674
+    "value": 75294920830
    },
    {
     "rank": 19,
     "name": "Diinoco",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1643,
-    "value": 73750419170
+    "level": 1644,
+    "value": 73875931217
    },
    {
     "rank": 20,
@@ -185,8 +185,8 @@
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1529,
-    "value": 59418937248
+    "level": 1530,
+    "value": 59487683801
    },
    {
     "rank": 24,
@@ -201,8 +201,8 @@
     "name": "Genezyzz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1513,
-    "value": 57525824537
+    "level": 1514,
+    "value": 57613561647
    },
    {
     "rank": 26,
@@ -218,7 +218,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1490,
-    "value": 54949976470
+    "value": 54950699826
    },
    {
     "rank": 28,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1474,
-    "value": 53220735260
+    "value": 53221623189
    },
    {
     "rank": 29,
@@ -242,7 +242,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1459,
-    "value": 51608718265
+    "value": 51614055887
    },
    {
     "rank": 31,
@@ -258,7 +258,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1392,
-    "value": 44836256976
+    "value": 44844806429
    },
    {
     "rank": 33,
@@ -266,7 +266,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1359,
-    "value": 41661599351
+    "value": 41662902746
    },
    {
     "rank": 34,
@@ -290,7 +290,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1333,
-    "value": 39360751154
+    "value": 39362062925
    },
    {
     "rank": 37,
@@ -298,7 +298,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1328,
-    "value": 38922687223
+    "value": 38928025099
    },
    {
     "rank": 38,
@@ -306,39 +306,39 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1317,
-    "value": 37918498501
+    "value": 37944919721
    },
    {
     "rank": 39,
     "name": "Mustafariy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1290,
-    "value": 35688905609
+    "level": 1291,
+    "value": 35729922352
    },
    {
     "rank": 40,
     "name": "Dark Obscuro",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1285,
-    "value": 35255545857
+    "level": 1283,
+    "value": 35105201613
    },
    {
     "rank": 41,
-    "name": "Arianwen",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1279,
-    "value": 34726277323
-   },
-   {
-    "rank": 42,
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1279,
-    "value": 34715401491
+    "value": 34728713907
+   },
+   {
+    "rank": 42,
+    "name": "Arianwen",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1279,
+    "value": 34726300573
    },
    {
     "rank": 43,
@@ -362,7 +362,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1261,
-    "value": 33320559447
+    "value": 33325896949
    },
    {
     "rank": 46,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1244,
-    "value": 31978949548
+    "value": 31979659783
    },
    {
     "rank": 48,
@@ -386,15 +386,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1243,
-    "value": 31866265095
+    "value": 31894690076
    },
    {
     "rank": 49,
     "name": "Erto Mage",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1230,
-    "value": 30938076985
+    "level": 1231,
+    "value": 30964606348
    },
    {
     "rank": 50,
