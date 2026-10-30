@@ -57,8 +57,8 @@
     "name": "Jack Black Sabbath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2154,
-    "value": 166319211469
+    "level": 2155,
+    "value": 166349111941
    },
    {
     "rank": 8,
@@ -82,7 +82,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1945,
-    "value": 122297109736
+    "value": 122378602147
    },
    {
     "rank": 11,
@@ -122,15 +122,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1701,
-    "value": 81803255418
+    "value": 81804393182
    },
    {
     "rank": 16,
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1686,
-    "value": 79661429409
+    "level": 1687,
+    "value": 79787596971
    },
    {
     "rank": 17,
@@ -154,15 +154,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1644,
-    "value": 73875931217
+    "value": 73876120166
    },
    {
     "rank": 20,
     "name": "Druiidguaba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1626,
-    "value": 71463104013
+    "level": 1627,
+    "value": 71618147888
    },
    {
     "rank": 21,
@@ -218,7 +218,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1490,
-    "value": 54950699826
+    "value": 54950929146
    },
    {
     "rank": 28,
@@ -250,7 +250,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1425,
-    "value": 48059349498
+    "value": 48066291602
    },
    {
     "rank": 32,
@@ -266,23 +266,23 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1359,
-    "value": 41662902746
+    "value": 41687683435
    },
    {
     "rank": 34,
+    "name": "Aevin",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1344,
+    "value": 40308227773
+   },
+   {
+    "rank": 35,
     "name": "Louisx",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1344,
     "value": 40290730923
-   },
-   {
-    "rank": 35,
-    "name": "Aevin",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1344,
-    "value": 40289642606
    },
    {
     "rank": 36,
@@ -330,7 +330,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1279,
-    "value": 34728713907
+    "value": 34745380734
    },
    {
     "rank": 42,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1279,
-    "value": 34726300573
+    "value": 34738037468
    },
    {
     "rank": 43,
@@ -358,19 +358,19 @@
    },
    {
     "rank": 45,
-    "name": "Itz Olsen",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1261,
-    "value": 33325896949
-   },
-   {
-    "rank": 46,
     "name": "Ell Droid Cansado",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1261,
     "value": 33280763347
+   },
+   {
+    "rank": 46,
+    "name": "Itz Olsen",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1260,
+    "value": 33235940968
    },
    {
     "rank": 47,
