@@ -1,14 +1,14 @@
 {
- "updatedAt": "2026-11-03T17:45:21.510Z",
+ "updatedAt": "2026-11-03T23:15:19.026Z",
  "name": "Night'Flyn",
  "title": "Aeternal",
  "sex": "female",
  "vocation": "Elder Druid",
- "level": 552,
+ "level": 551,
  "world": "Gentebra",
  "residence": "Thais",
  "achievementPoints": 733,
- "lastLogin": "2026-11-03T15:40:21Z",
+ "lastLogin": "2026-11-03T21:22:50Z",
  "accountStatus": "Premium Account",
  "accountCreated": "2003-08-01T22:04:00Z",
  "loyaltyTitle": "Warrior of Tibia",
@@ -23,7 +23,7 @@
   "achievements": 80,
   "axefighting": 190,
   "bosspoints": 283,
-  "bountypoints": 44,
+  "bountypoints": 41,
   "charmpoints": 151,
   "clubfighting": 502,
   "distancefighting": null,
@@ -42,7 +42,7 @@
   "achievements": 80,
   "axefighting": 190,
   "bosspoints": 283,
-  "bountypoints": 44,
+  "bountypoints": 41,
   "charmpoints": 151,
   "clubfighting": 502,
   "distancefighting": null,
@@ -56,5 +56,11 @@
   "swordfighting": 69,
   "weeklytasks": 3
  },
- "deaths": []
+ "deaths": [
+  {
+   "time": "2026-11-03T18:09:14Z",
+   "level": 552,
+   "reason": "Died at Level 552 by naga warrior."
+  }
+ ]
 }
