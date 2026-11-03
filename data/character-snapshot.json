@@ -18,7 +18,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2650,
-    "value": 309522901368
+    "value": 309753102194
    },
    {
     "rank": 3,
@@ -33,16 +33,16 @@
     "name": "Restlin",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2326,
-    "value": 209206801108
+    "level": 2327,
+    "value": 209473935760
    },
    {
     "rank": 5,
     "name": "General Keyllor",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2244,
-    "value": 188073059002
+    "level": 2245,
+    "value": 188088976334
    },
    {
     "rank": 6,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2205,
-    "value": 178318750672
+    "value": 178328366788
    },
    {
     "rank": 7,
@@ -58,15 +58,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2155,
-    "value": 166454053411
+    "value": 166537731711
    },
    {
     "rank": 8,
     "name": "Fa vey",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2021,
-    "value": 137238122724
+    "level": 2022,
+    "value": 137463407148
    },
    {
     "rank": 9,
@@ -74,7 +74,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1956,
-    "value": 124359777157
+    "value": 124476121825
    },
    {
     "rank": 10,
@@ -90,7 +90,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1782,
-    "value": 94008687176
+    "value": 94043648680
    },
    {
     "rank": 12,
@@ -98,7 +98,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1777,
-    "value": 93334251124
+    "value": 93344244396
    },
    {
     "rank": 13,
@@ -106,7 +106,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1764,
-    "value": 91174268738
+    "value": 91179190650
    },
    {
     "rank": 14,
@@ -122,7 +122,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1705,
-    "value": 82321793705
+    "value": 82321827061
    },
    {
     "rank": 16,
@@ -137,16 +137,16 @@
     "name": "Sojoker",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1673,
-    "value": 77826935967
+    "level": 1674,
+    "value": 78002253525
    },
    {
     "rank": 18,
     "name": "Maasz",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1655,
-    "value": 75361293372
+    "level": 1656,
+    "value": 75415496836
    },
    {
     "rank": 19,
@@ -154,7 +154,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1648,
-    "value": 74333601230
+    "value": 74443164494
    },
    {
     "rank": 20,
@@ -162,7 +162,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1630,
-    "value": 72030231656
+    "value": 72031595681
    },
    {
     "rank": 21,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1518,
-    "value": 58087403432
+    "value": 58122942509
    },
    {
     "rank": 25,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1516,
-    "value": 57864416786
+    "value": 57866247313
    },
    {
     "rank": 26,
@@ -218,15 +218,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1492,
-    "value": 55197805729
+    "value": 55199728806
    },
    {
     "rank": 28,
     "name": "Wingcat",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1474,
-    "value": 53245498490
+    "level": 1475,
+    "value": 53284550702
    },
    {
     "rank": 29,
@@ -242,15 +242,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1463,
-    "value": 51988828191
+    "value": 51995314993
    },
    {
     "rank": 31,
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1426,
-    "value": 48186805579
+    "level": 1427,
+    "value": 48254226296
    },
    {
     "rank": 32,
@@ -258,7 +258,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1394,
-    "value": 44963183670
+    "value": 44977425032
    },
    {
     "rank": 33,
@@ -266,7 +266,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1361,
-    "value": 41833851474
+    "value": 41836146813
    },
    {
     "rank": 34,
@@ -290,7 +290,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1334,
-    "value": 39388217177
+    "value": 39420177221
    },
    {
     "rank": 37,
@@ -306,7 +306,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1318,
-    "value": 38053999492
+    "value": 38054687865
    },
    {
     "rank": 39,
@@ -314,7 +314,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1291,
-    "value": 35764985101
+    "value": 35766038089
    },
    {
     "rank": 40,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1286,
-    "value": 35292969526
+    "value": 35301013385
    },
    {
     "rank": 41,
@@ -330,7 +330,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1281,
-    "value": 34918121928
+    "value": 34928233673
    },
    {
     "rank": 42,
@@ -338,7 +338,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1280,
-    "value": 34862537824
+    "value": 34868231742
    },
    {
     "rank": 43,
@@ -354,7 +354,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1264,
-    "value": 33514598218
+    "value": 33514759683
    },
    {
     "rank": 45,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1244,
-    "value": 32000462577
+    "value": 32001660602
    },
    {
     "rank": 48,
@@ -386,15 +386,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1244,
-    "value": 31943877386
+    "value": 31996946053
    },
    {
     "rank": 49,
     "name": "Erto Mage",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1232,
-    "value": 31047289470
+    "level": 1233,
+    "value": 31103530755
    },
    {
     "rank": 50,
