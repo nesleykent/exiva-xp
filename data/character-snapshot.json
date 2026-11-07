@@ -170,7 +170,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1635,
-    "value": 72688244880
+    "value": 72709094880
    },
    {
     "rank": 22,
@@ -178,7 +178,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1597,
-    "value": 67672609826
+    "value": 67707404095
    },
    {
     "rank": 23,
@@ -194,7 +194,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1533,
-    "value": 59839109684
+    "value": 59859959684
    },
    {
     "rank": 25,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1521,
-    "value": 58473514184
+    "value": 58473874184
    },
    {
     "rank": 26,
@@ -241,16 +241,16 @@
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1473,
-    "value": 53051350434
+    "level": 1474,
+    "value": 53165678234
    },
    {
     "rank": 31,
     "name": "Flandy",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1467,
-    "value": 52404763686
+    "level": 1468,
+    "value": 52512958551
    },
    {
     "rank": 32,
@@ -266,7 +266,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1396,
-    "value": 45172921431
+    "value": 45182521508
    },
    {
     "rank": 34,
@@ -346,7 +346,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1281,
-    "value": 34904542928
+    "value": 34913482728
    },
    {
     "rank": 44,
@@ -354,7 +354,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1273,
-    "value": 34274922018
+    "value": 34279110079
    },
    {
     "rank": 45,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1264,
-    "value": 33554926140
+    "value": 33564489588
    },
    {
     "rank": 47,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1263,
-    "value": 33438043027
+    "value": 33479358002
    },
    {
     "rank": 48,
@@ -398,11 +398,11 @@
    },
    {
     "rank": 50,
-    "name": "Erto Mage",
+    "name": "Nezuko Kirishima",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1234,
-    "value": 31232074611
+    "level": 1235,
+    "value": 31248938576
    }
   ],
   "highscore_page": {
