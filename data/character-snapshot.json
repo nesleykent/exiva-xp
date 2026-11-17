@@ -42,7 +42,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2246,
-    "value": 188437536553
+    "value": 188440456395
    },
    {
     "rank": 6,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2219,
-    "value": 181768824675
+    "value": 181768890141
    },
    {
     "rank": 7,
@@ -81,8 +81,8 @@
     "name": "Lady Steven Seagall",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1949,
-    "value": 123164441798
+    "level": 1950,
+    "value": 123312099811
    },
    {
     "rank": 11,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1719,
-    "value": 84467531720
+    "value": 84469860464
    },
    {
     "rank": 15,
@@ -129,8 +129,8 @@
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1701,
-    "value": 81762807146
+    "level": 1702,
+    "value": 81903876565
    },
    {
     "rank": 17,
@@ -138,7 +138,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1692,
-    "value": 80475502625
+    "value": 80476631726
    },
    {
     "rank": 18,
@@ -162,15 +162,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1662,
-    "value": 76303368756
+    "value": 76303368760
    },
    {
     "rank": 21,
     "name": "Druiidguaba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1646,
-    "value": 74095391222
+    "level": 1647,
+    "value": 74314925324
    },
    {
     "rank": 22,
@@ -193,8 +193,8 @@
     "name": "Eduh Loving",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1537,
-    "value": 60388460597
+    "level": 1538,
+    "value": 60421301825
    },
    {
     "rank": 25,
@@ -202,7 +202,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1530,
-    "value": 59532716183
+    "value": 59532716409
    },
    {
     "rank": 26,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1521,
-    "value": 58417901320
+    "value": 58417901402
    },
    {
     "rank": 27,
@@ -218,7 +218,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1502,
-    "value": 56309507209
+    "value": 56309518979
    },
    {
     "rank": 28,
@@ -233,24 +233,24 @@
     "name": "Lab Jba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1486,
-    "value": 54485742508
+    "level": 1487,
+    "value": 54619260462
    },
    {
     "rank": 30,
+    "name": "Flandy",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1477,
+    "value": 53532033341
+   },
+   {
+    "rank": 31,
     "name": "Wingcat",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1477,
     "value": 53517196645
-   },
-   {
-    "rank": 31,
-    "name": "Flandy",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1476,
-    "value": 53428365282
    },
    {
     "rank": 32,
@@ -282,7 +282,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1348,
-    "value": 40676756546
+    "value": 40729301990
    },
    {
     "rank": 36,
@@ -298,7 +298,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1336,
-    "value": 39646795388
+    "value": 39646795389
    },
    {
     "rank": 38,
@@ -345,16 +345,16 @@
     "name": "Trefor Das Sombras",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1287,
-    "value": 35396757895
+    "level": 1288,
+    "value": 35466679290
    },
    {
     "rank": 44,
     "name": "Itz Olsen",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1278,
-    "value": 34679679087
+    "level": 1279,
+    "value": 34785838381
    },
    {
     "rank": 45,
@@ -362,7 +362,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1275,
-    "value": 34421029847
+    "value": 34422487626
    },
    {
     "rank": 46,
@@ -370,7 +370,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1268,
-    "value": 33853444594
+    "value": 33887336268
    },
    {
     "rank": 47,
@@ -378,7 +378,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1266,
-    "value": 33667035450
+    "value": 33699330809
    },
    {
     "rank": 48,
