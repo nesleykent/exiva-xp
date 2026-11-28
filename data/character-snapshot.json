@@ -18,15 +18,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2672,
-    "value": 317264287158
+    "value": 317265590673
    },
    {
     "rank": 3,
     "name": "Hiro Teensina",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 2405,
-    "value": 231358911197
+    "level": 2406,
+    "value": 231629767767
    },
    {
     "rank": 4,
@@ -50,7 +50,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2233,
-    "value": 185126141863
+    "value": 185140895252
    },
    {
     "rank": 7,
@@ -58,7 +58,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 2164,
-    "value": 168647964019
+    "value": 168649618109
    },
    {
     "rank": 8,
@@ -81,8 +81,8 @@
     "name": "Lady Steven Seagall",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1955,
-    "value": 124299855848
+    "level": 1956,
+    "value": 124411162245
    },
    {
     "rank": 11,
@@ -97,8 +97,8 @@
     "name": "Owanda Datribo",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1797,
-    "value": 96464708571
+    "level": 1798,
+    "value": 96553604749
    },
    {
     "rank": 13,
@@ -114,7 +114,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1732,
-    "value": 86382446471
+    "value": 86382645526
    },
    {
     "rank": 15,
@@ -122,15 +122,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1727,
-    "value": 85552073898
+    "value": 85581208718
    },
    {
     "rank": 16,
     "name": "Jao Claude Andaime",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1714,
-    "value": 83659115357
+    "level": 1715,
+    "value": 83789873860
    },
    {
     "rank": 17,
@@ -154,7 +154,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1684,
-    "value": 79360951766
+    "value": 79361288879
    },
    {
     "rank": 20,
@@ -169,8 +169,8 @@
     "name": "Druiidguaba",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1664,
-    "value": 76551015003
+    "level": 1665,
+    "value": 76681053037
    },
    {
     "rank": 22,
@@ -210,7 +210,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1523,
-    "value": 58731262940
+    "value": 58734599828
    },
    {
     "rank": 27,
@@ -218,7 +218,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1514,
-    "value": 57627714015
+    "value": 57627835464
    },
    {
     "rank": 28,
@@ -226,7 +226,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1503,
-    "value": 56372979111
+    "value": 56422991131
    },
    {
     "rank": 29,
@@ -234,7 +234,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1502,
-    "value": 56264609781
+    "value": 56287124801
    },
    {
     "rank": 30,
@@ -250,15 +250,15 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1478,
-    "value": 53599870181
+    "value": 53606265254
    },
    {
     "rank": 32,
     "name": "Vannak Wrath",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1440,
-    "value": 49620040847
+    "level": 1441,
+    "value": 49665816069
    },
    {
     "rank": 33,
@@ -274,7 +274,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1373,
-    "value": 42957399617
+    "value": 42982782976
    },
    {
     "rank": 35,
@@ -298,7 +298,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1337,
-    "value": 39718353214
+    "value": 39719888720
    },
    {
     "rank": 38,
@@ -314,7 +314,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1332,
-    "value": 39264494638
+    "value": 39274575324
    },
    {
     "rank": 40,
@@ -322,7 +322,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1313,
-    "value": 37568570546
+    "value": 37587602611
    },
    {
     "rank": 41,
@@ -334,19 +334,19 @@
    },
    {
     "rank": 42,
+    "name": "Itz Olsen",
+    "vocation": "Elder Druid",
+    "world": "Gentebra",
+    "level": 1296,
+    "value": 36163573057
+   },
+   {
+    "rank": 43,
     "name": "Arianwen",
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1295,
-    "value": 36081585799
-   },
-   {
-    "rank": 43,
-    "name": "Itz Olsen",
-    "vocation": "Elder Druid",
-    "world": "Gentebra",
-    "level": 1295,
-    "value": 36065972583
+    "value": 36084570661
    },
    {
     "rank": 44,
@@ -377,8 +377,8 @@
     "name": "Nezuko Kirishima",
     "vocation": "Elder Druid",
     "world": "Gentebra",
-    "level": 1275,
-    "value": 34461314097
+    "level": 1277,
+    "value": 34591412707
    },
    {
     "rank": 48,
@@ -394,7 +394,7 @@
     "vocation": "Elder Druid",
     "world": "Gentebra",
     "level": 1254,
-    "value": 32721417637
+    "value": 32726626553
    },
    {
     "rank": 50,
